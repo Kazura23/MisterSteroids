@@ -5,41 +5,53 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour 
 {
 	#region Variables
-	public float SensitivityX = 15F;
-	public float SensitivityY = 15F;
 	public float JumpForce = 200;
 	public float MoveSpeed = 5;
-	public float Decelration = 1;
-	public Vector2 ClampCamMinMax;
+	public float RotationSpeed = 1;
 
 	Rigidbody thisRig;
-	Transform mainCam;
 	Transform pTrans;
+	Direction currentDir = Direction.North;
+	Direction newDir = Direction.North;
+	Vector3 posDir;
 
+	float calPos = 0;
+	float newDist;
 	bool canJump = true;
-//	bool canCheckGr = false;
+	bool newPos = false;
 	#endregion
 
 	#region Mono
 	void Awake ( )
 	{
 		thisRig = GetComponent<Rigidbody> ( );
-		mainCam = Camera.main.transform;
 		pTrans = transform;
 	}
 
-	void Update ( )
+	void FixedUpdate ( )
 	{
-		Cursor.visible = false;
-		Cursor.lockState = CursorLockMode.Locked;
+		if ( newPos )
+		{
+			float getCurr = Vector3.Distance ( posDir, pTrans.position );
+			if ( newDist != getCurr )
+			{
+				newDist = getCurr;
 
-		float getDelta = Time.deltaTime;
-		pTrans.Rotate ( 0, Input.GetAxis ( "Mouse X" ) * SensitivityX * getDelta, 0 );
-		mainCam.Rotate ( Input.GetAxis ( "Mouse Y" ) * -SensitivityY * getDelta, 0, 0 );
-		mainCam.localRotation = ClampRotationAroundXAxis ( mainCam.localRotation );
-		Transform transPlayer = pTrans;
+				if ( calPos > newDist )
+				{
+					calPos = newDist;
+				}
+				else
+				{
+					currentDir = newDir;
+					pTrans.position = new Vector3 ( posDir.x, pTrans.position.y, posDir.z );
+					calPos = 0;
+					newPos = false;
+				}
+			}
+		}
 
-		playerMove ( getDelta, transPlayer );
+		playerMove ( );
 	}
 	#endregion
 
@@ -47,30 +59,30 @@ public class PlayerController : MonoBehaviour
 	#endregion
 
 	#region Private Functions
-	void playerMove ( float deltaT, Transform transPlayer )
+	void playerMove ( )
 	{
-		float getValue;
+		Transform transPlayer = pTrans;
+		float getTime = Time.deltaTime;
 
-		getValue = Input.GetAxis ( "Vertical" );
-		if ( getValue > 0 )
+		if ( currentDir == Direction.North )
 		{
-			transPlayer.Translate ( transPlayer.forward * MoveSpeed * deltaT, Space.World );
+			pTrans.Translate ( Vector3.forward * MoveSpeed * getTime, Space.World );
+			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 0, 0 ) ), RotationSpeed * getTime );
 		}
-		else if ( getValue < 0 )
+		else if ( currentDir == Direction.South )
 		{
-			transPlayer.Translate ( -transPlayer.forward * MoveSpeed * deltaT, Space.World );
+			pTrans.Translate ( Vector3.back  * MoveSpeed * getTime, Space.World );
+			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 180, 0 ) ), RotationSpeed * getTime );
 		}
-
-		getValue = Input.GetAxis ( "Horizontal" );
-
-		if ( getValue < 0 )
+		else if ( currentDir == Direction.East )
 		{
-			transPlayer.Translate (- transPlayer.right * MoveSpeed * deltaT, Space.World );
+			pTrans.Translate ( Vector3.right * MoveSpeed * getTime, Space.World );
+			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 90, 0 ) ), RotationSpeed * getTime );
 		}
-		else if ( getValue > 0 )
+		else if ( currentDir == Direction.West )
 		{
-			//thisRig.MovePosition ( transPlayer.localPosition + transPlayer.right * MoveSpeed * deltaT );
-			transPlayer.Translate ( transPlayer.right * MoveSpeed * deltaT, Space.World );
+			pTrans.Translate ( Vector3.left * MoveSpeed * getTime, Space.World );
+			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, -90, 0 ) ), RotationSpeed * getTime );
 		}
 
 		if ( canJump && Input.GetAxis ( "Jump" ) > 0 )
@@ -81,28 +93,23 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	void OnCollisionStay ( Collision thisColl )
+	void OnTriggerEnter ( Collider thisColl )
 	{
-		if ( thisColl.gameObject.layer == 10 )
+		if ( thisColl.tag == "ModifDirect" )
 		{
-			canJump = true;
+			newPos = true;
+			posDir = thisColl.transform.position;
+			newDir = thisColl.GetComponent<NewDirect> ( ).NewDirection;
+			calPos = Vector3.Distance ( posDir, pTrans.position ) + 0.1f;
 		}
 	}
 
-	Quaternion ClampRotationAroundXAxis ( Quaternion q )
+	void OnCollisionStay ( Collision thisColl )
 	{
-		q.x /= q.w;
-		q.y /= q.w;
-		q.z /= q.w;
-		q.w = 1.0f;
-
-		float angleX = 2.0f * Mathf.Rad2Deg * Mathf.Atan (q.x);
-
-		angleX = Mathf.Clamp ( angleX, ClampCamMinMax.x, ClampCamMinMax.y );
-
-		q.x = Mathf.Tan (0.5f * Mathf.Deg2Rad * angleX);
-
-		return q;
+		if ( thisColl.gameObject.layer == 9 )
+		{
+			canJump = true;
+		}
 	}
 	#endregion
 }

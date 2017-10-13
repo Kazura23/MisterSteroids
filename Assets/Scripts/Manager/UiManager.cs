@@ -8,12 +8,15 @@ using System.Runtime.CompilerServices;
 public class UiManager : ManagerParent
 {
 	#region Variables
+	bool CursorVisble = false;
 	#endregion
 
 	#region Mono
 	#endregion
 
 	#region Public Methods
+
+
 	#endregion
 
 	#region Private Methods
@@ -24,7 +27,20 @@ public class UiManager : ManagerParent
 
 	void InitializeUI ( )
 	{
-		
+		InvokeRepeating ( "checkCurosr", 0, 0.5f );
+	}
+
+	void checkCurosr ( )
+	{
+		Cursor.visible = CursorVisble;
+		if ( CursorVisble )
+		{
+			Cursor.lockState = CursorLockMode.None;
+		}
+		else
+		{
+			Cursor.lockState = CursorLockMode.Locked;
+		}
 	}
 
 	void InitializeUI<T>(ref T manager) where T : UiParent

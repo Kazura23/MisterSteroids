@@ -6,7 +6,7 @@ public class MeshDesctruc : MonoBehaviour
 {
 	public GameObject TriangPrefb;
 
-	List<GameObject> stockElem;
+	public List<GameObject> stockElem;
 	Transform garbage;
 
 	void Start ( )
@@ -163,7 +163,6 @@ public class MeshDesctruc : MonoBehaviour
 					GO.GetComponent<Rigidbody> ( ).AddForce ( Vector3.Normalize ( getTrans.position - objSource.transform.position ), ForceMode.Impulse );
 				}
 
-				GO.GetComponent<Rigidbody> ( ).mass = 0.0001f;
 				GO.GetComponent<TimeToDisable> ( ).DisableThis ( 5 + Random.Range ( 0.0f, 5.0f ) );
 			}
 		}

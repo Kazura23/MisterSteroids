@@ -6,8 +6,11 @@ public class PlayerController : MonoBehaviour
 {
 	#region Variables
 	public float JumpForce = 200;
-	public float MoveSpeed = 5;
+	public float MaxSpeed = 5;
 	public float RotationSpeed = 1;
+	public float Acceleration = 10;
+	public float Deceleration = 1;
+	public bool Running = true;
 
 	Rigidbody thisRig;
 	Transform pTrans;
@@ -15,6 +18,7 @@ public class PlayerController : MonoBehaviour
 	Direction newDir = Direction.North;
 	Vector3 posDir;
 
+	float currSpeed = 0;
 	float calPos = 0;
 	float newDist;
 	bool canJump = true;
@@ -51,7 +55,30 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 
-		playerMove ( );
+		float deltTime = Time.deltaTime;
+
+		if ( Running )
+		{
+			if ( currSpeed < MaxSpeed )
+			{
+				currSpeed += Acceleration * deltTime;
+			}
+			else if ( currSpeed > MaxSpeed )
+			{
+				currSpeed = MaxSpeed;
+			}
+		}
+		else
+		{
+			currSpeed -= Deceleration * deltTime;
+
+			if ( currSpeed < 0 )
+			{
+				currSpeed = 0;
+			}
+		}
+
+		playerMove ( deltTime, currSpeed );
 	}
 	#endregion
 
@@ -59,30 +86,29 @@ public class PlayerController : MonoBehaviour
 	#endregion
 
 	#region Private Functions
-	void playerMove ( )
+	void playerMove ( float delTime, float speed )
 	{
 		Transform transPlayer = pTrans;
-		float getTime = Time.deltaTime;
-
+		delTime = Time.deltaTime;
 		if ( currentDir == Direction.North )
 		{
-			pTrans.Translate ( Vector3.forward * MoveSpeed * getTime, Space.World );
-			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 0, 0 ) ), RotationSpeed * getTime );
+			pTrans.Translate ( Vector3.forward * speed * delTime, Space.World );
+			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 0, 0 ) ), RotationSpeed * delTime );
 		}
 		else if ( currentDir == Direction.South )
 		{
-			pTrans.Translate ( Vector3.back  * MoveSpeed * getTime, Space.World );
-			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 180, 0 ) ), RotationSpeed * getTime );
+			pTrans.Translate ( Vector3.back  * speed * delTime, Space.World );
+			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 180, 0 ) ), RotationSpeed * delTime );
 		}
 		else if ( currentDir == Direction.East )
 		{
-			pTrans.Translate ( Vector3.right * MoveSpeed * getTime, Space.World );
-			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 90, 0 ) ), RotationSpeed * getTime );
+			pTrans.Translate ( Vector3.right * speed * delTime, Space.World );
+			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 90, 0 ) ), RotationSpeed * delTime );
 		}
 		else if ( currentDir == Direction.West )
 		{
-			pTrans.Translate ( Vector3.left * MoveSpeed * getTime, Space.World );
-			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, -90, 0 ) ), RotationSpeed * getTime );
+			pTrans.Translate ( Vector3.left * speed * delTime, Space.World );
+			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, -90, 0 ) ), RotationSpeed * delTime );
 		}
 
 		if ( canJump && Input.GetAxis ( "Jump" ) > 0 )

@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
 	public float RotationSpeed = 1;
 	public float JumpForce = 200;
 	public bool Running = true;
+	[Space]
+	[Header("Nombre de ligne bonus d'un seul coté")]
+	public int NbrLine = 3;
 
 	Rigidbody thisRig;
 	Transform pTrans;
@@ -34,6 +37,7 @@ public class PlayerController : MonoBehaviour
 	float newDist;
 	float saveDist;
 	float befRot = 0;
+	int currLine = 0;
 
 	int distLine = 3;
 	int LastImp = 0;
@@ -165,16 +169,18 @@ public class PlayerController : MonoBehaviour
 	{
 		float newImp = Input.GetAxis ( "Horizontal" );
 
-		if ( newImp == 1 && LastImp != 1 )
+		if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLine)
 		{
+			currLine++;
 			LastImp = 1;
 			clDir = 1;
 			newH = newH + distLine;
 			saveDist = newH;
 
 		}
-		else if ( newImp == -1 && LastImp != -1 )
+		else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLine )
 		{
+			currLine--;
 			LastImp = -1;
 			clDir = -1;
 			newH = newH - distLine;

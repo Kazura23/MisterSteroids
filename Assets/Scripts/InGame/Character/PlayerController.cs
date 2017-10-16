@@ -17,11 +17,15 @@ public class PlayerController : MonoBehaviour
 
 	[Header ("Caract both")]
 	public float RotationSpeed = 1;
-	public float JumpForce = 200;
 	public bool Running = true;
+	//public float JumpForce = 200;
+
 	[Space]
 	[Header("Nombre de ligne bonus d'un seul coté")]
 	public int NbrLine = 3;
+
+	[HideInInspector]
+	public bool playerDead = false;
 
 	Rigidbody thisRig;
 	Transform pTrans;
@@ -39,12 +43,13 @@ public class PlayerController : MonoBehaviour
 	float befRot = 0;
 	int currLine = 0;
 
-	int distLine = 3;
+	int distLine = 6;
 	int LastImp = 0;
 	int clDir = 0;
 
-	bool canJump = true;
+	//bool canJump = true;
 	bool newPos = false;
+
 	#endregion
 
 	#region Mono
@@ -56,6 +61,11 @@ public class PlayerController : MonoBehaviour
 
 	void FixedUpdate ( )
 	{
+		if ( playerDead )
+		{
+			return;
+		}
+
 		/*if ( newPos )
 		{
 			float getCurr = Vector3.Distance ( posDir, pTrans.position );
@@ -157,12 +167,11 @@ public class PlayerController : MonoBehaviour
 
 		pTrans.Translate ( calTrans, Space.World );
 			
-		if ( canJump && Input.GetAxis ( "Jump" ) > 0 )
+		/*if ( canJump && Input.GetAxis ( "Jump" ) > 0 )
 		{
 			canJump = false;
-			//canCheckGr = false;
 			thisRig.AddForce ( transPlayer.up * JumpForce, ForceMode.Impulse );
-		}
+		}*/
 	}
 
 	void changeLine ( float delTime )
@@ -225,24 +234,33 @@ public class PlayerController : MonoBehaviour
 
 	void OnTriggerEnter ( Collider thisColl )
 	{
-		if ( thisColl.tag == "ModifDirect" )
+		if ( thisColl.tag == Constants._NewDirec )
 		{
-			newPos = true;
 			//posDir = thisColl.transform.position;
-			newDir = thisColl.GetComponent<NewDirect> ( ).NewDirection;
-			befRot = thisColl.GetComponent<BoxCollider> ( ).size.z / 2 + pTrans.GetComponent<BoxCollider> ( ).size.z ; 
-			Debug.Log ( thisColl.bounds + " / " + befRot);
+			//befRot = thisColl.GetComponent<BoxCollider> ( ).size.z / 2 + pTrans.GetComponent<BoxCollider> ( ).size.z ;
 
-			//calPos = Vector3.Distance ( posDir, pTrans.position ) + 0.1f;
+			newPos = true;
+			newDir = thisColl.GetComponent<NewDirect> ( ).NewDirection;
+			befRot = Vector3.Distance ( thisColl.transform.position, pTrans.position );
+		} 
+	}
+
+	void OnCollisionEnter ( Collision thisColl )
+	{
+		if ( thisColl.gameObject.tag == Constants._EnnemisTag )
+		{
+			playerDead = true;
+			Manager.Ui.DisplayOver ( true );
 		}
 	}
 
-	void OnCollisionStay ( Collision thisColl )
+
+	/*void OnCollisionStay ( Collision thisColl )
 	{
 		if ( thisColl.gameObject.layer == 9 )
 		{
 			canJump = true;
 		}
-	}
+	}*/
 	#endregion
 }

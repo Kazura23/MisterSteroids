@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 public class UiManager : ManagerParent
 {
 	#region Variables
+	public GameObject GameOver;
 	bool CursorVisble = false;
 	#endregion
 
@@ -15,8 +16,10 @@ public class UiManager : ManagerParent
 	#endregion
 
 	#region Public Methods
-
-
+	public void DisplayOver ( bool display )
+	{
+		GameOver.gameObject.SetActive ( display );
+	}
 	#endregion
 
 	#region Private Methods

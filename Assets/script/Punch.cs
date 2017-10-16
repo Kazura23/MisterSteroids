@@ -10,7 +10,7 @@ public class Punch : MonoBehaviour {
     }
 
     private int numTechnic;
-    public int degat_basic = 1;
+    public Vector3 degat_basic;
 
     void OnTriggerEnter(Collider other)
     {

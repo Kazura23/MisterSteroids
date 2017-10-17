@@ -401,24 +401,6 @@ Transform:
   m_Father: {fileID: 1270626806}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &28345895 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1221139931999064, guid: 8a4bd94c402f1fc47a4982080a229450,
-    type: 2}
-  m_PrefabInternal: {fileID: 81585565}
---- !u!114 &28345897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 28345895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e90339c5e89f5134aba48336c80c1cd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delayDead: 2
-  NewColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1001 &29823294
 Prefab:
   m_ObjectHideFlags: 0
@@ -687,6 +669,16 @@ Prefab:
       propertyPath: DecelerationLineCL
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
+        type: 2}
+      propertyPath: poingGauche
+      value: 
+      objectReference: {fileID: 23628699}
+    - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
+        type: 2}
+      propertyPath: poingDroite
+      value: 
+      objectReference: {fileID: 207090447}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b0a5152c86828b64ebcfe000d3f1fd31, type: 2}
   m_IsPrefabParent: 0
@@ -9200,24 +9192,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4019637009555822, guid: 8a4bd94c402f1fc47a4982080a229450,
     type: 2}
   m_PrefabInternal: {fileID: 786001287}
---- !u!1 &786001289 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1221139931999064, guid: 8a4bd94c402f1fc47a4982080a229450,
-    type: 2}
-  m_PrefabInternal: {fileID: 786001287}
---- !u!114 &786001290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 786001289}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e90339c5e89f5134aba48336c80c1cd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delayDead: 2
-  NewColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1001 &786395630
 Prefab:
   m_ObjectHideFlags: 0
@@ -9680,24 +9654,6 @@ Rigidbody:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: b2f96746c6005c64888263f64272a556, type: 2}
   m_PrefabInternal: {fileID: 1775147487}
---- !u!1 &828672171 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1221139931999064, guid: 8a4bd94c402f1fc47a4982080a229450,
-    type: 2}
-  m_PrefabInternal: {fileID: 1298504492}
---- !u!114 &828672173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 828672171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e90339c5e89f5134aba48336c80c1cd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delayDead: 2
-  NewColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!4 &832989157 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: b2f96746c6005c64888263f64272a556, type: 2}
@@ -11304,28 +11260,6 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: b2f96746c6005c64888263f64272a556, type: 2}
   m_PrefabInternal: {fileID: 1041335662}
---- !u!1 &932313840 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1834829033540480, guid: b0a5152c86828b64ebcfe000d3f1fd31,
-    type: 2}
-  m_PrefabInternal: {fileID: 34139853}
---- !u!114 &932313841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 932313840}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a44ef38e20a937f44890af6a7f35db16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delayLeft: 1
-  delayRight: 1
-  delayHitbox: 0.3
-  hp: 10
-  poingGauche: {fileID: 23628699}
-  poingDroite: {fileID: 207090447}
 --- !u!4 &936474646 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 91d652779ec7140488b6b8e360497937, type: 2}
@@ -11728,24 +11662,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b2f96746c6005c64888263f64272a556, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &980193579 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1221139931999064, guid: 8a4bd94c402f1fc47a4982080a229450,
-    type: 2}
-  m_PrefabInternal: {fileID: 432761399}
---- !u!114 &980193581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 980193579}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e90339c5e89f5134aba48336c80c1cd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delayDead: 2
-  NewColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1001 &983479442
 Prefab:
   m_ObjectHideFlags: 0
@@ -21998,7 +21914,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae96edcd53504dc4685017eec4ca3880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  degat_basic: {x: 3, y: 3, z: 15}
+  projection_basic: {x: 2, y: 1, z: 3}
+  projection_double: {x: 0, y: 2, z: 7}
 --- !u!65 &1853283962
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -56,7 +56,7 @@ public class AbstractEnnemis : MonoBehaviour
 
 		mainCorps.constraints = RigidbodyConstraints.None;
 		mainCorps.useGravity = true;
-		mainCorps.AddForce ( projection, ForceMode.Impulse );
+		mainCorps.AddForce ( projection, ForceMode.VelocityChange );
 
 		Destroy ( this.gameObject, delayDead );
 	}

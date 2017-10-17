@@ -14,7 +14,7 @@ public class Punch : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "enemy")
+		if(other.gameObject.tag == Constants._EnnemisTag)
         {
             switch (numTechnic)
             {

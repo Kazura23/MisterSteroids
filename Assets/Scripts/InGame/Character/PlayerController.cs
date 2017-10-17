@@ -180,7 +180,7 @@ public class PlayerController : MonoBehaviour
 	{
 		float newImp = Input.GetAxis ( "Horizontal" );
 
-		if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLine)
+		if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLine && ( clDir == 1 || newH == 0 ) )
 		{
 			currLine++;
 			LastImp = 1;
@@ -188,7 +188,7 @@ public class PlayerController : MonoBehaviour
 			newH = newH + distLine;
 			saveDist = newH;
 		}
-		else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLine )
+		else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLine && ( clDir == -1 || newH == 0 ) )
 		{
 			currLine--;
 			LastImp = -1;
@@ -235,7 +235,9 @@ public class PlayerController : MonoBehaviour
 			{
 				calTrans += newH;
 				newH = 0;
+				currSpLine = 0;
 			}
+
 			dirLine = pTrans.right * calTrans;
 			pTrans.Translate ( dirLine, Space.World );
 		}

@@ -12,6 +12,6 @@ public class TimeToDisable : MonoBehaviour
 	void disable ( )
 	{
 		gameObject.SetActive ( false );
-		Manager.GameCont.MeshDest.ReAddObj ( gameObject );
+		GlobalManager.GameCont.MeshDest.ReAddObj ( gameObject );
 	}
 }

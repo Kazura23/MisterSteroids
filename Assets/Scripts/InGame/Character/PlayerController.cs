@@ -13,17 +13,23 @@ public class PlayerController : MonoBehaviour
 	[Header ("Caract when change Line")]
 	public float MaxSpeedCL = 5;
 	public float AccelerationCL = 10;
+	public float ImpulsionCL = 10;
+	public float DecelerationLineCL = 5;
 	public float DecelerationCL = 1;
 
 	[Header ("Caract both")]
 	public float RotationSpeed = 1;
-	public float JumpForce = 200;
 	public bool Running = true;
+	//public float JumpForce = 200;
+
 	[Space]
 	[Header("Nombre de ligne bonus d'un seul coté")]
 	public int NbrLine = 3;
 
-	Rigidbody thisRig;
+	[HideInInspector]
+	public bool playerDead = false;
+
+	//Rigidbody thisRig;
 	Transform pTrans;
 	Direction currentDir = Direction.North;
 	Direction newDir = Direction.North;
@@ -39,23 +45,29 @@ public class PlayerController : MonoBehaviour
 	float befRot = 0;
 	int currLine = 0;
 
-	int distLine = 3;
+	int distLine = 6;
 	int LastImp = 0;
 	int clDir = 0;
 
-	bool canJump = true;
+	//bool canJump = true;
 	bool newPos = false;
+
 	#endregion
 
 	#region Mono
 	void Awake ( )
 	{
-		thisRig = GetComponent<Rigidbody> ( );
+		//thisRig = GetComponent<Rigidbody> ( );
 		pTrans = transform;
 	}
 
 	void FixedUpdate ( )
 	{
+		if ( playerDead )
+		{
+			return;
+		}
+
 		/*if ( newPos )
 		{
 			float getCurr = Vector3.Distance ( posDir, pTrans.position );
@@ -157,12 +169,11 @@ public class PlayerController : MonoBehaviour
 
 		pTrans.Translate ( calTrans, Space.World );
 			
-		if ( canJump && Input.GetAxis ( "Jump" ) > 0 )
+		/*if ( canJump && Input.GetAxis ( "Jump" ) > 0 )
 		{
 			canJump = false;
-			//canCheckGr = false;
 			thisRig.AddForce ( transPlayer.up * JumpForce, ForceMode.Impulse );
-		}
+		}*/
 	}
 
 	void changeLine ( float delTime )
@@ -176,7 +187,6 @@ public class PlayerController : MonoBehaviour
 			clDir = 1;
 			newH = newH + distLine;
 			saveDist = newH;
-
 		}
 		else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLine )
 		{
@@ -195,9 +205,22 @@ public class PlayerController : MonoBehaviour
 		{
 			if ( Running )
 			{
-				if ( currSpLine < MaxSpeedCL )
+				float accLine = 0;
+
+				if ( saveDist < 0 && newH > saveDist / 2 || saveDist > 0 && newH < saveDist / 2 )
 				{
-					currSpLine += AccelerationCL * delTime;
+					currSpLine -= DecelerationLineCL * delTime;
+				}
+				else if ( currSpLine < MaxSpeedCL )
+				{
+					accLine = ( currSpLine * ImpulsionCL )/ MaxSpeedCL; 
+
+					if ( accLine > 1 || accLine == 0 )
+					{
+						accLine = 1;
+					}
+
+					currSpLine += AccelerationCL * accLine * delTime;
 				}
 				else if ( currSpLine > MaxSpeedCL )
 				{
@@ -213,7 +236,6 @@ public class PlayerController : MonoBehaviour
 				calTrans += newH;
 				newH = 0;
 			}
-
 			dirLine = pTrans.right * calTrans;
 			pTrans.Translate ( dirLine, Space.World );
 		}
@@ -225,24 +247,36 @@ public class PlayerController : MonoBehaviour
 
 	void OnTriggerEnter ( Collider thisColl )
 	{
-		if ( thisColl.tag == "ModifDirect" )
+		if ( thisColl.tag == Constants._NewDirec )
 		{
-			newPos = true;
 			//posDir = thisColl.transform.position;
-			newDir = thisColl.GetComponent<NewDirect> ( ).NewDirection;
-			befRot = thisColl.GetComponent<BoxCollider> ( ).size.z / 2 + pTrans.GetComponent<BoxCollider> ( ).size.z ; 
-			Debug.Log ( thisColl.bounds + " / " + befRot);
+			//befRot = thisColl.GetComponent<BoxCollider> ( ).size.z / 2 + pTrans.GetComponent<BoxCollider> ( ).size.z ;
 
-			//calPos = Vector3.Distance ( posDir, pTrans.position ) + 0.1f;
+			newPos = true;
+			newDir = thisColl.GetComponent<NewDirect> ( ).NewDirection;
+			befRot = Vector3.Distance ( thisColl.transform.position, pTrans.position );
+		} 
+	}
+
+	void OnCollisionEnter ( Collision thisColl )
+	{
+		if ( thisColl.gameObject.tag == Constants._EnnemisTag )
+		{
+			playerDead = true;
+			GlobalManager.Ui.DisplayOver ( true );
+
+            GlobalManager.GameCont.Restart();
+
 		}
 	}
 
-	void OnCollisionStay ( Collision thisColl )
+
+	/*void OnCollisionStay ( Collision thisColl )
 	{
 		if ( thisColl.gameObject.layer == 9 )
 		{
 			canJump = true;
 		}
-	}
+	}*/
 	#endregion
 }

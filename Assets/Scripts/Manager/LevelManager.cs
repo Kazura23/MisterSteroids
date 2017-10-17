@@ -2,8 +2,9 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
-public class SceneManager : ManagerParent
+public class LevelManager : ManagerParent
 {
 	#region Variables
 	public GameObject LoadScene;

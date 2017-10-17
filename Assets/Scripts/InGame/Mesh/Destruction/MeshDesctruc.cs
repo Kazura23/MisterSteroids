@@ -11,7 +11,7 @@ public class MeshDesctruc : MonoBehaviour
 
 	void Start ( )
 	{
-		garbage = Manager.GameCont.GarbageTransform;
+		garbage = GlobalManager.GameCont.GarbageTransform;
 		stockElem = new List<GameObject> ( );
 	}
 

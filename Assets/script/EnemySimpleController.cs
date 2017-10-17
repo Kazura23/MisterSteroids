@@ -14,6 +14,7 @@ public class EnemySimpleController : MonoBehaviour {
     private bool punchReady, isDead;
     private Vector3 projection;
     private List<Rigidbody> corps;
+	private Rigidbody mainCorps;
 
 	// Use this for initialization
 	void Start () {
@@ -25,9 +26,14 @@ public class EnemySimpleController : MonoBehaviour {
         punchReady = false; isDead = false;
         corps = new List<Rigidbody>();
         Debug.Log("count = " + transform.childCount);
+		mainCorps = GetComponent<Rigidbody> ();
         for(int i = 0; i < transform.childCount; i++)
         {
-            corps.Add(transform.GetChild(i).GetComponent<Rigidbody>());
+			if (transform.GetChild (i).GetComponent<Rigidbody> () != null) 
+			{
+				corps.Add(transform.GetChild(i).GetComponent<Rigidbody>());
+			}
+           
             Debug.Log("corps part " + i);
         }
 	}
@@ -91,7 +97,9 @@ public class EnemySimpleController : MonoBehaviour {
         {
             corps[i].useGravity = true;
         }
-        corps[0].AddForce(projection, ForceMode.Impulse);
+		mainCorps.constraints = RigidbodyConstraints.None;
+		mainCorps.useGravity = true;
+		mainCorps.AddForce (projection, ForceMode.Impulse);
         //animation dead
         yield return new WaitForSeconds(delayDead);
         Destroy(this.gameObject);

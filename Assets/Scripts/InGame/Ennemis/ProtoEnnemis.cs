@@ -40,7 +40,7 @@ public class ProtoEnnemis : AbstractEnnemis
 		}
 	}
 
-	public override void Dead( ) 
+	public override void Dead ( bool enemy = false ) 
 	{
 		base.Dead ( );
 

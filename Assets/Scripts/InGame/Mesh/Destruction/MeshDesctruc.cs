@@ -5,7 +5,6 @@ using UnityEngine;
 public class MeshDesctruc : MonoBehaviour 
 {
 	public GameObject TriangPrefb;
-
 	public List<GameObject> stockElem;
 	Transform garbage;
 
@@ -15,7 +14,7 @@ public class MeshDesctruc : MonoBehaviour
 		stockElem = new List<GameObject> ( );
 	}
 
-	public IEnumerator SplitMesh ( Vector3 sourceCol, GameObject objSource )    
+	public IEnumerator SplitMesh ( Vector3 sourceCol, GameObject objSource, float forcePro, float deleayDest )    
 	{
 		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
 
@@ -59,6 +58,7 @@ public class MeshDesctruc : MonoBehaviour
 		Transform getTrans = objSource.transform;
 		Vector3 explosionPos;
 		Vector3 getSize = M.bounds.size;
+		Vector3 calDir = Vector3.Normalize ( getTrans.position - sourceCol ) * forcePro;
 		GameObject GO;
 		GameObject getTri = TriangPrefb;
 		Mesh mesh;
@@ -154,16 +154,16 @@ public class MeshDesctruc : MonoBehaviour
 
 				explosionPos = new Vector3 ( getTrans.position.x + Random.Range ( -getSize.x, getSize.x ), getTrans.position.y + Random.Range ( -getSize.y, getSize.y ), getTrans.position.z + Random.Range ( -getSize.z, getSize.z ) );
 
-				if ( Random.Range ( 0, 5 ) < 2 )
+				if ( Random.Range ( 0, 20 ) < 1 )
 				{
 					GO.GetComponent<Rigidbody> ( ).AddExplosionForce ( 10, explosionPos, 0, 0, ForceMode.Impulse );
 				}
 				else
 				{
-					GO.GetComponent<Rigidbody> ( ).AddForce ( Vector3.Normalize ( getTrans.position - objSource.transform.position ), ForceMode.Impulse );
+					GO.GetComponent<Rigidbody> ( ).AddForce ( calDir, ForceMode.VelocityChange );
 				}
 
-				GO.GetComponent<TimeToDisable> ( ).DisableThis ( 5 + Random.Range ( 0.0f, 5.0f ) );
+				GO.GetComponent<TimeToDisable> ( ).DisableThis ( deleayDest + Random.Range ( 0.0f, deleayDest ) );
 			}
 		}
 			

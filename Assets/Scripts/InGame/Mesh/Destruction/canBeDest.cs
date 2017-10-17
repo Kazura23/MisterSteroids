@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class canBeDest : MonoBehaviour 
 {	
-	void OnCollisionEnter ( Collision collision ) 
+	public float ForcePropulse = 5;
+	public float DelayDestruc = 1;
+
+	void OnCollisionEnter ( Collision collision )
 	{
 		if ( collision.collider.tag == Constants._PlayerTag )
 		{
-			StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( collision.gameObject.transform.position, gameObject ) );
+			StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( collision.gameObject.transform.position, gameObject, ForcePropulse, DelayDestruc ) );
 		}
 	}
 }

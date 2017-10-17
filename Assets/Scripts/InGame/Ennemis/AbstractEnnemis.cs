@@ -7,6 +7,9 @@ public class AbstractEnnemis : MonoBehaviour
 	#region Variables
 	public float delayDead = 2;
 
+	[Tooltip ("Pourcentage de réduction lorsque l'enemy encontre en collision avec un autre enemy")]
+	public float velRecuced = 5;
+
 	protected Rigidbody mainCorps;
 	protected Transform parentTrans;
 
@@ -35,7 +38,7 @@ public class AbstractEnnemis : MonoBehaviour
 	{
 		if ( isDead )
 		{
-			StartCoroutine("Dead");
+			Dead ( );
 		}
 	}
 	#endregion
@@ -47,22 +50,44 @@ public class AbstractEnnemis : MonoBehaviour
 		projection = p_damage;
 	}
 
-	public virtual void Dead ( )
+	public virtual void Dead ( bool enemy = false )
 	{
 		for ( int i = 0; i < corps.Count; i++ )
 		{
 			corps [ i ].useGravity = true;
 		}
 
-		mainCorps.constraints = RigidbodyConstraints.None;
+		//mainCorps.constraints = RigidbodyConstraints.None;
 		mainCorps.useGravity = true;
-		mainCorps.AddForce ( projection, ForceMode.VelocityChange );
+		if ( enemy )
+		{
+			mainCorps.AddForce ( projection / velRecuced, ForceMode.VelocityChange );
+		}
+		else
+		{
+			mainCorps.AddForce ( projection, ForceMode.VelocityChange );
+		}
 
 		Destroy ( this.gameObject, delayDead );
 	}
 	#endregion
 
 	#region Private Methods
+	void OnCollisionEnter ( Collision thisColl)
+	{
+		if ( thisColl.gameObject.tag == Constants._EnnemisTag )
+		{
+			if ( !isDead )
+			{
+				Dead ( true );
+			}
+			else
+			{
+				mainCorps.velocity = mainCorps.velocity / velRecuced;
+			}
+		}
+	}
+
 	protected virtual void playerDetected ( )
 	{
 		

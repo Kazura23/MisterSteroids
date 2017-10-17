@@ -18,8 +18,12 @@ public class Punch : MonoBehaviour {
         {
             switch (numTechnic)
             {
-                case (int)Technic.basic_punch:
-                    other.GetComponent<EnemySimpleController>().Degat(degat_basic);
+			case (int)Technic.basic_punch:
+				if ( Random.Range ( 0, 2 ) == 0 )
+				{
+					degat_basic.x *= -1;
+				}
+				other.GetComponentInChildren<AbstractEnnemis>().Degat(degat_basic);
                     break;
             }
         }

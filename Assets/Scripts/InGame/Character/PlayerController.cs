@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
 	[HideInInspector]
 	public bool playerDead = false;
 
-	Rigidbody thisRig;
+	//Rigidbody thisRig;
 	Transform pTrans;
 	Direction currentDir = Direction.North;
 	Direction newDir = Direction.North;
@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
 	#region Mono
 	void Awake ( )
 	{
-		thisRig = GetComponent<Rigidbody> ( );
+		//thisRig = GetComponent<Rigidbody> ( );
 		pTrans = transform;
 	}
 

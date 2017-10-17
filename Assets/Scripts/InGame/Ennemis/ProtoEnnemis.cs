@@ -8,14 +8,13 @@ public class ProtoEnnemis : AbstractEnnemis
 	public Color NewColor;
 	Color saveCol;
 
-	Transform parentTrans;
+
 	Material parMat;
 	#endregion
 
 	#region Mono
 	void Start ( )
 	{
-		parentTrans = transform.parent;
 		parMat = parentTrans.GetComponent<MeshRenderer> ( ).material;
 		saveCol = parMat.color;
 	}
@@ -41,6 +40,13 @@ public class ProtoEnnemis : AbstractEnnemis
 		}
 	}
 
+	public override void Dead( ) 
+	{
+		base.Dead ( );
+
+		mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
+	}
+
 	protected override void playerDetected ( )
 	{
 		base.playerDetected ( );
@@ -52,7 +58,7 @@ public class ProtoEnnemis : AbstractEnnemis
 	{
 		base.playerUndetected ( );
 
-		saveCol = saveCol;
+		parMat.color = saveCol;
 	}
 	#endregion
 }

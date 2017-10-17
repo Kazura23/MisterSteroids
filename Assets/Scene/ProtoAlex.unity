@@ -417,6 +417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e90339c5e89f5134aba48336c80c1cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delayDead: 2
   NewColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1001 &29823294
 Prefab:
@@ -3455,22 +3456,6 @@ GameObject:
   m_PrefabParentObject: {fileID: 1131350923728168, guid: 8a4bd94c402f1fc47a4982080a229450,
     type: 2}
   m_PrefabInternal: {fileID: 786001287}
---- !u!114 &297945928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 297945924}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 337062c8caac3c84198f6c06203bde09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 8
-  cooldownPunch: 2
-  distanceMin: 2
-  delayDead: 2
-  degat: 1
 --- !u!54 &297945929
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8478,6 +8463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e90339c5e89f5134aba48336c80c1cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delayDead: 2
   NewColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!65 &708972909
 BoxCollider:
@@ -9220,6 +9206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e90339c5e89f5134aba48336c80c1cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delayDead: 2
   NewColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1001 &786395630
 Prefab:
@@ -9664,22 +9651,6 @@ GameObject:
   m_PrefabParentObject: {fileID: 1131350923728168, guid: 8a4bd94c402f1fc47a4982080a229450,
     type: 2}
   m_PrefabInternal: {fileID: 1298504492}
---- !u!114 &827453542
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 827453538}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 337062c8caac3c84198f6c06203bde09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 8
-  cooldownPunch: 2
-  distanceMin: 2
-  delayDead: 2
-  degat: 1
 --- !u!54 &827453543
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9715,6 +9686,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e90339c5e89f5134aba48336c80c1cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delayDead: 2
   NewColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!4 &832989157 stripped
 Transform:
@@ -11762,6 +11734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e90339c5e89f5134aba48336c80c1cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delayDead: 2
   NewColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1001 &983479442
 Prefab:
@@ -14374,22 +14347,6 @@ GameObject:
   m_PrefabParentObject: {fileID: 1131350923728168, guid: 8a4bd94c402f1fc47a4982080a229450,
     type: 2}
   m_PrefabInternal: {fileID: 81585565}
---- !u!114 &1193148749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1193148745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 337062c8caac3c84198f6c06203bde09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 8
-  cooldownPunch: 2
-  distanceMin: 2
-  delayDead: 2
-  degat: 1
 --- !u!54 &1193148750
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -16128,7 +16085,6 @@ GameObject:
   - component: {fileID: 1353189929}
   - component: {fileID: 1353189928}
   - component: {fileID: 1353189931}
-  - component: {fileID: 1353189932}
   m_Layer: 0
   m_Name: ProtoEnnemis (1)
   m_TagString: Enemy
@@ -16205,22 +16161,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 1
---- !u!114 &1353189932
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1353189927}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 337062c8caac3c84198f6c06203bde09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 8
-  cooldownPunch: 2
-  distanceMin: 2
-  delayDead: 2
-  degat: 1
 --- !u!4 &1353751106 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 91d652779ec7140488b6b8e360497937, type: 2}
@@ -16784,22 +16724,6 @@ GameObject:
   m_PrefabParentObject: {fileID: 1131350923728168, guid: 8a4bd94c402f1fc47a4982080a229450,
     type: 2}
   m_PrefabInternal: {fileID: 432761399}
---- !u!114 &1404302210
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1404302206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 337062c8caac3c84198f6c06203bde09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 8
-  cooldownPunch: 2
-  distanceMin: 2
-  delayDead: 2
-  degat: 1
 --- !u!54 &1404302211
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -17920,22 +17844,6 @@ GameObject:
   m_PrefabParentObject: {fileID: 1131350923728168, guid: 8a4bd94c402f1fc47a4982080a229450,
     type: 2}
   m_PrefabInternal: {fileID: 1083270436}
---- !u!114 &1508340565
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1508340561}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 337062c8caac3c84198f6c06203bde09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 8
-  cooldownPunch: 2
-  distanceMin: 2
-  delayDead: 2
-  degat: 1
 --- !u!54 &1508340566
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -22080,7 +21988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae96edcd53504dc4685017eec4ca3880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  degat_basic: {x: -5, y: 3, z: 3}
+  degat_basic: {x: 3, y: 3, z: 15}
 --- !u!65 &1853283962
 BoxCollider:
   m_ObjectHideFlags: 0

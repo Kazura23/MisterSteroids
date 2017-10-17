@@ -8,9 +8,9 @@ public class PlayerControllerEric : MonoBehaviour {
     private RaycastHit hit;
     private Collider punchBox;
     private Punch punch;
-    private bool punchRight, punchLeft, defense;
-    public float delayLeft = 1, delayRight = 1, delayHitbox = 0.3f;
-    private Coroutine corou;
+    private bool punchRight, punchLeft, preparRight, preparLeft, defense;
+    public float delayLeft = 1, delayRight = 1, delayHitbox = 0.3f, delayPrepare = 0.1f;
+    private Coroutine corou, preparPunch;
     public int hp = 10;
 	public GameObject poingGauche;
 	public GameObject poingDroite;
@@ -20,17 +20,39 @@ public class PlayerControllerEric : MonoBehaviour {
 	void Start () {
         punchBox = transform.GetChild(0).GetComponent<Collider>();
         punch = transform.GetChild(0).GetComponent<Punch>();
-        punchRight = true; punchLeft = true; defense = false;
+        punchRight = true; punchLeft = true; preparRight = false; preparLeft = false; defense = false;
+        preparPunch = null;
         
     }
 	
 	// Update is called once per frame
 	void Update () {
+        /*if(Input.GetKeyDown(KeyCode.A) && Input.GetKeyDown(KeyCode.E) && punchLeft && punchRight)
+        {
+            punch.setTechnic(1);
+            punchBox.enabled = true;
+            punchLeft = false;
+            punchRight = false;
+            if (corou != null)
+            {
+                punchBox.enabled = false;
+                StopCoroutine(corou);
+                punchBox.enabled = true;
+            }
+            corou = StartCoroutine("TimerHitbox");
+            StartCoroutine("CooldownLeft");
+            StartCoroutine("CooldownRight");
+        }*/
         if (Input.GetKeyDown(KeyCode.A) && punchLeft)
         {
-            Debug.Log("Frappegauch");
+            preparLeft = true;
+            if(preparPunch == null)
+            {
+                preparPunch = StartCoroutine("StartPunch");
+            }
+            //animation
 
-            punch.setTechnic(0);
+            /*punch.setTechnic(0);
             punchBox.enabled = true;
             punchLeft = false;
             if(corou != null)
@@ -42,11 +64,18 @@ public class PlayerControllerEric : MonoBehaviour {
 			poingGauche.SetActive (true);
             corou = StartCoroutine("TimerHitbox");
             StartCoroutine("CooldownLeft");
-            //animation poing gauche
+            //animation poing gauche*/
         }
         if (Input.GetKeyDown(KeyCode.E) && punchRight)
         {
-            punch.setTechnic(0);
+            preparRight = true;
+            if (preparPunch == null)
+            {
+                preparPunch = StartCoroutine("StartPunch");
+            }
+            //animation
+
+            /*punch.setTechnic(0);
             punchBox.enabled = true;
             punchRight = false;
             if (corou != null)
@@ -58,8 +87,13 @@ public class PlayerControllerEric : MonoBehaviour {
 			poingDroite.SetActive (true);
             corou = StartCoroutine("TimerHitbox");
             StartCoroutine("CooldownRight");
-            //animation poing droit
+            //animation poing droit*/
         }
+
+
+
+
+
         if (Input.GetKey(KeyCode.R) && punchLeft && punchRight)
         {
             defense = true;
@@ -72,6 +106,67 @@ public class PlayerControllerEric : MonoBehaviour {
         }
     }
 
+    private IEnumerator StartPunch()
+    {
+        yield return new WaitForSeconds(delayPrepare);
+        if (preparRight && preparLeft)
+        {
+            punch.setTechnic(1);
+            punchBox.enabled = true;
+            punchLeft = false;
+            punchRight = false;
+            if (corou != null)
+            {
+                punchBox.enabled = false;
+                StopCoroutine(corou);
+                punchBox.enabled = true;
+            }
+            corou = StartCoroutine("TimerHitbox");
+            /*StartCoroutine("CooldownLeft");
+            StartCoroutine("CooldownRight");*/
+        }else if (preparLeft)
+        {
+            punchLeft = false;
+            punch.setTechnic(0);
+            punchBox.enabled = true;
+            //bool
+            if (corou != null)
+            {
+                punchBox.enabled = false;
+                StopCoroutine(corou);
+                punchBox.enabled = true;
+            }
+            corou = StartCoroutine("TimerHitbox");
+            //StartCoroutine("CooldownLeft");
+            
+        }else if (preparRight)
+        {
+            punchRight = false;
+            punch.setTechnic(0);
+            punchBox.enabled = true;
+            // bool
+            if (corou != null)
+            {
+                punchBox.enabled = false;
+                StopCoroutine(corou);
+                punchBox.enabled = true;
+            }
+            corou = StartCoroutine("TimerHitbox");
+            //StartCoroutine("CooldownRight");
+            
+        }
+        if (preparLeft)
+        {
+            preparLeft = false;
+            StartCoroutine("CooldownLeft");
+        }
+        if (preparRight)
+        {
+            preparRight = false;
+            StartCoroutine("CooldownRight");
+        }
+        preparPunch = null;
+    }
 
     private IEnumerator CooldownLeft()
     {

@@ -6,11 +6,12 @@ public class Punch : MonoBehaviour {
 
     private enum Technic
     {
-        basic_punch
+        basic_punch,
+        double_punch
     }
 
     private int numTechnic;
-    public Vector3 degat_basic;
+    public Vector3 projection_basic, projection_double;
 
     void OnTriggerEnter(Collider other)
     {
@@ -19,7 +20,10 @@ public class Punch : MonoBehaviour {
             switch (numTechnic)
             {
                 case (int)Technic.basic_punch:
-                    other.GetComponent<EnemySimpleController>().Degat(degat_basic);
+                    other.GetComponent<EnemySimpleController>().Degat(projection_basic);
+                    break;
+                case (int)Technic.double_punch:
+                    other.GetComponent<EnemySimpleController>().Degat(projection_double);
                     break;
             }
         }

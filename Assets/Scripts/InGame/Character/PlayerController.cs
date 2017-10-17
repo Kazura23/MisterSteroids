@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
 	[Header ("Caract when change Line")]
 	public float MaxSpeedCL = 5;
 	public float AccelerationCL = 10;
+	public float ImpulsionCL = 10;
+	public float DecelerationLineCL = 5;
 	public float DecelerationCL = 1;
 
 	[Header ("Caract both")]
@@ -185,7 +187,6 @@ public class PlayerController : MonoBehaviour
 			clDir = 1;
 			newH = newH + distLine;
 			saveDist = newH;
-
 		}
 		else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLine )
 		{
@@ -204,9 +205,22 @@ public class PlayerController : MonoBehaviour
 		{
 			if ( Running )
 			{
-				if ( currSpLine < MaxSpeedCL )
+				float accLine = 0;
+
+				if ( saveDist < 0 && newH > saveDist / 2 || saveDist > 0 && newH < saveDist / 2 )
 				{
-					currSpLine += AccelerationCL * delTime;
+					currSpLine -= DecelerationLineCL * delTime;
+				}
+				else if ( currSpLine < MaxSpeedCL )
+				{
+					accLine = ( currSpLine * ImpulsionCL )/ MaxSpeedCL; 
+
+					if ( accLine > 1 || accLine == 0 )
+					{
+						accLine = 1;
+					}
+
+					currSpLine += AccelerationCL * accLine * delTime;
 				}
 				else if ( currSpLine > MaxSpeedCL )
 				{
@@ -222,7 +236,6 @@ public class PlayerController : MonoBehaviour
 				calTrans += newH;
 				newH = 0;
 			}
-
 			dirLine = pTrans.right * calTrans;
 			pTrans.Translate ( dirLine, Space.World );
 		}

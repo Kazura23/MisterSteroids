@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-public class Manager : MonoBehaviour
+public class GlobalManager : MonoBehaviour
 {
 	#region Variables
-   	static Manager mainManagerInstance;
+   	static GlobalManager mainManagerInstance;
 
 	//Add new managers here
 	static UiManager ui;
@@ -12,8 +12,8 @@ public class Manager : MonoBehaviour
 	static EventManager evnt;
     public static EventManager Event { get { return evnt; } }
 
-	static SceneManager scene;
-	public static SceneManager Scene { get { return scene; } }
+	static LevelManager scene;
+	public static LevelManager Scene { get { return scene; } }
 
 	static GameController gCont;
 	public static GameController GameCont { get { return gCont; } }

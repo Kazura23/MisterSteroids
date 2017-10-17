@@ -12,6 +12,8 @@ public class PlayerControllerEric : MonoBehaviour {
     public float delayLeft = 1, delayRight = 1, delayHitbox = 0.3f;
     private Coroutine corou;
     public int hp = 10;
+	public GameObject poingGauche;
+	public GameObject poingDroite;
 
 
 	// Use this for initialization
@@ -26,6 +28,8 @@ public class PlayerControllerEric : MonoBehaviour {
 	void Update () {
         if (Input.GetKeyDown(KeyCode.A) && punchLeft)
         {
+            Debug.Log("Frappegauch");
+
             punch.setTechnic(0);
             punchBox.enabled = true;
             punchLeft = false;
@@ -35,6 +39,7 @@ public class PlayerControllerEric : MonoBehaviour {
                 StopCoroutine(corou);
                 punchBox.enabled = true;
             }
+			poingGauche.SetActive (true);
             corou = StartCoroutine("TimerHitbox");
             StartCoroutine("CooldownLeft");
             //animation poing gauche
@@ -50,6 +55,7 @@ public class PlayerControllerEric : MonoBehaviour {
                 StopCoroutine(corou);
                 punchBox.enabled = true;
             }
+			poingDroite.SetActive (true);
             corou = StartCoroutine("TimerHitbox");
             StartCoroutine("CooldownRight");
             //animation poing droit
@@ -70,12 +76,14 @@ public class PlayerControllerEric : MonoBehaviour {
     private IEnumerator CooldownLeft()
     {
         yield return new WaitForSeconds(delayLeft);
+		poingGauche.SetActive (false);
         punchLeft = true;
     }
 
     private IEnumerator CooldownRight()
     {
         yield return new WaitForSeconds(delayRight);
+		poingDroite.SetActive (false);
         punchRight = true;
     }
 

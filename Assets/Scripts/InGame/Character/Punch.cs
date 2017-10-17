@@ -14,12 +14,16 @@ public class Punch : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "enemy")
+		if(other.gameObject.tag == Constants._EnnemisTag)
         {
             switch (numTechnic)
             {
-                case (int)Technic.basic_punch:
-                    other.GetComponent<EnemySimpleController>().Degat(degat_basic);
+			case (int)Technic.basic_punch:
+				if ( Random.Range ( 0, 2 ) == 0 )
+				{
+					degat_basic.x *= -1;
+				}
+				other.GetComponentInChildren<AbstractEnnemis>().Degat(degat_basic);
                     break;
             }
         }

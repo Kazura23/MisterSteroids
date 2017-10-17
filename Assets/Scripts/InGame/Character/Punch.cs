@@ -19,21 +19,19 @@ public class Punch : MonoBehaviour {
         {
             switch (numTechnic)
             {
-<<<<<<< HEAD:Assets/Scripts/InGame/Character/Punch.cs
 			case (int)Technic.basic_punch:
 				if ( Random.Range ( 0, 2 ) == 0 )
 				{
-					degat_basic.x *= -1;
+					projection_basic.x *= -1;
 				}
-				other.GetComponentInChildren<AbstractEnnemis>().Degat(degat_basic);
-=======
-                case (int)Technic.basic_punch:
-                    other.GetComponent<EnemySimpleController>().Degat(projection_basic);
-                    break;
-                case (int)Technic.double_punch:
-                    other.GetComponent<EnemySimpleController>().Degat(projection_double);
->>>>>>> Eric:Assets/script/Punch.cs
-                    break;
+
+				// 	projection_basic.x *= Random.Range ( -projection_basic.x, projection_basic.x + 1 );
+
+				other.GetComponentInChildren<AbstractEnnemis>().Degat(projection_basic);
+				break;
+            case (int)Technic.double_punch:
+				other.GetComponentInChildren<AbstractEnnemis>().Degat(projection_double);
+           	 	break;
             }
         }
     }

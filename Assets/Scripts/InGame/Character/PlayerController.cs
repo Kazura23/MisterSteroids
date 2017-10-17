@@ -26,8 +26,21 @@ public class PlayerController : MonoBehaviour
 	[Header("Nombre de ligne bonus d'un seul coté")]
 	public int NbrLine = 3;
 
+	[Header("Caract Fight")]
+	public float delayLeft = 1;
+	public float delayRight = 1;
+	public float delayHitbox = 0.3f;
+	public float delayPrepare = 0.1f;
+	public GameObject poingGauche;
+	public GameObject poingDroite;
+
 	[HideInInspector]
 	public bool playerDead = false;
+
+	private Collider punchBox;
+	private Punch punch;
+	private bool punchRight, punchLeft, preparRight, preparLeft, defense;
+	private Coroutine corou, preparPunch;
 
 	//Rigidbody thisRig;
 	Transform pTrans;
@@ -57,8 +70,17 @@ public class PlayerController : MonoBehaviour
 	#region Mono
 	void Awake ( )
 	{
-		//thisRig = GetComponent<Rigidbody> ( );
 		pTrans = transform;
+
+		punchBox = pTrans.GetChild(0).GetComponent<Collider>();
+		punch = pTrans.GetChild(0).GetComponent<Punch>();
+		punchRight = true; punchLeft = true; preparRight = false; preparLeft = false; defense = false;
+		preparPunch = null;
+	}
+
+	void Update ( )
+	{
+		playerFight ( );
 	}
 
 	void FixedUpdate ( )
@@ -246,6 +268,131 @@ public class PlayerController : MonoBehaviour
 			currSpLine = 0;
 		}
 	}
+
+	void playerFight ( )
+	{
+		if (Input.GetKeyDown(KeyCode.A) && punchLeft)
+		{
+			preparLeft = true;
+			poingGauche.SetActive (true);
+
+			if(preparPunch == null)
+			{
+				preparPunch = StartCoroutine("StartPunch");
+			}
+		}
+		if (Input.GetKeyDown(KeyCode.E) && punchRight)
+		{
+			preparRight = true;
+			poingDroite.SetActive (true);
+
+			if (preparPunch == null)
+			{
+				preparPunch = StartCoroutine("StartPunch");
+			}
+		}
+
+		/*
+	   	if (Input.GetKey(KeyCode.R) && punchLeft && punchRight)
+        {
+            defense = true;
+            //ajout animation defense active
+        }
+        if (Input.GetKeyUp(KeyCode.R) || punchLeft || punchRight)
+        {
+            defense = false;
+            //ajout animation defense desactive
+        } 
+		 */
+	}
+
+	private IEnumerator StartPunch()
+	{
+		yield return new WaitForSeconds(delayPrepare);
+		if (preparRight && preparLeft)
+		{
+			punch.setTechnic(1);
+			punchBox.enabled = true;
+			punchLeft = false;
+			punchRight = false;
+			if (corou != null)
+			{
+				punchBox.enabled = false;
+				StopCoroutine(corou);
+				punchBox.enabled = true;
+			}
+			corou = StartCoroutine("TimerHitbox");
+			/*StartCoroutine("CooldownLeft");
+            StartCoroutine("CooldownRight");*/
+		}else if (preparLeft)
+		{
+			punchLeft = false;
+			punch.setTechnic(0);
+			punchBox.enabled = true;
+			//bool
+			if (corou != null)
+			{
+				punchBox.enabled = false;
+				StopCoroutine(corou);
+				punchBox.enabled = true;
+			}
+			corou = StartCoroutine("TimerHitbox");
+			//StartCoroutine("CooldownLeft");
+
+		}else if (preparRight)
+		{
+			punchRight = false;
+			punch.setTechnic(0);
+			punchBox.enabled = true;
+			// bool
+			if (corou != null)
+			{
+				punchBox.enabled = false;
+				StopCoroutine(corou);
+				punchBox.enabled = true;
+			}
+			corou = StartCoroutine("TimerHitbox");
+			//StartCoroutine("CooldownRight");
+
+		}
+		if (preparLeft)
+		{
+			preparLeft = false;
+			StartCoroutine("CooldownLeft");
+		}
+		if (preparRight)
+		{
+			preparRight = false;
+			StartCoroutine("CooldownRight");
+		}
+		preparPunch = null;
+	}
+
+	private IEnumerator CooldownLeft()
+	{
+		yield return new WaitForSeconds(delayLeft);
+		poingGauche.SetActive (false);
+		punchLeft = true;
+	}
+
+	private IEnumerator CooldownRight()
+	{
+		yield return new WaitForSeconds(delayRight);
+		poingDroite.SetActive (false);
+		punchRight = true;
+	}
+
+	private IEnumerator TimerHitbox()
+	{
+		yield return new WaitForSeconds(delayHitbox);
+		punchBox.enabled = false;
+		corou = null;
+	}
+
+	/* public bool IsDefense()
+    {
+        return defense;
+    }*/
 
 	void OnTriggerEnter ( Collider thisColl )
 	{

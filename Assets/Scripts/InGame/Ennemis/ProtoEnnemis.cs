@@ -44,7 +44,7 @@ public class ProtoEnnemis : AbstractEnnemis
 	{
 		base.Dead ( );
 
-		mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
+		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
 	}
 
 	protected override void playerDetected ( )

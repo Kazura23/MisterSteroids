@@ -26,6 +26,8 @@ public class PlayerControllerEric : MonoBehaviour {
 	void Update () {
         if (Input.GetKeyDown(KeyCode.A) && punchLeft)
         {
+            Debug.Log("Frappegauch");
+
             punch.setTechnic(0);
             punchBox.enabled = true;
             punchLeft = false;

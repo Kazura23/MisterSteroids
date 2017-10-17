@@ -250,7 +250,10 @@ public class PlayerController : MonoBehaviour
 		if ( thisColl.gameObject.tag == Constants._EnnemisTag )
 		{
 			playerDead = true;
-			Manager.Ui.DisplayOver ( true );
+			GlobalManager.Ui.DisplayOver ( true );
+
+            GlobalManager.GameCont.Restart();
+
 		}
 	}
 

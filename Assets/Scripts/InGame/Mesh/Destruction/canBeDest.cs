@@ -8,7 +8,7 @@ public class canBeDest : MonoBehaviour
 	{
 		if ( collision.collider.tag == Constants._PlayerTag )
 		{
-			StartCoroutine ( Manager.GameCont.MeshDest.SplitMesh ( collision.gameObject.transform.position, gameObject ) );
+			StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( collision.gameObject.transform.position, gameObject ) );
 		}
 	}
 }

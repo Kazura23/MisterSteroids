@@ -6,11 +6,12 @@ public class Punch : MonoBehaviour {
 
     private enum Technic
     {
-        basic_punch
+        basic_punch,
+        double_punch
     }
 
     private int numTechnic;
-    public Vector3 degat_basic;
+    public Vector3 projection_basic, projection_double;
 
     void OnTriggerEnter(Collider other)
     {
@@ -21,10 +22,16 @@ public class Punch : MonoBehaviour {
 			case (int)Technic.basic_punch:
 				if ( Random.Range ( 0, 2 ) == 0 )
 				{
-					degat_basic.x *= -1;
+					projection_basic.x *= -1;
 				}
-				other.GetComponentInChildren<AbstractEnnemis>().Degat(degat_basic);
-                    break;
+
+				// 	projection_basic.x *= Random.Range ( -projection_basic.x, projection_basic.x + 1 );
+
+				other.GetComponentInChildren<AbstractEnnemis>().Degat(projection_basic);
+				break;
+            case (int)Technic.double_punch:
+				other.GetComponentInChildren<AbstractEnnemis>().Degat(projection_double);
+           	 	break;
             }
         }
     }

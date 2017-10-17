@@ -5,18 +5,25 @@ using UnityEngine;
 public class AbstractEnnemis : MonoBehaviour 
 {
 	#region Variables
+	[HideInInspector]
+	public bool isDead;
+
 	public float delayDead = 2;
 
-	[Tooltip ("Pourcentage de réduction lorsque l'enemy encontre en collision avec un autre enemy")]
-	public float velRecuced = 5;
+	[Tooltip ("force de direction lorsque en collision contre un ennemis ( situation ou ce gameobject est immobile )")]
+	public Vector3 onEnemy;
+
+	[Tooltip ("reduction de la velocité lors d'une collision avec un ennmis ( situation ou ce gameobject est en mouvement )")]
+	public float recuceVel = 5;
 
 	protected Rigidbody mainCorps;
 	protected Transform parentTrans;
 
 	List<Rigidbody> corps;
 	Vector3 projection;
+	Collider currColl;
 
-	bool isDead;
+
 	#endregion
 
 	#region Mono
@@ -26,7 +33,8 @@ public class AbstractEnnemis : MonoBehaviour
 
 		isDead = false;
 		corps = new List<Rigidbody>();
-		mainCorps = parentTrans.GetComponent<Rigidbody> ();
+		mainCorps = parentTrans.GetComponent<Rigidbody> ( );
+		currColl = parentTrans.GetComponent<Collider> ( );
 
 		foreach ( Rigidbody thisRig in parentTrans.GetComponentsInChildren<Rigidbody> ( ) )
 		{
@@ -52,16 +60,17 @@ public class AbstractEnnemis : MonoBehaviour
 
 	public virtual void Dead ( bool enemy = false )
 	{
+		StartCoroutine ( disableColl ( ) );
 		for ( int i = 0; i < corps.Count; i++ )
 		{
 			corps [ i ].useGravity = true;
 		}
 
-		//mainCorps.constraints = RigidbodyConstraints.None;
+		mainCorps.constraints = RigidbodyConstraints.None;
 		mainCorps.useGravity = true;
 		if ( enemy )
 		{
-			mainCorps.AddForce ( projection / velRecuced, ForceMode.VelocityChange );
+			mainCorps.AddForce ( onEnemy, ForceMode.VelocityChange );
 		}
 		else
 		{
@@ -70,22 +79,33 @@ public class AbstractEnnemis : MonoBehaviour
 
 		Destroy ( this.gameObject, delayDead );
 	}
+
+	public void CollDetect (  )
+	{
+		if ( !isDead )
+		{
+			Dead ( true );
+		}
+		else
+		{
+			mainCorps.velocity = mainCorps.velocity / recuceVel;
+		}
+	}
 	#endregion
 
 	#region Private Methods
-	void OnCollisionEnter ( Collision thisColl)
+	protected void debrisDetected ( Collider thisColl )
 	{
-		if ( thisColl.gameObject.tag == Constants._EnnemisTag )
-		{
-			if ( !isDead )
-			{
-				Dead ( true );
-			}
-			else
-			{
-				mainCorps.velocity = mainCorps.velocity / velRecuced;
-			}
-		}
+		Physics.IgnoreCollision ( thisColl, currColl );
+	}
+
+	IEnumerator disableColl ( )
+	{
+		WaitForSeconds thisSec = new WaitForSeconds ( 0.5f );
+
+		yield return thisSec;
+
+		parentTrans.tag = Constants._UnTagg;
 	}
 
 	protected virtual void playerDetected ( )

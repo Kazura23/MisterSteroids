@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour
 	Direction newDir = Direction.North;
 	//Vector3 posDir;
 	Vector3 dirLine = Vector3.zero;
+	Collider currCol;
 
 	float currSpeed = 0;
 	float currSpLine = 0;
@@ -71,7 +72,7 @@ public class PlayerController : MonoBehaviour
 	void Awake ( )
 	{
 		pTrans = transform;
-
+		currCol = GetComponent<Collider> ( );
 		punchBox = pTrans.GetChild(0).GetComponent<Collider>();
 		punch = pTrans.GetChild(0).GetComponent<Punch>();
 		punchRight = true; punchLeft = true; preparRight = false; preparLeft = false; defense = false;
@@ -414,8 +415,12 @@ public class PlayerController : MonoBehaviour
 			playerDead = true;
 			GlobalManager.Ui.DisplayOver ( true );
 
-            GlobalManager.GameCont.Restart();
+			GlobalManager.GameCont.Restart ( );
 
+		}
+		else if ( thisColl.gameObject.tag == Constants._DebrisEnv )
+		{
+			Physics.IgnoreCollision ( thisColl.collider, currCol );
 		}
 	}
 

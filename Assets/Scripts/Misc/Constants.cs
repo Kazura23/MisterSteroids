@@ -7,5 +7,7 @@ public static class Constants
 	public const string _PlayerTag = "Player";
 	public const string _NewDirec = "ModifDirect";
 	public const string _EnnemisTag = "Enemy";
+	public const string _DebrisEnv = "Debris";
+	public const string _UnTagg = "Untagged";
 	#endregion
 }

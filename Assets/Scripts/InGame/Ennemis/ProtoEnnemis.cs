@@ -30,6 +30,10 @@ public class ProtoEnnemis : AbstractEnnemis
 		{
 			playerDetected ( );
 		}
+		else if ( thisColl.tag == Constants._DebrisEnv )
+		{
+			debrisDetected ( thisColl.gameObject.GetComponent<Collider> ( ) );
+		}
 	}
 
 	void OnTriggerExit ( Collider thisColl )
@@ -42,7 +46,7 @@ public class ProtoEnnemis : AbstractEnnemis
 
 	public override void Dead ( bool enemy = false ) 
 	{
-		base.Dead ( );
+		base.Dead ( enemy );
 
 		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
 	}

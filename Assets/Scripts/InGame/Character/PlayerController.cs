@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
 	public float delayRight = 1;
 	public float delayHitbox = 0.3f;
 	public float delayPrepare = 0.1f;
+	public Vector3 DistPoingDroit = Vector3.zero;
+	public Vector3 DistPoingGauche = Vector3.zero;
 	public GameObject poingGauche;
 	public GameObject poingDroite;
 
@@ -281,6 +283,8 @@ public class PlayerController : MonoBehaviour
 			{
 				preparPunch = StartCoroutine("StartPunch");
 			}
+
+			StartCoroutine ( animePunch ( true ) );
 		}
 		if (Input.GetKeyDown(KeyCode.E) && punchRight)
 		{
@@ -291,6 +295,8 @@ public class PlayerController : MonoBehaviour
 			{
 				preparPunch = StartCoroutine("StartPunch");
 			}
+
+			StartCoroutine ( animePunch ( false ) );
 		}
 
 		/*
@@ -388,6 +394,48 @@ public class PlayerController : MonoBehaviour
 		yield return new WaitForSeconds(delayHitbox);
 		punchBox.enabled = false;
 		corou = null;
+	}
+
+	IEnumerator animePunch ( bool leftPoing )
+	{
+		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
+		Transform thisPoing;
+		Vector3 getStart;
+		Vector3 thisDist;
+
+		float getTime = delayLeft / 2;
+		float currTime = 0;
+
+		if ( !leftPoing )
+		{
+			thisPoing = poingDroite.transform;	
+			thisDist = DistPoingDroit;
+		}
+		else
+		{
+			thisPoing = poingGauche.transform;
+			thisDist = DistPoingGauche;
+		}
+
+		getStart = thisPoing.localPosition;
+
+		do 
+		{
+			yield return thisFrame;
+
+			currTime += Time.deltaTime;
+			thisPoing.localPosition = getStart + thisDist * ( currTime / getTime);
+		}while ( currTime < getTime );
+
+		do 
+		{
+			yield return thisFrame;
+
+			currTime -= Time.deltaTime;
+			thisPoing.localPosition = getStart + thisDist * ( currTime / getTime);
+		}while ( currTime > 0 );
+
+		thisPoing.localPosition = getStart;
 	}
 
 	/* public bool IsDefense()

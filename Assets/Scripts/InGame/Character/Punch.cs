@@ -9,7 +9,7 @@ public class Punch : MonoBehaviour {
         basic_punch,
         double_punch
     }
-
+		
     private int numTechnic;
 	[Tooltip ("X = force droite / gauche - Y = force haut / bas - Z = force Devant / derriere" )]
     public Vector3 projection_basic, projection_double;
@@ -35,5 +35,4 @@ public class Punch : MonoBehaviour {
     {
         numTechnic = typeTech;
     }
-
 }

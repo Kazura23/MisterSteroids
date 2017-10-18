@@ -679,6 +679,46 @@ Prefab:
       propertyPath: poingDroite
       value: 
       objectReference: {fileID: 207090447}
+    - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
+        type: 2}
+      propertyPath: DistPoingDroit.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
+        type: 2}
+      propertyPath: DistPoingGauche.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
+        type: 2}
+      propertyPath: DistPoingGauche.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
+        type: 2}
+      propertyPath: delayLeft
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
+        type: 2}
+      propertyPath: delayRight
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
+        type: 2}
+      propertyPath: DistPoingDroit.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
+        type: 2}
+      propertyPath: DistPoingGauche.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
+        type: 2}
+      propertyPath: DistPoingDroit.x
+      value: -0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b0a5152c86828b64ebcfe000d3f1fd31, type: 2}
   m_IsPrefabParent: 0

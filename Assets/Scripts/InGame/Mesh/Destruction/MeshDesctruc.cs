@@ -14,7 +14,7 @@ public class MeshDesctruc : MonoBehaviour
 		stockElem = new List<GameObject> ( );
 	}
 
-	public IEnumerator SplitMesh ( Vector3 sourceCol, GameObject objSource, float forcePro, float deleayDest )    
+	public IEnumerator SplitMesh ( GameObject objSource, float forcePro, float deleayDest )    
 	{
 		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
 
@@ -58,7 +58,7 @@ public class MeshDesctruc : MonoBehaviour
 		Transform getTrans = objSource.transform;
 		Vector3 explosionPos;
 		Vector3 getSize = M.bounds.size;
-		Vector3 calDir = Vector3.Normalize ( getTrans.position - sourceCol ) * forcePro;
+		Vector3 calDir = getTrans.forward * forcePro;
 		GameObject GO;
 		GameObject getTri = TriangPrefb;
 		Mesh mesh;

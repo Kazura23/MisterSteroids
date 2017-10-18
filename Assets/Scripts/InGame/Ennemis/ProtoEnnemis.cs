@@ -28,7 +28,10 @@ public class ProtoEnnemis : AbstractEnnemis
 	{
 		if ( thisColl.tag == Constants._PlayerTag )
 		{
-			playerDetected ( );
+			if ( parentTrans.tag != Constants._UnTagg)
+			{
+				playerDetected ( );
+			}
 		}
 		else if ( thisColl.tag == Constants._DebrisEnv )
 		{

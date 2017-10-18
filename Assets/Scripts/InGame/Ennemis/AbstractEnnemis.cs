@@ -13,8 +13,8 @@ public class AbstractEnnemis : MonoBehaviour
 	[Tooltip ("force de direction lorsque en collision contre un ennemis ( situation ou ce gameobject est immobile )")]
 	public Vector3 onEnemy;
 
-	[Tooltip ("reduction de la velocité lors d'une collision avec un ennmis ( situation ou ce gameobject est en mouvement )")]
-	public float recuceVel = 5;
+	[Tooltip ("pourcentage de velocité restante en pourcentage lors d'une collision avec un ennmis ( situation ou ce gameobject est en mouvement )")]
+	public float VelRestant = 5;
 
 	protected Rigidbody mainCorps;
 	protected Transform parentTrans;
@@ -54,8 +54,11 @@ public class AbstractEnnemis : MonoBehaviour
 	#region Public Methods
 	public void Degat(Vector3 p_damage)
 	{
-		isDead = true;
-		projection = p_damage;
+		if ( !isDead )
+		{
+			isDead = true;
+			projection = p_damage;
+		}
 	}
 
 	public virtual void Dead ( bool enemy = false )
@@ -67,7 +70,11 @@ public class AbstractEnnemis : MonoBehaviour
 		}
 
 		mainCorps.constraints = RigidbodyConstraints.None;
+		mainCorps.constraints = RigidbodyConstraints.FreezePositionX;
+		mainCorps.constraints = RigidbodyConstraints.FreezePositionY;
+
 		mainCorps.useGravity = true;
+
 		if ( enemy )
 		{
 			mainCorps.AddForce ( onEnemy, ForceMode.VelocityChange );
@@ -88,7 +95,7 @@ public class AbstractEnnemis : MonoBehaviour
 		}
 		else
 		{
-			mainCorps.velocity = mainCorps.velocity / recuceVel;
+			mainCorps.velocity = mainCorps.velocity * ( VelRestant / 100 );
 		}
 	}
 	#endregion

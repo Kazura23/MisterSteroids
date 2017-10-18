@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProtoEnnemis : AbstractEnnemis
+public class ProtoEnnemis : AbstractObject
 {
 	#region Variables
+	[Space]
 	public Color NewColor;
 	Color saveCol;
 
@@ -15,38 +16,33 @@ public class ProtoEnnemis : AbstractEnnemis
 	#region Mono
 	void Start ( )
 	{
-		parMat = parentTrans.GetComponent<MeshRenderer> ( ).material;
+		parMat = getTrans.GetComponent<MeshRenderer> ( ).material;
 		saveCol = parMat.color;
 	}
 	#endregion
 
 	#region Public Methods
+	public void PlayerDetected ( bool isDetected )
+	{
+		
+	}
 	#endregion
 
 	#region Private Methods
-	void OnTriggerEnter ( Collider thisColl )
+	void OnCollisionEnter ( Collision thisColl )
 	{
-		if ( thisColl.tag == Constants._PlayerTag )
+		GameObject getThis = thisColl.gameObject;
+
+		if ( getThis.tag == Constants._EnnemisTag || getThis.tag == Constants._ObjDeadTag || getThis.tag == Constants._ObsTag )
 		{
-			if ( parentTrans.tag != Constants._UnTagg)
-			{
-				playerDetected ( );
-			}
+			CollDetect ( );
 		}
-		else if ( thisColl.tag == Constants._DebrisEnv )
+		else if ( getThis.tag == Constants._PlayerTag && gameObject.tag == Constants._ObjDeadTag )
 		{
-			debrisDetected ( thisColl.gameObject.GetComponent<Collider> ( ) );
+			Physics.IgnoreCollision ( thisColl.collider, GetComponent<Collider> ( ) );
 		}
 	}
-
-	void OnTriggerExit ( Collider thisColl )
-	{
-		if ( thisColl.tag == Constants._PlayerTag )
-		{
-			playerUndetected ( );
-		}
-	}
-
+		
 	public override void Dead ( bool enemy = false ) 
 	{
 		base.Dead ( enemy );
@@ -54,18 +50,19 @@ public class ProtoEnnemis : AbstractEnnemis
 		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
 	}
 
-	protected override void playerDetected ( )
+	public override void playerDetected ( bool isDetected )
 	{
-		base.playerDetected ( );
+		base.playerDetected ( isDetected );
 
+		if ( isDetected )
+		{
+			parMat.color = NewColor;
+		}
+		else
+		{
+			parMat.color = saveCol;
+		}
 		parMat.color = NewColor;
-	}
-
-	protected override void playerUndetected ( )
-	{
-		base.playerUndetected ( );
-
-		parMat.color = saveCol;
 	}
 	#endregion
 }

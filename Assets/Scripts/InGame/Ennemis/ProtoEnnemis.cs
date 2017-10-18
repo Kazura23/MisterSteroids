@@ -22,9 +22,26 @@ public class ProtoEnnemis : AbstractObject
 	#endregion
 
 	#region Public Methods
-	public void PlayerDetected ( bool isDetected )
+	public override void PlayerDetected ( GameObject thisObj, bool isDetected )
 	{
-		
+		base.PlayerDetected ( thisObj, isDetected );
+
+		if ( isDetected )
+		{
+			parMat.color = NewColor;
+		}
+		else
+		{
+			parMat.color = saveCol;
+		}
+		parMat.color = NewColor;
+	}
+
+	public override void Dead ( bool enemy = false ) 
+	{
+		base.Dead ( enemy );
+
+		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
 	}
 	#endregion
 
@@ -41,28 +58,6 @@ public class ProtoEnnemis : AbstractObject
 		{
 			Physics.IgnoreCollision ( thisColl.collider, GetComponent<Collider> ( ) );
 		}
-	}
-		
-	public override void Dead ( bool enemy = false ) 
-	{
-		base.Dead ( enemy );
-
-		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
-	}
-
-	public override void playerDetected ( bool isDetected )
-	{
-		base.playerDetected ( isDetected );
-
-		if ( isDetected )
-		{
-			parMat.color = NewColor;
-		}
-		else
-		{
-			parMat.color = saveCol;
-		}
-		parMat.color = NewColor;
 	}
 	#endregion
 }

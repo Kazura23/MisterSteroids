@@ -12,4 +12,8 @@ public static class Constants
 	public const string _DebrisEnv = "Debris";
 	public const string _UnTagg = "Untagged";
 	#endregion
+
+	#region Other
+	public const int LineDist = 6;
+	#endregion
 }

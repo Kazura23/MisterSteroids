@@ -52,6 +52,8 @@ public class PlayerController : MonoBehaviour
 	//Vector3 posDir;
 	Vector3 dirLine = Vector3.zero;
 	Collider currCol;
+	IEnumerator currCouR;
+	IEnumerator currCouL;
 
 	float currSpeed = 0;
 	float currSpLine = 0;
@@ -62,13 +64,11 @@ public class PlayerController : MonoBehaviour
 	float befRot = 0;
 	int currLine = 0;
 
-	int distLine = 6;
 	int LastImp = 0;
 	int clDir = 0;
 
 	//bool canJump = true;
 	bool newPos = false;
-
 	#endregion
 
 	#region Mono
@@ -212,7 +212,7 @@ public class PlayerController : MonoBehaviour
 			currLine++;
 			LastImp = 1;
 			clDir = 1;
-			newH = newH + distLine;
+			newH = newH + Constants.LineDist;
 			saveDist = newH;
 		}
 		else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLine && ( clDir == -1 || newH == 0 ) )
@@ -220,7 +220,7 @@ public class PlayerController : MonoBehaviour
 			currLine--;
 			LastImp = -1;
 			clDir = -1;
-			newH = newH - distLine;
+			newH = newH - Constants.LineDist;;
 			saveDist = newH;
 		}
 		else if ( newImp == 0 )
@@ -282,12 +282,24 @@ public class PlayerController : MonoBehaviour
             if (punchRight)
             {
                 poingDroite.SetActive(true);
-				StartCoroutine ( animePunch ( true ) );
+
+				if ( currCouR != null )
+				{
+					StopCoroutine ( currCouR );
+				}
+				currCouR = animePunch ( true );
+				StartCoroutine ( currCouR );
             }
             else
             {
                 poingGauche.SetActive(true);
-				StartCoroutine ( animePunch ( false ) );
+
+				if ( currCouL != null )
+				{
+					StopCoroutine ( currCouL );
+				}
+				currCouL = animePunch ( false );
+				StartCoroutine ( currCouL );
             }
             punchRight = !punchRight;
             StartCoroutine("StartPunch", 0);
@@ -297,11 +309,14 @@ public class PlayerController : MonoBehaviour
             poingDroite.SetActive(true);
             poingGauche.SetActive(true);
             StartCoroutine("StartPunch", 1);
-			StartCoroutine ( animePunch ( false ) );
-			StartCoroutine ( animePunch ( true ) );
+
+			currCouL = animePunch ( false );
+			currCouR = animePunch ( true );
+
+			StartCoroutine ( currCouL );
+			StartCoroutine ( currCouR );
         }
-        
-        
+         
         
         
         
@@ -487,6 +502,15 @@ public class PlayerController : MonoBehaviour
 		}while ( currTime > 0 );
 
 		thisPoing.localPosition = getStart;
+
+		if ( rightPoing )
+		{
+			currCouR = null;
+		}
+		else
+		{
+			currCouL = null;
+		}
 	}
 
 	/* public bool IsDefense()

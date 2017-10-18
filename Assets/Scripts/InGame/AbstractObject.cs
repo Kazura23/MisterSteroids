@@ -162,7 +162,7 @@ public class AbstractObject : MonoBehaviour
 		getTrans.tag = Constants._ObjDeadTag;
 	}
 
-	public virtual void playerDetected ( bool isDetected )
+	public virtual void PlayerDetected ( GameObject thisObj, bool isDetected )
 	{
 		
 	}

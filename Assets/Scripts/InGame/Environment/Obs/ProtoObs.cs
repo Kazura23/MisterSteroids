@@ -16,6 +16,11 @@ public class ProtoObs : AbstractObject
 	{
 		base.Dead ( enemy );
 	}
+
+	public override void PlayerDetected ( GameObject thisObj, bool isDetected )
+	{
+		base.PlayerDetected ( thisObj, isDetected );
+	}
 	#endregion
 
 	#region Private Methods
@@ -25,11 +30,6 @@ public class ProtoObs : AbstractObject
 		{
 			CollDetect ( );
 		}
-	}
-
-	public override void playerDetected ( bool isDetected )
-	{
-		base.playerDetected ( isDetected );
 	}
 	#endregion
 }

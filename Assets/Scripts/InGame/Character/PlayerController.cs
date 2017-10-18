@@ -26,9 +26,10 @@ public class PlayerController : MonoBehaviour
 	[Header("Nombre de ligne bonus d'un seul coté")]
 	public int NbrLine = 3;
 
-	[Header("Caract Fight")]
-	public float delayLeft = 1;
-	public float delayRight = 1;
+    [Header("Caract Fight")]
+    /*public float delayLeft = 1;
+	public float delayRight = 1;*/
+    public float delayPunch = 1;
 	public float delayHitbox = 0.3f;
 	public float delayPrepare = 0.1f;
 	public GameObject poingGauche;
@@ -39,8 +40,8 @@ public class PlayerController : MonoBehaviour
 
 	private Collider punchBox;
 	private Punch punch;
-	private bool punchRight, punchLeft, preparRight, preparLeft, defense;
-	private Coroutine corou, preparPunch;
+    private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
+	private Coroutine corou/*, preparPunch*/;
 
 	//Rigidbody thisRig;
 	Transform pTrans;
@@ -75,9 +76,10 @@ public class PlayerController : MonoBehaviour
 		currCol = GetComponent<Collider> ( );
 		punchBox = pTrans.GetChild(0).GetComponent<Collider>();
 		punch = pTrans.GetChild(0).GetComponent<Punch>();
-		punchRight = true; punchLeft = true; preparRight = false; preparLeft = false; defense = false;
-		preparPunch = null;
-	}
+        canPunch = true; punchRight = true;
+        /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
+		preparPunch = null;*/
+    }
 
 	void Update ( )
 	{
@@ -272,7 +274,33 @@ public class PlayerController : MonoBehaviour
 
 	void playerFight ( )
 	{
-		if (Input.GetKeyDown(KeyCode.A) && punchLeft)
+		if(Input.GetKeyDown(KeyCode.A) && canPunch)
+        {
+            canPunch = false;
+            if (punchRight)
+            {
+                poingDroite.SetActive(true);
+            }
+            else
+            {
+                poingGauche.SetActive(true);
+            }
+            punchRight = !punchRight;
+            StartCoroutine("StartPunch", 0);
+        }else if(Input.GetKeyDown(KeyCode.E) && canPunch)
+        {
+            canPunch = false;
+            poingDroite.SetActive(true);
+            poingGauche.SetActive(true);
+            StartCoroutine("StartPunch", 1);
+        }
+        
+        
+        
+        
+        
+        //en stock
+        /*if (Input.GetKeyDown(KeyCode.A) && punchLeft)
 		{
 			preparLeft = true;
 			poingGauche.SetActive (true);
@@ -291,7 +319,7 @@ public class PlayerController : MonoBehaviour
 			{
 				preparPunch = StartCoroutine("StartPunch");
 			}
-		}
+		}*/
 
 		/*
 	   	if (Input.GetKey(KeyCode.R) && punchLeft && punchRight)
@@ -307,10 +335,21 @@ public class PlayerController : MonoBehaviour
 		 */
 	}
 
-	private IEnumerator StartPunch()
+	private IEnumerator StartPunch(int type_technic)
 	{
 		yield return new WaitForSeconds(delayPrepare);
-		if (preparRight && preparLeft)
+        punch.setTechnic(type_technic);
+        punchBox.enabled = true;
+        corou = StartCoroutine("TimerHitbox");
+        StartCoroutine("CooldownPunch");
+
+
+
+
+
+
+        // en stock
+		/*if (preparRight && preparLeft)
 		{
 			punch.setTechnic(1);
 			punchBox.enabled = true;
@@ -322,10 +361,10 @@ public class PlayerController : MonoBehaviour
 				StopCoroutine(corou);
 				punchBox.enabled = true;
 			}
-			corou = StartCoroutine("TimerHitbox");
+			corou = StartCoroutine("TimerHitbox");*/
 			/*StartCoroutine("CooldownLeft");
             StartCoroutine("CooldownRight");*/
-		}else if (preparLeft)
+		/*}else if (preparLeft)
 		{
 			punchLeft = false;
 			punch.setTechnic(0);
@@ -366,10 +405,25 @@ public class PlayerController : MonoBehaviour
 			preparRight = false;
 			StartCoroutine("CooldownRight");
 		}
-		preparPunch = null;
+		preparPunch = null;*/
 	}
 
-	private IEnumerator CooldownLeft()
+
+    private IEnumerator CooldownPunch()
+    {
+        yield return new WaitForSeconds(delayPunch);
+        if (poingDroite.activeInHierarchy)
+        {
+            poingDroite.SetActive(false);
+        }
+        if (poingGauche.activeInHierarchy)
+        {
+            poingGauche.SetActive(false);
+        }
+        canPunch = true;
+    }
+    //en stock
+	/*private IEnumerator CooldownLeft()
 	{
 		yield return new WaitForSeconds(delayLeft);
 		poingGauche.SetActive (false);
@@ -381,7 +435,7 @@ public class PlayerController : MonoBehaviour
 		yield return new WaitForSeconds(delayRight);
 		poingDroite.SetActive (false);
 		punchRight = true;
-	}
+	}*/
 
 	private IEnumerator TimerHitbox()
 	{

@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
 	private Collider punchBox;
 	private Punch punch;
-	private bool punchRight, punchLeft, preparRight, preparLeft, defense;
+	private bool punchRight, punchLeft, preparRight, preparLeft/*, defense*/;
 	private Coroutine corou, preparPunch;
 
 	//Rigidbody thisRig;
@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
 		currCol = GetComponent<Collider> ( );
 		punchBox = pTrans.GetChild(0).GetComponent<Collider>();
 		punch = pTrans.GetChild(0).GetComponent<Punch>();
-		punchRight = true; punchLeft = true; preparRight = false; preparLeft = false; defense = false;
+		punchRight = true; punchLeft = true; preparRight = false; preparLeft = false;// defense = false;
 		preparPunch = null;
 	}
 

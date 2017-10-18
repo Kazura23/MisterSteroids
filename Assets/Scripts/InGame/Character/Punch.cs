@@ -27,10 +27,10 @@ public class Punch : MonoBehaviour {
 
 				// 	projection_basic.x *= Random.Range ( -projection_basic.x, projection_basic.x + 1 );
 
-				other.GetComponentInChildren<AbstractEnnemis>().Degat(projection_basic);
+				other.GetComponentInChildren<AbstractEnnemis>().Degat(projection_basic, numTechnic);
 				break;
             case (int)Technic.double_punch:
-				other.GetComponentInChildren<AbstractEnnemis>().Degat(projection_double);
+				other.GetComponentInChildren<AbstractEnnemis>().Degat(projection_double, numTechnic);
            	 	break;
             }
         }

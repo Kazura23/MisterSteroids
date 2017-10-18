@@ -679,6 +679,11 @@ Prefab:
       propertyPath: poingDroite
       value: 
       objectReference: {fileID: 207090447}
+    - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
+        type: 2}
+      propertyPath: delayPunch
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b0a5152c86828b64ebcfe000d3f1fd31, type: 2}
   m_IsPrefabParent: 0
@@ -1174,7 +1179,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4019637009555822, guid: 8a4bd94c402f1fc47a4982080a229450, type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 65142582006481138, guid: 8a4bd94c402f1fc47a4982080a229450,
         type: 2}
@@ -5540,7 +5545,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4019637009555822, guid: 8a4bd94c402f1fc47a4982080a229450, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 65142582006481138, guid: 8a4bd94c402f1fc47a4982080a229450,
         type: 2}
@@ -9217,7 +9222,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4019637009555822, guid: 8a4bd94c402f1fc47a4982080a229450, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 65142582006481138, guid: 8a4bd94c402f1fc47a4982080a229450,
         type: 2}
@@ -15393,7 +15398,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4019637009555822, guid: 8a4bd94c402f1fc47a4982080a229450, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 65142582006481138, guid: 8a4bd94c402f1fc47a4982080a229450,
         type: 2}

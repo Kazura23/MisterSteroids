@@ -52,7 +52,7 @@ public class AbstractEnnemis : MonoBehaviour
 	#endregion
 
 	#region Public Methods
-	public void Degat(Vector3 p_damage)
+	public virtual void Degat(Vector3 p_damage, int p_technic)
 	{
 		if ( !isDead )
 		{

@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
 	private Collider punchBox;
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
-	private Coroutine corou/*, preparPunch*/;
+	//private Coroutine corou/*, preparPunch*/;
 
 	//Rigidbody thisRig;
 	Transform pTrans;
@@ -282,10 +282,12 @@ public class PlayerController : MonoBehaviour
             if (punchRight)
             {
                 poingDroite.SetActive(true);
+				StartCoroutine ( animePunch ( true ) );
             }
             else
             {
                 poingGauche.SetActive(true);
+				StartCoroutine ( animePunch ( false ) );
             }
             punchRight = !punchRight;
             StartCoroutine("StartPunch", 0);
@@ -295,6 +297,8 @@ public class PlayerController : MonoBehaviour
             poingDroite.SetActive(true);
             poingGauche.SetActive(true);
             StartCoroutine("StartPunch", 1);
+			StartCoroutine ( animePunch ( false ) );
+			StartCoroutine ( animePunch ( true ) );
         }
         
         
@@ -344,13 +348,8 @@ public class PlayerController : MonoBehaviour
 		yield return new WaitForSeconds(delayPrepare);
         punch.setTechnic(type_technic);
         punchBox.enabled = true;
-        corou = StartCoroutine("TimerHitbox");
+       /* corou =*/ StartCoroutine("TimerHitbox");
         StartCoroutine("CooldownPunch");
-
-
-
-
-
 
         // en stock
 		/*if (preparRight && preparLeft)
@@ -445,20 +444,20 @@ public class PlayerController : MonoBehaviour
 	{
 		yield return new WaitForSeconds(delayHitbox);
 		punchBox.enabled = false;
-		corou = null;
+		//corou = null;
 	}
 
-	IEnumerator animePunch ( bool leftPoing )
+	IEnumerator animePunch ( bool rightPoing )
 	{
 		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
 		Transform thisPoing;
 		Vector3 getStart;
 		Vector3 thisDist;
 
-		float getTime = delayLeft / 2;
+		float getTime = delayPunch / 2;
 		float currTime = 0;
 
-		if ( !leftPoing )
+		if ( rightPoing )
 		{
 			thisPoing = poingDroite.transform;	
 			thisDist = DistPoingDroit;

@@ -697,12 +697,12 @@ Prefab:
     - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
         type: 2}
       propertyPath: delayLeft
-      value: 0.2
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
         type: 2}
       propertyPath: delayRight
-      value: 0.2
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
         type: 2}
@@ -718,6 +718,16 @@ Prefab:
         type: 2}
       propertyPath: DistPoingDroit.x
       value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
+        type: 2}
+      propertyPath: delayPunch
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114028596236080998, guid: b0a5152c86828b64ebcfe000d3f1fd31,
+        type: 2}
+      propertyPath: delayPrepare
+      value: 0.05
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b0a5152c86828b64ebcfe000d3f1fd31, type: 2}

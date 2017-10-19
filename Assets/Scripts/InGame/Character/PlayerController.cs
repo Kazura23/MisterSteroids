@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
 	public float MaxSpeedCL = 5;
 	public float AccelerationCL = 10;
 	public float ImpulsionCL = 10;
-	public float DecelerationLineCL = 5;
 	public float DecelerationCL = 1;
 
 	[Header ("Caract both")]
@@ -138,7 +137,7 @@ public class PlayerController : MonoBehaviour
 				currSpeed = 0;
 			}
 
-			currSpLine -= DecelerationCL * deltTime;
+			currSpLine -= Deceleration * deltTime;
 
 			if ( currSpLine < 0 )
 			{
@@ -206,13 +205,14 @@ public class PlayerController : MonoBehaviour
 	void changeLine ( float delTime )
 	{
 		float newImp = Input.GetAxis ( "Horizontal" );
+		float lineDistance = Constants.LineDist;
 
 		if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLine && ( clDir == 1 || newH == 0 ) )
 		{
 			currLine++;
 			LastImp = 1;
 			clDir = 1;
-			newH = newH + Constants.LineDist;
+			newH = newH +lineDistance;
 			saveDist = newH;
 		}
 		else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLine && ( clDir == -1 || newH == 0 ) )
@@ -220,7 +220,7 @@ public class PlayerController : MonoBehaviour
 			currLine--;
 			LastImp = -1;
 			clDir = -1;
-			newH = newH - Constants.LineDist;;
+			newH = newH - lineDistance;
 			saveDist = newH;
 		}
 		else if ( newImp == 0 )
@@ -234,9 +234,14 @@ public class PlayerController : MonoBehaviour
 			{
 				float accLine = 0;
 
-				if ( saveDist < 0 && newH > saveDist / 2 || saveDist > 0 && newH < saveDist / 2 )
+				if ( saveDist < 0 && newH > -lineDistance / 2 || saveDist > 0 && newH < lineDistance / 2 )
 				{
-					currSpLine -= DecelerationLineCL * delTime;
+					currSpLine -= DecelerationCL * delTime;
+
+					if ( currSpLine < 0 )
+					{
+						currSpLine = 0;
+					}
 				}
 				else if ( currSpLine < MaxSpeedCL )
 				{
@@ -533,7 +538,7 @@ public class PlayerController : MonoBehaviour
 
 	void OnCollisionEnter ( Collision thisColl )
 	{
-		if ( thisColl.gameObject.tag == Constants._EnnemisTag )
+		if ( thisColl.gameObject.tag == Constants._EnnemisTag || thisColl.gameObject.tag == Constants._ObsTag )
 		{
 			playerDead = true;
 			GlobalManager.Ui.DisplayOver ( true );

@@ -13,11 +13,12 @@ public class EnnemisLane : AbstractObject
 
 	[Tooltip ("Si à 0 alors il peux se diriger vers la gauche ou droite : X = gauche - Y = droite")]
 	public Vector2 CanGo = Vector2.zero;
-	public bool followPlayer = false;
+	public bool FollowPlayer = false;
 
 	int currLine = 0;
 	bool moving;
 	bool playerDetected = false;
+	bool firtDe = false;
 
 	GameObject savePlayer;
 	#endregion
@@ -25,8 +26,7 @@ public class EnnemisLane : AbstractObject
 	#region Mono
 	void Update ( )
 	{
-
-		if ( playerDetected && followPlayer && !moving )
+		if ( !isDead && playerDetected && ( FollowPlayer || !firtDe ) && !moving )
 		{
 			Transform objTrans = savePlayer.transform;
 			Vector3 getPos = objTrans.position;
@@ -44,12 +44,14 @@ public class EnnemisLane : AbstractObject
 			{
 				if ( CanGo.y == 0 && currLine < NbrLane )
 				{
+					firtDe = true;
 					currLine ++;
 					StartCoroutine ( changeLane ( true ) );
 				}
 			}
 			else if ( CanGo.x == 0 && currLine > -NbrLane )
 			{
+				firtDe = true;
 				currLine --;
 				StartCoroutine ( changeLane ( false ) );
 			}
@@ -62,7 +64,7 @@ public class EnnemisLane : AbstractObject
 	{
 		base.PlayerDetected ( thisObj, isDetected );
 
-		if ( isDetected )
+		if ( isDetected && !isDead )
 		{
 			savePlayer = thisObj;
 			Transform objTrans = thisObj.transform;
@@ -79,17 +81,21 @@ public class EnnemisLane : AbstractObject
 				return;
 			}
 
+
+
 			if ( getRight > getLeft )
 			{
 				if ( CanGo.y == 0 )
 				{
-					currLine = 1;
+					firtDe = true;
+					currLine ++;
 					StartCoroutine ( changeLane ( true ) );
 				}
 			}
 			else if ( CanGo.x == 0 )
 			{
-				currLine = -1;
+				firtDe = true;
+				currLine--;
 				StartCoroutine ( changeLane ( false ) );
 			}
 		}

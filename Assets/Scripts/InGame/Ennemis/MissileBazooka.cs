@@ -7,7 +7,6 @@ public class MissileBazooka : MonoBehaviour {
     private Rigidbody rigiSelf;
     private Vector3 direction, save;
     public int vitesse = 7, tempsExistance = 10;
-    private bool active;
     private float facteurVite;
     private bool isReturn;
     private Collider coll;
@@ -16,7 +15,7 @@ public class MissileBazooka : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        active = false; isReturn = false;
+        isReturn = false;
         StartCoroutine("TempsDeVie");
     }
 	
@@ -38,7 +37,6 @@ public class MissileBazooka : MonoBehaviour {
             }
             rigiSelf.velocity = direction * vitesse * facteurVite;
             save = rigiSelf.velocity;
-            active = true;
         }
     }
 
@@ -67,7 +65,7 @@ public class MissileBazooka : MonoBehaviour {
         }else if(collision.gameObject.tag == Constants._EnnemisTag && isReturn)
         {
             Debug.Log("explo");
-            collision.gameObject.GetComponentInChildren<AbstractEnnemis>().Degat(transform.forward * projection, 1);
+			collision.gameObject.GetComponentInChildren<AbstractObject>().Degat(transform.forward * projection, 1);
             Explosion();
         }else if (collision.gameObject.tag == Constants._EnnemisTag && !isReturn)
         {

@@ -538,7 +538,7 @@ public class PlayerController : MonoBehaviour
 
 	void OnCollisionEnter ( Collision thisColl )
 	{
-		if ( thisColl.gameObject.tag == Constants._EnnemisTag || thisColl.gameobject.tag == Constants._ObsTag || thisColl.gameobject.tag == Constants._MissileBazoo )
+		if ( thisColl.gameObject.tag == Constants._EnnemisTag || thisColl.gameObject.tag == Constants._ObsTag || thisColl.gameObject.tag == Constants._MissileBazoo )
 		{
             if(thisColl.gameObject.tag == Constants._MissileBazoo)
             {

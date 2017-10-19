@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class ShieldMan : AbstractEnnemis {
+public class ShieldMan : AbstractObject {
 
     private bool shieldActive;
     public float delay = 1;
@@ -24,7 +24,7 @@ public class ShieldMan : AbstractEnnemis {
     {
         shieldActive = true;
         move = new Vector3();
-        parMat = parentTrans.GetComponent<MeshRenderer>().material;
+		parMat = getTrans.GetComponent<MeshRenderer>().material;
         saveCol = parMat.color;
     }
     #endregion
@@ -37,9 +37,9 @@ public class ShieldMan : AbstractEnnemis {
     {
         if (thisColl.tag == Constants._PlayerTag)
         {
-            if (parentTrans.tag != Constants._UnTagg)
+			if (getTrans.tag != Constants._UnTagg)
             {
-                playerDetected();
+				PlayerDetected(thisColl.gameObject ,true);
             }
         }
         else if (thisColl.tag == Constants._DebrisEnv)
@@ -52,7 +52,7 @@ public class ShieldMan : AbstractEnnemis {
     {
         if (thisColl.tag == Constants._PlayerTag)
         {
-            playerUndetected();
+			PlayerDetected(thisColl.gameObject, false);
         }
     }
 
@@ -63,18 +63,18 @@ public class ShieldMan : AbstractEnnemis {
         //mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
     }
 
-    protected override void playerDetected()
+	public override void PlayerDetected( GameObject thisObj, bool isDetected )
     {
-        base.playerDetected();
+		base.PlayerDetected ( thisObj, isDetected );
 
-        parMat.color = NewColor;
-    }
-
-    protected override void playerUndetected()
-    {
-        base.playerUndetected();
-
-        parMat.color = saveCol;
+		if ( isDetected )
+		{
+			parMat.color = NewColor;
+		}
+		else
+		{
+			parMat.color = saveCol;
+		}
     }
     #endregion
 
@@ -85,10 +85,10 @@ public class ShieldMan : AbstractEnnemis {
             if (shieldActive)
             {
                 shieldActive = false;
-                move = transform.parent.position + (parentTrans.forward * distance);
-                parentTrans.DOMoveX(move.x, delay);
-                parentTrans.DOMoveZ(move.z, delay);
-                parentTrans.DOMoveY((saveVal = parentTrans.position.y) + hauteur, delay / 2).OnComplete<Tweener>(() => parentTrans.DOMoveY(saveVal, delay / 2));
+				move = transform.parent.position + (getTrans.forward * distance);
+				getTrans.DOMoveX(move.x, delay);
+				getTrans.DOMoveZ(move.z, delay);
+				getTrans.DOMoveY((saveVal = getTrans.position.y) + hauteur, delay / 2).OnComplete<Tweener>(() => getTrans.DOMoveY(saveVal, delay / 2));
                 //animation shield destroy
             }
             else

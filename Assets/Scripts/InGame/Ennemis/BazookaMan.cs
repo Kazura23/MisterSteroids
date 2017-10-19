@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BazookaMan : AbstractEnnemis {
+public class BazookaMan : AbstractObject {
 
     public float distanceMax = 30, distanceMin = 10;
     public float cooldownMin = 2, coolDownGeneral = 5;
@@ -25,13 +25,13 @@ public class BazookaMan : AbstractEnnemis {
             if (Vector3.Distance(transform.position, player.position) <= distanceMin && timer >= cooldownMin)
             {
                 MissileScript = Instantiate(Missile, transform.position + new Vector3(0, 0, -2), Quaternion.identity).GetComponent<MissileBazooka>();
-                MissileScript.ActiveTir(-parentTrans.forward, 1, false);
+				MissileScript.ActiveTir(-getTrans.forward, 1, false);
                 timer = 0;
             }
             else if (timer >= coolDownGeneral)
             {
                 MissileScript = Instantiate(Missile, transform.position + new Vector3(0, 0, -2), Quaternion.identity).GetComponent<MissileBazooka>();
-                MissileScript.ActiveTir(-parentTrans.forward, 1, false);
+				MissileScript.ActiveTir(-getTrans.forward, 1, false);
                 timer = 0;
             }
             timer += Time.deltaTime;

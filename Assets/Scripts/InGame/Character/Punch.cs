@@ -13,6 +13,7 @@ public class Punch : MonoBehaviour {
     private int numTechnic;
 	[Tooltip ("X = force droite / gauche - Y = force haut / bas - Z = force Devant / derriere" )]
     public Vector3 projection_basic, projection_double;
+    public float facteurVitesseRenvoie = 1.5f;
 
     void OnTriggerEnter(Collider other)
     {
@@ -42,6 +43,9 @@ public class Punch : MonoBehaviour {
 >>>>>>> Eric
            	 	break;
             }
+        }else if (other.gameObject.tag == Constants._MissileBazoo)
+        {
+            other.gameObject.GetComponent<MissileBazooka>().ActiveTir(-other.gameObject.GetComponent<MissileBazooka>().GetDirection(), facteurVitesseRenvoie, true);
         }
     }
 

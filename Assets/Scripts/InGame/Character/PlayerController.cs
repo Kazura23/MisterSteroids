@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
 	public float MaxSpeedCL = 5;
 	public float AccelerationCL = 10;
 	public float ImpulsionCL = 10;
-	public float DecelerationLineCL = 5;
 	public float DecelerationCL = 1;
 
 	[Header ("Caract both")]
@@ -52,6 +51,8 @@ public class PlayerController : MonoBehaviour
 	//Vector3 posDir;
 	Vector3 dirLine = Vector3.zero;
 	Collider currCol;
+	IEnumerator currCouR;
+	IEnumerator currCouL;
 
 	float currSpeed = 0;
 	float currSpLine = 0;
@@ -62,13 +63,11 @@ public class PlayerController : MonoBehaviour
 	float befRot = 0;
 	int currLine = 0;
 
-	int distLine = 6;
 	int LastImp = 0;
 	int clDir = 0;
 
 	//bool canJump = true;
 	bool newPos = false;
-
 	#endregion
 
 	#region Mono
@@ -138,7 +137,7 @@ public class PlayerController : MonoBehaviour
 				currSpeed = 0;
 			}
 
-			currSpLine -= DecelerationCL * deltTime;
+			currSpLine -= Deceleration * deltTime;
 
 			if ( currSpLine < 0 )
 			{
@@ -206,13 +205,14 @@ public class PlayerController : MonoBehaviour
 	void changeLine ( float delTime )
 	{
 		float newImp = Input.GetAxis ( "Horizontal" );
+		float lineDistance = Constants.LineDist;
 
 		if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLine && ( clDir == 1 || newH == 0 ) )
 		{
 			currLine++;
 			LastImp = 1;
 			clDir = 1;
-			newH = newH + distLine;
+			newH = newH +lineDistance;
 			saveDist = newH;
 		}
 		else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLine && ( clDir == -1 || newH == 0 ) )
@@ -220,7 +220,7 @@ public class PlayerController : MonoBehaviour
 			currLine--;
 			LastImp = -1;
 			clDir = -1;
-			newH = newH - distLine;
+			newH = newH - lineDistance;
 			saveDist = newH;
 		}
 		else if ( newImp == 0 )
@@ -234,9 +234,14 @@ public class PlayerController : MonoBehaviour
 			{
 				float accLine = 0;
 
-				if ( saveDist < 0 && newH > saveDist / 2 || saveDist > 0 && newH < saveDist / 2 )
+				if ( saveDist < 0 && newH > -lineDistance / 2 || saveDist > 0 && newH < lineDistance / 2 )
 				{
-					currSpLine -= DecelerationLineCL * delTime;
+					currSpLine -= DecelerationCL * delTime;
+
+					if ( currSpLine < 0 )
+					{
+						currSpLine = 0;
+					}
 				}
 				else if ( currSpLine < MaxSpeedCL )
 				{
@@ -282,12 +287,24 @@ public class PlayerController : MonoBehaviour
             if (punchRight)
             {
                 poingDroite.SetActive(true);
-				StartCoroutine ( animePunch ( true ) );
+
+				if ( currCouR != null )
+				{
+					StopCoroutine ( currCouR );
+				}
+				currCouR = animePunch ( true );
+				StartCoroutine ( currCouR );
             }
             else
             {
                 poingGauche.SetActive(true);
-				StartCoroutine ( animePunch ( false ) );
+
+				if ( currCouL != null )
+				{
+					StopCoroutine ( currCouL );
+				}
+				currCouL = animePunch ( false );
+				StartCoroutine ( currCouL );
             }
             punchRight = !punchRight;
             StartCoroutine("StartPunch", 0);
@@ -297,11 +314,14 @@ public class PlayerController : MonoBehaviour
             poingDroite.SetActive(true);
             poingGauche.SetActive(true);
             StartCoroutine("StartPunch", 1);
-			StartCoroutine ( animePunch ( false ) );
-			StartCoroutine ( animePunch ( true ) );
+
+			currCouL = animePunch ( false );
+			currCouR = animePunch ( true );
+
+			StartCoroutine ( currCouL );
+			StartCoroutine ( currCouR );
         }
-        
-        
+         
         
         
         
@@ -487,6 +507,15 @@ public class PlayerController : MonoBehaviour
 		}while ( currTime > 0 );
 
 		thisPoing.localPosition = getStart;
+
+		if ( rightPoing )
+		{
+			currCouR = null;
+		}
+		else
+		{
+			currCouL = null;
+		}
 	}
 
 	/* public bool IsDefense()
@@ -509,7 +538,7 @@ public class PlayerController : MonoBehaviour
 
 	void OnCollisionEnter ( Collision thisColl )
 	{
-		if ( thisColl.gameObject.tag == Constants._EnnemisTag )
+		if ( thisColl.gameObject.tag == Constants._EnnemisTag || thisColl.gameObject.tag == Constants._ObsTag )
 		{
 			playerDead = true;
 			GlobalManager.Ui.DisplayOver ( true );

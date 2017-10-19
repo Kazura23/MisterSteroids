@@ -12,7 +12,7 @@ public class OnTrig : MonoBehaviour
 		{
 			if ( GetAbs.gameObject.gameObject.tag != Constants._UnTagg )
 			{
-				GetAbs.playerDetected ( true );
+				GetAbs.PlayerDetected ( thisColl.gameObject, true );
 			}
 		}
 		else if ( thisColl.tag == Constants._DebrisEnv )
@@ -25,7 +25,7 @@ public class OnTrig : MonoBehaviour
 	{
 		if ( thisColl.tag == Constants._PlayerTag )
 		{
-			GetAbs.playerDetected ( false );
+			GetAbs.PlayerDetected ( thisColl.gameObject, false );
 		}
 	}
 }

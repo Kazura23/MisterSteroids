@@ -32,29 +32,7 @@ public class ShieldMan : AbstractObject {
     #region Public Methods
     #endregion
 
-    #region Private Methods
-    void OnTriggerEnter(Collider thisColl)
-    {
-        if (thisColl.tag == Constants._PlayerTag)
-        {
-			if (getTrans.tag != Constants._UnTagg)
-            {
-				PlayerDetected(thisColl.gameObject ,true);
-            }
-        }
-        else if (thisColl.tag == Constants._DebrisEnv)
-        {
-            debrisDetected(thisColl.gameObject.GetComponent<Collider>());
-        }
-    }
-
-    void OnTriggerExit(Collider thisColl)
-    {
-        if (thisColl.tag == Constants._PlayerTag)
-        {
-			PlayerDetected(thisColl.gameObject, false);
-        }
-    }
+    #region Private Methods 
 
     public override void Dead(bool enemy = false)
     {

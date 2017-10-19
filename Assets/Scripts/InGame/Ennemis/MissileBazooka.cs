@@ -20,7 +20,7 @@ public class MissileBazooka : MonoBehaviour {
     }
 	
 
-    public void ActiveTir(Vector3 p_dir, float p_facteur, bool p_Return)
+	public void ActiveTir(Vector3 p_dir, float p_facteur, bool p_Return)
     {
         if (!isReturn)
         {

@@ -15,7 +15,6 @@ public class ShieldMan : AbstractObject {
     public Color NewColor;
     Color saveCol;
 
-
     Material parMat;
     #endregion
 

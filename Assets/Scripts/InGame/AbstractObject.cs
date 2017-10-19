@@ -115,6 +115,20 @@ public class AbstractObject : MonoBehaviour
 	#endregion
 
 	#region Private Methods
+	void OnCollisionEnter ( Collision thisColl )
+	{
+		GameObject getThis = thisColl.gameObject;
+
+		if ( getThis.tag == Constants._EnnemisTag || getThis.tag == Constants._ObjDeadTag || getThis.tag == Constants._ObsTag )
+		{
+			CollDetect ( );
+		}
+		else if ( getThis.tag == Constants._PlayerTag && gameObject.tag == Constants._ObjDeadTag )
+		{
+			Physics.IgnoreCollision ( thisColl.collider, GetComponent<Collider> ( ) );
+		}
+	}
+
 	/*void checkConstAxe ( )
 	{
 		if ( useGravity )

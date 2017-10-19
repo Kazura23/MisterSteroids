@@ -68,6 +68,8 @@ public class PlayerController : MonoBehaviour
 
 	//bool canJump = true;
 	bool newPos = false;
+	bool resetAxeS = true;
+	bool resetAxeD = true;
 	#endregion
 
 	#region Mono
@@ -84,6 +86,16 @@ public class PlayerController : MonoBehaviour
 
 	void Update ( )
 	{
+		if ( Input.GetAxis ( "CoupSimple" ) == 0 )
+		{
+			resetAxeS = true;
+		}
+
+		if ( Input.GetAxis ( "CoupDouble" ) == 0 )
+		{
+			resetAxeD = true;
+		}
+
 		playerFight ( );
 	}
 
@@ -281,8 +293,9 @@ public class PlayerController : MonoBehaviour
 
 	void playerFight ( )
 	{
-		if(Input.GetKeyDown(KeyCode.A) && canPunch)
+		if(Input.GetAxis("CoupSimple") != 0 && canPunch && resetAxeS )
         {
+			resetAxeS = false;
             canPunch = false;
             if (punchRight)
             {
@@ -308,8 +321,9 @@ public class PlayerController : MonoBehaviour
             }
             punchRight = !punchRight;
             StartCoroutine("StartPunch", 0);
-        }else if(Input.GetKeyDown(KeyCode.E) && canPunch)
+		}else if(Input.GetAxis("CoupDouble") != 0 && canPunch && resetAxeD )
         {
+			resetAxeD = false;
             canPunch = false;
             poingDroite.SetActive(true);
             poingGauche.SetActive(true);

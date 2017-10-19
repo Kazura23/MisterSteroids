@@ -1,0 +1,91 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class RiffleMan : AbstractObject 
+{
+	#region Variables
+	public GameObject ball;
+	public int NbrBalls = 20;
+	public int ForceBall; 
+	public float angle = 1;
+	public float SpeedSpawn = 0.2f;
+	public float timeDestr = 0.4f;
+
+	Transform player;
+	Transform localShoot;
+	float timer;
+	bool playerDetected = false;
+	#endregion
+
+	#region Mono
+	void Start () 
+	{
+		timer = 0;
+		player = GlobalManager.GameCont.Player.transform;
+		localShoot = getTrans.Find ( "SpawnShoot" );
+	}
+	#endregion
+
+	#region Public Methods
+	public override void PlayerDetected ( GameObject thisObj, bool isDetected )
+	{
+		base.PlayerDetected ( thisObj, isDetected );
+
+		if ( isDetected && !isDead )
+		{
+			playerDetected = true;
+			StartCoroutine ( shootPlayer ( new WaitForSeconds ( SpeedSpawn ), false ) );
+		}
+		else
+		{
+			playerDetected = false;
+		}
+	}
+	#endregion
+
+	#region Private Methods
+	IEnumerator shootPlayer ( WaitForSeconds thisF, bool checkDir )
+	{
+		timer = Time.timeSinceLevelLoad;
+
+		int a;
+		GameObject getCurr;
+		for ( a = 0; a < NbrBalls; a++ )
+		{
+			yield return thisF;
+
+			if ( isDead )
+			{
+				break;
+			}
+
+			getCurr = ( GameObject ) Instantiate ( ball, localShoot );
+			getCurr.transform.localPosition = new Vector3 ( 0, 0, 0 );
+
+			if ( checkDir )
+			{
+				getCurr.GetComponent<Rigidbody> ( ).AddForce ( new Vector3 ( -NbrBalls / 2 + a * angle, 0,ForceBall ), ForceMode.VelocityChange );
+			}
+			else
+			{
+				getCurr.GetComponent<Rigidbody> ( ).AddForce ( new Vector3 ( NbrBalls / 2 - a * angle, 0,ForceBall ), ForceMode.VelocityChange );
+			}
+
+			Destroy ( getCurr, timeDestr );
+		}
+
+		if ( !isDead )
+		{
+			StartCoroutine ( shootPlayer ( thisF, !checkDir ) );
+		}
+	}
+
+	public override void Dead ( bool enemy = false ) 
+	{
+		base.Dead ( enemy );
+
+		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
+	}
+	#endregion
+}

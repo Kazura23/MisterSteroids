@@ -9,8 +9,9 @@ public class RiffleMan : AbstractObject
 	public int NbrBalls = 20;
 	public int ForceBall; 
 	public float angle = 1;
+	public int angleY = 3;
 	public float SpeedSpawn = 0.2f;
-	public float timeDestr = 0.4f;
+	public float TimeDestr = 0.4f;
 
 	Transform player;
 	Transform localShoot;
@@ -65,14 +66,14 @@ public class RiffleMan : AbstractObject
 
 			if ( checkDir )
 			{
-				getCurr.GetComponent<Rigidbody> ( ).AddForce ( new Vector3 ( -NbrBalls / 2 + a * angle, 0,ForceBall ), ForceMode.VelocityChange );
+				getCurr.GetComponent<Rigidbody> ( ).AddForce ( new Vector3 ( -NbrBalls / 2 + a * angle, Random.Range ( -angleY, angleY + 1 ), ForceBall ), ForceMode.VelocityChange );
 			}
 			else
 			{
-				getCurr.GetComponent<Rigidbody> ( ).AddForce ( new Vector3 ( NbrBalls / 2 - a * angle, 0,ForceBall ), ForceMode.VelocityChange );
+				getCurr.GetComponent<Rigidbody> ( ).AddForce ( new Vector3 ( NbrBalls / 2 - a * angle, Random.Range ( -angleY, angleY + 1 ), ForceBall ), ForceMode.VelocityChange );
 			}
 
-			Destroy ( getCurr, timeDestr );
+			Destroy ( getCurr, TimeDestr );
 		}
 
 		if ( !isDead )

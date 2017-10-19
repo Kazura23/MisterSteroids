@@ -464,8 +464,12 @@ public class PlayerController : MonoBehaviour
 
 	void OnCollisionEnter ( Collision thisColl )
 	{
-		if ( thisColl.gameObject.tag == Constants._EnnemisTag )
+		if ( thisColl.gameObject.tag == Constants._EnnemisTag && thisColl.gameObject.tag == Constants._MissileBazoo)
 		{
+            if(thisColl.gameObject.tag == Constants._MissileBazoo)
+            {
+                thisColl.gameObject.GetComponent<MissileBazooka>().Explosion();
+            }
 			playerDead = true;
 			GlobalManager.Ui.DisplayOver ( true );
 

@@ -12,6 +12,7 @@ public class Punch : MonoBehaviour {
 
     private int numTechnic;
     public Vector3 projection_basic, projection_double;
+    public float facteurVitesseRenvoie = 1.5f;
 
     void OnTriggerEnter(Collider other)
     {
@@ -33,6 +34,9 @@ public class Punch : MonoBehaviour {
 				other.GetComponentInChildren<AbstractEnnemis>().Degat(projection_double, numTechnic);
            	 	break;
             }
+        }else if (other.gameObject.tag == Constants._MissileBazoo)
+        {
+            other.gameObject.GetComponent<MissileBazooka>().ActiveTir(-other.gameObject.GetComponent<MissileBazooka>().GetDirection(), facteurVitesseRenvoie, true);
         }
     }
 

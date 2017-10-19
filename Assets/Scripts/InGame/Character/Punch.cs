@@ -21,11 +21,25 @@ public class Punch : MonoBehaviour {
             switch (numTechnic)
             {
 			case (int)Technic.basic_punch:
+<<<<<<< HEAD
 				projection_basic.x *= Random.Range ( -projection_basic.x, projection_basic.x + 1 );
 				other.GetComponentInChildren<AbstractObject> ( ).Degat ( projection_basic );
 				break;
 			case (int)Technic.double_punch:
 				other.GetComponentInChildren<AbstractObject> ( ).Degat ( projection_double );
+=======
+				if ( Random.Range ( 0, 2 ) == 0 )
+				{
+					projection_basic.x *= -1;
+				}
+
+				// 	projection_basic.x *= Random.Range ( -projection_basic.x, projection_basic.x + 1 );
+
+				other.GetComponentInChildren<AbstractEnnemis>().Degat(projection_basic, numTechnic);
+				break;
+            case (int)Technic.double_punch:
+				other.GetComponentInChildren<AbstractEnnemis>().Degat(projection_double, numTechnic);
+>>>>>>> Eric
            	 	break;
             }
         }

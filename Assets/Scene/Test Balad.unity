@@ -108,6 +108,34 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &59648047 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1381658892978538, guid: 185d77031068cc742ba9e73e362c9dd4,
+    type: 2}
+  m_PrefabInternal: {fileID: 1449408965}
+--- !u!114 &59648048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 59648047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efd9f6377916d074485eec3a36390cad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDead: 0
+  delayDead: 2
+  VelRestant: 5
+  onObjForward: 0
+  FreezeAxe: {x: 0, y: 0, z: 0}
+  FreezeRot: {x: 0, y: 0, z: 0}
+  useGravity: 1
+  distanceMax: 30
+  distanceMin: 10
+  cooldownMin: 1
+  coolDownGeneral: 10
+  Missile: {fileID: 1954344456442172, guid: 9f6f3ef23b0005d46acdf59d8ef8c962, type: 2}
 --- !u!1 &437566081
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,18 +527,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1407288931}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efd9f6377916d074485eec3a36390cad, type: 3}
+  m_Script: {fileID: 11500000, guid: ecfec35d00fa0844db7aba76f1d1f657, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDead: 0
-  delayDead: 2
-  onEnemy: {x: 0, y: 0, z: 0}
-  VelRestant: 5
-  distanceMax: 30
-  distanceMin: 10
-  cooldownMin: 1
-  coolDownGeneral: 10
-  Missile: {fileID: 1954344456442172, guid: 9f6f3ef23b0005d46acdf59d8ef8c962, type: 2}
+  GetAbs: {fileID: 59648048}
 --- !u!1001 &1449408965
 Prefab:
   m_ObjectHideFlags: 0
@@ -560,7 +580,8 @@ Prefab:
       value: 
       objectReference: {fileID: 2100000, guid: 2546ad0e09edde74680774031bc474f5, type: 2}
     m_RemovedComponents:
-    - {fileID: 114758238333044990, guid: 185d77031068cc742ba9e73e362c9dd4, type: 2}
+    - {fileID: 0}
+    - {fileID: 0}
   m_ParentPrefab: {fileID: 100100000, guid: 185d77031068cc742ba9e73e362c9dd4, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1462162919

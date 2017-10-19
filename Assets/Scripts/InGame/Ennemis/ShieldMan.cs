@@ -85,7 +85,7 @@ public class ShieldMan : AbstractObject {
             if (shieldActive)
             {
                 shieldActive = false;
-				move = transform.parent.position + (getTrans.forward * distance);
+				move = getTrans.position + (getTrans.forward * distance);
 				getTrans.DOMoveX(move.x, delay);
 				getTrans.DOMoveZ(move.z, delay);
 				getTrans.DOMoveY((saveVal = getTrans.position.y) + hauteur, delay / 2).OnComplete<Tweener>(() => getTrans.DOMoveY(saveVal, delay / 2));

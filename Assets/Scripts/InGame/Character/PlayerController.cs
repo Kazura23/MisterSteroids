@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour
 	public float MaxSpeed = 5;
 	public float Acceleration = 10;
 	public float Deceleration = 1;
+	public float DashTime = 2;
+	[Tooltip ("Cooldown qui commence une fois le dash terminé")]
+	public float CooldownDash = 3;
 
 	[Header ("Caract when change Line")]
 	public float MaxSpeedCL = 5;
@@ -38,6 +41,8 @@ public class PlayerController : MonoBehaviour
 
 	[HideInInspector]
 	public bool playerDead = false;
+	[HideInInspector]
+	public bool Dash = false;
 
 	private Collider punchBox;
 	private Punch punch;
@@ -70,6 +75,7 @@ public class PlayerController : MonoBehaviour
 	bool newPos = false;
 	bool resetAxeS = true;
 	bool resetAxeD = true;
+	bool canDash = true;
 	#endregion
 
 	#region Mono
@@ -86,17 +92,28 @@ public class PlayerController : MonoBehaviour
 
 	void Update ( )
 	{
-		if ( Input.GetAxis ( "CoupSimple" ) == 0 )
+		if ( !Dash )
 		{
-			resetAxeS = true;
+			if ( Input.GetAxis ( "CoupSimple" ) == 0 )
+			{
+				resetAxeS = true;
+			}
+
+			if ( Input.GetAxis ( "CoupDouble" ) == 0 )
+			{
+				resetAxeD = true;
+			}
+
+			playerFight ( );
 		}
 
-		if ( Input.GetAxis ( "CoupDouble" ) == 0 )
+		if ( Input.GetAxis ( "Dash") != 0 && newH == 0 && canDash )
 		{
-			resetAxeD = true;
-		}
+			Dash = true;
+			canDash = false;
 
-		playerFight ( );
+			StartCoroutine ( waitStopDash ( ) );
+		}
 	}
 
 	void FixedUpdate ( )
@@ -157,7 +174,11 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 
-		changeLine ( deltTime );
+		if ( !Dash )
+		{
+			changeLine ( deltTime );
+		}
+
 		playerMove ( deltTime, currSpeed );
 	}
 	#endregion
@@ -171,6 +192,11 @@ public class PlayerController : MonoBehaviour
 		Transform transPlayer = pTrans;
 		Vector3 calTrans = Vector3.zero;
 		delTime = Time.deltaTime;
+
+		if ( Dash )
+		{
+			speed *= 2;
+		}
 
 		if ( currentDir == Direction.North )
 		{
@@ -532,6 +558,26 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	IEnumerator waitStopDash ( )
+	{
+		WaitForSeconds thisS = new WaitForSeconds ( DashTime );
+
+		yield return thisS;
+
+		Dash = false;
+
+		StartCoroutine ( enableDash ( ) );
+	}
+
+	IEnumerator enableDash ( )
+	{
+		WaitForSeconds thisS = new WaitForSeconds ( CooldownDash );
+
+		yield return thisS;
+
+		canDash = true;
+	}
+
 	/* public bool IsDefense()
     {
         return defense;
@@ -552,11 +598,13 @@ public class PlayerController : MonoBehaviour
 
 	void OnCollisionEnter ( Collision thisColl )
 	{
-		if ( thisColl.gameObject.tag == Constants._EnnemisTag || thisColl.gameObject.tag == Constants._ObsTag || thisColl.gameObject.tag == Constants._MissileBazoo )
+		GameObject getObj = thisColl.gameObject;
+
+		if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ObsTag || getObj.tag == Constants._MissileBazoo || getObj.tag == Constants._Balls && !Dash)
 		{
-            if(thisColl.gameObject.tag == Constants._MissileBazoo)
+			if( getObj.tag == Constants._MissileBazoo)
             {
-                thisColl.gameObject.GetComponent<MissileBazooka>().Explosion();
+				getObj.GetComponent<MissileBazooka>().Explosion();
             }
 			playerDead = true;
 			GlobalManager.Ui.DisplayOver ( true );
@@ -564,10 +612,7 @@ public class PlayerController : MonoBehaviour
 			GlobalManager.GameCont.Restart ( );
 
 		}
-		else if ( thisColl.gameObject.tag == Constants._DebrisEnv )
-		{
-			Physics.IgnoreCollision ( thisColl.collider, currCol );
-		}
+	
 	}
 
 

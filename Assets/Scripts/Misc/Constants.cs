@@ -12,6 +12,7 @@ public static class Constants
 	public const string _DebrisEnv = "Debris";
 	public const string _UnTagg = "Untagged";
     public const string _MissileBazoo = "MissileBazooka";
+	public const string _Balls = "Balls";
 	#endregion
 
 	#region Other

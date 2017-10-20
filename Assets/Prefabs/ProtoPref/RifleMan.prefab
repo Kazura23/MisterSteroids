@@ -212,7 +212,10 @@ MonoBehaviour:
   FreezeAxe: {x: 0, y: 0, z: 0}
   FreezeRot: {x: 0, y: 0, z: 0}
   useGravity: 1
-  ball: {fileID: 0}
-  cooldown: 0
-  MaxBalls: 0
-  timeDestr: 0.4
+  ball: {fileID: 1740949778150274, guid: bae88c420c1a2db4796651c9139ee75f, type: 2}
+  NbrBalls: 10
+  ForceBall: -10
+  angle: 1
+  angleY: 3
+  SpeedSpawn: 0.01
+  TimeDestr: 0.8

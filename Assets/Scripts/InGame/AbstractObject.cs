@@ -108,10 +108,10 @@ public class AbstractObject : MonoBehaviour
 		}
 	}
 
-	public void debrisDetected ( Collider thisColl )
+	/*public void debrisDetected ( Collider thisColl )
 	{
 		Physics.IgnoreCollision ( thisColl, currColl );
-	}
+	}*/
 	#endregion
 
 	#region Private Methods
@@ -123,10 +123,10 @@ public class AbstractObject : MonoBehaviour
 		{
 			CollDetect ( );
 		}
-		else if ( getThis.tag == Constants._PlayerTag && gameObject.tag == Constants._ObjDeadTag )
+		/*else if ( getThis.tag == Constants._PlayerTag && gameObject.tag == Constants._ObjDeadTag )
 		{
 			Physics.IgnoreCollision ( thisColl.collider, GetComponent<Collider> ( ) );
-		}
+		}*/
 	}
 
 	/*void checkConstAxe ( )

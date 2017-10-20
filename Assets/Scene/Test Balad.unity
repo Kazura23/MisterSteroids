@@ -751,57 +751,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 11
       objectReference: {fileID: 0}
-    - target: {fileID: 114856030000373474, guid: ac64f997d77b9cd4ab4efff6105597ce,
-        type: 2}
-      propertyPath: cooldown
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114856030000373474, guid: ac64f997d77b9cd4ab4efff6105597ce,
-        type: 2}
-      propertyPath: MaxBalls
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 114856030000373474, guid: ac64f997d77b9cd4ab4efff6105597ce,
-        type: 2}
-      propertyPath: ball
-      value: 
-      objectReference: {fileID: 1740949778150274, guid: bae88c420c1a2db4796651c9139ee75f,
-        type: 2}
-    - target: {fileID: 114856030000373474, guid: ac64f997d77b9cd4ab4efff6105597ce,
-        type: 2}
-      propertyPath: ForceAxe.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114856030000373474, guid: ac64f997d77b9cd4ab4efff6105597ce,
-        type: 2}
-      propertyPath: ForceAxe.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114856030000373474, guid: ac64f997d77b9cd4ab4efff6105597ce,
-        type: 2}
-      propertyPath: ForceAxe.z
-      value: -10
-      objectReference: {fileID: 0}
-    - target: {fileID: 114856030000373474, guid: ac64f997d77b9cd4ab4efff6105597ce,
-        type: 2}
-      propertyPath: timeDestr
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114856030000373474, guid: ac64f997d77b9cd4ab4efff6105597ce,
-        type: 2}
-      propertyPath: SpeedSpawn
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 114856030000373474, guid: ac64f997d77b9cd4ab4efff6105597ce,
-        type: 2}
-      propertyPath: ForceBall
-      value: -10
-      objectReference: {fileID: 0}
-    - target: {fileID: 114856030000373474, guid: ac64f997d77b9cd4ab4efff6105597ce,
-        type: 2}
-      propertyPath: angle
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ac64f997d77b9cd4ab4efff6105597ce, type: 2}
   m_IsPrefabParent: 0

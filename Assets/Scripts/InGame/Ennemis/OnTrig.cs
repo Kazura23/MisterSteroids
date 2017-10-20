@@ -15,10 +15,10 @@ public class OnTrig : MonoBehaviour
 				GetAbs.PlayerDetected ( thisColl.gameObject, true );
 			}
 		}
-		else if ( thisColl.tag == Constants._DebrisEnv )
+		/*else if ( thisColl.tag == Constants._DebrisEnv )
 		{
 			GetAbs.debrisDetected ( thisColl.gameObject.GetComponent<Collider> ( ) );
-		}
+		}*/
 	}
 
 	void OnTriggerExit ( Collider thisColl )

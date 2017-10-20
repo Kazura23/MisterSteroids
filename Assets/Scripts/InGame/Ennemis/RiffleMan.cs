@@ -16,7 +16,6 @@ public class RiffleMan : AbstractObject
 	Transform player;
 	Transform localShoot;
 	float timer;
-	bool playerDetected = false;
 	#endregion
 
 	#region Mono
@@ -35,12 +34,7 @@ public class RiffleMan : AbstractObject
 
 		if ( isDetected && !isDead )
 		{
-			playerDetected = true;
 			StartCoroutine ( shootPlayer ( new WaitForSeconds ( SpeedSpawn ), false ) );
-		}
-		else
-		{
-			playerDetected = false;
 		}
 	}
 	#endregion

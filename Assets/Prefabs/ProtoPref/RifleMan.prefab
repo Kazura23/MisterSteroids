@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 114856030000373474}
   m_Layer: 11
   m_Name: RifleMan
-  m_TagString: Enemy
+  m_TagString: ElemDash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,7 +96,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1727208941225064}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.66, y: 1.5, z: 56.76}
+  m_LocalPosition: {x: 0, y: 8.1, z: 56.76}
   m_LocalScale: {x: 1, y: 3, z: 1}
   m_Children:
   - {fileID: 4162267417660650}
@@ -168,8 +168,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 13, y: 1, z: 7}
-  m_Center: {x: 0, y: 0, z: -4}
+  m_Size: {x: 13, y: 1, z: 20}
+  m_Center: {x: 0, y: 0, z: -10.5}
 --- !u!65 &65145044901558976
 BoxCollider:
   m_ObjectHideFlags: 1

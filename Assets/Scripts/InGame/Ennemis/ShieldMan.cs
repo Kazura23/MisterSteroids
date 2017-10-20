@@ -32,7 +32,6 @@ public class ShieldMan : AbstractObject {
     #endregion
 
     #region Private Methods 
-
     public override void Dead(bool enemy = false)
     {
         base.Dead(enemy);

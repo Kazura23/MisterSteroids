@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     public float delayPunch = 1;
 	public float delayHitbox = 0.3f;
 	public float delayPrepare = 0.1f;
+	public float PropulseBalls = 100;
 	public Vector3 DistPoingDroit = Vector3.zero;
 	public Vector3 DistPoingGauche = Vector3.zero;
 	public GameObject poingGauche;
@@ -55,9 +56,9 @@ public class PlayerController : MonoBehaviour
 	Direction newDir = Direction.North;
 	//Vector3 posDir;
 	Vector3 dirLine = Vector3.zero;
-	Collider currCol;
 	IEnumerator currCouR;
 	IEnumerator currCouL;
+	Punch getPunch;
 
 	float currSpeed = 0;
 	float currSpLine = 0;
@@ -82,10 +83,10 @@ public class PlayerController : MonoBehaviour
 	void Awake ( )
 	{
 		pTrans = transform;
-		currCol = GetComponent<Collider> ( );
 		punchBox = pTrans.GetChild(0).GetComponent<Collider>();
 		punch = pTrans.GetChild(0).GetComponent<Punch>();
         canPunch = true; punchRight = true;
+		getPunch = GetComponentInChildren<Punch> ( );
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
     }
@@ -600,19 +601,44 @@ public class PlayerController : MonoBehaviour
 	{
 		GameObject getObj = thisColl.gameObject;
 
-		if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ObsTag || getObj.tag == Constants._MissileBazoo || getObj.tag == Constants._Balls && !Dash)
+		if ( getObj.tag == Constants._Balls || getObj.tag == Constants._ElemDash )
 		{
-			if( getObj.tag == Constants._MissileBazoo)
-            {
-				getObj.GetComponent<MissileBazooka>().Explosion();
-            }
-			playerDead = true;
-			GlobalManager.Ui.DisplayOver ( true );
+			if ( Dash )
+			{
+				if ( getObj.tag == Constants._ElemDash )
+				{
+					thisColl.gameObject.GetComponent<Rigidbody> ( ).AddForce ( getPunch.projection_double, ForceMode.VelocityChange );
+				}
+				else
+				{
+					StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 50 ) );
+				}
+				return;
+			}
 
-			GlobalManager.GameCont.Restart ( );
-
+			StartCoroutine ( GameOver ( ) );
 		}
-	
+		else if ( getObj.tag == Constants._MissileBazoo )
+		{
+			getObj.GetComponent<MissileBazooka>().Explosion();
+			StartCoroutine ( GameOver ( ) );
+		}
+		else if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ObsTag || getObj.tag == Constants._MissileBazoo )
+		{
+			StartCoroutine ( GameOver ( ) );
+		}
+	}
+
+	IEnumerator GameOver ( )
+	{
+		WaitForSeconds thisS = new WaitForSeconds ( 1 );
+		playerDead = true;
+
+		yield return thisS;
+
+
+		GlobalManager.Ui.DisplayOver ( true );
+		GlobalManager.GameCont.Restart ( );
 	}
 
 

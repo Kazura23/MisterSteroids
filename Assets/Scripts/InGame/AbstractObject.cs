@@ -32,7 +32,6 @@ public class AbstractObject : MonoBehaviour
 
 	List<Rigidbody> corps;
 	Vector3 projection;
-	Collider currColl;
 	#endregion
 
 	#region Mono
@@ -44,7 +43,6 @@ public class AbstractObject : MonoBehaviour
 		getTrans = transform;
 
 		mainCorps = getTrans.GetComponent<Rigidbody> ( );
-		currColl = getTrans.GetComponent<Collider> ( );
 
 		foreach ( Rigidbody thisRig in getTrans.GetComponentsInChildren<Rigidbody> ( ) )
 		{
@@ -58,7 +56,6 @@ public class AbstractObject : MonoBehaviour
 	{
 		if ( !isDead )
 		{
-			isDead = true;
 			projection = p_damage;
 			Dead ( );
 		}
@@ -66,6 +63,7 @@ public class AbstractObject : MonoBehaviour
 
 	public virtual void Dead ( bool enemy = false )
 	{
+		isDead = true;
 		StartCoroutine ( disableColl ( ) );
 		for ( int i = 0; i < corps.Count; i++ )
 		{
@@ -107,15 +105,10 @@ public class AbstractObject : MonoBehaviour
 			mainCorps.velocity = mainCorps.velocity * ( VelRestant / 100 );
 		}
 	}
-
-	/*public void debrisDetected ( Collider thisColl )
-	{
-		Physics.IgnoreCollision ( thisColl, currColl );
-	}*/
 	#endregion
 
 	#region Private Methods
-	void OnCollisionEnter ( Collision thisColl )
+	protected virtual void OnCollisionEnter ( Collision thisColl )
 	{
 		GameObject getThis = thisColl.gameObject;
 

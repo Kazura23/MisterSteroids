@@ -13,16 +13,12 @@ public class RiffleMan : AbstractObject
 	public float SpeedSpawn = 0.2f;
 	public float TimeDestr = 0.4f;
 
-	Transform player;
 	Transform localShoot;
-	float timer;
 	#endregion
 
 	#region Mono
 	void Start () 
 	{
-		timer = 0;
-		player = GlobalManager.GameCont.Player.transform;
 		localShoot = getTrans.Find ( "SpawnShoot" );
 	}
 	#endregion
@@ -40,10 +36,18 @@ public class RiffleMan : AbstractObject
 	#endregion
 
 	#region Private Methods
+	protected override void OnCollisionEnter ( Collision thisColl )
+	{
+		base.OnCollisionEnter ( thisColl );
+
+		if ( thisColl.gameObject.tag == Constants._PlayerTag && thisColl.gameObject.GetComponent<PlayerController> ( ).Dash )
+		{
+			CollDetect ( );
+		}
+	}
+
 	IEnumerator shootPlayer ( WaitForSeconds thisF, bool checkDir )
 	{
-		timer = Time.timeSinceLevelLoad;
-
 		int a;
 		GameObject getCurr;
 		for ( a = 0; a < NbrBalls; a++ )

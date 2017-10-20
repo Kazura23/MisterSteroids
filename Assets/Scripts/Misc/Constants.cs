@@ -13,6 +13,7 @@ public static class Constants
 	public const string _UnTagg = "Untagged";
     public const string _MissileBazoo = "MissileBazooka";
 	public const string _Balls = "Balls";
+	public const string _ElemDash = "ElemDash";
 	#endregion
 
 	#region Other

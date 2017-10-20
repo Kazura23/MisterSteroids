@@ -22,11 +22,15 @@ public class PlayerController : MonoBehaviour
 	[Header ("Caract both")]
 	public float RotationSpeed = 1;
 	public bool Running = true;
+	[Tooltip ("Force bonus en plus de la gravitée")]
+	public float BonusGrav = 0;
+	[Tooltip ("Pourcentage de ralentissement du personnage dans les airs")]
+	public float PourCRal = 50;
 	//public float JumpForce = 200;
 
 	[Space]
-	[Header("Nombre de ligne bonus d'un seul coté")]
-	public int NbrLine = 3;
+	public int NbrLineRight = 1;
+	public int NbrLineLeft = 1;
 
     [Header("Caract Fight")]
     /*public float delayLeft = 1;
@@ -52,6 +56,7 @@ public class PlayerController : MonoBehaviour
 
 	//Rigidbody thisRig;
 	Transform pTrans;
+	Rigidbody pRig;
 	Direction currentDir = Direction.North;
 	Direction newDir = Direction.North;
 	//Vector3 posDir;
@@ -77,15 +82,18 @@ public class PlayerController : MonoBehaviour
 	bool resetAxeS = true;
 	bool resetAxeD = true;
 	bool canDash = true;
+	bool inAir = false;
 	#endregion
 
 	#region Mono
 	void Awake ( )
 	{
 		pTrans = transform;
+		pRig = gameObject.GetComponent<Rigidbody> ( );
 		punchBox = pTrans.GetChild(0).GetComponent<Collider>();
 		punch = pTrans.GetChild(0).GetComponent<Punch>();
-        canPunch = true; punchRight = true;
+        canPunch = true; 
+		punchRight = true;
 		getPunch = GetComponentInChildren<Punch> ( );
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
@@ -175,10 +183,9 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 
-		if ( !Dash )
-		{
-			changeLine ( deltTime );
-		}
+		checkInAir ( );
+
+		changeLine ( deltTime );
 
 		playerMove ( deltTime, currSpeed );
 	}
@@ -188,11 +195,45 @@ public class PlayerController : MonoBehaviour
 	#endregion
 
 	#region Private Functions
+	void checkInAir ( )
+	{
+		RaycastHit thisHit;
+
+		if ( !Physics.Raycast ( pTrans.position, Vector3.down, out thisHit, 3 ) )
+		{
+			inAir = true;
+			pRig.useGravity = true;
+			pRig.AddForce ( Vector3.down * BonusGrav, ForceMode.Acceleration );
+		}
+		else 
+		{
+			Transform getThis = thisHit.collider.transform;
+
+			if ( getThis.rotation.x < 0 )
+			{
+				pTrans.Translate ( new Vector3 ( 0, ( ( 360 - getThis.eulerAngles.x ) / 4  ) * Time.deltaTime, 0 ), Space.World );
+				pRig.useGravity = false;
+			}
+			else
+			{
+				pTrans.Translate ( new Vector3 ( 0, ( -getThis.eulerAngles.x / 4 ) * Time.deltaTime, 0 ), Space.World );
+				pRig.useGravity = true;
+			}
+
+			inAir = false;
+		}
+	}
+
 	void playerMove ( float delTime, float speed )
 	{
 		Transform transPlayer = pTrans;
 		Vector3 calTrans = Vector3.zero;
 		delTime = Time.deltaTime;
+
+		if ( inAir )
+		{
+			speed = ( speed / 100 ) * PourCRal;
+		}
 
 		if ( Dash )
 		{
@@ -233,7 +274,7 @@ public class PlayerController : MonoBehaviour
 		}
 
 		pTrans.Translate ( calTrans, Space.World );
-			
+
 		/*if ( canJump && Input.GetAxis ( "Jump" ) > 0 )
 		{
 			canJump = false;
@@ -246,25 +287,28 @@ public class PlayerController : MonoBehaviour
 		float newImp = Input.GetAxis ( "Horizontal" );
 		float lineDistance = Constants.LineDist;
 
-		if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLine && ( clDir == 1 || newH == 0 ) )
+		if ( !Dash && !inAir )
 		{
-			currLine++;
-			LastImp = 1;
-			clDir = 1;
-			newH = newH +lineDistance;
-			saveDist = newH;
-		}
-		else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLine && ( clDir == -1 || newH == 0 ) )
-		{
-			currLine--;
-			LastImp = -1;
-			clDir = -1;
-			newH = newH - lineDistance;
-			saveDist = newH;
-		}
-		else if ( newImp == 0 )
-		{
-			LastImp = 0;
+			if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLineRight && ( clDir == 1 || newH == 0 ) )
+			{
+				currLine++;
+				LastImp = 1;
+				clDir = 1;
+				newH = newH + lineDistance;
+				saveDist = newH;
+			}
+			else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLineLeft && ( clDir == -1 || newH == 0 ) )
+			{
+				currLine--;
+				LastImp = -1;
+				clDir = -1;
+				newH = newH - lineDistance;
+				saveDist = newH;
+			}
+			else if ( newImp == 0 )
+			{
+				LastImp = 0;
+			}
 		}
 
 		if ( newH != 0 )

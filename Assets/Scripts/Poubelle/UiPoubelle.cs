@@ -14,4 +14,8 @@ public class UiPoubelle : MonoBehaviour {
         /*missi = GameObject.FindGameObjectWithTag(Constants._MissileBazoo);
         missi.GetComponent<MissileBazooka>().ActiveTir(-missi.GetComponent<MissileBazooka>().GetDirection(), 1.5f, true);*/
     }
+
+
+    
+
 }

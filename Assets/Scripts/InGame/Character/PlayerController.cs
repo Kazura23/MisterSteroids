@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
 	[Tooltip ("Force bonus en plus de la gravitée")]
 	public float BonusGrav = 0;
 	[Tooltip ("Pourcentage de ralentissement du personnage dans les airs")]
-	public float PourCRal = 50;
+	public float PourcRal = 50;
 	//public float JumpForce = 200;
 
 	[Space]
@@ -232,7 +232,7 @@ public class PlayerController : MonoBehaviour
 
 		if ( inAir )
 		{
-			speed = ( speed / 100 ) * PourCRal;
+			speed = ( speed / 100 ) * PourcRal;
 		}
 
 		if ( Dash )

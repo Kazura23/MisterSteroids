@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour
 	public float MaxSpeed = 5;
 	public float Acceleration = 10;
 	public float Deceleration = 1;
+	public float DashTime = 2;
+	[Tooltip ("Cooldown qui commence une fois le dash terminé")]
+	public float CooldownDash = 3;
 
 	[Header ("Caract when change Line")]
 	public float MaxSpeedCL = 5;
@@ -31,6 +34,7 @@ public class PlayerController : MonoBehaviour
     public float delayPunch = 1;
 	public float delayHitbox = 0.3f;
 	public float delayPrepare = 0.1f;
+	public float PropulseBalls = 100;
 	public Vector3 DistPoingDroit = Vector3.zero;
 	public Vector3 DistPoingGauche = Vector3.zero;
 	public GameObject poingGauche;
@@ -38,6 +42,8 @@ public class PlayerController : MonoBehaviour
 
 	[HideInInspector]
 	public bool playerDead = false;
+	[HideInInspector]
+	public bool Dash = false;
 
 	private Collider punchBox;
 	private Punch punch;
@@ -50,9 +56,9 @@ public class PlayerController : MonoBehaviour
 	Direction newDir = Direction.North;
 	//Vector3 posDir;
 	Vector3 dirLine = Vector3.zero;
-	Collider currCol;
 	IEnumerator currCouR;
 	IEnumerator currCouL;
+	Punch getPunch;
 
 	float currSpeed = 0;
 	float currSpLine = 0;
@@ -68,23 +74,47 @@ public class PlayerController : MonoBehaviour
 
 	//bool canJump = true;
 	bool newPos = false;
+	bool resetAxeS = true;
+	bool resetAxeD = true;
+	bool canDash = true;
 	#endregion
 
 	#region Mono
 	void Awake ( )
 	{
 		pTrans = transform;
-		currCol = GetComponent<Collider> ( );
 		punchBox = pTrans.GetChild(0).GetComponent<Collider>();
 		punch = pTrans.GetChild(0).GetComponent<Punch>();
         canPunch = true; punchRight = true;
+		getPunch = GetComponentInChildren<Punch> ( );
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
     }
 
 	void Update ( )
 	{
-		playerFight ( );
+		if ( !Dash )
+		{
+			if ( Input.GetAxis ( "CoupSimple" ) == 0 )
+			{
+				resetAxeS = true;
+			}
+
+			if ( Input.GetAxis ( "CoupDouble" ) == 0 )
+			{
+				resetAxeD = true;
+			}
+
+			playerFight ( );
+		}
+
+		if ( Input.GetAxis ( "Dash") != 0 && newH == 0 && canDash )
+		{
+			Dash = true;
+			canDash = false;
+
+			StartCoroutine ( waitStopDash ( ) );
+		}
 	}
 
 	void FixedUpdate ( )
@@ -145,7 +175,11 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 
-		changeLine ( deltTime );
+		if ( !Dash )
+		{
+			changeLine ( deltTime );
+		}
+
 		playerMove ( deltTime, currSpeed );
 	}
 	#endregion
@@ -159,6 +193,11 @@ public class PlayerController : MonoBehaviour
 		Transform transPlayer = pTrans;
 		Vector3 calTrans = Vector3.zero;
 		delTime = Time.deltaTime;
+
+		if ( Dash )
+		{
+			speed *= 2;
+		}
 
 		if ( currentDir == Direction.North )
 		{
@@ -281,8 +320,9 @@ public class PlayerController : MonoBehaviour
 
 	void playerFight ( )
 	{
-		if(Input.GetKeyDown(KeyCode.A) && canPunch)
+		if(Input.GetAxis("CoupSimple") != 0 && canPunch && resetAxeS )
         {
+			resetAxeS = false;
             canPunch = false;
             if (punchRight)
             {
@@ -308,8 +348,9 @@ public class PlayerController : MonoBehaviour
             }
             punchRight = !punchRight;
             StartCoroutine("StartPunch", 0);
-        }else if(Input.GetKeyDown(KeyCode.E) && canPunch)
+		}else if(Input.GetAxis("CoupDouble") != 0 && canPunch && resetAxeD )
         {
+			resetAxeD = false;
             canPunch = false;
             poingDroite.SetActive(true);
             poingGauche.SetActive(true);
@@ -518,6 +559,26 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	IEnumerator waitStopDash ( )
+	{
+		WaitForSeconds thisS = new WaitForSeconds ( DashTime );
+
+		yield return thisS;
+
+		Dash = false;
+
+		StartCoroutine ( enableDash ( ) );
+	}
+
+	IEnumerator enableDash ( )
+	{
+		WaitForSeconds thisS = new WaitForSeconds ( CooldownDash );
+
+		yield return thisS;
+
+		canDash = true;
+	}
+
 	/* public bool IsDefense()
     {
         return defense;
@@ -538,22 +599,46 @@ public class PlayerController : MonoBehaviour
 
 	void OnCollisionEnter ( Collision thisColl )
 	{
-		if ( thisColl.gameObject.tag == Constants._EnnemisTag || thisColl.gameObject.tag == Constants._ObsTag || thisColl.gameObject.tag == Constants._MissileBazoo )
-		{
-            if(thisColl.gameObject.tag == Constants._MissileBazoo)
-            {
-                thisColl.gameObject.GetComponent<MissileBazooka>().Explosion();
-            }
-			playerDead = true;
-			GlobalManager.Ui.DisplayOver ( true );
+		GameObject getObj = thisColl.gameObject;
 
-			GlobalManager.GameCont.Restart ( );
-
-		}
-		else if ( thisColl.gameObject.tag == Constants._DebrisEnv )
+		if ( getObj.tag == Constants._Balls || getObj.tag == Constants._ElemDash )
 		{
-			Physics.IgnoreCollision ( thisColl.collider, currCol );
+			if ( Dash )
+			{
+				if ( getObj.tag == Constants._ElemDash )
+				{
+					thisColl.gameObject.GetComponent<Rigidbody> ( ).AddForce ( getPunch.projection_double, ForceMode.VelocityChange );
+				}
+				else
+				{
+					StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 50 ) );
+				}
+				return;
+			}
+
+			StartCoroutine ( GameOver ( ) );
 		}
+		else if ( getObj.tag == Constants._MissileBazoo )
+		{
+			getObj.GetComponent<MissileBazooka>().Explosion();
+			StartCoroutine ( GameOver ( ) );
+		}
+		else if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ObsTag || getObj.tag == Constants._MissileBazoo )
+		{
+			StartCoroutine ( GameOver ( ) );
+		}
+	}
+
+	IEnumerator GameOver ( )
+	{
+		WaitForSeconds thisS = new WaitForSeconds ( 1 );
+		playerDead = true;
+
+		yield return thisS;
+
+
+		GlobalManager.Ui.DisplayOver ( true );
+		GlobalManager.GameCont.Restart ( );
 	}
 
 

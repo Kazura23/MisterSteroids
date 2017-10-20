@@ -8,7 +8,7 @@ public class GameController : ManagerParent
 	#region Variables
 	public Transform GarbageTransform;
 	public MeshDesctruc MeshDest;
-
+	public GameObject Player;
     #endregion
 
     #region Mono
@@ -27,6 +27,7 @@ public class GameController : ManagerParent
     #region Private Methods
     protected override void InitializeManager ( )
 	{
+		Player = GameObject.FindGameObjectWithTag("Player");
 	}
 	#endregion
 }

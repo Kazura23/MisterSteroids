@@ -14,7 +14,7 @@ public class MeshDesctruc : MonoBehaviour
 		stockElem = new List<GameObject> ( );
 	}
 
-	public IEnumerator SplitMesh ( GameObject objSource, float forcePro, float deleayDest )    
+	public IEnumerator SplitMesh ( GameObject objSource, float forcePro, float deleayDest, int lim = 250 )    
 	{
 		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
 
@@ -82,7 +82,7 @@ public class MeshDesctruc : MonoBehaviour
 			countTriangle = 1;
 			checkLim = false;
 
-			while ( indices.Length / countTriangle > 250 )
+			while ( indices.Length / countTriangle > lim )
 			{
 				countTriangle += 3;
 			}
@@ -94,6 +94,11 @@ public class MeshDesctruc : MonoBehaviour
 				if ( b % 50 == 0 )
 				{
 					yield return thisFrame;
+				}
+
+				if ( objSource == null )
+				{
+					yield break;
 				}
 
 				for ( c = 0; c < 3; c++ )

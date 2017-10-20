@@ -24,7 +24,7 @@ public class ProtoObs : AbstractObject
 	#endregion
 
 	#region Private Methods
-	void OnCollisionEnter ( Collision thisColl )
+	protected override void OnCollisionEnter ( Collision thisColl )
 	{
 		if ( thisColl.gameObject.tag == Constants._EnnemisTag )
 		{

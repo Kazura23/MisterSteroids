@@ -10,11 +10,12 @@ public class BazookaMan : AbstractObject {
     public GameObject Missile;
     private MissileBazooka MissileScript;
     private Transform player;
-
+	Transform localShoot;
 	// Use this for initialization
 	void Start () {
         timer = 0;
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+		player = GlobalManager.GameCont.Player.transform;
+		localShoot = getTrans.Find ( "SpawnShoot" );
 	}
 	
 	// Update is called once per frame
@@ -24,13 +25,13 @@ public class BazookaMan : AbstractObject {
             Debug.Log("temps = " + timer);
             if (Vector3.Distance(transform.position, player.position) <= distanceMin && timer >= cooldownMin)
             {
-                MissileScript = Instantiate(Missile, transform.position + new Vector3(0, 0, -2), Quaternion.identity).GetComponent<MissileBazooka>();
+				MissileScript = Instantiate ( Missile, localShoot ).GetComponent<MissileBazooka> ( );
 				MissileScript.ActiveTir(-getTrans.forward, 1, false);
                 timer = 0;
             }
             else if (timer >= coolDownGeneral)
             {
-                MissileScript = Instantiate(Missile, transform.position + new Vector3(0, 0, -2), Quaternion.identity).GetComponent<MissileBazooka>();
+				MissileScript = Instantiate(Missile, localShoot).GetComponent<MissileBazooka>();
 				MissileScript.ActiveTir(-getTrans.forward, 1, false);
                 timer = 0;
             }

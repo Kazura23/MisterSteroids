@@ -1,24 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : ManagerParent
 {
 	#region Variables
 	public Transform GarbageTransform;
 	public MeshDesctruc MeshDest;
-	#endregion
+	public GameObject Player;
+    #endregion
 
-	#region Mono
+    #region Mono
 
-	#endregion
+    #endregion
 
-	#region Public Methods
-	#endregion
+    #region Public Methods
 
-	#region Private Methods
-	protected override void InitializeManager ( )
+    public void Restart() {
+        SceneManager.LoadScene("ProtoAlex", LoadSceneMode.Single);
+        GlobalManager.Ui.DisplayOver(false);
+    }
+
+    #endregion
+
+    #region Private Methods
+    protected override void InitializeManager ( )
 	{
+		Player = GameObject.FindGameObjectWithTag("Player");
 	}
 	#endregion
 }

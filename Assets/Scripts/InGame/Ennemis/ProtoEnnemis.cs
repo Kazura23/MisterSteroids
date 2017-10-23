@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProtoEnnemis : AbstractEnnemis
+public class ProtoEnnemis : AbstractObject
 {
 	#region Variables
+	[Space]
 	public Color NewColor;
 	Color saveCol;
 
@@ -15,50 +16,35 @@ public class ProtoEnnemis : AbstractEnnemis
 	#region Mono
 	void Start ( )
 	{
-		parMat = parentTrans.GetComponent<MeshRenderer> ( ).material;
+		parMat = getTrans.GetComponent<MeshRenderer> ( ).material;
 		saveCol = parMat.color;
 	}
 	#endregion
 
 	#region Public Methods
-	#endregion
-
-	#region Private Methods
-	void OnTriggerEnter ( Collider thisColl )
+	public override void PlayerDetected ( GameObject thisObj, bool isDetected )
 	{
-		if ( thisColl.tag == Constants._PlayerTag )
+		base.PlayerDetected ( thisObj, isDetected );
+
+		if ( isDetected )
 		{
-			playerDetected ( );
+			parMat.color = NewColor;
 		}
-	}
-
-	void OnTriggerExit ( Collider thisColl )
-	{
-		if ( thisColl.tag == Constants._PlayerTag )
+		else
 		{
-			playerUndetected ( );
+			parMat.color = saveCol;
 		}
-	}
-
-	public override void Dead( ) 
-	{
-		base.Dead ( );
-
-		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
-	}
-
-	protected override void playerDetected ( )
-	{
-		base.playerDetected ( );
-
 		parMat.color = NewColor;
 	}
 
-	protected override void playerUndetected ( )
+	public override void Dead ( bool enemy = false ) 
 	{
-		base.playerUndetected ( );
+		base.Dead ( enemy );
 
-		parMat.color = saveCol;
+		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
 	}
+	#endregion
+
+	#region Private Methods
 	#endregion
 }

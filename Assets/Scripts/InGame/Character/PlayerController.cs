@@ -53,6 +53,10 @@ public class PlayerController : MonoBehaviour
 	public GameObject poingGauche;
 	public GameObject poingDroite;
 
+	[Header ("SphereMask")]
+	public float Radius;
+	public float SoftNess;
+
 	[HideInInspector]
 	public bool playerDead = false;
 	[HideInInspector]
@@ -136,6 +140,13 @@ public class PlayerController : MonoBehaviour
 
 			StartCoroutine ( waitStopDash ( ) );
 		}
+
+		Mathf.Clamp ( Radius, 0, 100 );
+		Mathf.Clamp ( SoftNess, 0, 100 );
+
+		Shader.SetGlobalVector ( "GlobaleMask_Position", new Vector4 ( pTrans.position.x, pTrans.position.y, pTrans.position.z, 0 ) );
+		Shader.SetGlobalFloat ( "GlobaleMask_Radius", Radius );
+		Shader.SetGlobalFloat ( "GlobaleMask_SoftNess", SoftNess );
 	}
 
 	void FixedUpdate ( )

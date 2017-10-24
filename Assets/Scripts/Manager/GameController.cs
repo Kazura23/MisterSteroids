@@ -9,25 +9,35 @@ public class GameController : ManagerParent
 	public Transform GarbageTransform;
 	public MeshDesctruc MeshDest;
 	public GameObject Player;
+	public SpawnChunks SpawnerChunck;
     #endregion
 
     #region Mono
-
+	void Start ( )
+	{
+		StartGame ( );
+	}
     #endregion
 
     #region Public Methods
+	public void StartGame ( )
+	{
+		SpawnerChunck.FirstSpawn ( );
+	}
 
-    public void Restart() {
-        SceneManager.LoadScene("ProtoAlex", LoadSceneMode.Single);
-        GlobalManager.Ui.DisplayOver(false);
+    public void Restart ( ) 
+	{
+		SceneManager.LoadScene ( "ProtoAlex", LoadSceneMode.Single );
+		GlobalManager.Ui.DisplayOver ( false );
+		StartGame ( );
     }
-
     #endregion
 
     #region Private Methods
     protected override void InitializeManager ( )
 	{
 		Player = GameObject.FindGameObjectWithTag("Player");
+		SpawnerChunck = GetComponentInChildren<SpawnChunks> ( );
 	}
 	#endregion
 }

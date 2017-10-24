@@ -18,5 +18,6 @@ public static class Constants
 
 	#region Other
 	public const int LineDist = 6;
+	public const float ChunkLengh = 470;
 	#endregion
 }

@@ -48,7 +48,7 @@ public class SpawnChunks : MonoBehaviour
 			getSpc.RemoveAt ( 0 );
 		}
 
-		if ( !newLevel )
+		if ( newLevel )
 		{
 			getChunkT = getSpc [ getSpc.Count - 1 ].transform;
 			thisObj = ( GameObject ) Instantiate ( getChunks [ currLevel ].WallLastThisLvl, thisT );

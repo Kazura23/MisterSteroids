@@ -2,6 +2,7 @@
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
+		_BumpMap ("BumpMap", 2D) = "bump" {}
 		_LessGray ("LessGray", Range (0,2)) = 1
 
 		_EmissionColor ("EmissionColor", Color) = (1,1,1,1)
@@ -27,13 +28,14 @@
 		// Use shader model 3.0 target, to get nicer looking lighting
 		#pragma target 3.0
 
-		sampler2D _MainTex, _EmissionMainTex;
+		sampler2D _MainTex, _EmissionMainTex, _BumpMap;
 
 		struct Input 
 		{
 			float2 uv_MainTex;
 			float2 uv_EmissionTex;
 			float3 worldPos;
+			float2 uv_BumpMap;
 		};
 
 		fixed4 _Color, _EmissionColor;
@@ -58,7 +60,7 @@
 		{
 			// default color
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-
+			
 			//récupère seulement le gris de la texture
 			half grayscale = (c.r+c.g+c.b)*.333; 
 			half satG = saturate (grayscale * _LessGray);
@@ -74,12 +76,14 @@
 			fixed4 lerpEmiision = lerp(fixed4(0,0,0,0),e,sum);
 
 			o.Albedo = lerpColor.rgb;
-
+			o.Normal = UnpackNormal (tex2D (_BumpMap, IN.uv_BumpMap));
+			
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Emission = lerpEmiision.rgb;
 			o.Smoothness = _Glossiness;
 			o.Alpha = c.a;
+			
 		}
 		ENDCG
 	}

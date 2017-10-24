@@ -15,9 +15,11 @@ public class Punch : MonoBehaviour {
     public Vector3 projection_basic, projection_double;
     public float facteurVitesseRenvoie = 1.5f;
 
+	bool canPunc = true;
+
     void OnTriggerEnter(Collider other)
     {
-		if(other.gameObject.tag == Constants._EnnemisTag || other.gameObject.tag == Constants._ObsTag )
+		if( canPunc && ( other.gameObject.tag == Constants._EnnemisTag || other.gameObject.tag == Constants._ObsTag) )
         {
             switch (numTechnic)
             {
@@ -39,4 +41,9 @@ public class Punch : MonoBehaviour {
     {
         numTechnic = typeTech;
     }
+
+	public void CanPunch ( bool canPush )
+	{
+		canPunc = canPush;
+	}
 }

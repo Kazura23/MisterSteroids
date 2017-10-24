@@ -118,7 +118,9 @@ public class PlayerController : MonoBehaviour
 
 	void Update ( )
 	{
-		if ( !Dash )
+		punch.CanPunch ( !playerDead );
+
+		if ( !Dash && !playerDead )
 		{
 			if ( Input.GetAxis ( "CoupSimple" ) == 0 )
 			{

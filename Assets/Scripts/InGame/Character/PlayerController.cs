@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 	public float MaxSpeed = 5;
 	public float Acceleration = 10;
 	public float Deceleration = 1;
-	public float DashTime = 2;
+
 	[Tooltip ("Cooldown qui commence une fois le dash terminé")]
 	public float CooldownDash = 3;
 
@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
 	[Tooltip ("Force bonus en plus de la gravitée")]
 	public float BonusGrav = 0;
 	[Tooltip ("Pourcentage de ralentissement du personnage dans les airs")]
-	public float PourCRal = 50;
+	public float PourcRal = 50;
 	//public float JumpForce = 200;
 
 	[Space]
@@ -35,10 +35,19 @@ public class PlayerController : MonoBehaviour
     [Header("Caract Fight")]
     /*public float delayLeft = 1;
 	public float delayRight = 1;*/
+	public float DashTime = 2;
+	[Tooltip ("La valeur de DashSpeed est un multiplicateur sur la vitesse du joueur")]
+	public float DashSpeed = 2;
+
     public float delayPunch = 1;
 	public float delayHitbox = 0.3f;
 	public float delayPrepare = 0.1f;
 	public float PropulseBalls = 100;
+	[Tooltip ("Le temps max sera delayPunch")]
+	public float TimePropulsePunch = 0.1f, TimePropulseDoublePunch = 0.2f;
+	[Tooltip ("La valeur est un multiplicateur sur la vitesse du joueur")]
+	public float SpeedPunchRun = 1.2f, SpeedDoublePunchRun = 1.5f;
+
 	public Vector3 DistPoingDroit = Vector3.zero;
 	public Vector3 DistPoingGauche = Vector3.zero;
 	public GameObject poingGauche;
@@ -63,6 +72,7 @@ public class PlayerController : MonoBehaviour
 	Vector3 dirLine = Vector3.zero;
 	IEnumerator currCouR;
 	IEnumerator currCouL;
+	IEnumerator propPunch;
 	Punch getPunch;
 
 	float currSpeed = 0;
@@ -78,6 +88,8 @@ public class PlayerController : MonoBehaviour
 	int clDir = 0;
 
 	//bool canJump = true;
+	bool propP = false;
+	bool propDP = false;
 	bool newPos = false;
 	bool resetAxeS = true;
 	bool resetAxeD = true;
@@ -197,30 +209,39 @@ public class PlayerController : MonoBehaviour
 	#region Private Functions
 	void checkInAir ( )
 	{
-		RaycastHit thisHit;
+		RaycastHit[] allHit;
+		bool inAir = true;
 
-		if ( !Physics.Raycast ( pTrans.position, Vector3.down, out thisHit, 3 ) )
+		allHit = Physics.RaycastAll ( pTrans.position, Vector3.down, 5 );
+		foreach ( RaycastHit thisRay in allHit )
 		{
+			if ( thisRay.collider.gameObject.layer == 9 )
+			{
+				inAir = false;
+
+				Transform getThis = thisRay.collider.transform;
+
+				if ( getThis.rotation.x < 0 )
+				{
+					pTrans.Translate ( new Vector3 ( 0, ( ( 360 - getThis.eulerAngles.x ) / 4  ) * Time.deltaTime, 0 ), Space.World );
+					pRig.useGravity = false;
+				}
+				else if ( getThis.rotation.x > 0 )
+				{
+					pTrans.Translate ( new Vector3 ( 0, ( -getThis.eulerAngles.x / 4 ) * Time.deltaTime, 0 ), Space.World );
+					pRig.useGravity = true;
+				}
+
+				inAir = false;
+			}
+		}
+
+		if ( inAir )
+		{
+			Debug.Log ( "IN AIR" );
 			inAir = true;
 			pRig.useGravity = true;
 			pRig.AddForce ( Vector3.down * BonusGrav, ForceMode.Acceleration );
-		}
-		else 
-		{
-			Transform getThis = thisHit.collider.transform;
-
-			if ( getThis.rotation.x < 0 )
-			{
-				pTrans.Translate ( new Vector3 ( 0, ( ( 360 - getThis.eulerAngles.x ) / 4  ) * Time.deltaTime, 0 ), Space.World );
-				pRig.useGravity = false;
-			}
-			else
-			{
-				pTrans.Translate ( new Vector3 ( 0, ( -getThis.eulerAngles.x / 4 ) * Time.deltaTime, 0 ), Space.World );
-				pRig.useGravity = true;
-			}
-
-			inAir = false;
 		}
 	}
 
@@ -232,12 +253,20 @@ public class PlayerController : MonoBehaviour
 
 		if ( inAir )
 		{
-			speed = ( speed / 100 ) * PourCRal;
+			speed = ( speed / 100 ) * PourcRal;
 		}
 
 		if ( Dash )
 		{
-			speed *= 2;
+			speed *= DashSpeed;
+		}
+		else if ( propP )
+		{
+			speed *= SpeedPunchRun;
+		}
+		else if ( propDP )
+		{
+			speed *= SpeedDoublePunchRun;
 		}
 
 		if ( currentDir == Direction.North )
@@ -287,7 +316,7 @@ public class PlayerController : MonoBehaviour
 		float newImp = Input.GetAxis ( "Horizontal" );
 		float lineDistance = Constants.LineDist;
 
-		if ( !Dash && !inAir )
+		if ( newH == 0 && !Dash && !inAir )
 		{
 			if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLineRight && ( clDir == 1 || newH == 0 ) )
 			{
@@ -368,6 +397,7 @@ public class PlayerController : MonoBehaviour
         {
 			resetAxeS = false;
             canPunch = false;
+			propP = true;
             if (punchRight)
             {
                 poingDroite.SetActive(true);
@@ -392,8 +422,11 @@ public class PlayerController : MonoBehaviour
             }
             punchRight = !punchRight;
             StartCoroutine("StartPunch", 0);
+			propPunch = propulsePunch ( TimePropulsePunch );
+			StartCoroutine ( propPunch );
 		}else if(Input.GetAxis("CoupDouble") != 0 && canPunch && resetAxeD )
         {
+			propDP = true;
 			resetAxeD = false;
             canPunch = false;
             poingDroite.SetActive(true);
@@ -405,6 +438,8 @@ public class PlayerController : MonoBehaviour
 
 			StartCoroutine ( currCouL );
 			StartCoroutine ( currCouR );
+			propPunch = propulsePunch ( TimePropulseDoublePunch );
+			StartCoroutine ( propPunch );
         }
          
         
@@ -601,6 +636,14 @@ public class PlayerController : MonoBehaviour
 		{
 			currCouL = null;
 		}
+
+		if ( propPunch != null )
+		{
+			StopCoroutine ( propPunch );
+		}
+
+		propP = false;
+		propDP = false;
 	}
 
 	IEnumerator waitStopDash ( )
@@ -621,6 +664,16 @@ public class PlayerController : MonoBehaviour
 		yield return thisS;
 
 		canDash = true;
+	}
+
+	IEnumerator propulsePunch ( float thisTime )
+	{
+		WaitForSeconds thisSec = new WaitForSeconds ( thisTime );
+
+		yield return thisSec;
+
+		propP = false;
+		propDP = false;
 	}
 
 	/* public bool IsDefense()
@@ -655,8 +708,9 @@ public class PlayerController : MonoBehaviour
 				}
 				else
 				{
-					StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 50 ) );
+					StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 5 ) );
 				}
+
 				return;
 			}
 

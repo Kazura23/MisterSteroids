@@ -5,16 +5,16 @@ using UnityEngine;
 public class MeshDesctruc : MonoBehaviour 
 {
 	public GameObject TriangPrefb;
-	public List<GameObject> stockElem;
+//	public List<GameObject> stockElem;
 	Transform garbage;
 
 	void Start ( )
 	{
 		garbage = GlobalManager.GameCont.GarbageTransform;
-		stockElem = new List<GameObject> ( );
+		//stockElem = new List<GameObject> ( );
 	}
 
-	public IEnumerator SplitMesh ( GameObject objSource, float forcePro, float deleayDest, int lim = 250 )    
+	public IEnumerator SplitMesh ( GameObject objSource, float forcePro, float deleayDest, int lim = 25, bool little = false )    
 	{
 		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
 
@@ -49,11 +49,11 @@ public class MeshDesctruc : MonoBehaviour
 		Vector3[] normals = M.normals;
 		Vector2[] uvs = M.uv;
 
-		Vector3[] newVerts = new Vector3[6];
-		Vector3[] newNormals = new Vector3[6];
-		Vector2[] newUvs = new Vector2[6]; 
+		Vector3[] newVerts = new Vector3[9];
+		Vector3[] newNormals = new Vector3[9];
+		Vector2[] newUvs = new Vector2[9]; 
 
-		List<GameObject> getAllSt;
+	//	List<GameObject> getAllSt;
 
 		Transform getTrans = objSource.transform;
 		Vector3 explosionPos;
@@ -74,7 +74,7 @@ public class MeshDesctruc : MonoBehaviour
 		bool checkLim;
 		getSize = new Vector2 ( getSize.x / 2, getSize.y / 2 );
 
-		getAllSt = stockElem;
+		//getAllSt = stockElem;
 
 		for ( a = 0; a < M.subMeshCount; a++ )
 		{
@@ -91,7 +91,7 @@ public class MeshDesctruc : MonoBehaviour
 
 			for ( b = 0; b < indices.Length; b += 3 + countTriangle )
 			{
-				if ( b % 50 == 0 )
+				if ( b % 25 == 0 )
 				{
 					yield return thisFrame;
 				}
@@ -116,7 +116,20 @@ public class MeshDesctruc : MonoBehaviour
 
 					newUvs [ c + 3 ] = uvs [ index ];
 					newNormals [ c + 3 ] = normals [ index ];
-					newVerts [ c + 3 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.5f ), -verts [ index ].x * Random.Range ( 0.5f, 1.5f ), -verts [ index ].z * Random.Range ( 0.5f, 1.5f ) );
+
+					newUvs [ c + 6 ] = uvs [ index ];
+					newNormals [ c + 6 ] = normals [ index ];
+
+					if ( !little )
+					{
+						newVerts [ c + 3 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.5f ), -verts [ index ].x * Random.Range ( 0.5f, 1.5f ), -verts [ index ].z * Random.Range ( 0.5f, 1.5f ) );
+						newVerts [ c + 6 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.5f ), -verts [ index ].x * Random.Range ( 0.5f, 1.5f ), -verts [ index ].z * Random.Range ( 0.5f, 1.5f ) );
+					}
+					else
+					{
+						newVerts [ c + 3 ] = new Vector3 ( verts [ index ].x * Random.Range ( 0.5f, 1.5f ), verts [ index ].y * Random.Range ( 0.5f, 1.5f ), verts [ index ].z );
+						newVerts [ c + 6 ] = new Vector3 ( -verts [ index ].x * Random.Range ( 0.1f, 0.5f ), -verts [ index ].y * Random.Range ( 0.1f, 0.5f ), verts [ index ].z );
+					}
 				}
 					
 				if ( checkLim )
@@ -131,12 +144,21 @@ public class MeshDesctruc : MonoBehaviour
 				mesh.triangles = new int[] 
 				{
 					0, 1, 2,
+
 					1, 3, 2,
 					0, 3, 1,
-					0, 2, 3
+					0, 2, 3,
+
+					0, 4, 1,
+					1, 4, 2,
+					0, 2, 4,
+
+					2, 4, 1,
+					1, 4, 3,
+					2, 3, 4
 				};
 
-				if ( getAllSt.Count > 0 && !getAllSt [ 0 ].activeSelf )
+				/*if ( getAllSt.Count > 0 && !getAllSt [ 0 ].activeSelf )
 				{
 					GO = getAllSt [ 0 ];
 					GO.SetActive ( true );
@@ -147,8 +169,9 @@ public class MeshDesctruc : MonoBehaviour
 				{
 					GO = ( GameObject ) Instantiate ( getTri );
 					GO.transform.SetParent ( garbage );
-				}
-
+				}*/
+				GO = ( GameObject ) Instantiate ( getTri );
+				GO.transform.SetParent ( garbage );
 				GO.GetComponent<MeshRenderer> ( ).material = materials [ a ];
 				GO.GetComponent<MeshFilter> ( ).mesh = mesh;
 				GO.AddComponent<BoxCollider> ( );
@@ -175,8 +198,15 @@ public class MeshDesctruc : MonoBehaviour
 		Destroy ( objSource );
 	}
 
-	public void ReAddObj ( GameObject thisObj )
+	/*public void ReAddObj ( GameObject thisObj )
 	{
-		stockElem.Add ( thisObj );
-	}
+		if ( stockElem.Count > 100 )
+		{
+			Destroy ( thisObj );
+		}
+		else
+		{
+			stockElem.Add ( thisObj );
+		}
+	}*/
 }

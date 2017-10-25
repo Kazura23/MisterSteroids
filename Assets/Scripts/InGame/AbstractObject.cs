@@ -64,7 +64,9 @@ public class AbstractObject : MonoBehaviour
 	public virtual void Dead ( bool enemy = false )
 	{
 		isDead = true;
-		StartCoroutine ( disableColl ( ) );
+
+		//StartCoroutine ( disableColl ( ) );
+		getTrans.tag = Constants._ObjDeadTag;
 		for ( int i = 0; i < corps.Count; i++ )
 		{
 			corps [ i ].useGravity = true;
@@ -162,7 +164,7 @@ public class AbstractObject : MonoBehaviour
 		
 	IEnumerator disableColl ( )
 	{
-		WaitForSeconds thisSec = new WaitForSeconds ( 0.5f );
+		WaitForSeconds thisSec = new WaitForSeconds ( 0.0f );
 
 		yield return thisSec;
 

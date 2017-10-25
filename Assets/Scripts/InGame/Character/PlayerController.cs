@@ -53,6 +53,10 @@ public class PlayerController : MonoBehaviour
 	public GameObject poingGauche;
 	public GameObject poingDroite;
 
+	[Header ("SphereMask")]
+	public float Radius;
+	public float SoftNess;
+
 	[HideInInspector]
 	public bool playerDead = false;
 	[HideInInspector]
@@ -95,6 +99,7 @@ public class PlayerController : MonoBehaviour
 	bool resetAxeD = true;
 	bool canDash = true;
 	bool inAir = false;
+	bool canChange = true;
 	#endregion
 
 	#region Mono
@@ -113,7 +118,9 @@ public class PlayerController : MonoBehaviour
 
 	void Update ( )
 	{
-		if ( !Dash )
+		punch.CanPunch ( !playerDead );
+
+		if ( !Dash && !playerDead )
 		{
 			if ( Input.GetAxis ( "CoupSimple" ) == 0 )
 			{
@@ -135,6 +142,13 @@ public class PlayerController : MonoBehaviour
 
 			StartCoroutine ( waitStopDash ( ) );
 		}
+
+		Mathf.Clamp ( Radius, 0, 100 );
+		Mathf.Clamp ( SoftNess, 0, 100 );
+
+		Shader.SetGlobalVector ( "GlobaleMask_Position", new Vector4 ( pTrans.position.x, pTrans.position.y, pTrans.position.z, 0 ) );
+		Shader.SetGlobalFloat ( "GlobaleMask_Radius", Radius );
+		Shader.SetGlobalFloat ( "GlobaleMask_SoftNess", SoftNess );
 	}
 
 	void FixedUpdate ( )
@@ -316,10 +330,11 @@ public class PlayerController : MonoBehaviour
 		float newImp = Input.GetAxis ( "Horizontal" );
 		float lineDistance = Constants.LineDist;
 
-		if ( newH == 0 && !Dash && !inAir )
+		if ( ( canChange || newH == 0 ) && !Dash && !inAir )
 		{
 			if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLineRight && ( clDir == 1 || newH == 0 ) )
 			{
+				canChange = false;
 				currLine++;
 				LastImp = 1;
 				clDir = 1;
@@ -328,6 +343,7 @@ public class PlayerController : MonoBehaviour
 			}
 			else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLineLeft && ( clDir == -1 || newH == 0 ) )
 			{
+				canChange = false;
 				currLine--;
 				LastImp = -1;
 				clDir = -1;
@@ -349,6 +365,8 @@ public class PlayerController : MonoBehaviour
 				if ( saveDist < 0 && newH > -lineDistance / 2 || saveDist > 0 && newH < lineDistance / 2 )
 				{
 					currSpLine -= DecelerationCL * delTime;
+
+					canChange = true;
 
 					if ( currSpLine < 0 )
 					{
@@ -708,7 +726,7 @@ public class PlayerController : MonoBehaviour
 				}
 				else
 				{
-					StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 5 ) );
+					StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 5, true ) );
 				}
 
 				return;
@@ -733,7 +751,6 @@ public class PlayerController : MonoBehaviour
 		playerDead = true;
 
 		yield return thisS;
-
 
 		GlobalManager.Ui.DisplayOver ( true );
 		GlobalManager.GameCont.Restart ( );

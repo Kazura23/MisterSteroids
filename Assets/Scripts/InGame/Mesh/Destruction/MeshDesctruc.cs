@@ -14,7 +14,7 @@ public class MeshDesctruc : MonoBehaviour
 		//stockElem = new List<GameObject> ( );
 	}
 
-	public IEnumerator SplitMesh ( GameObject objSource, float forcePro, float deleayDest, int lim = 25 )    
+	public IEnumerator SplitMesh ( GameObject objSource, float forcePro, float deleayDest, int lim = 25, bool little = false )    
 	{
 		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
 
@@ -116,11 +116,20 @@ public class MeshDesctruc : MonoBehaviour
 
 					newUvs [ c + 3 ] = uvs [ index ];
 					newNormals [ c + 3 ] = normals [ index ];
-					newVerts [ c + 3 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.5f ), -verts [ index ].x * Random.Range ( 0.5f, 1.5f ), -verts [ index ].z * Random.Range ( 0.5f, 1.5f ) );
 
 					newUvs [ c + 6 ] = uvs [ index ];
 					newNormals [ c + 6 ] = normals [ index ];
-					newVerts [ c + 6 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.5f ), -verts [ index ].x * Random.Range ( 0.5f, 1.5f ), -verts [ index ].z * Random.Range ( 0.5f, 1.5f ) );
+
+					if ( !little )
+					{
+						newVerts [ c + 3 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.5f ), -verts [ index ].x * Random.Range ( 0.5f, 1.5f ), -verts [ index ].z * Random.Range ( 0.5f, 1.5f ) );
+						newVerts [ c + 6 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.5f ), -verts [ index ].x * Random.Range ( 0.5f, 1.5f ), -verts [ index ].z * Random.Range ( 0.5f, 1.5f ) );
+					}
+					else
+					{
+						newVerts [ c + 3 ] = new Vector3 ( verts [ index ].x * Random.Range ( 0.5f, 1.5f ), verts [ index ].y * Random.Range ( 0.5f, 1.5f ), verts [ index ].z );
+						newVerts [ c + 6 ] = new Vector3 ( -verts [ index ].x * Random.Range ( 0.1f, 0.5f ), -verts [ index ].y * Random.Range ( 0.1f, 0.5f ), verts [ index ].z );
+					}
 				}
 					
 				if ( checkLim )

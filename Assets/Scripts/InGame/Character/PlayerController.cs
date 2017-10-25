@@ -726,7 +726,7 @@ public class PlayerController : MonoBehaviour
 				}
 				else
 				{
-					StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 5 ) );
+					StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 5, true ) );
 				}
 
 				return;

@@ -6515,6 +6515,16 @@ Prefab:
       propertyPath: GameOver
       value: 
       objectReference: {fileID: 939855112}
+    - target: {fileID: 114930067391110948, guid: 15bb641fdb1f44941a035ea7b9db8239,
+        type: 2}
+      propertyPath: UseMatDeb
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114930067391110948, guid: 15bb641fdb1f44941a035ea7b9db8239,
+        type: 2}
+      propertyPath: DebrisMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 6e70c349c99ad7641a958de9722c2145, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 15bb641fdb1f44941a035ea7b9db8239, type: 2}
   m_IsPrefabParent: 0

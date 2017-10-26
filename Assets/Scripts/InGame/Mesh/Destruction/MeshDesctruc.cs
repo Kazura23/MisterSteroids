@@ -5,6 +5,8 @@ using UnityEngine;
 public class MeshDesctruc : MonoBehaviour 
 {
 	public GameObject TriangPrefb;
+	public Material DebrisMaterial;
+	public bool UseMatDeb = false;
 //	public List<GameObject> stockElem;
 	Transform garbage;
 
@@ -14,7 +16,7 @@ public class MeshDesctruc : MonoBehaviour
 		//stockElem = new List<GameObject> ( );
 	}
 
-	public IEnumerator SplitMesh ( GameObject objSource, float forcePro, float deleayDest, int lim = 25, bool little = false )    
+	public IEnumerator SplitMesh ( GameObject objSource, float forcePro, float deleayDest, int lim = 10, bool little = false )    
 	{
 		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
 
@@ -122,12 +124,12 @@ public class MeshDesctruc : MonoBehaviour
 
 					if ( !little )
 					{
-						newVerts [ c + 3 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.5f ), -verts [ index ].x * Random.Range ( 0.5f, 1.5f ), -verts [ index ].z * Random.Range ( 0.5f, 1.5f ) );
-						newVerts [ c + 6 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.5f ), -verts [ index ].x * Random.Range ( 0.5f, 1.5f ), -verts [ index ].z * Random.Range ( 0.5f, 1.5f ) );
+						newVerts [ c + 3 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.2f ), -verts [ index ].x * Random.Range ( 0.5f, 1.2f ), -verts [ index ].z * Random.Range ( 0.5f, 1.2f ) );
+						newVerts [ c + 6 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.2f ), -verts [ index ].x * Random.Range ( 0.5f, 1.2f ), -verts [ index ].z * Random.Range ( 0.5f, 1.2f ) );
 					}
 					else
 					{
-						newVerts [ c + 3 ] = new Vector3 ( verts [ index ].x * Random.Range ( 0.5f, 1.5f ), verts [ index ].y * Random.Range ( 0.5f, 1.5f ), verts [ index ].z );
+						newVerts [ c + 3 ] = new Vector3 ( verts [ index ].x * Random.Range ( 0.5f, 1f ), verts [ index ].y * Random.Range ( 0.5f, 1f ), verts [ index ].z );
 						newVerts [ c + 6 ] = new Vector3 ( -verts [ index ].x * Random.Range ( 0.1f, 0.5f ), -verts [ index ].y * Random.Range ( 0.1f, 0.5f ), verts [ index ].z );
 					}
 				}
@@ -172,7 +174,16 @@ public class MeshDesctruc : MonoBehaviour
 				}*/
 				GO = ( GameObject ) Instantiate ( getTri );
 				GO.transform.SetParent ( garbage );
-				GO.GetComponent<MeshRenderer> ( ).material = materials [ a ];
+			
+				if ( UseMatDeb )
+				{
+					GO.GetComponent<MeshRenderer> ( ).material = DebrisMaterial;
+				}
+				else
+				{
+					GO.GetComponent<MeshRenderer> ( ).material = materials [ a ];
+				}
+
 				GO.GetComponent<MeshFilter> ( ).mesh = mesh;
 				GO.AddComponent<BoxCollider> ( );
 

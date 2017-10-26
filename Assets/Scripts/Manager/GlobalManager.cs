@@ -6,8 +6,8 @@ public class GlobalManager : MonoBehaviour
    	static GlobalManager mainManagerInstance;
 
 	//Add new managers here
-	static UiManager ui;
-	public static UiManager Ui { get { return ui; } }
+	static UIManager ui;
+	public static UIManager Ui { get { return ui; } }
 
 	static EventManager evnt;
     public static EventManager Event { get { return evnt; } }

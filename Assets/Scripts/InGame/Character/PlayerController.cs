@@ -416,6 +416,11 @@ public class PlayerController : MonoBehaviour
 			resetAxeS = false;
             canPunch = false;
 			propP = true;
+
+            ScreenShake.Singleton.ShakeHit();
+
+           
+
             if (punchRight)
             {
                 poingDroite.SetActive(true);

@@ -10,6 +10,7 @@ public class RainbowColor : MonoBehaviour
     {
         Image,
         Material,
+        MaterialFont,
         Sprite,
         Text,
     }
@@ -37,6 +38,8 @@ public class RainbowColor : MonoBehaviour
         if (ComponentType == Type.Material)
             GetComponent<Material>().DOColor(colors[index], time).OnComplete(() => Next());
 
+        if (ComponentType == Type.MaterialFont)
+            GetComponent<Font>().material.DOColor(colors[index], time).OnComplete(() => Next());
 
         if (ComponentType == Type.Sprite)
             GetComponent<SpriteRenderer>().DOColor(colors[index], time).OnComplete(() => Next());
@@ -58,6 +61,12 @@ public class RainbowColor : MonoBehaviour
         {
             GetComponent<Material>().DOKill();
             GetComponent<Material>().DOColor(Color.white, time * 2f);
+        }
+
+        if (ComponentType == Type.MaterialFont)
+        {
+            GetComponent<Font>().material.DOKill();
+            GetComponent<Font>().material.DOColor(Color.white, time * 2f);
         }
 
         if (ComponentType == Type.Sprite)

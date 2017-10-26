@@ -1,29 +1,61 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-
-using System.Diagnostics;
+using DG.Tweening;
 using System.Runtime.CompilerServices;
 
-public class UiManager : ManagerParent
+public class UIManager : ManagerParent
 {
 	#region Variables
 	public GameObject GameOver;
+    public Image RedScreen;
+    public static UIManager Singleton;
+
 	bool CursorVisble = false;
 	#endregion
 
 	#region Mono
 	#endregion
 
+    
+
 	#region Public Methods
 	public void DisplayOver ( bool display )
 	{
-		GameOver.gameObject.SetActive ( display );
-	}
-	#endregion
 
-	#region Private Methods
-	protected override void InitializeManager ( )
+        GameOver.gameObject.SetActive ( display );
+	}
+
+    public void BloodHit()
+    {
+        Time.timeScale = 0;
+        DOVirtual.DelayedCall(.065f, () => {
+            Time.timeScale = 1;
+        });
+        Camera.main.DOFieldOfView(45, .12f);//.SetEase(Ease.InBounce);
+        RedScreen.DOFade(.4f, .12f).OnComplete(() => {
+            RedScreen.DOFade(0, .08f);
+            Camera.main.DOFieldOfView(60, .08f);//.SetEase(Ease.InBounce);
+        });
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    void Awake()
+    {
+        if(Singleton == null)
+        {
+            Singleton = this;
+        } else
+        {
+            Destroy(this);
+        }
+    }
+
+
+    protected override void InitializeManager ( )
 	{
 		InitializeUI ( );
 	}
@@ -45,6 +77,9 @@ public class UiManager : ManagerParent
 			Cursor.lockState = CursorLockMode.Locked;
 		}
 	}
+
+
+
 
 	void InitializeUI<T>(ref T manager) where T : UiParent
 	{

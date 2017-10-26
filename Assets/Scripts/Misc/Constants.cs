@@ -14,10 +14,16 @@ public static class Constants
     public const string _MissileBazoo = "MissileBazooka";
 	public const string _Balls = "Balls";
 	public const string _ElemDash = "ElemDash";
+
+	public const string _SAbleEnnemy = "SpawnableEnnemy";
+	public const string _SAbleObs = "SpawnableObstacle";
+	public const string _SAbleDestObs = "SpawnableDestObs";
+	public const string _SAbleCoin = "SpawnableCoin";
+	public const string _DebutFinChunk = "DebutFinChunk";
 	#endregion
 
 	#region Other
 	public const int LineDist = 6;
-	public const float ChunkLengh = 470;
+	//public const float ChunkLengh = 470;
 	#endregion
 }

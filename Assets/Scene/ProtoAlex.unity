@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44970924, g: 0.49977684, b: 0.57563376, a: 1}
+  m_IndirectSpecularColor: {r: 0.4497097, g: 0.49977732, b: 0.57563514, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -564,7 +564,7 @@ Prefab:
     - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
         type: 2}
       propertyPath: SpeedDoublePunchRun
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
         type: 2}
@@ -574,12 +574,17 @@ Prefab:
     - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
         type: 2}
       propertyPath: SpeedPunchRun
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
         type: 2}
       propertyPath: TimePropulsePunch
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: DashTime
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114580676302761910, guid: b4cea04d2ef6e224da8a8b609103e64f, type: 2}
@@ -3683,12 +3688,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 033e22ab3d510c8458b103a93766cb1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AllChunks:
-  - NbrChunkOneLvl: 3
-    TheseChunks:
-    - {fileID: 1429027651367742, guid: 5de88afc57002d04eb9e3e145bc47372, type: 2}
-    WallLastThisLvl: {fileID: 1727208941225064, guid: ac64f997d77b9cd4ab4efff6105597ce,
-      type: 2}
+  ChunksInfo:
+  - {fileID: 11400000, guid: 8c39cac52faee384e8f026761ef26143, type: 2}
   DefaultPos: {x: 0, y: 0, z: 0}
   currLevel: 0
 --- !u!4 &282748281 stripped
@@ -5508,7 +5509,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profile: {fileID: 11400000, guid: 18725ae5963e3ba48ab45d844d355d97, type: 2}
 --- !u!114 &386138795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6564,6 +6564,11 @@ Prefab:
       propertyPath: m_Name
       value: UIManager
       objectReference: {fileID: 0}
+    - target: {fileID: 114930067391110948, guid: 15bb641fdb1f44941a035ea7b9db8239,
+        type: 2}
+      propertyPath: DebrisMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 6e70c349c99ad7641a958de9722c2145, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 15bb641fdb1f44941a035ea7b9db8239, type: 2}
   m_IsPrefabParent: 0

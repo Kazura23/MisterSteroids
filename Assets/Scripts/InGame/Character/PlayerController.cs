@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour 
 {
 	#region Variables
-	[Header ("Caract on same Line")]
+	[Header ("Caractéristique sur une même Lane")]
 	public float MaxSpeed = 5;
 	public float Acceleration = 10;
 	public float Deceleration = 1;
@@ -13,13 +14,13 @@ public class PlayerController : MonoBehaviour
 	[Tooltip ("Cooldown qui commence une fois le dash terminé")]
 	public float CooldownDash = 3;
 
-	[Header ("Caract when change Line")]
+	[Header ("Caractéristique de changement de Lane")]
 	public float MaxSpeedCL = 5;
 	public float AccelerationCL = 10;
 	public float ImpulsionCL = 10;
 	public float DecelerationCL = 1;
 
-	[Header ("Caract both")]
+	[Header ("Autres runner Caractéristiques ")]
 	public float RotationSpeed = 1;
 	public float SpeedEffectTime;
 	public bool Running = true;
@@ -29,24 +30,32 @@ public class PlayerController : MonoBehaviour
 	public float PourcRal = 50;
 
 	//public float JumpForce = 200;
-
-	[Space]
-	public int NbrLineRight = 1;
-	public int NbrLineLeft = 1;
-
-    [Header("Caract Fight")]
+    [Header("Caractéristique Fight")]
     /*public float delayLeft = 1;
 	public float delayRight = 1;*/
 	public float DashTime = 2;
 	[Tooltip ("La valeur de DashSpeed est un multiplicateur sur la vitesse du joueur")]
 	public float DashSpeed = 2;
 
-	[Header ("Delay Punch")]
+	[Header ("Slow Motion Caractéristique")]
+	[Tooltip ("De combien la vitesse va diminuer au maximun par rapport à la vitesse standard")]
+	public float SlowMotion = 1;
+	[Tooltip ("Vitesse pour atteindre le slowMotion")]
+	public float SpeedSlowMot = 1;
+	[Tooltip ("Vitesse pour revenir à la vitesse normal")]
+	public float SpeedDeacSM = 3;
+
+	[Tooltip ("Vitesse de descente du slider content")]
+	public float ReduceSlider;
+	[Tooltip ("Vitesse de récupération du slider content")]
+	public float RecovSlider;
+
+	[Header ("Caractérique de temps sur les punchs")]
     public float delayPunch = 1;
 	public float delayHitbox = 0.3f;
 	public float delayPrepare = 0.1f;
 
-	[Header ("Punch Caract")]
+	[Header ("Caractéristique de force des punchs")]
 	public float PropulseBalls = 100;
 	[Tooltip ("Le temps max sera delayPunch")]
 	public float TimePropulsePunch = 0.1f, TimePropulseDoublePunch = 0.2f;
@@ -61,6 +70,11 @@ public class PlayerController : MonoBehaviour
 	[Header ("SphereMask")]
 	public float Radius;
 	public float SoftNess;
+
+	[HideInInspector]
+	public int NbrLineRight = 1;
+	[HideInInspector]
+	public int NbrLineLeft = 1;
 
 	[HideInInspector]
 	public bool playerDead = false;
@@ -92,6 +106,7 @@ public class PlayerController : MonoBehaviour
 	float newDist;
 	float saveDist;
 	float befRot = 0;
+	float SliderContent;
 	int currLine = 0;
 
 	int LastImp = 0;
@@ -119,6 +134,7 @@ public class PlayerController : MonoBehaviour
 		punchRight = true;
 		getPunch = GetComponentInChildren<Punch> ( );
 		thisCam = GetComponentInChildren<Camera> ( );
+		SliderContent = 10;
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
     }
@@ -150,18 +166,41 @@ public class PlayerController : MonoBehaviour
 			StartCoroutine ( waitStopDash ( ) );
 		}
 
+		if ( Input.GetAxis ( "SlowMot" ) > 0 && SliderContent > 0 && Time.timeScale > 1 / SlowMotion )
+		{
+			Time.timeScale -= Time.deltaTime * SpeedSlowMot;
+			SliderContent -= ReduceSlider * Time.deltaTime;
+		}
+		else if ( Time.timeScale < 1 )
+		{
+			SliderContent = 0;
+			Time.timeScale += Time.deltaTime * SpeedDeacSM;
+		}
+		else if ( SliderContent < 10 )
+		{
+			Time.timeScale = 1;
+			SliderContent += RecovSlider * Time.deltaTime;
+		}
+		else
+		{
+			SliderContent = 10;
+		}
+
+		Debug.Log ( SliderContent );
 		Mathf.Clamp ( Radius, 0, 100 );
 		Mathf.Clamp ( SoftNess, 0, 100 );
 
 		Shader.SetGlobalVector ( "GlobaleMask_Position", new Vector4 ( pTrans.position.x, pTrans.position.y, pTrans.position.z, 0 ) );
 		Shader.SetGlobalFloat ( "GlobaleMask_Radius", Radius );
 		Shader.SetGlobalFloat ( "GlobaleMask_SoftNess", SoftNess );
+		Shader.SetGlobalFloat ( "_SlowMot", Time.timeScale );
 	}
 
 	void FixedUpdate ( )
 	{
 		if ( playerDead )
 		{
+			thisCam.fieldOfView = Constants.DefFov;
 			return;
 		}
 

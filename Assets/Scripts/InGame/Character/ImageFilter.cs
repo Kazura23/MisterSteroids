@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
 
 [ImageEffectAllowedInSceneView]
-[ExecuteInEditMode]
 public class ImageFilter : MonoBehaviour 
 {
 	#region Variable
-	public Material material;
+	public Material SpeedEffect;
 	#endregion
 	
 	#region Mono
 	void OnRenderImage ( RenderTexture source, RenderTexture destination ) 
 	{
-		Graphics.Blit (source, destination, material);
+		Graphics.Blit (source, destination, SpeedEffect);
 	}
 	#endregion
 		

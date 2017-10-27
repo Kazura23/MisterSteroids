@@ -39,17 +39,24 @@
 			
 			sampler2D _MainTex, _Camera1;
 			float _ReduceVis;
+			float _SlowMot;
 
 			fixed4 frag (v2f i) : SV_Target
 			{
 				float2 uv = i.uv;
-				fixed4 color =  tex2D(_MainTex, uv);
+				fixed4 color = tex2D(_MainTex, uv);
 				float val = 1 - _ReduceVis * 0.1;
 				float val2 = 1 - val;
+
 				color.rgb *= val+val2*sin(uv.x*3.14159);
 				color.rgb *= val+val2*sin(uv.y*3.14159);
 
-				return color;
+				fixed4 colorMot  = color;
+				colorMot.r /= _SlowMot;
+				colorMot.g *= _SlowMot;
+				colorMot.b *= _SlowMot;
+
+				return lerp(color, colorMot, 0.1);
 			}
 			ENDCG
 		}

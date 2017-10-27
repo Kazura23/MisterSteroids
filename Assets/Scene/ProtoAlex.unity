@@ -616,6 +616,31 @@ Prefab:
       propertyPath: SpeedEffectTime
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: SlowMotion
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: SpeedSlowMot
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: SpeedDeacSM
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: ReduceSlider
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: RecovSlider
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114580676302761910, guid: b4cea04d2ef6e224da8a8b609103e64f, type: 2}
     - {fileID: 114550746714595070, guid: b4cea04d2ef6e224da8a8b609103e64f, type: 2}
@@ -5550,7 +5575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894b79da34224d74f8b28401bd90b62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: 29466087a0ed8f44b8ac0be8601effde, type: 2}
+  SpeedEffect: {fileID: 2100000, guid: 29466087a0ed8f44b8ac0be8601effde, type: 2}
 --- !u!114 &386138795
 MonoBehaviour:
   m_ObjectHideFlags: 0

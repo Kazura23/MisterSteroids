@@ -40,7 +40,7 @@ public class ProtoEnnemis : AbstractObject
 	public override void Dead ( bool enemy = false ) 
 	{
 		base.Dead ( enemy );
-        UIManager.Singleton.BloodHit();
+		GlobalManager.Ui.BloodHit();
         //mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
     }
 	#endregion

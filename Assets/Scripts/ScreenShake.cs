@@ -16,6 +16,12 @@ public class ScreenShake : MonoBehaviour
 		}
 	}
 
+
+	void Update ( )
+	{
+		
+	}
+
 	public void ShakeHit ()
 	{
         //transform.DOKill(true);

@@ -7,14 +7,9 @@ using System.Runtime.CompilerServices;
 public class UIManager : ManagerParent
 {
 	#region Variables
+	public Slider MotionSlider;
 	public GameObject GameOver;
     public Image RedScreen;
-    public GameObject Patterns;
-
-    [Header("PAUSE")]
-    public GameObject PauseObject;
-    public Text PauseText;
-
     public static UIManager Singleton;
 
 	bool CursorVisble = false;
@@ -23,13 +18,10 @@ public class UIManager : ManagerParent
 	#region Mono
 	#endregion
 
-    
-
 	#region Public Methods
 	public void DisplayOver ( bool display )
 	{
-
-        GameOver.gameObject.SetActive ( display );
+		GameOver.gameObject.SetActive ( display );
 	}
 
     void Start()
@@ -73,20 +65,7 @@ public class UIManager : ManagerParent
     #endregion
 
     #region Private Methods
-
-    void Awake()
-    {
-        if(Singleton == null)
-        {
-            Singleton = this;
-        } else
-        {
-            Destroy(this);
-        }
-    }
-
-
-    protected override void InitializeManager ( )
+	protected override void InitializeManager ( )
 	{
 		InitializeUI ( );
 	}
@@ -108,9 +87,6 @@ public class UIManager : ManagerParent
 			Cursor.lockState = CursorLockMode.Locked;
 		}
 	}
-
-
-
 
 	void InitializeUI<T>(ref T manager) where T : UiParent
 	{
@@ -138,3 +114,11 @@ public class UIManager : ManagerParent
 	}
 	#endregion
 }
+
+    public GameObject Patterns;
+
+    [Header("PAUSE")]
+    public GameObject PauseObject;
+    public Text PauseText;
+
+    public static UIManager Singleton;

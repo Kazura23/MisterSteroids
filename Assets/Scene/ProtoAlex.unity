@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4497097, g: 0.49977732, b: 0.57563514, a: 1}
+  m_IndirectSpecularColor: {r: 0.44970924, g: 0.49977684, b: 0.57563376, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -3187,6 +3187,11 @@ Camera:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: b2f96746c6005c64888263f64272a556, type: 2}
   m_PrefabInternal: {fileID: 1302750054}
+--- !u!1 &251682763 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1528059048823118, guid: b4cea04d2ef6e224da8a8b609103e64f,
+    type: 2}
+  m_PrefabInternal: {fileID: 34139853}
 --- !u!1001 &252669416
 Prefab:
   m_ObjectHideFlags: 0
@@ -6704,6 +6709,21 @@ Prefab:
       propertyPath: DebrisMaterial
       value: 
       objectReference: {fileID: 2100000, guid: 6e70c349c99ad7641a958de9722c2145, type: 2}
+    - target: {fileID: 114912327921122032, guid: 15bb641fdb1f44941a035ea7b9db8239,
+        type: 2}
+      propertyPath: Player
+      value: 
+      objectReference: {fileID: 251682763}
+    - target: {fileID: 114912327921122032, guid: 15bb641fdb1f44941a035ea7b9db8239,
+        type: 2}
+      propertyPath: SpawnerChunck
+      value: 
+      objectReference: {fileID: 282500545}
+    - target: {fileID: 114930067391110948, guid: 15bb641fdb1f44941a035ea7b9db8239,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114612881951848004, guid: 15bb641fdb1f44941a035ea7b9db8239, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 15bb641fdb1f44941a035ea7b9db8239, type: 2}
@@ -10170,7 +10190,7 @@ RectTransform:
   - {fileID: 1577625134}
   - {fileID: 1276622897}
   m_Father: {fileID: 1882369955}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -23839,6 +23859,9 @@ MonoBehaviour:
   MotionSlider: {fileID: 996198972}
   GameOver: {fileID: 939855112}
   RedScreen: {fileID: 1919846581}
+  Patterns: {fileID: 1276622896}
+  PauseObject: {fileID: 676910844}
+  PauseText: {fileID: 1577625135}
 --- !u!4 &1544339949 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 91d652779ec7140488b6b8e360497937, type: 2}

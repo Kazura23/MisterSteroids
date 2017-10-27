@@ -12,7 +12,13 @@ public class UIManager : ManagerParent
     public Image RedScreen;
     public static UIManager Singleton;
 
-	bool CursorVisble = false;
+    public GameObject Patterns;
+
+    [Header("PAUSE")]
+    public GameObject PauseObject;
+    public Text PauseText;
+
+    bool CursorVisble = false;
 	#endregion
 
 	#region Mono
@@ -115,10 +121,4 @@ public class UIManager : ManagerParent
 	#endregion
 }
 
-    public GameObject Patterns;
-
-    [Header("PAUSE")]
-    public GameObject PauseObject;
-    public Text PauseText;
-
-    public static UIManager Singleton;
+    

@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-
-using System.Diagnostics;
+using DG.Tweening;
 using System.Runtime.CompilerServices;
 
-public class UiManager : ManagerParent
+public class UIManager : ManagerParent
 {
 	#region Variables
+	public Slider MotionSlider;
 	public GameObject GameOver;
+    public Image RedScreen;
+
 	bool CursorVisble = false;
 	#endregion
 
@@ -20,9 +22,23 @@ public class UiManager : ManagerParent
 	{
 		GameOver.gameObject.SetActive ( display );
 	}
-	#endregion
 
-	#region Private Methods
+    public void BloodHit()
+    {
+        Time.timeScale = 0;
+        DOVirtual.DelayedCall(.065f, () => {
+            Time.timeScale = 1;
+        });
+        Camera.main.DOFieldOfView(45, .12f);//.SetEase(Ease.InBounce);
+        RedScreen.DOFade(.4f, .12f).OnComplete(() => {
+            RedScreen.DOFade(0, .08f);
+            Camera.main.DOFieldOfView(60, .08f);//.SetEase(Ease.InBounce);
+        });
+    }
+
+    #endregion
+
+    #region Private Methods
 	protected override void InitializeManager ( )
 	{
 		InitializeUI ( );

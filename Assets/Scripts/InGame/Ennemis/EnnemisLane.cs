@@ -110,6 +110,7 @@ public class EnnemisLane : AbstractObject
 	public override void Dead ( bool enemy = false ) 
 	{
 		base.Dead ( enemy );
+        
 
 		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
 	}

@@ -5,6 +5,8 @@ using UnityEngine;
 public class MeshDesctruc : MonoBehaviour 
 {
 	public GameObject TriangPrefb;
+	public Material DebrisMaterial;
+	public bool UseMatDeb = false;
 //	public List<GameObject> stockElem;
 	Transform garbage;
 
@@ -14,7 +16,7 @@ public class MeshDesctruc : MonoBehaviour
 		//stockElem = new List<GameObject> ( );
 	}
 
-	public IEnumerator SplitMesh ( GameObject objSource, float forcePro, float deleayDest, int lim = 100 )    
+	public IEnumerator SplitMesh ( GameObject objSource, float forcePro, float deleayDest, int lim = 10, bool little = false )    
 	{
 		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
 
@@ -49,9 +51,9 @@ public class MeshDesctruc : MonoBehaviour
 		Vector3[] normals = M.normals;
 		Vector2[] uvs = M.uv;
 
-		Vector3[] newVerts = new Vector3[6];
-		Vector3[] newNormals = new Vector3[6];
-		Vector2[] newUvs = new Vector2[6]; 
+		Vector3[] newVerts = new Vector3[9];
+		Vector3[] newNormals = new Vector3[9];
+		Vector2[] newUvs = new Vector2[9]; 
 
 	//	List<GameObject> getAllSt;
 
@@ -116,7 +118,20 @@ public class MeshDesctruc : MonoBehaviour
 
 					newUvs [ c + 3 ] = uvs [ index ];
 					newNormals [ c + 3 ] = normals [ index ];
-					newVerts [ c + 3 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.5f ), -verts [ index ].x * Random.Range ( 0.5f, 1.5f ), -verts [ index ].z * Random.Range ( 0.5f, 1.5f ) );
+
+					newUvs [ c + 6 ] = uvs [ index ];
+					newNormals [ c + 6 ] = normals [ index ];
+
+					if ( !little )
+					{
+						newVerts [ c + 3 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.2f ), -verts [ index ].x * Random.Range ( 0.5f, 1.2f ), -verts [ index ].z * Random.Range ( 0.5f, 1.2f ) );
+						newVerts [ c + 6 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.2f ), -verts [ index ].x * Random.Range ( 0.5f, 1.2f ), -verts [ index ].z * Random.Range ( 0.5f, 1.2f ) );
+					}
+					else
+					{
+						newVerts [ c + 3 ] = new Vector3 ( verts [ index ].x * Random.Range ( 0.5f, 1f ), verts [ index ].y * Random.Range ( 0.5f, 1f ), verts [ index ].z );
+						newVerts [ c + 6 ] = new Vector3 ( -verts [ index ].x * Random.Range ( 0.1f, 0.5f ), -verts [ index ].y * Random.Range ( 0.1f, 0.5f ), verts [ index ].z );
+					}
 				}
 					
 				if ( checkLim )
@@ -131,9 +146,18 @@ public class MeshDesctruc : MonoBehaviour
 				mesh.triangles = new int[] 
 				{
 					0, 1, 2,
+
 					1, 3, 2,
 					0, 3, 1,
-					0, 2, 3
+					0, 2, 3,
+
+					0, 4, 1,
+					1, 4, 2,
+					0, 2, 4,
+
+					2, 4, 1,
+					1, 4, 3,
+					2, 3, 4
 				};
 
 				/*if ( getAllSt.Count > 0 && !getAllSt [ 0 ].activeSelf )
@@ -150,7 +174,16 @@ public class MeshDesctruc : MonoBehaviour
 				}*/
 				GO = ( GameObject ) Instantiate ( getTri );
 				GO.transform.SetParent ( garbage );
-				GO.GetComponent<MeshRenderer> ( ).material = materials [ a ];
+			
+				if ( UseMatDeb )
+				{
+					GO.GetComponent<MeshRenderer> ( ).material = DebrisMaterial;
+				}
+				else
+				{
+					GO.GetComponent<MeshRenderer> ( ).material = materials [ a ];
+				}
+
 				GO.GetComponent<MeshFilter> ( ).mesh = mesh;
 				GO.AddComponent<BoxCollider> ( );
 

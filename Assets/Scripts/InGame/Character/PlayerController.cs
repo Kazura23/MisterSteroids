@@ -166,9 +166,13 @@ public class PlayerController : MonoBehaviour
 			StartCoroutine ( waitStopDash ( ) );
 		}
 
-		if ( Input.GetAxis ( "SlowMot" ) > 0 && SliderContent > 0 && Time.timeScale > 1 / SlowMotion )
+		if ( Input.GetAxis ( "SlowMot" ) > 0 && SliderContent > 0 )
 		{
-			Time.timeScale -= Time.deltaTime * SpeedSlowMot;
+			if ( Time.timeScale > 1 / SlowMotion )
+			{
+				Time.timeScale -= Time.deltaTime * SpeedSlowMot;
+			}
+
 			SliderContent -= ReduceSlider * Time.deltaTime;
 		}
 		else if ( Time.timeScale < 1 )

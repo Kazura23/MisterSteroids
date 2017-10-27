@@ -7,9 +7,9 @@ using System.Runtime.CompilerServices;
 public class UIManager : ManagerParent
 {
 	#region Variables
+	public Slider MotionSlider;
 	public GameObject GameOver;
     public Image RedScreen;
-    public static UIManager Singleton;
 
 	bool CursorVisble = false;
 	#endregion
@@ -17,13 +17,10 @@ public class UIManager : ManagerParent
 	#region Mono
 	#endregion
 
-    
-
 	#region Public Methods
 	public void DisplayOver ( bool display )
 	{
-
-        GameOver.gameObject.SetActive ( display );
+		GameOver.gameObject.SetActive ( display );
 	}
 
     public void BloodHit()
@@ -42,20 +39,7 @@ public class UIManager : ManagerParent
     #endregion
 
     #region Private Methods
-
-    void Awake()
-    {
-        if(Singleton == null)
-        {
-            Singleton = this;
-        } else
-        {
-            Destroy(this);
-        }
-    }
-
-
-    protected override void InitializeManager ( )
+	protected override void InitializeManager ( )
 	{
 		InitializeUI ( );
 	}
@@ -77,9 +61,6 @@ public class UIManager : ManagerParent
 			Cursor.lockState = CursorLockMode.Locked;
 		}
 	}
-
-
-
 
 	void InitializeUI<T>(ref T manager) where T : UiParent
 	{

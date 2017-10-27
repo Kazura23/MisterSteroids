@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour 
 {
@@ -98,6 +99,7 @@ public class PlayerController : MonoBehaviour
 	IEnumerator propPunch;
 	Punch getPunch;
 	Camera thisCam;
+	Slider SliderSlow;
 
 	float currSpeed = 0;
 	float currSpLine = 0;
@@ -124,7 +126,7 @@ public class PlayerController : MonoBehaviour
 	#endregion
 
 	#region Mono
-	void Awake ( )
+	void Start ( )
 	{
 		pTrans = transform;
 		pRig = gameObject.GetComponent<Rigidbody> ( );
@@ -134,7 +136,9 @@ public class PlayerController : MonoBehaviour
 		punchRight = true;
 		getPunch = GetComponentInChildren<Punch> ( );
 		thisCam = GetComponentInChildren<Camera> ( );
+		SliderSlow = GlobalManager.Ui.MotionSlider;
 		SliderContent = 10;
+		SliderSlow.maxValue = 10;
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
     }
@@ -177,7 +181,11 @@ public class PlayerController : MonoBehaviour
 		}
 		else if ( Time.timeScale < 1 )
 		{
-			SliderContent = 0;
+			if ( SliderContent < 0 )
+			{
+				SliderContent = 0;
+			}
+
 			Time.timeScale += Time.deltaTime * SpeedDeacSM;
 		}
 		else if ( SliderContent < 10 )
@@ -189,6 +197,8 @@ public class PlayerController : MonoBehaviour
 		{
 			SliderContent = 10;
 		}
+
+		SliderSlow.value = SliderContent;
 
 		Debug.Log ( SliderContent );
 		Mathf.Clamp ( Radius, 0, 100 );

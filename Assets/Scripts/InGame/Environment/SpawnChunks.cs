@@ -51,7 +51,7 @@ public class SpawnChunks : MonoBehaviour
 
 				for ( c = 0; c < getChildrenChunk.Length; c++ )
 				{
-					switch (getChildrenChunk[c].tag )
+					switch ( getChildrenChunk[c].tag )
 					{
 					case Constants._SAbleCoin:
 						getSpawnable [ a ].getCoinSpawnable.Add ( getChildrenChunk [ c ].gameObject );

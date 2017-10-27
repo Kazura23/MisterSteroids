@@ -21,11 +21,13 @@ public class PlayerController : MonoBehaviour
 
 	[Header ("Caract both")]
 	public float RotationSpeed = 1;
+	public float SpeedEffectTime;
 	public bool Running = true;
 	[Tooltip ("Force bonus en plus de la gravitée")]
 	public float BonusGrav = 0;
 	[Tooltip ("Pourcentage de ralentissement du personnage dans les airs")]
 	public float PourcRal = 50;
+
 	//public float JumpForce = 200;
 
 	[Space]
@@ -39,9 +41,12 @@ public class PlayerController : MonoBehaviour
 	[Tooltip ("La valeur de DashSpeed est un multiplicateur sur la vitesse du joueur")]
 	public float DashSpeed = 2;
 
+	[Header ("Delay Punch")]
     public float delayPunch = 1;
 	public float delayHitbox = 0.3f;
 	public float delayPrepare = 0.1f;
+
+	[Header ("Punch Caract")]
 	public float PropulseBalls = 100;
 	[Tooltip ("Le temps max sera delayPunch")]
 	public float TimePropulsePunch = 0.1f, TimePropulseDoublePunch = 0.2f;
@@ -78,6 +83,7 @@ public class PlayerController : MonoBehaviour
 	IEnumerator currCouL;
 	IEnumerator propPunch;
 	Punch getPunch;
+	Camera thisCam;
 
 	float currSpeed = 0;
 	float currSpLine = 0;
@@ -112,6 +118,7 @@ public class PlayerController : MonoBehaviour
         canPunch = true; 
 		punchRight = true;
 		getPunch = GetComponentInChildren<Punch> ( );
+		thisCam = GetComponentInChildren<Camera> ( );
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
     }
@@ -252,7 +259,6 @@ public class PlayerController : MonoBehaviour
 
 		if ( inAir )
 		{
-			Debug.Log ( "IN AIR" );
 			inAir = true;
 			pRig.useGravity = true;
 			pRig.AddForce ( Vector3.down * BonusGrav, ForceMode.Acceleration );
@@ -283,12 +289,25 @@ public class PlayerController : MonoBehaviour
 			speed *= SpeedDoublePunchRun;
 		}
 
+		float calCFov = Constants.DefFov * ( speed / MaxSpeed );
+
+		Shader.SetGlobalFloat ( "_ReduceVis", speed / MaxSpeed);
+
+		if ( thisCam.fieldOfView < calCFov)
+		{
+			thisCam.fieldOfView += Time.deltaTime * SpeedEffectTime;
+		}
+		else if ( thisCam.fieldOfView > calCFov)
+		{
+			thisCam.fieldOfView -= Time.deltaTime * SpeedEffectTime;
+		}
+
 		if ( currentDir == Direction.North )
 		{
 			calTrans = Vector3.forward * speed * delTime;
 			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 0, 0 ) ), RotationSpeed * delTime );
 		}
-		else if ( currentDir == Direction.South )
+		/*else if ( currentDir == Direction.South )
 		{
 			calTrans = Vector3.back  * speed * delTime;
 			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 180, 0 ) ), RotationSpeed * delTime );
@@ -302,7 +321,7 @@ public class PlayerController : MonoBehaviour
 		{
 			calTrans = Vector3.left * speed * delTime;
 			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, -90, 0 ) ), RotationSpeed * delTime );
-		}
+		}*/
 
 		if ( newPos )
 		{

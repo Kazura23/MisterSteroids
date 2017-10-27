@@ -586,6 +586,36 @@ Prefab:
       propertyPath: DashTime
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 20669040202461326, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: field of view
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: SpeedEffect
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: Running
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: ReducSpeedEffect
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: IncreaseSpeedEffect
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: SpeedEffectTime
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114580676302761910, guid: b4cea04d2ef6e224da8a8b609103e64f, type: 2}
     - {fileID: 114550746714595070, guid: b4cea04d2ef6e224da8a8b609103e64f, type: 2}
@@ -5509,6 +5539,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &386138791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 386138788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 894b79da34224d74f8b28401bd90b62a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: 29466087a0ed8f44b8ac0be8601effde, type: 2}
 --- !u!114 &386138795
 MonoBehaviour:
   m_ObjectHideFlags: 0

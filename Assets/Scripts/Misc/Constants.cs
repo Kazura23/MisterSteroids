@@ -23,6 +23,7 @@ public static class Constants
 	#endregion
 
 	#region Other
+	public const int DefFov = 60;
 	public const int LineDist = 6;
 	//public const float ChunkLengh = 470;
 	#endregion

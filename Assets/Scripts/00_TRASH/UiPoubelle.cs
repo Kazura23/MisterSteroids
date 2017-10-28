@@ -8,7 +8,12 @@ public class UiPoubelle : MonoBehaviour {
     public Vector3 propulsion, prop2;
     private GameObject missi;
 
-	public void onActive()
+    private void Awake()
+    {
+        Debug.Log("path : " + Application.dataPath);
+    }
+
+    public void onActive()
     {
         GameObject.Find("ShieldMan").GetComponent<ShieldMan>().Degat(propulsion, 1);
         /*missi = GameObject.FindGameObjectWithTag(Constants._MissileBazoo);

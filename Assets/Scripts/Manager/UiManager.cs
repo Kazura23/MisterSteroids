@@ -59,7 +59,8 @@ public class UIManager : ManagerParent
 
 	public void DisplayOver ( bool display )
 	{
-		GameOver.gameObject.SetActive ( display );
+
+        GameOver.gameObject.SetActive ( display );
 	}
 
     public void BloodHit()
@@ -78,7 +79,20 @@ public class UIManager : ManagerParent
     #endregion
 
     #region Private Methods
-	protected override void InitializeManager ( )
+
+    void Awake()
+    {
+        if(Singleton == null)
+        {
+            Singleton = this;
+        } else
+        {
+            Destroy(this);
+        }
+    }
+
+
+    protected override void InitializeManager ( )
 	{
 		InitializeUI ( );
 
@@ -162,3 +176,6 @@ public class UIManager : ManagerParent
 }
 
     
+	{
+		GameOver.gameObject.SetActive ( display );
+	protected override void InitializeManager ( )

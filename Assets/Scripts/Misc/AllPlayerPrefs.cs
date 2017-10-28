@@ -2,6 +2,9 @@
 
 public static class AllPlayerPrefs
 {
+    public static int piece;
+
+
     #region Get Methods
     #endregion
 

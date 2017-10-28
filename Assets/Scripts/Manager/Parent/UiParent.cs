@@ -4,6 +4,11 @@ public abstract class UiParent : MonoBehaviour
 {
 	#region Variables
 	protected bool pause;
+
+	public abstract MenuType ThisMenu
+	{
+		get;
+	}
 	#endregion
 
 	#region Mono
@@ -13,6 +18,7 @@ public abstract class UiParent : MonoBehaviour
 	public void Initialize()
 	{
 		InitializeUi();
+		CloseThis ( );
 	}
 
 	public virtual void OpenThis ( MenuTokenAbstract GetTok = null )

@@ -1,28 +1,111 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-
-using System.Diagnostics;
+using DG.Tweening;
 using System.Runtime.CompilerServices;
+using System.Collections;
+using UnityEngine.EventSystems;
 
-public class UiManager : ManagerParent
+public class UIManager : ManagerParent
 {
 	#region Variables
-	bool CursorVisble = false;
+	#if UNITY_EDITOR
+	public bool lauchGame = false;
+	#endif
+	public Slider MotionSlider;
+    public Image RedScreen;
+	public Transform MenuParent;
+
+	Dictionary <MenuType, UiParent> AllMenu;
+	MenuType menuOpen;
+
+	GameObject InGame;
 	#endregion
 
 	#region Mono
 	#endregion
 
 	#region Public Methods
+	public void OpenThisMenu ( MenuType thisType, MenuTokenAbstract GetTok = null )
+	{
+		UiParent thisUi;
+		InGame.SetActive ( false );
+		if ( menuOpen != MenuType.Nothing )
+		{
+			CloseThisMenu ( );
+		}
 
+		menuOpen = thisType;
 
-	#endregion
+		if ( AllMenu.TryGetValue ( thisType, out thisUi ) )
+		{
+			thisUi.OpenThis ( GetTok );
+		}
+	}
 
-	#region Private Methods
-	protected override void InitializeManager ( )
+	public void CloseThisMenu ( )
+	{
+		UiParent thisUi;
+		InGame.SetActive ( true );
+
+		if ( menuOpen != MenuType.Nothing && AllMenu.TryGetValue ( menuOpen, out thisUi ) )
+		{
+			thisUi.CloseThis (  );
+		}
+
+		menuOpen = MenuType.Nothing;
+	}
+
+    public void BloodHit()
+    {
+        Time.timeScale = 0;
+        DOVirtual.DelayedCall(.065f, () => {
+            Time.timeScale = 1;
+        });
+        Camera.main.DOFieldOfView(45, .12f);//.SetEase(Ease.InBounce);
+        RedScreen.DOFade(.4f, .12f).OnComplete(() => {
+            RedScreen.DOFade(0, .08f);
+            Camera.main.DOFieldOfView(60, .08f);//.SetEase(Ease.InBounce);
+        });
+    }
+
+    #endregion
+
+    #region Private Methods
+    protected override void InitializeManager ( )
 	{
 		InitializeUI ( );
+
+		Object[] getAllMenu =Resources.LoadAll ( "Menu" );
+		Dictionary<MenuType, UiParent> setAllMenu = new Dictionary<MenuType, UiParent> ( getAllMenu.Length );
+
+		GameObject thisMenu;
+		UiParent thisUi;
+
+		for ( int a = 0; a < getAllMenu.Length; a++ )
+		{
+			thisMenu = (GameObject) Instantiate ( getAllMenu [ a ], MenuParent );
+			thisUi = thisMenu.GetComponent<UiParent> ( );
+			setAllMenu.Add ( thisUi.ThisMenu, thisUi );
+			InitializeUI ( ref thisUi );
+		}
+
+		AllMenu = setAllMenu;
+
+		InGame = transform.Find ( "Canvas/InGame" ).gameObject;
+
+		#if UNITY_EDITOR
+		if ( !lauchGame )
+		{
+			OpenThisMenu ( MenuType.MenuHome );
+		}
+		else
+		{
+			GlobalManager.GameCont.StartGame ( );
+		}
+		#else
+		OpenThisMenu ( MenuType.MenuHome );
+		#endif
 	}
 
 	void InitializeUI ( )
@@ -32,13 +115,14 @@ public class UiManager : ManagerParent
 
 	void checkCurosr ( )
 	{
-		Cursor.visible = CursorVisble;
-		if ( CursorVisble )
+		if ( menuOpen != MenuType.Nothing )
 		{
+			Cursor.visible = true;
 			Cursor.lockState = CursorLockMode.None;
 		}
 		else
 		{
+			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;
 		}
 	}

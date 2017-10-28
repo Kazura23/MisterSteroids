@@ -14,3 +14,13 @@ public enum Direction
 	West
 }
 
+public enum MenuType
+{
+	Nothing,
+	test,
+	MenuHome,
+	Shop,
+	Pause,
+	GameOver
+}
+

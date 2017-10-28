@@ -14,20 +14,17 @@ public class GameController : ManagerParent
     #endregion
 
     #region Mono
-	void Start ( )
-	{
-		StartGame ( );
-	}
     #endregion
 
     #region Public Methods
 	public void StartGame ( )
 	{
+		Player = GameObject.FindGameObjectWithTag("Player");
+
 		SpawnerChunck.FirstSpawn ( );
         Player.GetComponent<PlayerController>().MaxSpeed = 0;
         Camera.main.GetComponent<RainbowRotate>().time = 2;
         Camera.main.GetComponent<RainbowMove>().time = 1;
-
     }
 
     public void Restart ( ) 
@@ -42,7 +39,7 @@ public class GameController : ManagerParent
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            UIManager.Singleton.Pause();
+			GlobalManager.Ui.OpenThisMenu(MenuType.Pause);
         }
 
         if (Input.GetKeyDown(KeyCode.A))
@@ -54,7 +51,6 @@ public class GameController : ManagerParent
                 Camera.main.GetComponent<RainbowRotate>().time = .4f;
                 Camera.main.GetComponent<RainbowMove>().time = .2f;
             }
-            
         }
     }
     #endregion
@@ -62,8 +58,8 @@ public class GameController : ManagerParent
             #region Private Methods
     protected override void InitializeManager ( )
 	{
-		Player = GameObject.FindGameObjectWithTag("Player");
 		SpawnerChunck = GetComponentInChildren<SpawnChunks> ( );
+		SpawnerChunck.InitChunck ( );
 	}
 	#endregion
 }

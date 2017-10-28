@@ -3,57 +3,64 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using DG.Tweening;
 using System.Runtime.CompilerServices;
+using System.Collections;
+using UnityEngine.EventSystems;
 
 public class UIManager : ManagerParent
 {
 	#region Variables
+	#if UNITY_EDITOR
+	public bool lauchGame = false;
+	#endif
 	public Slider MotionSlider;
 	public GameObject GameOver;
     public Image RedScreen;
-    public static UIManager Singleton;
+	public Transform MenuParent;
 
-    public GameObject Patterns;
+	Dictionary <MenuType, UiParent> AllMenu;
+	MenuType menuOpen;
 
-    [Header("PAUSE")]
-    public GameObject PauseObject;
-    public Text PauseText;
-
-    bool CursorVisble = false;
+	GameObject InGame;
 	#endregion
 
 	#region Mono
 	#endregion
 
 	#region Public Methods
+	public void OpenThisMenu ( MenuType thisType, MenuTokenAbstract GetTok = null )
+	{
+		UiParent thisUi;
+		InGame.SetActive ( false );
+		if ( menuOpen != MenuType.Nothing )
+		{
+			CloseThisMenu ( );
+		}
+
+		menuOpen = thisType;
+
+		if ( AllMenu.TryGetValue ( thisType, out thisUi ) )
+		{
+			thisUi.OpenThis ( GetTok );
+		}
+	}
+
+	public void CloseThisMenu ( )
+	{
+		UiParent thisUi;
+		InGame.SetActive ( true );
+
+		if ( menuOpen != MenuType.Nothing && AllMenu.TryGetValue ( menuOpen, out thisUi ) )
+		{
+			thisUi.CloseThis (  );
+		}
+
+		menuOpen = MenuType.Nothing;
+	}
+
 	public void DisplayOver ( bool display )
 	{
 		GameOver.gameObject.SetActive ( display );
 	}
-
-    void Start()
-    {
-
-        Patterns.transform.DOLocalMoveY(-60, 5f).SetEase(Ease.Linear).OnComplete(() => {
-            Patterns.transform.DOLocalMoveY(1092, 0);
-        }).SetLoops(-1, LoopType.Restart);
-    }
-
-    public void Pause()
-    {
-        PauseObject.GetComponent<CanvasGroup>().DOFade(1, .2f);
-        
-        PauseText.transform.DOScale(7, 0);
-        PauseText.transform.DOScale(1, .15f);
-
-    }
-
-    public void UnPause()
-    {
-        PauseObject.GetComponent<CanvasGroup>().DOFade(0, .2f);
-
-        PauseText.transform.DOScale(7, .2f);
-    }
-
 
     public void BloodHit()
     {
@@ -74,6 +81,38 @@ public class UIManager : ManagerParent
 	protected override void InitializeManager ( )
 	{
 		InitializeUI ( );
+
+		Object[] getAllMenu =Resources.LoadAll ( "Menu" );
+		Dictionary<MenuType, UiParent> setAllMenu = new Dictionary<MenuType, UiParent> ( getAllMenu.Length );
+
+		GameObject thisMenu;
+		UiParent thisUi;
+
+		for ( int a = 0; a < getAllMenu.Length; a++ )
+		{
+			thisMenu = (GameObject) Instantiate ( getAllMenu [ a ], MenuParent );
+			thisUi = thisMenu.GetComponent<UiParent> ( );
+			setAllMenu.Add ( thisUi.ThisMenu, thisUi );
+			InitializeUI ( ref thisUi );
+		}
+
+		AllMenu = setAllMenu;
+
+		InGame = transform.Find ( "Canvas/InGame" ).gameObject;
+
+		#if UNITY_EDITOR
+		if ( !lauchGame )
+		{
+			OpenThisMenu ( MenuType.MenuHome );
+		}
+		else
+		{
+			GlobalManager.GameCont.StartGame ( );
+		}
+		#else
+		OpenThisMenu ( MenuType.MenuHome );
+		#endif
+
 	}
 
 	void InitializeUI ( )
@@ -83,13 +122,14 @@ public class UIManager : ManagerParent
 
 	void checkCurosr ( )
 	{
-		Cursor.visible = CursorVisble;
-		if ( CursorVisble )
+		if ( menuOpen != MenuType.Nothing )
 		{
+			Cursor.visible = true;
 			Cursor.lockState = CursorLockMode.None;
 		}
 		else
 		{
+			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;
 		}
 	}

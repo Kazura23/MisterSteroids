@@ -21,7 +21,10 @@ public class SpawnChunks : MonoBehaviour
 	#endregion
 	
 	#region Mono
-	void Awake ( )
+	#endregion
+		
+	#region Public
+	public void InitChunck ( )
 	{
 		getSpawnChunks = new List<GameObject> ( );
 		AllSpawnable = new List<GetSpawnable> ( );
@@ -73,9 +76,7 @@ public class SpawnChunks : MonoBehaviour
 			}
 		}
 	}
-	#endregion
-		
-	#region Public
+
 	public void NewSpawn ( Transform sourceSpawn )
 	{
 		List<ChunksScriptable> getChunks = ChunksInfo;

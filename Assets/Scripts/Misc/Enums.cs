@@ -20,6 +20,7 @@ public enum MenuType
 	test,
 	MenuHome,
 	Shop,
-	Pause
+	Pause,
+	GameOver
 }
 

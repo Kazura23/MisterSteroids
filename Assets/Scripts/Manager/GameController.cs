@@ -25,12 +25,12 @@ public class GameController : ManagerParent
         Player.GetComponent<PlayerController>().MaxSpeed = 0;
         Camera.main.GetComponent<RainbowRotate>().time = 2;
         Camera.main.GetComponent<RainbowMove>().time = 1;
+		GlobalManager.Ui.CloseThisMenu ( );
     }
 
     public void Restart ( ) 
 	{
 		SceneManager.LoadScene ( "ProtoAlex", LoadSceneMode.Single );
-		GlobalManager.Ui.DisplayOver ( false );
         GameStarted = false;
         StartGame ( );
     }
@@ -55,7 +55,7 @@ public class GameController : ManagerParent
     }
     #endregion
 
-            #region Private Methods
+    #region Private Methods
     protected override void InitializeManager ( )
 	{
 		SpawnerChunck = GetComponentInChildren<SpawnChunks> ( );

@@ -825,10 +825,10 @@ public class PlayerController : MonoBehaviour
 	{
 		WaitForSeconds thisS = new WaitForSeconds ( 1 );
 		playerDead = true;
+		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
 
 		yield return thisS;
 
-		GlobalManager.Ui.DisplayOver ( true );
 		GlobalManager.GameCont.Restart ( );
 	}
 

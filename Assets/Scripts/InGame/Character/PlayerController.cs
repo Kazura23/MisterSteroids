@@ -200,7 +200,6 @@ public class PlayerController : MonoBehaviour
 
 		SliderSlow.value = SliderContent;
 
-		Debug.Log ( SliderContent );
 		Mathf.Clamp ( Radius, 0, 100 );
 		Mathf.Clamp ( SoftNess, 0, 100 );
 

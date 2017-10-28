@@ -46,8 +46,8 @@ public class GlobalManager : MonoBehaviour
 	{
 		InitializeManager ( ref evnt );
 		InitializeManager ( ref scene );
-		InitializeManager ( ref ui );
 		InitializeManager ( ref gCont );
+		InitializeManager ( ref ui );
 	}
 
 	void InitializeManager<T>(ref T manager) where T : ManagerParent

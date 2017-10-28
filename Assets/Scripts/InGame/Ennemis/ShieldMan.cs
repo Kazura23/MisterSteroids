@@ -71,6 +71,17 @@ public class ShieldMan : AbstractObject {
             {
                 base.Degat(p_damage, p_technic);
             }
+        }else
+        {
+            if (shieldActive)
+            {
+                Debug.Log("Fracas bouclier");
+                // animation ou son sur le bouclier
+            }
+            else
+            {
+                base.Degat(p_damage, p_technic);
+            }
         }
     }
 

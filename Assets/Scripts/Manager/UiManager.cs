@@ -1,15 +1,24 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-
-using System.Diagnostics;
+using DG.Tweening;
 using System.Runtime.CompilerServices;
 
-public class UiManager : ManagerParent
+public class UIManager : ManagerParent
 {
 	#region Variables
+	public Slider MotionSlider;
 	public GameObject GameOver;
-	bool CursorVisble = false;
+    public Image RedScreen;
+    public static UIManager Singleton;
+
+    public GameObject Patterns;
+
+    [Header("PAUSE")]
+    public GameObject PauseObject;
+    public Text PauseText;
+
+    bool CursorVisble = false;
 	#endregion
 
 	#region Mono
@@ -20,9 +29,48 @@ public class UiManager : ManagerParent
 	{
 		GameOver.gameObject.SetActive ( display );
 	}
-	#endregion
 
-	#region Private Methods
+    void Start()
+    {
+
+        Patterns.transform.DOLocalMoveY(-60, 5f).SetEase(Ease.Linear).OnComplete(() => {
+            Patterns.transform.DOLocalMoveY(1092, 0);
+        }).SetLoops(-1, LoopType.Restart);
+    }
+
+    public void Pause()
+    {
+        PauseObject.GetComponent<CanvasGroup>().DOFade(1, .2f);
+        
+        PauseText.transform.DOScale(7, 0);
+        PauseText.transform.DOScale(1, .15f);
+
+    }
+
+    public void UnPause()
+    {
+        PauseObject.GetComponent<CanvasGroup>().DOFade(0, .2f);
+
+        PauseText.transform.DOScale(7, .2f);
+    }
+
+
+    public void BloodHit()
+    {
+        Time.timeScale = 0;
+        DOVirtual.DelayedCall(.065f, () => {
+            Time.timeScale = 1;
+        });
+        Camera.main.DOFieldOfView(45, .12f);//.SetEase(Ease.InBounce);
+        RedScreen.DOFade(.4f, .12f).OnComplete(() => {
+            RedScreen.DOFade(0, .08f);
+            Camera.main.DOFieldOfView(60, .08f);//.SetEase(Ease.InBounce);
+        });
+    }
+
+    #endregion
+
+    #region Private Methods
 	protected override void InitializeManager ( )
 	{
 		InitializeUI ( );
@@ -72,3 +120,5 @@ public class UiManager : ManagerParent
 	}
 	#endregion
 }
+
+    

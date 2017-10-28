@@ -178,12 +178,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDead: 0
   delayDead: 2
-  VelRestant: 5
-  onObjForward: 0
+  VelRestant: 15
+  onObjForward: 25
   FreezeAxe: {x: 0, y: 0, z: 0}
   FreezeRot: {x: 0, y: 0, z: 0}
   useGravity: 1
   TimeToChange: 1
   NbrLane: 1
   CanGo: {x: 0, y: 0}
-  followPlayer: 1
+  FollowPlayer: 0

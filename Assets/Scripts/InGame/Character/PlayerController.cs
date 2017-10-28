@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour 
 {
 	#region Variables
-	[Header ("Caract on same Line")]
+	[Header ("Caractéristique sur une même Lane")]
 	public float MaxSpeed = 5;
 	public float Acceleration = 10;
 	public float Deceleration = 1;
@@ -13,35 +15,48 @@ public class PlayerController : MonoBehaviour
 	[Tooltip ("Cooldown qui commence une fois le dash terminé")]
 	public float CooldownDash = 3;
 
-	[Header ("Caract when change Line")]
+	[Header ("Caractéristique de changement de Lane")]
 	public float MaxSpeedCL = 5;
 	public float AccelerationCL = 10;
 	public float ImpulsionCL = 10;
 	public float DecelerationCL = 1;
 
-	[Header ("Caract both")]
+	[Header ("Autres runner Caractéristiques ")]
 	public float RotationSpeed = 1;
+	public float SpeedEffectTime;
 	public bool Running = true;
 	[Tooltip ("Force bonus en plus de la gravitée")]
 	public float BonusGrav = 0;
 	[Tooltip ("Pourcentage de ralentissement du personnage dans les airs")]
 	public float PourcRal = 50;
+
 	//public float JumpForce = 200;
-
-	[Space]
-	public int NbrLineRight = 1;
-	public int NbrLineLeft = 1;
-
-    [Header("Caract Fight")]
+    [Header("Caractéristique Fight")]
     /*public float delayLeft = 1;
 	public float delayRight = 1;*/
 	public float DashTime = 2;
 	[Tooltip ("La valeur de DashSpeed est un multiplicateur sur la vitesse du joueur")]
 	public float DashSpeed = 2;
 
+	[Header ("Slow Motion Caractéristique")]
+	[Tooltip ("De combien la vitesse va diminuer au maximun par rapport à la vitesse standard")]
+	public float SlowMotion = 1;
+	[Tooltip ("Vitesse pour atteindre le slowMotion")]
+	public float SpeedSlowMot = 1;
+	[Tooltip ("Vitesse pour revenir à la vitesse normal")]
+	public float SpeedDeacSM = 3;
+
+	[Tooltip ("Vitesse de descente du slider content")]
+	public float ReduceSlider;
+	[Tooltip ("Vitesse de récupération du slider content")]
+	public float RecovSlider;
+
+	[Header ("Caractérique de temps sur les punchs")]
     public float delayPunch = 1;
 	public float delayHitbox = 0.3f;
 	public float delayPrepare = 0.1f;
+
+	[Header ("Caractéristique de force des punchs")]
 	public float PropulseBalls = 100;
 	[Tooltip ("Le temps max sera delayPunch")]
 	public float TimePropulsePunch = 0.1f, TimePropulseDoublePunch = 0.2f;
@@ -52,6 +67,15 @@ public class PlayerController : MonoBehaviour
 	public Vector3 DistPoingGauche = Vector3.zero;
 	public GameObject poingGauche;
 	public GameObject poingDroite;
+
+	[Header ("SphereMask")]
+	public float Radius;
+	public float SoftNess;
+
+	[HideInInspector]
+	public int NbrLineRight = 1;
+	[HideInInspector]
+	public int NbrLineLeft = 1;
 
 	[HideInInspector]
 	public bool playerDead = false;
@@ -74,6 +98,8 @@ public class PlayerController : MonoBehaviour
 	IEnumerator currCouL;
 	IEnumerator propPunch;
 	Punch getPunch;
+	Camera thisCam;
+	Slider SliderSlow;
 
 	float currSpeed = 0;
 	float currSpLine = 0;
@@ -82,6 +108,7 @@ public class PlayerController : MonoBehaviour
 	float newDist;
 	float saveDist;
 	float befRot = 0;
+	float SliderContent;
 	int currLine = 0;
 
 	int LastImp = 0;
@@ -95,10 +122,11 @@ public class PlayerController : MonoBehaviour
 	bool resetAxeD = true;
 	bool canDash = true;
 	bool inAir = false;
+	bool canChange = true;
 	#endregion
 
 	#region Mono
-	void Awake ( )
+	void Start ( )
 	{
 		pTrans = transform;
 		pRig = gameObject.GetComponent<Rigidbody> ( );
@@ -107,13 +135,19 @@ public class PlayerController : MonoBehaviour
         canPunch = true; 
 		punchRight = true;
 		getPunch = GetComponentInChildren<Punch> ( );
+		thisCam = GetComponentInChildren<Camera> ( );
+		SliderSlow = GlobalManager.Ui.MotionSlider;
+		SliderContent = 10;
+		SliderSlow.maxValue = 10;
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
     }
 
 	void Update ( )
 	{
-		if ( !Dash )
+		punch.CanPunch ( !playerDead );
+
+		if ( !Dash && !playerDead )
 		{
 			if ( Input.GetAxis ( "CoupSimple" ) == 0 )
 			{
@@ -135,12 +169,52 @@ public class PlayerController : MonoBehaviour
 
 			StartCoroutine ( waitStopDash ( ) );
 		}
+
+		if ( Input.GetAxis ( "SlowMot" ) > 0 && SliderContent > 0 )
+		{
+			if ( Time.timeScale > 1 / SlowMotion )
+			{
+				Time.timeScale -= Time.deltaTime * SpeedSlowMot;
+			}
+
+			SliderContent -= ReduceSlider * Time.deltaTime;
+		}
+		else if ( Time.timeScale < 1 )
+		{
+			if ( SliderContent < 0 )
+			{
+				SliderContent = 0;
+			}
+
+			Time.timeScale += Time.deltaTime * SpeedDeacSM;
+		}
+		else if ( SliderContent < 10 )
+		{
+			Time.timeScale = 1;
+			SliderContent += RecovSlider * Time.deltaTime;
+		}
+		else
+		{
+			SliderContent = 10;
+		}
+
+		SliderSlow.value = SliderContent;
+
+		Debug.Log ( SliderContent );
+		Mathf.Clamp ( Radius, 0, 100 );
+		Mathf.Clamp ( SoftNess, 0, 100 );
+
+		Shader.SetGlobalVector ( "GlobaleMask_Position", new Vector4 ( pTrans.position.x, pTrans.position.y, pTrans.position.z, 0 ) );
+		Shader.SetGlobalFloat ( "GlobaleMask_Radius", Radius );
+		Shader.SetGlobalFloat ( "GlobaleMask_SoftNess", SoftNess );
+		Shader.SetGlobalFloat ( "_SlowMot", Time.timeScale );
 	}
 
 	void FixedUpdate ( )
 	{
 		if ( playerDead )
 		{
+			thisCam.fieldOfView = Constants.DefFov;
 			return;
 		}
 
@@ -238,7 +312,6 @@ public class PlayerController : MonoBehaviour
 
 		if ( inAir )
 		{
-			Debug.Log ( "IN AIR" );
 			inAir = true;
 			pRig.useGravity = true;
 			pRig.AddForce ( Vector3.down * BonusGrav, ForceMode.Acceleration );
@@ -269,12 +342,25 @@ public class PlayerController : MonoBehaviour
 			speed *= SpeedDoublePunchRun;
 		}
 
+		float calCFov = Constants.DefFov * ( speed / MaxSpeed );
+
+		Shader.SetGlobalFloat ( "_ReduceVis", speed / MaxSpeed);
+
+		if ( thisCam.fieldOfView < calCFov)
+		{
+			thisCam.fieldOfView += Time.deltaTime * SpeedEffectTime;
+		}
+		else if ( thisCam.fieldOfView > calCFov)
+		{
+			thisCam.fieldOfView -= Time.deltaTime * SpeedEffectTime;
+		}
+
 		if ( currentDir == Direction.North )
 		{
 			calTrans = Vector3.forward * speed * delTime;
 			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 0, 0 ) ), RotationSpeed * delTime );
 		}
-		else if ( currentDir == Direction.South )
+		/*else if ( currentDir == Direction.South )
 		{
 			calTrans = Vector3.back  * speed * delTime;
 			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 180, 0 ) ), RotationSpeed * delTime );
@@ -288,7 +374,7 @@ public class PlayerController : MonoBehaviour
 		{
 			calTrans = Vector3.left * speed * delTime;
 			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, -90, 0 ) ), RotationSpeed * delTime );
-		}
+		}*/
 
 		if ( newPos )
 		{
@@ -316,10 +402,11 @@ public class PlayerController : MonoBehaviour
 		float newImp = Input.GetAxis ( "Horizontal" );
 		float lineDistance = Constants.LineDist;
 
-		if ( newH == 0 && !Dash && !inAir )
+		if ( ( canChange || newH == 0 ) && !Dash && !inAir )
 		{
 			if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLineRight && ( clDir == 1 || newH == 0 ) )
 			{
+				canChange = false;
 				currLine++;
 				LastImp = 1;
 				clDir = 1;
@@ -328,6 +415,7 @@ public class PlayerController : MonoBehaviour
 			}
 			else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLineLeft && ( clDir == -1 || newH == 0 ) )
 			{
+				canChange = false;
 				currLine--;
 				LastImp = -1;
 				clDir = -1;
@@ -349,6 +437,8 @@ public class PlayerController : MonoBehaviour
 				if ( saveDist < 0 && newH > -lineDistance / 2 || saveDist > 0 && newH < lineDistance / 2 )
 				{
 					currSpLine -= DecelerationCL * delTime;
+
+					canChange = true;
 
 					if ( currSpLine < 0 )
 					{
@@ -398,6 +488,11 @@ public class PlayerController : MonoBehaviour
 			resetAxeS = false;
             canPunch = false;
 			propP = true;
+
+            ScreenShake.Singleton.ShakeHit();
+
+           
+
             if (punchRight)
             {
                 poingDroite.SetActive(true);
@@ -708,7 +803,7 @@ public class PlayerController : MonoBehaviour
 				}
 				else
 				{
-					StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 5 ) );
+					StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 5, true ) );
 				}
 
 				return;
@@ -733,7 +828,6 @@ public class PlayerController : MonoBehaviour
 		playerDead = true;
 
 		yield return thisS;
-
 
 		GlobalManager.Ui.DisplayOver ( true );
 		GlobalManager.GameCont.Restart ( );

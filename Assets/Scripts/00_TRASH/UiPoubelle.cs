@@ -5,7 +5,7 @@ using UnityEngine;
 public class UiPoubelle : MonoBehaviour {
 
     public ShieldMan enemy;
-    public Vector3 propulsion;
+    public Vector3 propulsion, prop2;
     private GameObject missi;
 
 	public void onActive()
@@ -16,6 +16,9 @@ public class UiPoubelle : MonoBehaviour {
     }
 
 
-    
+    public void onActive2()
+    {
+        GameObject.Find("ShieldMan").GetComponent<ShieldMan>().Degat(prop2, 0);
+    }
 
 }

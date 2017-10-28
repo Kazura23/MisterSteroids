@@ -10,8 +10,15 @@ public class UIManager : ManagerParent
 	public Slider MotionSlider;
 	public GameObject GameOver;
     public Image RedScreen;
+    public static UIManager Singleton;
 
-	bool CursorVisble = false;
+    public GameObject Patterns;
+
+    [Header("PAUSE")]
+    public GameObject PauseObject;
+    public Text PauseText;
+
+    bool CursorVisble = false;
 	#endregion
 
 	#region Mono
@@ -22,6 +29,31 @@ public class UIManager : ManagerParent
 	{
 		GameOver.gameObject.SetActive ( display );
 	}
+
+    void Start()
+    {
+
+        Patterns.transform.DOLocalMoveY(-60, 5f).SetEase(Ease.Linear).OnComplete(() => {
+            Patterns.transform.DOLocalMoveY(1092, 0);
+        }).SetLoops(-1, LoopType.Restart);
+    }
+
+    public void Pause()
+    {
+        PauseObject.GetComponent<CanvasGroup>().DOFade(1, .2f);
+        
+        PauseText.transform.DOScale(7, 0);
+        PauseText.transform.DOScale(1, .15f);
+
+    }
+
+    public void UnPause()
+    {
+        PauseObject.GetComponent<CanvasGroup>().DOFade(0, .2f);
+
+        PauseText.transform.DOScale(7, .2f);
+    }
+
 
     public void BloodHit()
     {
@@ -88,3 +120,5 @@ public class UIManager : ManagerParent
 	}
 	#endregion
 }
+
+    

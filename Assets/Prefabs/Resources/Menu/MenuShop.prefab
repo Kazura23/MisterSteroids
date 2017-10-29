@@ -11,6 +11,7 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1923773163344672}
   m_IsPrefabParent: 1
+<<<<<<< HEAD
 --- !u!1 &1343062198567424
 GameObject:
   m_ObjectHideFlags: 0
@@ -81,6 +82,9 @@ GameObject:
   m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!1 &1709987656764582
+=======
+--- !u!1 &1520953817491216
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
 GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -99,6 +103,7 @@ GameObject:
   m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!1 &1724451219885576
+<<<<<<< HEAD
 GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -117,6 +122,8 @@ GameObject:
   m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!1 &1760300893386102
+=======
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
 GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -134,6 +141,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!1 &1780142929946282
 GameObject:
   m_ObjectHideFlags: 1
@@ -152,6 +160,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+=======
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
 --- !u!1 &1783434492216974
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,6 +254,7 @@ MonoBehaviour:
   NombreVie: 1
   ReduceSlowMot: 0.1
   RecoverSlowMot: 0.1
+<<<<<<< HEAD
 --- !u!114 &114163613592013074
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -271,6 +282,8 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+=======
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
 --- !u!114 &114217060598415120
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -300,6 +313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 649fefe4a2e17314d90106d1b4e9fb89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   time: 0.2
   scales:
   - {x: 0.7, y: 0.7, z: 1}
@@ -316,6 +330,8 @@ MonoBehaviour:
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+=======
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -332,7 +348,11 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+<<<<<<< HEAD
 --- !u!114 &114245089617449086
+=======
+--- !u!114 &114312590437280746
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -415,6 +435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e34c1b773868efe4cb44635a3e8e9967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   time: 0.8
   colors:
   - {r: 0.4611026, g: 0.86764705, b: 0.3317474, a: 0.1764706}
@@ -477,6 +498,13 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
 --- !u!114 &114552548863023804
+=======
+  DefCatSelected: {fileID: 0}
+  DefItemSelected: {fileID: 0}
+  currCatSeled: {fileID: 0}
+  currItemSeled: {fileID: 0}
+--- !u!114 &114655212138875336
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -503,6 +531,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+<<<<<<< HEAD
 --- !u!114 &114560527102136966
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -581,6 +610,9 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
 --- !u!114 &114750302713167542
+=======
+--- !u!114 &114924812799509216
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -588,6 +620,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1479708714645414}
   m_Enabled: 1
   m_EditorHideFlags: 0
+<<<<<<< HEAD
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -615,6 +648,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1888825704854150}
   m_Enabled: 1
   m_EditorHideFlags: 0
+=======
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
   m_Script: {fileID: 11500000, guid: 87c05e9886e606948816b8d5703ee400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -625,12 +660,15 @@ MonoBehaviour:
   SpriteUnSelected: {fileID: 0}
   LeftCategorie: {fileID: 0}
   RightCategorie: {fileID: 0}
+<<<<<<< HEAD
 --- !u!222 &222287969113580340
 CanvasRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1709987656764582}
+=======
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
 --- !u!222 &222297759547919740
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -648,6 +686,7 @@ CanvasRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1783434492216974}
 --- !u!222 &222415777862746038
 CanvasRenderer:
@@ -673,12 +712,16 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1343062198567424}
+=======
+  m_GameObject: {fileID: 1724451219885576}
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
 --- !u!222 &222943363654838422
 CanvasRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1520953817491216}
+<<<<<<< HEAD
 --- !u!224 &224230849175928990
 RectTransform:
   m_ObjectHideFlags: 1
@@ -734,6 +777,9 @@ RectTransform:
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224603486183524142
+=======
+--- !u!224 &224526407188206634
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
 RectTransform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -744,7 +790,11 @@ RectTransform:
   m_LocalScale: {x: 0.9999877, y: 0.9999877, z: 0.9999877}
   m_Children: []
   m_Father: {fileID: 224690195555384436}
+<<<<<<< HEAD
   m_RootOrder: 4
+=======
+  m_RootOrder: 2
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -758,11 +808,19 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1760300893386102}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+<<<<<<< HEAD
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224695294418099100}
   m_RootOrder: 0
+=======
+  m_LocalPosition: {x: 0, y: -0.000015258789, z: 0}
+  m_LocalScale: {x: 0.9999877, y: 0.9999877, z: 0.9999877}
+  m_Children: []
+  m_Father: {fileID: 224690195555384436}
+  m_RootOrder: 1
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -779,9 +837,12 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+<<<<<<< HEAD
   - {fileID: 224749372199407540}
   - {fileID: 224695294418099100}
   - {fileID: 224230849175928990}
+=======
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
   - {fileID: 224844690952061238}
   - {fileID: 224603486183524142}
   - {fileID: 224526407188206634}
@@ -793,6 +854,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
 --- !u!224 &224695294418099100
 RectTransform:
   m_ObjectHideFlags: 1
@@ -831,6 +893,8 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
+=======
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
 --- !u!224 &224844690952061238
 RectTransform:
   m_ObjectHideFlags: 1
@@ -844,6 +908,7 @@ RectTransform:
   - {fileID: 224932709648079986}
   - {fileID: 224982819526982338}
   m_Father: {fileID: 224690195555384436}
+<<<<<<< HEAD
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -862,6 +927,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224844690952061238}
+=======
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -887,6 +954,7 @@ RectTransform:
   m_AnchoredPosition: {x: 296, y: -6}
   m_SizeDelta: {x: 193.6, y: 83.3}
   m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
 --- !u!225 &225370957308182798
 CanvasGroup:
   m_ObjectHideFlags: 1
@@ -898,3 +966,5 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+=======
+>>>>>>> parent of 0968b99... WIP_ShopintheWorks

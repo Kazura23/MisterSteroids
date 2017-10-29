@@ -18,9 +18,9 @@ public class EditItemMod : Editor
 
 		myTarget.ItemName = EditorGUILayout.TextField ( "ItemName", myTarget.ItemName );
 		myTarget.Price = EditorGUILayout.IntField ( "Price", myTarget.Price );
-		myTarget.BuyForLife = EditorGUILayout.ToggleLeft ( "BuyForLife", myTarget.BuyForLife );
-		myTarget.UseColor = EditorGUILayout.ToggleLeft ( "UseColor", myTarget.UseColor );
-		myTarget.UseSprite = EditorGUILayout.ToggleLeft ( "UseSprite", myTarget.UseSprite );
+		myTarget.BuyForLife = EditorGUILayout.Toggle ( "BuyForLife", myTarget.BuyForLife );
+		myTarget.UseColor = EditorGUILayout.Toggle ( "UseColor", myTarget.UseColor );
+		myTarget.UseSprite = EditorGUILayout.Toggle ( "UseSprite", myTarget.UseSprite );
 
 		myTarget.CatName = myTarget.transform.parent.GetComponent<CatShop> ( ).NameCategorie;
 
@@ -41,16 +41,34 @@ public class EditItemMod : Editor
 			myTarget.ColorSelected = EditorGUILayout.ColorField ( "ColorSelected", myTarget.ColorSelected );
 			myTarget.ColorUnSelected = EditorGUILayout.ColorField ( "ColorUnSelected", myTarget.ColorUnSelected );
 
-			myTarget.UseOtherColor = EditorGUILayout.ToggleLeft ( "OtherColorWhenBough", myTarget.UseOtherColor );
+			myTarget.UseOtherColor = EditorGUILayout.Toggle ( "OtherColorWhenBough", myTarget.UseOtherColor );
 
 			if ( myTarget.UseOtherColor )
 			{
 				myTarget.BoughtColorSelected = EditorGUILayout.ColorField ( "BoughtColorSelected", myTarget.BoughtColorSelected );
-				myTarget.BoughtColorUnSelected = EditorGUILayout.ColorField ( "BoughtColorUnSelected", myTarget.BoughtColorUnSelected);
+				myTarget.BoughtColorUnSelected = EditorGUILayout.ColorField ( "BoughtColorUnSelected", myTarget.BoughtColorUnSelected );
 
 				if ( myTarget.ItemBought )
 				{
-					myTarget.GetComponent<Image> ( ).color = myTarget.BoughtColorUnSelected;
+					if ( myTarget.Selected )
+					{
+						myTarget.GetComponent<Image> ( ).color = myTarget.BoughtColorSelected;
+					}
+					else
+					{
+						myTarget.GetComponent<Image> ( ).color = myTarget.BoughtColorUnSelected;
+					}
+				}
+			}
+			else
+			{
+				if ( myTarget.Selected )
+				{
+					myTarget.GetComponent<Image> ( ).color = myTarget.ColorSelected;
+				}
+				else
+				{
+					myTarget.GetComponent<Image> ( ).color = myTarget.ColorUnSelected;
 				}
 			}
 
@@ -85,16 +103,35 @@ public class EditItemMod : Editor
 			myTarget.SpriteSelected = (Sprite)EditorGUILayout.ObjectField ( "SpriteSelected", myTarget.SpriteSelected, typeof( Sprite ), true );
 			myTarget.SpriteUnselected = (Sprite)EditorGUILayout.ObjectField ( "SpriteUnselected", myTarget.SpriteUnselected, typeof( Sprite ), true );
 
-			myTarget.UseOtherSprite = EditorGUILayout.ToggleLeft ( "OtherSpriteWhenBough", myTarget.UseOtherSprite );
+			myTarget.UseOtherSprite = EditorGUILayout.Toggle ( "OtherSpriteWhenBough", myTarget.UseOtherSprite );
 
 			if ( myTarget.UseOtherSprite )
 			{
-				myTarget.BoughtSpriteSelected = (Sprite)EditorGUILayout.ObjectField ( "BoughtSpriteSelected", myTarget.BoughtSpriteSelected, typeof( Sprite ), true );
-				myTarget.BoughtSpriteUnselected = (Sprite)EditorGUILayout.ObjectField ( "BoughtSpriteUnselected", myTarget.BoughtSpriteUnselected, typeof( Sprite ), true );
+				myTarget.BoughtSpriteSelected = ( Sprite ) EditorGUILayout.ObjectField ( "BoughtSpriteSelected", myTarget.BoughtSpriteSelected, typeof( Sprite ), true );
+				myTarget.BoughtSpriteUnselected = ( Sprite ) EditorGUILayout.ObjectField ( "BoughtSpriteUnselected", myTarget.BoughtSpriteUnselected, typeof( Sprite ), true );
 
-				if ( myTarget.ItemBought && myTarget.BoughtSpriteUnselected != null )
+				if ( myTarget.ItemBought )
 				{
-					myTarget.GetComponent<Image> ( ).sprite = myTarget.BoughtSpriteUnselected;
+					if ( myTarget.Selected )
+					{
+						myTarget.GetComponent<Image> ( ).sprite = myTarget.BoughtSpriteSelected;
+					}
+					else
+					{
+						myTarget.GetComponent<Image> ( ).sprite = myTarget.BoughtSpriteUnselected;
+					}
+				}
+
+			}
+			else
+			{
+				if ( myTarget.Selected )
+				{
+					myTarget.GetComponent<Image> ( ).sprite = myTarget.SpriteSelected;
+				}
+				else
+				{
+					myTarget.GetComponent<Image> ( ).sprite = myTarget.SpriteUnselected;
 				}
 			}
 

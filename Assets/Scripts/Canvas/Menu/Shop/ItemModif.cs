@@ -43,6 +43,8 @@ public class ItemModif : MonoBehaviour
 	public int NombreVie;
 	public float ReduceSlowMot;
 	public float RecoverSlowMot;
+
+	public bool Selected;
 	#endregion
 
 	#region Mono

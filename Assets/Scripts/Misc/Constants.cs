@@ -24,6 +24,8 @@ public static class Constants
 
 	#region PlayerPref
 	public const string Coin = "Coins";
+	public const string ItemBought = "Item_";
+
 	#endregion
 
 

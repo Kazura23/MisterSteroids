@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuShop : UiParent 
 {
@@ -13,18 +14,91 @@ public class MenuShop : UiParent
 		}
 	}
 
-	public Transform DefCatSelected;
+	//Object par défaut sélectionner a l'ouverture du shop
+	public CatShop DefCatSelected;
+	public ItemModif DefItemSelected;
 
-	Transform currCatSeled;
+	[HideInInspector]
+	public CatShop currCatSeled;
+
+	[HideInInspector]
+	public ItemModif currItemSeled;
+
+	Dictionary <string, ItemModif> allConfirm;
+
+	bool catCurrSelected = true;
+	bool waitInputH = false;
+	bool waitInputV = false;
 	#endregion
 
 	#region Mono
+	void Update ( )
+	{
+		float getH = Input.GetAxis ( "Horizontal" );
+		float getV = Input.GetAxis ( "Vertical" );
+
+		// Touche pour pouvoir selectionner les items
+		if ( Input.GetAxis ( "Submit" ) == 1 )
+		{
+			ChangeToItem ( true );
+		}
+
+		// Touche pour sortir des items
+		if ( Input.GetAxis ( "Cancel" ) == 1 )
+		{
+			ChangeToItem ( false );
+		}
+
+		// Navigation horizontale des catégories ou items
+		if ( getH != 0 && !waitInputH )
+		{
+			waitInputH = true;
+
+			if ( catCurrSelected )
+			{
+				if ( getH > 0 )
+				{
+					NextCat ( true );
+				}
+				else
+				{
+					NextCat ( false );
+				}
+			}
+			else if ( getH == 1 || getH == -1 )
+			{
+				NextItem ( ( int ) getH );
+			}
+			else
+			{
+				waitInputH = false;
+			}
+		}
+		else if ( Input.GetAxis ( "Horizontal" ) == 0 )
+		{
+			waitInputH = false;
+		}
+
+		// Navigation vertocal des items
+		if ( !catCurrSelected && ( getV == 1 || getV == -1 ) && !waitInputV )
+		{
+				waitInputV = true;
+				NextItem ( ( int ) getH * 2 );
+		}
+		else if ( Input.GetAxis ( "Vertical" ) == 0 )
+		{
+			waitInputV = false;
+		}
+	}
 	#endregion
 
 	#region Public Methods
 	public override void OpenThis ( MenuTokenAbstract GetTok = null )
 	{
 		base.OpenThis ( GetTok );
+
+		currCatSeled = DefCatSelected;
+		currItemSeled = DefItemSelected;
 	}
 
 	public override void CloseThis ( )
@@ -32,16 +106,104 @@ public class MenuShop : UiParent
 		base.CloseThis (  );
 	}
 
-	public override void Pause ( bool setPause )
-	{
-		base.Pause ( setPause );
-	}
-
+	// Nouvelle selection de catégorie
 	public void NextCat ( bool right )
 	{
-		if (right)
+		CheckSelectCat ( false );
+
+		if ( right )
 		{
-			
+			currCatSeled = currCatSeled.RightCategorie;
+		}
+		else
+		{
+			currCatSeled = currCatSeled.LeftCategorie;
+		}
+
+		CheckSelectCat ( true );
+	}
+
+	// Nouvelle selection d'item
+	// -1 = gauche _ 1 droite _ 2 haut _ -2 bas
+	public void NextItem ( int thisDir )
+	{
+		CheckSelectItem ( false );
+
+		switch ( thisDir )
+		{
+		case -1:
+			currItemSeled = currItemSeled.LeftItem;
+			break;
+		case 1:
+			currItemSeled = currItemSeled.RightItem;
+			break;
+		case -2:
+			currItemSeled = currItemSeled.DownItem;
+			break;
+		case 2:
+			currItemSeled = currItemSeled.UpItem;
+			break;
+		}
+
+		CheckSelectItem ( true );
+	}
+
+	// achete ou confirme un item
+	public void BuyItem ( )
+	{
+		string getCons = Constants.ItemBought;
+		if ( AllPlayerPrefs.GetBoolValue ( getCons + currItemSeled.ItemName ) )
+		{
+			getCons += currItemSeled.CatName;
+			AllPlayerPrefs.SetStringValue ( getCons, "Confirm" );
+			ItemModif getThis;
+
+			if ( allConfirm.TryGetValue ( getCons, out getThis ) )
+			{
+				if ( getThis.UseOtherSprite )
+				{
+					getThis.GetComponent<Image> ( ).sprite = currItemSeled.BoughtSpriteUnselected;
+				}
+				else
+				{
+					getThis.GetComponent<Image> ( ).sprite = currItemSeled.SpriteUnselected;
+				}
+
+				if ( getThis.UseColor )
+				{
+					if ( getThis.UseOtherColor )
+					{
+						getThis.GetComponent<Image> ( ).color = currItemSeled.BoughtColorUnSelected;
+					}
+					else
+					{
+						getThis.GetComponent<Image> ( ).color = currItemSeled.ColorUnSelected;
+					}
+				}
+
+				allConfirm.Remove ( getCons );
+			}
+
+			allConfirm.Add ( getCons, currItemSeled );
+
+			currItemSeled.GetComponent<Image> ( ).sprite = currItemSeled.SpriteConfirm;
+
+			if ( currItemSeled.UseColor )
+			{
+				currItemSeled.GetComponent<Image> ( ).color = currItemSeled.ColorConfirm;
+			}
+		}
+		else
+		{
+			if ( AllPlayerPrefs.GetIntValue ( Constants.Coin ) > currItemSeled.Price )
+			{
+				AllPlayerPrefs.SetIntValue ( Constants.Coin, -currItemSeled.Price );
+
+				if ( currItemSeled.BuyForLife )
+				{
+					AllPlayerPrefs.SetStringValue ( getCons + currItemSeled.ItemName );
+				}
+			}
 		}
 	}
 	#endregion
@@ -50,6 +212,109 @@ public class MenuShop : UiParent
 	protected override void InitializeUi()
 	{
 		currCatSeled = DefCatSelected;
+		currItemSeled = DefItemSelected;
+
+		ItemModif[] checkAllItem = GetComponentsInChildren<ItemModif> ( true );
+		ItemModif currItem;
+
+		string getCons = Constants.ItemBought;
+		Dictionary <string, ItemModif> getItemConf = new Dictionary<string, ItemModif> ( );
+
+		for ( int a = 0; a < checkAllItem.Length; a++ )
+		{
+			if ( AllPlayerPrefs.GetBoolValue ( getCons + checkAllItem [ a ].CatName ) )
+			{
+				currItem = checkAllItem [ a ];
+				getItemConf.Add ( getCons + currItem, currItem ); 
+
+				currItem.GetComponent<Image> ( ).sprite = currItem.SpriteConfirm;
+
+				if ( currItem.UseColor )
+				{
+					currItem.GetComponent<Image> ( ).color = currItem.ColorConfirm;
+				}
+			}
+		}
+
+		allConfirm = getItemConf;
+		GlobalManager.GameCont.AllModifItem = getItemConf;
+	}
+
+	//Changement de catégorie a item et inversement
+	void ChangeToItem ( bool goItem )
+	{
+		if ( goItem && catCurrSelected ) // Changement de cat a item
+		{
+			catCurrSelected = false;
+		}
+		else if ( !goItem && !catCurrSelected ) // Changement de item a cat
+		{
+			catCurrSelected = true;
+		}
+	}
+
+	// Selection d'une nouvelle catégorie
+	void CheckSelectCat ( bool selected )
+	{
+		CatShop thisShop = currCatSeled;
+
+		if ( selected )
+		{
+			thisShop.GetComponent<Image> ( ).color = thisShop.ColorSelected;
+			thisShop.GetComponent<Image> ( ).sprite = thisShop.SpriteSelected;
+		}
+		else
+		{
+			thisShop.GetComponent<Image> ( ).color = thisShop.ColorUnSelected;
+			thisShop.GetComponent<Image> ( ).sprite = thisShop.SpriteUnSelected;
+		}
+	}
+
+	// Selection d'un nouvelle item
+	void CheckSelectItem ( bool selected )
+	{
+		ItemModif thisItem = currItemSeled;
+
+		if ( selected )
+		{
+			if ( thisItem.ItemBought && thisItem.UseOtherColor )
+			{
+				thisItem.GetComponent<Image> ( ).color = thisItem.BoughtColorSelected;
+			}
+			else if ( thisItem.UseColor )
+			{
+				thisItem.GetComponent<Image> ( ).color = thisItem.ColorSelected;
+			}
+
+			if ( thisItem.ItemBought && thisItem.UseOtherSprite )
+			{
+				thisItem.GetComponent<Image> ( ).sprite = thisItem.BoughtSpriteSelected;
+			}
+			else
+			{
+				thisItem.GetComponent<Image> ( ).sprite = thisItem.SpriteSelected;
+			}
+		}
+		else
+		{
+			if ( thisItem.ItemBought && thisItem.UseOtherColor )
+			{
+				thisItem.GetComponent<Image> ( ).color = thisItem.BoughtColorUnSelected;
+			}
+			else if ( thisItem.UseColor )
+			{
+				thisItem.GetComponent<Image> ( ).color = thisItem.ColorUnSelected;
+			}
+
+			if ( thisItem.ItemBought && thisItem.UseOtherSprite )
+			{
+				thisItem.GetComponent<Image> ( ).sprite = thisItem.BoughtSpriteUnselected;
+			}
+			else
+			{
+				thisItem.GetComponent<Image> ( ).sprite = thisItem.SpriteUnselected;
+			}
+		}
 	}
 	#endregion
 }

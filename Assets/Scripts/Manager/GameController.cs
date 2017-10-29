@@ -13,6 +13,9 @@ public class GameController : ManagerParent
 	public GameObject Player;
 	public SpawnChunks SpawnerChunck;
     public bool GameStarted;
+
+	[HideInInspector]
+	public Dictionary <string, ItemModif> AllModifItem;
     #endregion
 
     #region Mono
@@ -90,6 +93,16 @@ public class GameController : ManagerParent
 	{
 		SpawnerChunck = GetComponentInChildren<SpawnChunks> ( );
 		SpawnerChunck.InitChunck ( );
+	}
+
+	void SetAllBonus ( )
+	{
+		Dictionary <string, ItemModif> getMod = AllModifItem;
+
+		for ( int a = 0; a < getMod.Count; a++ )
+		{
+			
+		}
 	}
 	#endregion
 }

@@ -28,14 +28,18 @@ public class MenuHome : UiParent
 		base.CloseThis (  );
 	}
 
-	public override void Pause ( bool setPause )
+	public void ChangeMenu ( string thisType )
 	{
-		base.Pause ( setPause );
-	}
+		System.Array thisArray = System.Enum.GetValues ( typeof ( MenuType ) );
 
-	public void ChangeMenu ( MenuType thisType )
-	{
-		GlobalManager.Ui.OpenThisMenu ( thisType );
+		for ( int a = 0; a < thisArray.Length; a++ )
+		{
+			if ( thisArray.GetValue ( a ).ToString ( ) == thisType )
+			{
+				GlobalManager.Ui.OpenThisMenu ( (MenuType) thisArray.GetValue ( a ) );
+				break;
+			}
+		}
 	}
 
 	public void ChangeScene ( string thisScene )

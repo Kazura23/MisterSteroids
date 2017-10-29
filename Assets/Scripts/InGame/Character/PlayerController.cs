@@ -174,6 +174,8 @@ public class PlayerController : MonoBehaviour
 
 		if ( Input.GetAxis ( "SlowMot" ) > 0 && SliderContent > 0 )
 		{
+            Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
+
 			if ( Time.timeScale > 1 / SlowMotion )
 			{
 				Time.timeScale -= Time.deltaTime * SpeedSlowMot;
@@ -194,7 +196,8 @@ public class PlayerController : MonoBehaviour
 		{
 			Time.timeScale = 1;
 			SliderContent += RecovSlider * Time.deltaTime;
-		}
+            Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = false;
+        }
 		else
 		{
 			SliderContent = 10;
@@ -326,6 +329,7 @@ public class PlayerController : MonoBehaviour
 		delTime = Time.deltaTime;
 
         GlobalManager.Ui.CloseDashSpeed();
+        Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole>().enabled = false;
 
         if ( inAir )
 		{
@@ -337,6 +341,7 @@ public class PlayerController : MonoBehaviour
 			speed *= DashSpeed;
 
             GlobalManager.Ui.OpenDashSpeed();
+            Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole>().enabled = true;
 
         }
 		else if ( propP )

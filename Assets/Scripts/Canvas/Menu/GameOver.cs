@@ -27,11 +27,6 @@ public class GameOver : UiParent
 	{
 		base.CloseThis (  );
 	}
-
-	public override void Pause ( bool setPause )
-	{
-		base.Pause ( setPause );
-	}
 	#endregion
 
 	#region Private Methods

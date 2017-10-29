@@ -7,12 +7,16 @@ public class CatShop : MonoBehaviour
 	#region Variables
 	[Header ("Information Categorie")]
 	public string NameCategorie;
-	public Color ColorCategorie;
-	public Sprite SpriteCategorie;
+
+	public Color ColorSelected;
+	public Color ColorUnSelected;
+
+	public Sprite SpriteSelected;
+	public Sprite SpriteUnSelected;
 
 	[Header ("Information Categorie Voisines")]
-	public Transform LeftCategorie;
-	public Transform RightCategorie;
+	public CatShop LeftCategorie;
+	public CatShop RightCategorie;
 	#endregion
 
 	#region Mono

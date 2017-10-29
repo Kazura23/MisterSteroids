@@ -81,6 +81,8 @@ public class PlayerController : MonoBehaviour
 	public bool playerDead = false;
 	[HideInInspector]
 	public bool Dash = false;
+	[HideInInspector]
+	public int Life = 1;
 
 	public bool StopPlayer = false;
 
@@ -836,6 +838,13 @@ public class PlayerController : MonoBehaviour
 	IEnumerator GameOver ( )
 	{
 		WaitForSeconds thisS = new WaitForSeconds ( 1 );
+		Life--;
+
+		if ( Life > 0 )
+		{
+			yield break;
+		}
+
 		playerDead = true;
 		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
 

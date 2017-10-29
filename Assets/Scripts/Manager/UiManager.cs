@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Collections;
 using UnityEngine.EventSystems;
 
-public class UIManager : ManagerParent
+public class UiManager : ManagerParent
 {
 	#region Variables
 	#if UNITY_EDITOR
@@ -29,16 +29,6 @@ public class UIManager : ManagerParent
     #endregion
 
     #region Public Methods
-
-
-    void Start()
-    {
-
-        PatternBackground.transform.DOLocalMoveY(-60, 5f).SetEase(Ease.Linear).OnComplete(() => {
-            PatternBackground.transform.DOLocalMoveY(1092, 0);
-        }).SetLoops(-1, LoopType.Restart);
-    }
-
     public void OpenThisMenu ( MenuType thisType, MenuTokenAbstract GetTok = null )
 	{
 		UiParent thisUi;
@@ -142,6 +132,13 @@ public class UIManager : ManagerParent
 	void InitializeUI ( )
 	{
 		InvokeRepeating ( "checkCurosr", 0, 0.5f );
+
+		if ( PatternBackground != null )
+		{
+			PatternBackground.transform.DOLocalMoveY(-60, 5f).SetEase(Ease.Linear).OnComplete(() => {
+				PatternBackground.transform.DOLocalMoveY(1092, 0);
+			}).SetLoops(-1, LoopType.Restart);
+		}
 	}
 
 	void checkCurosr ( )

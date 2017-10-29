@@ -15,6 +15,7 @@ public class UIManager : ManagerParent
 	public Slider MotionSlider;
 	public GameObject GameOver;
     public Image RedScreen;
+    public GameObject speedEffect;
 	public Transform MenuParent;
 
 	Dictionary <MenuType, UiParent> AllMenu;
@@ -76,20 +77,21 @@ public class UIManager : ManagerParent
         });
     }
 
+    public void OpenDashSpeed()
+    {
+        speedEffect.GetComponent<CanvasGroup>().DOFade(1, .25f);
+    }
+
+    public void CloseDashSpeed()
+    {
+        speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f);
+    }
+
+
     #endregion
 
     #region Private Methods
 
-    void Awake()
-    {
-        if(Singleton == null)
-        {
-            Singleton = this;
-        } else
-        {
-            Destroy(this);
-        }
-    }
 
 
     protected override void InitializeManager ( )
@@ -175,7 +177,8 @@ public class UIManager : ManagerParent
 	#endregion
 }
 
-    
+    /*
 	{
 		GameOver.gameObject.SetActive ( display );
 	protected override void InitializeManager ( )
+    */

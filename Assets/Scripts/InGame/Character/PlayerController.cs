@@ -323,7 +323,9 @@ public class PlayerController : MonoBehaviour
 		Vector3 calTrans = Vector3.zero;
 		delTime = Time.deltaTime;
 
-		if ( inAir )
+        GlobalManager.Ui.CloseDashSpeed();
+
+        if ( inAir )
 		{
 			speed = ( speed / 100 ) * PourcRal;
 		}
@@ -331,7 +333,10 @@ public class PlayerController : MonoBehaviour
 		if ( Dash )
 		{
 			speed *= DashSpeed;
-		}
+
+            GlobalManager.Ui.OpenDashSpeed();
+
+        }
 		else if ( propP )
 		{
 			speed *= SpeedPunchRun;

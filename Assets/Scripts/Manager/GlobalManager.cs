@@ -9,7 +9,7 @@ public class GlobalManager : MonoBehaviour
 	static UIManager ui;
 	public static UIManager Ui { get { return ui; } }
 
-	static EventManager evnt;
+    static EventManager evnt;
     public static EventManager Event { get { return evnt; } }
 
 	static LevelManager scene;
@@ -48,7 +48,7 @@ public class GlobalManager : MonoBehaviour
 		InitializeManager ( ref scene );
 		InitializeManager ( ref gCont );
 		InitializeManager ( ref ui );
-	}
+    }
 
 	void InitializeManager<T>(ref T manager) where T : ManagerParent
 	{

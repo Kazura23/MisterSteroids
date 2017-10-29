@@ -10,7 +10,7 @@ public static class SaveData {
 
 
 
-    public static void LoadData()
+   /* public static void LoadData()
     {
         AllPlayerPrefs.piece = PlayerPrefs.GetInt("piece", 0);
     }
@@ -18,5 +18,5 @@ public static class SaveData {
     public static void SaveDataS()
     {
         PlayerPrefs.SetInt("piece", AllPlayerPrefs.piece);
-    }
+    }*/
 }

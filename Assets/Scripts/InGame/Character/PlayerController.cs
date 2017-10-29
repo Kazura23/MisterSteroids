@@ -82,6 +82,8 @@ public class PlayerController : MonoBehaviour
 	[HideInInspector]
 	public bool Dash = false;
 
+	public bool StopPlayer = false;
+
 	private Collider punchBox;
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
@@ -211,7 +213,7 @@ public class PlayerController : MonoBehaviour
 
 	void FixedUpdate ( )
 	{
-		if ( playerDead )
+		if ( playerDead || StopPlayer )
 		{
 			thisCam.fieldOfView = Constants.DefFov;
 			return;

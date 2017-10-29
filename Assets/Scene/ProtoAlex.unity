@@ -541,121 +541,26 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: Radius
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: SoftNess
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 114275943528702584, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: projection_basic.z
-      value: 70
-      objectReference: {fileID: 0}
-    - target: {fileID: 114275943528702584, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: projection_double.z
-      value: 120
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: SpeedDoublePunchRun
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: TimePropulseDoublePunch
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: SpeedPunchRun
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: TimePropulsePunch
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: DashTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 20669040202461326, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: field of view
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: SpeedEffect
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: Running
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: ReducSpeedEffect
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: IncreaseSpeedEffect
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: SpeedEffectTime
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: SlowMotion
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: SpeedSlowMot
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: SpeedDeacSM
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: ReduceSlider
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
-        type: 2}
-      propertyPath: RecovSlider
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 1528059048823118, guid: b4cea04d2ef6e224da8a8b609103e64f, type: 2}
       propertyPath: m_Name
       value: ==> Player
       objectReference: {fileID: 0}
-    - target: {fileID: 1173696423758702, guid: b4cea04d2ef6e224da8a8b609103e64f, type: 2}
-      propertyPath: m_Name
-      value: Hit Punch
+    - target: {fileID: 114275943528702584, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: projection_double.z
+      value: 300
       objectReference: {fileID: 0}
-    - target: {fileID: 1488018743905684, guid: b4cea04d2ef6e224da8a8b609103e64f, type: 2}
-      propertyPath: m_Name
-      value: => Main Camera
+    - target: {fileID: 114275943528702584, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: projection_basic.z
+      value: 150
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 114580676302761910, guid: b4cea04d2ef6e224da8a8b609103e64f, type: 2}
-    - {fileID: 114550746714595070, guid: b4cea04d2ef6e224da8a8b609103e64f, type: 2}
+    - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: TimePropulseDoublePunch
+      value: 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b4cea04d2ef6e224da8a8b609103e64f, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &36661519 stripped
@@ -1346,7 +1251,7 @@ Prefab:
     - target: {fileID: 114956283340806840, guid: 15bb641fdb1f44941a035ea7b9db8239,
         type: 2}
       propertyPath: lauchGame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224562249454764838, guid: 15bb641fdb1f44941a035ea7b9db8239,
         type: 2}
@@ -1362,6 +1267,31 @@ Prefab:
       propertyPath: m_Name
       value: ==> Managers
       objectReference: {fileID: 0}
+    - target: {fileID: 114956283340806840, guid: 15bb641fdb1f44941a035ea7b9db8239,
+        type: 2}
+      propertyPath: GameOver
+      value: 
+      objectReference: {fileID: 1305728047}
+    - target: {fileID: 114956283340806840, guid: 15bb641fdb1f44941a035ea7b9db8239,
+        type: 2}
+      propertyPath: RedScreen
+      value: 
+      objectReference: {fileID: 293982331}
+    - target: {fileID: 114956283340806840, guid: 15bb641fdb1f44941a035ea7b9db8239,
+        type: 2}
+      propertyPath: MenuParent
+      value: 
+      objectReference: {fileID: 732782679}
+    - target: {fileID: 114956283340806840, guid: 15bb641fdb1f44941a035ea7b9db8239,
+        type: 2}
+      propertyPath: MotionSlider
+      value: 
+      objectReference: {fileID: 940108146}
+    - target: {fileID: 114956283340806840, guid: 15bb641fdb1f44941a035ea7b9db8239,
+        type: 2}
+      propertyPath: speedEffect
+      value: 
+      objectReference: {fileID: 1487267339}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 15bb641fdb1f44941a035ea7b9db8239, type: 2}
   m_IsPrefabParent: 0
@@ -3888,6 +3818,12 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: b2f96746c6005c64888263f64272a556, type: 2}
   m_PrefabInternal: {fileID: 1917630962}
+--- !u!114 &293982331 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114934094079022610, guid: 15bb641fdb1f44941a035ea7b9db8239,
+    type: 2}
+  m_PrefabInternal: {fileID: 94591326}
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &294691851
 Prefab:
   m_ObjectHideFlags: 0
@@ -4126,13 +4062,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDead: 0
   delayDead: 2
+  FXDestroy: {fileID: 0}
   VelRestant: 5
   onObjForward: 0
   FreezeAxe: {x: 0, y: 0, z: 0}
   FreezeRot: {x: 0, y: 0, z: 0}
   useGravity: 1
   NewColor: {r: 1, g: 0, b: 0, a: 1}
-  FXDestroy: {fileID: 0}
 --- !u!54 &297945929
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5478,34 +5414,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b2f96746c6005c64888263f64272a556, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &386138788 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1488018743905684, guid: b4cea04d2ef6e224da8a8b609103e64f,
-    type: 2}
-  m_PrefabInternal: {fileID: 34139853}
---- !u!114 &386138791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 386138788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 894b79da34224d74f8b28401bd90b62a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SpeedEffect: {fileID: 2100000, guid: 29466087a0ed8f44b8ac0be8601effde, type: 2}
---- !u!114 &386138795
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 386138788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2595fd05f9eddc4bbb91deff5d57aed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &388038361
 Prefab:
   m_ObjectHideFlags: 0
@@ -10376,6 +10284,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b2f96746c6005c64888263f64272a556, type: 2}
   m_IsPrefabParent: 0
+--- !u!224 &732782679 stripped
+RectTransform:
+  m_PrefabParentObject: {fileID: 224377966545842578, guid: 15bb641fdb1f44941a035ea7b9db8239,
+    type: 2}
+  m_PrefabInternal: {fileID: 94591326}
 --- !u!1001 &739087548
 Prefab:
   m_ObjectHideFlags: 0
@@ -11608,13 +11521,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDead: 0
   delayDead: 2
+  FXDestroy: {fileID: 0}
   VelRestant: 5
   onObjForward: 0
   FreezeAxe: {x: 0, y: 0, z: 0}
   FreezeRot: {x: 0, y: 0, z: 0}
   useGravity: 1
   NewColor: {r: 1, g: 0, b: 0, a: 1}
-  FXDestroy: {fileID: 0}
 --- !u!54 &827453543
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13473,6 +13386,12 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 91d652779ec7140488b6b8e360497937, type: 2}
   m_PrefabInternal: {fileID: 1237102125}
+--- !u!114 &940108146 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114002586270133342, guid: 15bb641fdb1f44941a035ea7b9db8239,
+    type: 2}
+  m_PrefabInternal: {fileID: 94591326}
+  m_Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &943007947
 Prefab:
   m_ObjectHideFlags: 0
@@ -17720,13 +17639,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDead: 0
   delayDead: 2
+  FXDestroy: {fileID: 0}
   VelRestant: 5
   onObjForward: 0
   FreezeAxe: {x: 0, y: 0, z: 0}
   FreezeRot: {x: 0, y: 0, z: 0}
   useGravity: 1
   NewColor: {r: 1, g: 0, b: 0, a: 1}
-  FXDestroy: {fileID: 0}
 --- !u!54 &1193148750
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -19166,6 +19085,11 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: b2f96746c6005c64888263f64272a556, type: 2}
   m_PrefabInternal: {fileID: 294691851}
+--- !u!1 &1305728047 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1429099742376554, guid: 15bb641fdb1f44941a035ea7b9db8239,
+    type: 2}
+  m_PrefabInternal: {fileID: 94591326}
 --- !u!1001 &1309572727
 Prefab:
   m_ObjectHideFlags: 0
@@ -19904,13 +19828,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDead: 0
   delayDead: 2
+  FXDestroy: {fileID: 0}
   VelRestant: 5
   onObjForward: 0
   FreezeAxe: {x: 0, y: 0, z: 0}
   FreezeRot: {x: 0, y: 0, z: 0}
   useGravity: 1
   NewColor: {r: 1, g: 0, b: 0, a: 1}
-  FXDestroy: {fileID: 0}
 --- !u!4 &1353751106 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 91d652779ec7140488b6b8e360497937, type: 2}
@@ -20601,13 +20525,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDead: 0
   delayDead: 2
+  FXDestroy: {fileID: 0}
   VelRestant: 5
   onObjForward: 0
   FreezeAxe: {x: 0, y: 0, z: 0}
   FreezeRot: {x: 0, y: 0, z: 0}
   useGravity: 1
   NewColor: {r: 1, g: 0, b: 0, a: 1}
-  FXDestroy: {fileID: 0}
 --- !u!54 &1404302211
 Rigidbody:
   m_ObjectHideFlags: 0

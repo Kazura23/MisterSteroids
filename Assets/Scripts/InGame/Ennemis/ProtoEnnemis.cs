@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class ProtoEnnemis : AbstractObject
 {
-	#region Variables
-	[Space]
+    #region Variables
+
+    [Space]
 	public Color NewColor;
 	Color saveCol;
 
 
 	Material parMat;
 
-    public GameObject FXDestroy;
 
 	#endregion
 
@@ -45,7 +45,7 @@ public class ProtoEnnemis : AbstractObject
 
 	public override void Dead ( bool enemy = false ) 
 	{
-        //var fx = Instantiate(FXDestroy, transform.position, Quaternion.identity, transform);
+       // GameObject fx = (GameObject) Instantiate(FXDestroy, transform.position, Quaternion.identity, transform);
         //Destroy(fx, 1);
 
 		base.Dead ( enemy );

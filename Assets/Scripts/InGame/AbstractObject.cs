@@ -10,7 +10,9 @@ public class AbstractObject : MonoBehaviour
 	public bool isDead;
 	public float delayDead = 2;
 
-	[Header ("Contact avec obs")]
+    public GameObject FXDestroy;
+
+    [Header ("Contact avec obs")]
 	[Tooltip ("pourcentage de velocité restante en pourcentage lors d'une collision avec un ennmis ( situation ou ce gameobject est en mouvement )")]
 	public float VelRestant = 5;
 

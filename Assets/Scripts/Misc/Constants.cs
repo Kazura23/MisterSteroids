@@ -22,6 +22,11 @@ public static class Constants
 	public const string _DebutFinChunk = "DebutFinChunk";
 	#endregion
 
+	#region PlayerPref
+	public const string Coin = "Coins";
+	#endregion
+
+
 	#region Other
 	public const int DefFov = 60;
 	public const int LineDist = 6;

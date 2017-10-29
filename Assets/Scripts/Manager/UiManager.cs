@@ -22,13 +22,23 @@ public class UIManager : ManagerParent
 	MenuType menuOpen;
 
 	GameObject InGame;
-	#endregion
+    #endregion
 
-	#region Mono
-	#endregion
+    #region Mono
+    #endregion
 
-	#region Public Methods
-	public void OpenThisMenu ( MenuType thisType, MenuTokenAbstract GetTok = null )
+    #region Public Methods
+
+
+    void Start()
+    {
+
+        PatternBackground.transform.DOLocalMoveY(-60, 5f).SetEase(Ease.Linear).OnComplete(() => {
+            PatternBackground.transform.DOLocalMoveY(1092, 0);
+        }).SetLoops(-1, LoopType.Restart);
+    }
+
+    public void OpenThisMenu ( MenuType thisType, MenuTokenAbstract GetTok = null )
 	{
 		UiParent thisUi;
 		InGame.SetActive ( false );
@@ -90,7 +100,9 @@ public class UIManager : ManagerParent
     #endregion
 
     #region Private Methods
-	protected override void InitializeManager ( )
+
+
+    protected override void InitializeManager ( )
 	{
 		InitializeUI ( );
 

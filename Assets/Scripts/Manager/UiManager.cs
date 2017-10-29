@@ -59,7 +59,7 @@ public class UIManager : ManagerParent
 
 	public void DisplayOver ( bool display )
 	{
-		GameOver.gameObject.SetActive ( display );
+		//GameOver.gameObject.SetActive ( display );
 	}
 
     public void BloodHit()
@@ -170,23 +170,3 @@ public class UIManager : ManagerParent
 	}
 	#endregion
 }
-
-    
->>>>>>> Temporary merge branch 2
-
-	public void DisplayOver ( bool display )
-	{
-
-        GameOver.gameObject.SetActive ( display );
-	}
-
-
-
-
-    protected override void InitializeManager ( )
-
-    /*
-	{
-		GameOver.gameObject.SetActive ( display );
-	protected override void InitializeManager ( )
-    */

@@ -14,6 +14,7 @@ public class UIManager : ManagerParent
 	#endif
 	public Slider MotionSlider;
     public Image RedScreen;
+    public GameObject speedEffect;
 	public Transform MenuParent;
 
 	Dictionary <MenuType, UiParent> AllMenu;
@@ -56,6 +57,11 @@ public class UIManager : ManagerParent
 		menuOpen = MenuType.Nothing;
 	}
 
+	public void DisplayOver ( bool display )
+	{
+		//GameOver.gameObject.SetActive ( display );
+	}
+
     public void BloodHit()
     {
         Time.timeScale = 0;
@@ -69,10 +75,21 @@ public class UIManager : ManagerParent
         });
     }
 
+    public void OpenDashSpeed()
+    {
+        speedEffect.GetComponent<CanvasGroup>().DOFade(1, .25f);
+    }
+
+    public void CloseDashSpeed()
+    {
+        speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f);
+    }
+
+
     #endregion
 
     #region Private Methods
-    protected override void InitializeManager ( )
+	protected override void InitializeManager ( )
 	{
 		InitializeUI ( );
 

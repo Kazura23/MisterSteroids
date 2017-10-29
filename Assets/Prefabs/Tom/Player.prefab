@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 65542938768310824}
   - component: {fileID: 114275943528702584}
   m_Layer: 11
-  m_Name: hit punch
+  m_Name: Hit Punch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,8 +76,10 @@ GameObject:
   - component: {fileID: 81020928097985718}
   - component: {fileID: 114396453940007926}
   - component: {fileID: 114646076245186260}
+  - component: {fileID: 114461424696399938}
+  - component: {fileID: 114997091371556078}
   m_Layer: 11
-  m_Name: Main Camera
+  m_Name: => Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -390,8 +392,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae96edcd53504dc4685017eec4ca3880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projection_basic: {x: 2, y: 1, z: 300}
-  projection_double: {x: 0, y: 0, z: 400}
+  projection_basic: {x: 2, y: 1, z: 70}
+  projection_double: {x: 0, y: 0, z: 120}
   facteurVitesseRenvoie: 1.5
 --- !u!114 &114396453940007926
 MonoBehaviour:
@@ -423,34 +425,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxSpeed: 15
   Acceleration: 50
-  Deceleration: 50
+  Deceleration: 25
   CooldownDash: 1
-  MaxSpeedCL: 60
+  MaxSpeedCL: 150
   AccelerationCL: 150
-  ImpulsionCL: 200
+  ImpulsionCL: 500
   DecelerationCL: 0
   RotationSpeed: 4
+  SpeedEffectTime: 50
   Running: 1
   BonusGrav: 20
   PourcRal: 50
-  NbrLineRight: 1
-  NbrLineLeft: 1
-  DashTime: 2
+  DashTime: 1
   DashSpeed: 2
+  SlowMotion: 2
+  SpeedSlowMot: 3
+  SpeedDeacSM: 5
+  ReduceSlider: 5
+  RecovSlider: 2
   delayPunch: 0.05
   delayHitbox: 0.05
   delayPrepare: 0.05
   PropulseBalls: 100
-  TimePropulsePunch: 0.2
-  TimePropulseDoublePunch: 0.35
-  SpeedPunchRun: 3.2
-  SpeedDoublePunchRun: 1.5
+  TimePropulsePunch: 0.1
+  TimePropulseDoublePunch: 0.1
+  SpeedPunchRun: 1
+  SpeedDoublePunchRun: 2
   DistPoingDroit: {x: -0.5, y: 0.1, z: 1}
   DistPoingGauche: {x: 0.5, y: 0.1, z: 1}
   poingGauche: {fileID: 1063540573602348}
   poingDroite: {fileID: 1406027018080338}
+  Radius: 15
+  SoftNess: 15
+  NbrLineRight: 1
+  NbrLineLeft: 1
   playerDead: 0
   Dash: 0
+--- !u!114 &114461424696399938
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1488018743905684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 894b79da34224d74f8b28401bd90b62a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpeedEffect: {fileID: 2100000, guid: 29466087a0ed8f44b8ac0be8601effde, type: 2}
 --- !u!114 &114646076245186260
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -468,6 +490,17 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 7}
   - {x: 0, y: 0, z: -7}
   easeType: 2
+--- !u!114 &114997091371556078
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1488018743905684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2595fd05f9eddc4bbb91deff5d57aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!124 &124645815204121290
 Behaviour:
   m_ObjectHideFlags: 1

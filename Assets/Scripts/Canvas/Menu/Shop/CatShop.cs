@@ -8,15 +8,20 @@ public class CatShop : MonoBehaviour
 	[Header ("Information Categorie")]
 	public string NameCategorie;
 
+	public bool Selected;
+	public bool UseColor;
 	public Color ColorSelected;
 	public Color ColorUnSelected;
 
+	public bool UseSprite;
 	public Sprite SpriteSelected;
 	public Sprite SpriteUnSelected;
 
 	[Header ("Information Categorie Voisines")]
 	public CatShop LeftCategorie;
 	public CatShop RightCategorie;
+
+	public ItemModif DefautItem;
 	#endregion
 
 	#region Mono

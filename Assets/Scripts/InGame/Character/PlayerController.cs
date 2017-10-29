@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour
 
 	[Header ("Caractérique de temps sur les punchs")]
     public float delayPunch = 1;
+	public float delayDoublePunch = 1;
 	public float delayHitbox = 0.3f;
 	public float delayPrepare = 0.1f;
 
@@ -650,9 +651,16 @@ public class PlayerController : MonoBehaviour
 	}
 
 
-    private IEnumerator CooldownPunch()
+	private IEnumerator CooldownPunch ( bool doublePunch = false )
     {
-        yield return new WaitForSeconds(delayPunch);
+		if ( doublePunch )
+		{
+			yield return new WaitForSeconds(delayDoublePunch);
+		}
+		else
+		{
+			yield return new WaitForSeconds(delayPunch);
+		}
         if (poingDroite.activeInHierarchy)
         {
             poingDroite.SetActive(false);
@@ -685,14 +693,23 @@ public class PlayerController : MonoBehaviour
 		//corou = null;
 	}
 
-	IEnumerator animePunch ( bool rightPoing )
+	IEnumerator animePunch ( bool rightPoing, bool doublePunch = false )
 	{
 		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
 		Transform thisPoing;
 		Vector3 getStart;
 		Vector3 thisDist;
 
-		float getTime = delayPunch / 2;
+		float getTime;
+		if ( doublePunch )
+		{
+			getTime = delayDoublePunch / 2;
+		}
+		else
+		{
+			getTime = delayPunch / 2;
+		}
+
 		float currTime = 0;
 
 		if ( rightPoing )

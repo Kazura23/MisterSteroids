@@ -16,7 +16,6 @@ public class MenuShop : UiParent
 
 	//Object par défaut sélectionner a l'ouverture du shop
 	public CatShop DefCatSelected;
-	public ItemModif DefItemSelected;
 
 	[HideInInspector]
 	public CatShop currCatSeled;
@@ -98,7 +97,13 @@ public class MenuShop : UiParent
 		base.OpenThis ( GetTok );
 
 		currCatSeled = DefCatSelected;
-		currItemSeled = DefItemSelected;
+		if ( currItemSeled != currCatSeled.DefautItem )
+		{
+			CheckSelectItem ( false );
+		}
+
+		currItemSeled = currCatSeled.DefautItem;
+		CheckSelectItem ( true );
 	}
 
 	public override void CloseThis ( )
@@ -212,7 +217,7 @@ public class MenuShop : UiParent
 	protected override void InitializeUi()
 	{
 		currCatSeled = DefCatSelected;
-		currItemSeled = DefItemSelected;
+		currItemSeled = currCatSeled.DefautItem;
 
 		ItemModif[] checkAllItem = GetComponentsInChildren<ItemModif> ( true );
 		ItemModif currItem;
@@ -235,6 +240,8 @@ public class MenuShop : UiParent
 				}
 			}
 		}
+
+		CheckSelectItem ( true );
 
 		allConfirm = getItemConf;
 		GlobalManager.GameCont.AllModifItem = getItemConf;
@@ -260,13 +267,31 @@ public class MenuShop : UiParent
 
 		if ( selected )
 		{
-			thisShop.GetComponent<Image> ( ).color = thisShop.ColorSelected;
-			thisShop.GetComponent<Image> ( ).sprite = thisShop.SpriteSelected;
+			CheckSelectItem ( false );
+			currItemSeled = thisShop.DefautItem;
+			CheckSelectItem ( true );
+			thisShop.Selected = true;
+			if ( thisShop.UseColor )
+			{
+				thisShop.GetComponent<Image> ( ).color = thisShop.ColorSelected;
+			}
+
+			if ( thisShop.UseSprite )
+			{
+				thisShop.GetComponent<Image> ( ).sprite = thisShop.SpriteSelected;
+			}
 		}
 		else
 		{
-			thisShop.GetComponent<Image> ( ).color = thisShop.ColorUnSelected;
-			thisShop.GetComponent<Image> ( ).sprite = thisShop.SpriteUnSelected;
+			thisShop.Selected = false;
+			if ( thisShop.UseColor )
+			{
+				thisShop.GetComponent<Image> ( ).color = thisShop.ColorUnSelected;
+			}
+			if ( thisShop.UseSprite )
+			{
+				thisShop.GetComponent<Image> ( ).sprite = thisShop.SpriteUnSelected;
+			}
 		}
 	}
 
@@ -277,6 +302,7 @@ public class MenuShop : UiParent
 
 		if ( selected )
 		{
+			thisItem.Selected = true;
 			if ( thisItem.ItemBought && thisItem.UseOtherColor )
 			{
 				thisItem.GetComponent<Image> ( ).color = thisItem.BoughtColorSelected;
@@ -297,6 +323,7 @@ public class MenuShop : UiParent
 		}
 		else
 		{
+			thisItem.Selected = false;
 			if ( thisItem.ItemBought && thisItem.UseOtherColor )
 			{
 				thisItem.GetComponent<Image> ( ).color = thisItem.BoughtColorUnSelected;

@@ -4,20 +4,17 @@ using UnityEngine;
 
 public class ItemModif : MonoBehaviour 
 {
-
 	#region Variables
+	public string ItemName;
+
+	[Header ("Modification")]
+	public bool ModifVie;
+
+
+	public int NombreVie;
 	#endregion
 
 	#region Mono
-	void Start () 
-	{
-		
-	}
-	
-	void Update () 
-	{
-		
-	}
 	#endregion
 
 	#region Public Methods

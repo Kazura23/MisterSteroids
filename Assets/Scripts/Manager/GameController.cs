@@ -52,28 +52,29 @@ public class GameController : ManagerParent
 	{
 		List<FxList> getAllFx = AllFx;
 		GameObject getObj;
-		GameObject getFx;
 
-		for ( int a = 0; a < a < getAllFx.Count; a++ )
+		for ( int a = 0;  a < getAllFx.Count; a++ )
 		{
 			if ( getAllFx [ a ].FxName == fxName )
 			{
 				getObj = getAllFx [ a ].FxObj;
+
+				if ( parentObj != null )
+				{
+					getObj = ( GameObject ) Instantiate ( getObj, parentObj );
+
+				}
+				else
+				{
+					getObj = ( GameObject ) Instantiate ( getObj, parentObj );
+				}
+
+				getObj.transform.position = thisPos;
+
+				break;
 			}
 		}
 
-		if ( parentObj != null )
-		{
-			getObj = ( GameObject ) Instantiate ( getFx, parentObj );
-
-		}
-		else
-		{
-			getObj = ( GameObject ) Instantiate ( getFx, parentObj );
-
-		}
-
-		getObj.transform.position = thisPos;
 	}
 
     public void Restart ( ) 
@@ -98,5 +99,5 @@ public class GameController : ManagerParent
 public class FxList 
 {
 	public string FxName;
-	public List<GameObject> FxObj;
+	public GameObject FxObj;
 }

@@ -16,6 +16,8 @@ public class UIManager : ManagerParent
     public Image RedScreen;
     public GameObject speedEffect;
 	public Transform MenuParent;
+    public GameObject PatternBackground;
+
 
 	Dictionary <MenuType, UiParent> AllMenu;
 	MenuType menuOpen;

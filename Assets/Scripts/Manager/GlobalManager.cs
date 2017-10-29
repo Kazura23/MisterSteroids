@@ -6,8 +6,8 @@ public class GlobalManager : MonoBehaviour
    	static GlobalManager mainManagerInstance;
 
 	//Add new managers here
-	static UIManager ui;
-	public static UIManager Ui { get { return ui; } }
+	static UiManager ui;
+	public static UiManager Ui { get { return ui; } }
 
     static EventManager evnt;
     public static EventManager Event { get { return evnt; } }
@@ -17,6 +17,9 @@ public class GlobalManager : MonoBehaviour
 
 	static GameController gCont;
 	public static GameController GameCont { get { return gCont; } }
+
+	static LevelManager lvlManager;
+	public static LevelManager LVLManager { get { return lvlManager; } }
 	#endregion
 
 	#region Mono
@@ -48,6 +51,7 @@ public class GlobalManager : MonoBehaviour
 		InitializeManager ( ref scene );
 		InitializeManager ( ref gCont );
 		InitializeManager ( ref ui );
+		InitializeManager ( ref lvlManager );
     }
 
 	void InitializeManager<T>(ref T manager) where T : ManagerParent

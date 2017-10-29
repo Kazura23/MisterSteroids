@@ -13,7 +13,6 @@ public class UIManager : ManagerParent
 	public bool lauchGame = false;
 	#endif
 	public Slider MotionSlider;
-	public GameObject GameOver;
     public Image RedScreen;
     public GameObject speedEffect;
 	public Transform MenuParent;
@@ -60,8 +59,7 @@ public class UIManager : ManagerParent
 
 	public void DisplayOver ( bool display )
 	{
-
-        GameOver.gameObject.SetActive ( display );
+		//GameOver.gameObject.SetActive ( display );
 	}
 
     public void BloodHit()
@@ -91,10 +89,7 @@ public class UIManager : ManagerParent
     #endregion
 
     #region Private Methods
-
-
-
-    protected override void InitializeManager ( )
+	protected override void InitializeManager ( )
 	{
 		InitializeUI ( );
 
@@ -128,7 +123,6 @@ public class UIManager : ManagerParent
 		#else
 		OpenThisMenu ( MenuType.MenuHome );
 		#endif
-
 	}
 
 	void InitializeUI ( )
@@ -176,9 +170,3 @@ public class UIManager : ManagerParent
 	}
 	#endregion
 }
-
-    /*
-	{
-		GameOver.gameObject.SetActive ( display );
-	protected override void InitializeManager ( )
-    */

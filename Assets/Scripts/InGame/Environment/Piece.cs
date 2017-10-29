@@ -10,7 +10,8 @@ public class Piece : MonoBehaviour {
     {
         if(other.tag == Constants._PlayerTag)
         {
-            AllPlayerPrefs.piece += piece;
+           // AllPlayerPrefs.piece += piece;
+			AllPlayerPrefs.SetIntValue ( Constants.Coin, piece );
             //animation
             Destroy(this.gameObject);
         }

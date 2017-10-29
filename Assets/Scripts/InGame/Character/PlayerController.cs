@@ -82,6 +82,8 @@ public class PlayerController : MonoBehaviour
 	[HideInInspector]
 	public bool Dash = false;
 
+	public bool StopPlayer = false;
+
 	private Collider punchBox;
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
@@ -172,6 +174,8 @@ public class PlayerController : MonoBehaviour
 
 		if ( Input.GetAxis ( "SlowMot" ) > 0 && SliderContent > 0 )
 		{
+            Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
+
 			if ( Time.timeScale > 1 / SlowMotion )
 			{
 				Time.timeScale -= Time.deltaTime * SpeedSlowMot;
@@ -192,7 +196,8 @@ public class PlayerController : MonoBehaviour
 		{
 			Time.timeScale = 1;
 			SliderContent += RecovSlider * Time.deltaTime;
-		}
+            Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = false;
+        }
 		else
 		{
 			SliderContent = 10;
@@ -211,7 +216,7 @@ public class PlayerController : MonoBehaviour
 
 	void FixedUpdate ( )
 	{
-		if ( playerDead )
+		if ( playerDead || StopPlayer )
 		{
 			thisCam.fieldOfView = Constants.DefFov;
 			return;
@@ -324,6 +329,7 @@ public class PlayerController : MonoBehaviour
 		delTime = Time.deltaTime;
 
         GlobalManager.Ui.CloseDashSpeed();
+        Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole>().enabled = false;
 
         if ( inAir )
 		{
@@ -335,6 +341,7 @@ public class PlayerController : MonoBehaviour
 			speed *= DashSpeed;
 
             GlobalManager.Ui.OpenDashSpeed();
+            Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole>().enabled = true;
 
         }
 		else if ( propP )
@@ -830,10 +837,10 @@ public class PlayerController : MonoBehaviour
 	{
 		WaitForSeconds thisS = new WaitForSeconds ( 1 );
 		playerDead = true;
+		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
 
 		yield return thisS;
 
-		GlobalManager.Ui.DisplayOver ( true );
 		GlobalManager.GameCont.Restart ( );
 	}
 

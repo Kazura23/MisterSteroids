@@ -120,10 +120,6 @@ public class UiManager : ManagerParent
 		{
 			OpenThisMenu ( MenuType.MenuHome );
 		}
-		else
-		{
-			GlobalManager.GameCont.StartGame ( );
-		}
 		#else
 		OpenThisMenu ( MenuType.MenuHome );
 		#endif
@@ -131,7 +127,7 @@ public class UiManager : ManagerParent
 
 	void InitializeUI ( )
 	{
-		InvokeRepeating ( "checkCurosr", 0, 0.5f );
+	//	InvokeRepeating ( "checkCurosr", 0, 0.5f );
 
 		if ( PatternBackground != null )
 		{

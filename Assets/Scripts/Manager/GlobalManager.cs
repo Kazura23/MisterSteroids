@@ -17,9 +17,6 @@ public class GlobalManager : MonoBehaviour
 
 	static GameController gCont;
 	public static GameController GameCont { get { return gCont; } }
-
-	static LevelManager lvlManager;
-	public static LevelManager LVLManager { get { return lvlManager; } }
 	#endregion
 
 	#region Mono
@@ -48,10 +45,9 @@ public class GlobalManager : MonoBehaviour
 	void InitializeManagers()
 	{
 		InitializeManager ( ref evnt );
-		InitializeManager ( ref scene );
 		InitializeManager ( ref gCont );
 		InitializeManager ( ref ui );
-		InitializeManager ( ref lvlManager );
+		InitializeManager ( ref scene );
     }
 
 	void InitializeManager<T>(ref T manager) where T : ManagerParent

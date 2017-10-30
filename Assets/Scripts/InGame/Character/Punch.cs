@@ -42,7 +42,7 @@ public class Punch : MonoBehaviour {
         numTechnic = typeTech;
     }
 
-	public void CanPunch ( bool canPush )
+	public void SetPunch ( bool canPush )
 	{
 		canPunc = canPush;
 	}

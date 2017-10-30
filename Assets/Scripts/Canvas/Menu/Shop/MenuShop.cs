@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class MenuShop : UiParent 
 {
@@ -279,8 +280,11 @@ public class MenuShop : UiParent
 			thisShop.Selected = true;
 
             textCategory.text = thisShop.NameCategorie;
+            thisShop.GetComponent<Image>().transform.DOScale(1, .2f);
+            //thisShop.GetComponent<Image>().DOFade(1f, .05f);
 
-			if ( thisShop.UseColor )
+
+            if ( thisShop.UseColor )
 			{
 				thisShop.GetComponent<Image> ( ).color = thisShop.ColorSelected;
 			}
@@ -293,9 +297,12 @@ public class MenuShop : UiParent
 		else
 		{
 			thisShop.Selected = false;
-			if ( thisShop.UseColor )
+            thisShop.GetComponent<Image>().transform.DOScale(.2f, .2f);
+           // thisShop.GetComponent<Image>().DOFade(0, .2f);
+
+            if ( thisShop.UseColor )
 			{
-				thisShop.GetComponent<Image> ( ).color = thisShop.ColorUnSelected;
+				//thisShop.GetComponent<Image> ( ).color = thisShop.ColorUnSelected;
 			}
 			if ( thisShop.UseSprite )
 			{

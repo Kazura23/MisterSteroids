@@ -17,6 +17,12 @@ public class MenuShop : UiParent
 	//Object par défaut sélectionner a l'ouverture du shop
 	public CatShop DefCatSelected;
 
+    public Image iconCategory;
+    public Text textCategory;
+    public Image barCategory;
+    public Image moleculeCategory;
+
+
 	[HideInInspector]
 	public CatShop currCatSeled;
 
@@ -271,6 +277,9 @@ public class MenuShop : UiParent
 			currItemSeled = thisShop.DefautItem;
 			CheckSelectItem ( true );
 			thisShop.Selected = true;
+
+            textCategory.text = thisShop.NameCategorie;
+
 			if ( thisShop.UseColor )
 			{
 				thisShop.GetComponent<Image> ( ).color = thisShop.ColorSelected;

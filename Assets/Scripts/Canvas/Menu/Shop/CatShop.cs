@@ -14,7 +14,6 @@ public class CatShop : MonoBehaviour
 	public Color ColorUnSelected;
 
 
-    public float rotateCat;
 
     public bool UseSprite;
 	public Sprite SpriteSelected;
@@ -24,7 +23,8 @@ public class CatShop : MonoBehaviour
 	public CatShop LeftCategorie;
 	public CatShop RightCategorie;
 
-	public ItemModif DefautItem;
+    public float rotateCat;
+    public ItemModif DefautItem;
 	#endregion
 
 	#region Mono

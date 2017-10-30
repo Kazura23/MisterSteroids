@@ -13,8 +13,8 @@ public class CatShop : MonoBehaviour
 	public Color ColorSelected;
 	public Color ColorUnSelected;
 
-    
-    public Sprite IconCat;
+
+    public float rotateCat;
 
     public bool UseSprite;
 	public Sprite SpriteSelected;

@@ -24,6 +24,7 @@ public class MenuShop : UiParent
     public Text textCategory;
     public Image barCategory;
     public Image moleculeCategory;
+    public GameObject moleculeContainer;
 
 
 	[HideInInspector]
@@ -259,9 +260,16 @@ public class MenuShop : UiParent
 	//Changement de catégorie a item et inversement
 	void ChangeToItem ( bool goItem )
 	{
-		if ( goItem && catCurrSelected ) // Changement de cat a item
+        CatShop thisShop = currCatSeled;
+
+        if ( goItem && catCurrSelected ) // Changement de cat a item
 		{
 			catCurrSelected = false;
+
+            currItemSeled = thisShop.DefautItem;
+
+            moleculeContainer.transform.DORotate(new Vector3(moleculeContainer.transform.localEulerAngles.x, moleculeContainer.transform.localEulerAngles.y, thisShop.rotateCat),.5f);
+
 		}
 		else if ( !goItem && !catCurrSelected ) // Changement de item a cat
 		{
@@ -281,11 +289,49 @@ public class MenuShop : UiParent
 			CheckSelectItem ( true );
 			thisShop.Selected = true;
 
-            textCategory.text = thisShop.NameCat;
-            iconCategory.sprite = thisShop.SpriteSelected;
-            thisShop.GetComponent<Image>().transform.DOScale(1.25f, .2f);
-            //thisShop.GetComponent<Image>().DOFade(1f, .05f);
-            iconCategory.GetComponent<Image>().sprite = thisShop.SpriteSelected;
+            
+            
+
+            DOVirtual.DelayedCall(.1f, () => {
+                iconCategory.GetComponent<Image>().DOFade(1, .1f);
+                textCategory.DOFade(1, .1f);
+                barCategory.transform.GetChild(0).transform.DOLocalMoveX(200, 0);
+                barCategory.transform.GetChild(0).transform.DOLocalMoveX(0, .6f);
+
+                textCategory.text = thisShop.NameCat;
+                iconCategory.sprite = thisShop.SpriteSelected;
+                thisShop.GetComponent<Image>().transform.DOScale(1.25f, .2f);
+                //thisShop.GetComponent<Image>().DOFade(1f, .05f);
+                iconCategory.GetComponent<Image>().sprite = thisShop.SpriteSelected;
+                iconCategory.transform.DOMoveY(thisShop.GetComponent<Image>().transform.position.y + 160, 0);
+
+
+                textCategory.transform.DOMoveY(thisShop.GetComponent<Image>().transform.position.y + 75, 0);
+
+                barCategory.transform.GetChild(0).GetComponent<Image>().DOColor(thisShop.ColorSelected, 0);
+
+                if (textCategory.text == "ABILITIES")
+                {
+                    textCategory.transform.DOMoveX(thisShop.GetComponent<Image>().transform.position.x - 55, 0);
+                    barCategory.transform.DOMoveX(thisShop.GetComponent<Image>().transform.position.x - 55, 0);
+                    iconCategory.transform.DOMoveX(thisShop.GetComponent<Image>().transform.position.x - 40, 0);
+                }
+                else
+                {
+                    textCategory.transform.DOMoveX(thisShop.GetComponent<Image>().transform.position.x, 0);
+                    barCategory.transform.DOMoveX(thisShop.GetComponent<Image>().transform.position.x, 0);
+                    iconCategory.transform.DOMoveX(thisShop.GetComponent<Image>().transform.position.x, 0);
+                }
+
+                barCategory.transform.DOMoveY(thisShop.GetComponent<Image>().transform.position.y + 75, 0);
+            });
+            /*
+            iconCategory.transform.DOLocalMoveY(transform.localPosition.y + 10, .25f).OnComplete(() => {
+                iconCategory.transform.DOLocalMoveY(transform.localPosition.y - 10, .25f);
+            }).SetLoops(-1,LoopType.Restart);*/
+
+            //iconCategory.transform.DOKill();
+            //iconCategory.GetComponent<RainbowMove>().enabled = true;
 
 
             if ( thisShop.UseColor )
@@ -301,6 +347,12 @@ public class MenuShop : UiParent
 		else
 		{
 			thisShop.Selected = false;
+            //iconCategory.transform.DOKill();
+
+            
+                iconCategory.GetComponent<Image>().DOFade(0, .1f);
+            textCategory.DOFade(0, .1f);
+            iconCategory.GetComponent<RainbowMove>().enabled = false;
             thisShop.GetComponent<Image>().transform.DOScale(.8f, .2f);
            // thisShop.GetComponent<Image>().DOFade(0, .2f);
 

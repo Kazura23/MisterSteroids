@@ -52,11 +52,11 @@ public class EditCat : Editor
 
 			if ( myTarget.Selected )
 			{
-				myTarget.GetComponent<Image> ( ).sprite = myTarget.SpriteSelected;
+				//myTarget.GetComponent<Image> ( ).sprite = myTarget.SpriteSelected;
 			}
 			else
 			{
-				myTarget.GetComponent<Image> ( ).sprite = myTarget.SpriteUnSelected;
+				//myTarget.GetComponent<Image> ( ).sprite = myTarget.SpriteUnSelected;
 			}
 		}
 

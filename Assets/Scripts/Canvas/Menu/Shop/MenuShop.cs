@@ -56,6 +56,7 @@ public class MenuShop : UiParent
 		if ( Input.GetAxis ( "Cancel" ) == 1 )
 		{
 			ChangeToItem ( false );
+            ChangeToCat();
 		}
 
 		// Navigation horizontale des catégories ou items
@@ -268,14 +269,72 @@ public class MenuShop : UiParent
 
             currItemSeled = thisShop.DefautItem;
 
-            moleculeContainer.transform.DORotate(new Vector3(moleculeContainer.transform.localEulerAngles.x, moleculeContainer.transform.localEulerAngles.y, thisShop.rotateCat),.5f);
+            iconCategory.DOFade(0, .1f);
+            textCategory.DOFade(0, .1f);
+            barCategory.DOFade(0, .1f);
+        
+            
+            
 
-		}
+            transform.DORotate(new Vector3(moleculeContainer.transform.localEulerAngles.x, moleculeContainer.transform.localEulerAngles.y, -130),.5f);
+            transform.DOLocalMoveX(transform.localPosition.x -625, 1f);
+            transform.DOLocalMoveY(transform.localPosition.y - 200, 1f);
+            transform.DOScale(1.25f, 1f).OnComplete(()=> {
+                thisShop.GetComponent<Image>().DOFade(1, 0.1f);
+                iconCategory.transform.DORotate(Vector3.zero, 0);
+                textCategory.transform.DORotate(Vector3.zero, 0);
+                barCategory.transform.DORotate(Vector3.zero, 0);
+                iconCategory.transform.DOMoveY(transform.position.y + 500,0);
+                textCategory.transform.DOMoveY(transform.position.y + 450, 0);
+                textCategory.transform.DOMoveX(transform.position.x -40, 0);
+                barCategory.transform.DOMoveX(transform.position.x - 40, 0);
+                barCategory.transform.DOMoveY(transform.position.y + 450, 0);
+                iconCategory.DOFade(1, .25f);
+                textCategory.DOFade(1, .25f);
+                barCategory.DOFade(1, .25f);
+            });
+
+            //On remet les molécules de couleur au gris
+            foreach (Transform cat in DefCatSelected.transform.parent)
+            {
+                cat.GetComponent<Image>().DOFade(0, 0.1f);
+            }
+            foreach (Transform trans in thisShop.transform)
+            {
+                trans.GetComponent<CanvasGroup>().DOFade(1, 0.5f);
+                trans.DOLocalRotate(new Vector3(0, 0, 130), 0);
+                trans.DOLocalMove(new Vector2(-280,600),0);
+                trans.GetComponent<CanvasGroup>().DOFade(1, .1f);
+            }
+        }
 		else if ( !goItem && !catCurrSelected ) // Changement de item a cat
 		{
 			catCurrSelected = true;
 		}
 	}
+
+    void ChangeToCat()
+    {
+        iconCategory.DOFade(0, .1f);
+        textCategory.DOFade(0, .1f);
+        barCategory.DOFade(0, .1f);
+        transform.DORotate(Vector3.zero, .5f);
+        transform.DOScale(1, .5f);
+        transform.DOLocalMove(Vector2.zero, .5f).OnComplete(()=> {
+            iconCategory.transform.DORotate(Vector3.zero, 0);
+            textCategory.transform.DORotate(Vector3.zero, 0);
+            barCategory.transform.DORotate(Vector3.zero, 0);
+            iconCategory.DOFade(1, .1f);
+            textCategory.DOFade(1, .1f);
+            barCategory.DOFade(1, .1f);
+        });
+
+        //On remet les molécules à leur couleur initiale
+        foreach (Transform cat in DefCatSelected.transform.parent)
+        {
+            cat.GetComponent<Image>().DOFade(1, 0.1f);
+        }
+    }
 
 	// Selection d'une nouvelle catégorie
 	void CheckSelectCat ( bool selected )
@@ -375,6 +434,18 @@ public class MenuShop : UiParent
 		if ( selected )
 		{
 			thisItem.Selected = true;
+
+
+            //Code du outline
+            /*
+            thisItem.GetComponent<Outline>().transform.DOScale(2, .75f).OnComplete(() => {
+                thisItem.GetComponent<Outline>().DOFade(0, .25f);
+                DOVirtual.DelayedCall(.25f, () => {
+                    thisItem.GetComponent<Outline>().DOFade(1, 0);
+                    thisItem.GetComponent<Outline>().transform.DOScale(1, 0);
+                });
+            }).SetLoops(-1,LoopType.Restart);*/
+
 			if ( thisItem.ItemBought && thisItem.UseOtherColor )
 			{
 				thisItem.GetComponent<Image> ( ).color = thisItem.BoughtColorSelected;

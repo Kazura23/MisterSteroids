@@ -13,35 +13,36 @@ public class UiManager : ManagerParent
 	public bool lauchGame = false;
 	#endif
 	public Slider MotionSlider;
-    public Image RedScreen;
-    public GameObject speedEffect;
+	public Image RedScreen;
+	public GameObject speedEffect;
 	public Transform MenuParent;
-    public GameObject PatternBackground;
-
+	public GameObject PatternBackground;
+	public GameObject GlobalBack;
 
 	Dictionary <MenuType, UiParent> AllMenu;
 	MenuType menuOpen;
 
 	GameObject InGame;
-    #endregion
+	#endregion
 
-    #region Mono
-    #endregion
+	#region Mono
+	#endregion
 
-    #region Public Methods
-    public void OpenThisMenu ( MenuType thisType, MenuTokenAbstract GetTok = null )
+	#region Public Methods
+	public void OpenThisMenu ( MenuType thisType, MenuTokenAbstract GetTok = null )
 	{
 		UiParent thisUi;
-		InGame.SetActive ( false );
-		if ( menuOpen != MenuType.Nothing )
-		{
-			CloseThisMenu ( );
-		}
-
-		menuOpen = thisType;
 
 		if ( AllMenu.TryGetValue ( thisType, out thisUi ) )
 		{
+			InGame.SetActive ( false );
+			if ( menuOpen != MenuType.Nothing )
+			{
+				CloseThisMenu ( );
+			}
+
+			menuOpen = thisType;
+			GlobalBack.SetActive ( true );
 			thisUi.OpenThis ( GetTok );
 		}
 	}
@@ -49,14 +50,15 @@ public class UiManager : ManagerParent
 	public void CloseThisMenu ( )
 	{
 		UiParent thisUi;
-		InGame.SetActive ( true );
 
 		if ( menuOpen != MenuType.Nothing && AllMenu.TryGetValue ( menuOpen, out thisUi ) )
 		{
+			InGame.SetActive ( true );
+			GlobalBack.SetActive ( false );
 			thisUi.CloseThis (  );
+			menuOpen = MenuType.Nothing;
 		}
 
-		menuOpen = MenuType.Nothing;
 	}
 
 	public void DisplayOver ( bool display )
@@ -64,36 +66,36 @@ public class UiManager : ManagerParent
 		//GameOver.gameObject.SetActive ( display );
 	}
 
-    public void BloodHit()
-    {
-        Time.timeScale = 0;
-        DOVirtual.DelayedCall(.065f, () => {
-            Time.timeScale = 1;
-        });
-        Camera.main.DOFieldOfView(45, .12f);//.SetEase(Ease.InBounce);
-        RedScreen.DOFade(.4f, .12f).OnComplete(() => {
-            RedScreen.DOFade(0, .08f);
-            Camera.main.DOFieldOfView(60, .08f);//.SetEase(Ease.InBounce);
-        });
-    }
+	public void BloodHit()
+	{
+		Time.timeScale = 0;
+		DOVirtual.DelayedCall(.065f, () => {
+			Time.timeScale = 1;
+		});
+		Camera.main.DOFieldOfView(45, .12f);//.SetEase(Ease.InBounce);
+		RedScreen.DOFade(.4f, .12f).OnComplete(() => {
+			RedScreen.DOFade(0, .08f);
+			Camera.main.DOFieldOfView(60, .08f);//.SetEase(Ease.InBounce);
+		});
+	}
 
-    public void OpenDashSpeed()
-    {
-        speedEffect.GetComponent<CanvasGroup>().DOFade(1, .25f);
-    }
+	public void OpenDashSpeed()
+	{
+		speedEffect.GetComponent<CanvasGroup>().DOFade(1, .25f);
+	}
 
-    public void CloseDashSpeed()
-    {
-        speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f);
-    }
-
-
-    #endregion
-
-    #region Private Methods
+	public void CloseDashSpeed()
+	{
+		speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f);
+	}
 
 
-    protected override void InitializeManager ( )
+	#endregion
+
+	#region Private Methods
+
+
+	protected override void InitializeManager ( )
 	{
 		InitializeUI ( );
 
@@ -127,7 +129,7 @@ public class UiManager : ManagerParent
 
 	void InitializeUI ( )
 	{
-	//	InvokeRepeating ( "checkCurosr", 0, 0.5f );
+		//	InvokeRepeating ( "checkCurosr", 0, 0.5f );
 
 		if ( PatternBackground != null )
 		{

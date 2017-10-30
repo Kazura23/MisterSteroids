@@ -18,6 +18,8 @@ public class MenuShop : UiParent
 	//Object par défaut sélectionner a l'ouverture du shop
 	public CatShop DefCatSelected;
 
+    [Header("ALL INFO")]
+
     public Image iconCategory;
     public Text textCategory;
     public Image barCategory;
@@ -279,9 +281,11 @@ public class MenuShop : UiParent
 			CheckSelectItem ( true );
 			thisShop.Selected = true;
 
-            textCategory.text = thisShop.NameCategorie;
-            thisShop.GetComponent<Image>().transform.DOScale(1, .2f);
+            textCategory.text = thisShop.NameCat;
+            iconCategory.sprite = thisShop.SpriteSelected;
+            thisShop.GetComponent<Image>().transform.DOScale(1.25f, .2f);
             //thisShop.GetComponent<Image>().DOFade(1f, .05f);
+            iconCategory.GetComponent<Image>().sprite = thisShop.SpriteSelected;
 
 
             if ( thisShop.UseColor )
@@ -291,13 +295,13 @@ public class MenuShop : UiParent
 
 			if ( thisShop.UseSprite )
 			{
-				thisShop.GetComponent<Image> ( ).sprite = thisShop.SpriteSelected;
+				//thisShop.GetComponent<Image> ( ).sprite = thisShop.SpriteSelected;
 			}
 		}
 		else
 		{
 			thisShop.Selected = false;
-            thisShop.GetComponent<Image>().transform.DOScale(.2f, .2f);
+            thisShop.GetComponent<Image>().transform.DOScale(.8f, .2f);
            // thisShop.GetComponent<Image>().DOFade(0, .2f);
 
             if ( thisShop.UseColor )
@@ -306,7 +310,7 @@ public class MenuShop : UiParent
 			}
 			if ( thisShop.UseSprite )
 			{
-				thisShop.GetComponent<Image> ( ).sprite = thisShop.SpriteUnSelected;
+				//thisShop.GetComponent<Image> ( ).sprite = thisShop.SpriteUnSelected;
 			}
 		}
 	}

@@ -22,7 +22,7 @@ public class EditItemMod : Editor
 		myTarget.UseColor = EditorGUILayout.Toggle ( "UseColor", myTarget.UseColor );
 		myTarget.UseSprite = EditorGUILayout.Toggle ( "UseSprite", myTarget.UseSprite );
 
-		myTarget.CatName = myTarget.transform.parent.GetComponent<CatShop> ( ).NameCategorie;
+		myTarget.CatName = myTarget.transform.parent.GetComponent<CatShop> ( ).NameCat;
 
 		if ( AllPlayerPrefs.GetBoolValue ( Constants.ItemBought + myTarget.ItemName ) )
 		{

@@ -520,7 +520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  m_Color: {r: 0.77254903, g: 0.8117647, b: 0.39607844, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -547,7 +547,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.20000002, g: 0.20000002, b: 0.20000002, a: 1}
+  m_Color: {r: 0.95686275, g: 0.42352942, b: 0.43137255, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -747,7 +747,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  m_Color: {r: 0.9843137, g: 0.8, b: 0.35686275, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -801,7 +801,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  m_Color: {r: 0.53333336, g: 0.80784315, b: 0.9529412, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -897,11 +897,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87c05e9886e606948816b8d5703ee400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameCategorie: UPGRADES
+  NameCat: UPGRADES
   Selected: 0
   UseColor: 1
   ColorSelected: {r: 0.77254903, g: 0.8117647, b: 0.39607844, a: 1}
-  ColorUnSelected: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  ColorUnSelected: {r: 0.77254903, g: 0.8117647, b: 0.39607844, a: 1}
+  IconCat: {fileID: 0}
   UseSprite: 0
   SpriteSelected: {fileID: 21300000, guid: c084db22e43bd61499f3d42d7946ba31, type: 3}
   SpriteUnSelected: {fileID: 21300000, guid: c084db22e43bd61499f3d42d7946ba31, type: 3}
@@ -960,15 +961,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87c05e9886e606948816b8d5703ee400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameCategorie: ABILITIES
+  NameCat: ABILITIES
   Selected: 0
   UseColor: 1
   ColorSelected: {r: 0.95686275, g: 0.42352942, b: 0.43137255, a: 1}
-  ColorUnSelected: {r: 0.20000002, g: 0.20000002, b: 0.20000002, a: 1}
+  ColorUnSelected: {r: 0.95686275, g: 0.42352942, b: 0.43137255, a: 1}
+  IconCat: {fileID: 0}
   UseSprite: 0
   SpriteSelected: {fileID: 21300000, guid: 7f4e5f9eac93c0a4ab5e638adf6b02e1, type: 3}
   SpriteUnSelected: {fileID: 21300000, guid: 7f4e5f9eac93c0a4ab5e638adf6b02e1, type: 3}
-  LeftCategorie: {fileID: 114908865935510772}
+  LeftCategorie: {fileID: 114516059223440440}
   RightCategorie: {fileID: 114333564198533622}
   DefautItem: {fileID: 114010657436254904}
 --- !u!114 &114412016469997158
@@ -1155,11 +1157,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87c05e9886e606948816b8d5703ee400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameCategorie: COSMETICS
+  NameCat: COSMETICS
   Selected: 0
   UseColor: 1
   ColorSelected: {r: 0.9843137, g: 0.8, b: 0.35686275, a: 1}
-  ColorUnSelected: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  ColorUnSelected: {r: 0.9843137, g: 0.8, b: 0.35686275, a: 1}
+  IconCat: {fileID: 0}
   UseSprite: 0
   SpriteSelected: {fileID: 21300000, guid: 8a31f11fc8c662f468a5c4b7ef68406b, type: 3}
   SpriteUnSelected: {fileID: 21300000, guid: 8a31f11fc8c662f468a5c4b7ef68406b, type: 3}
@@ -1441,11 +1444,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87c05e9886e606948816b8d5703ee400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NameCategorie: BONUS
+  NameCat: BONUS
   Selected: 0
   UseColor: 1
   ColorSelected: {r: 0.53333336, g: 0.80784315, b: 0.9529412, a: 1}
-  ColorUnSelected: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  ColorUnSelected: {r: 0.53333336, g: 0.80784315, b: 0.9529412, a: 1}
+  IconCat: {fileID: 0}
   UseSprite: 0
   SpriteSelected: {fileID: 21300000, guid: 8a31f11fc8c662f468a5c4b7ef68406b, type: 3}
   SpriteUnSelected: {fileID: 21300000, guid: 8a31f11fc8c662f468a5c4b7ef68406b, type: 3}
@@ -1710,7 +1714,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -144, y: -9}
+  m_AnchoredPosition: {x: -144, y: -4}
   m_SizeDelta: {x: 85, y: 85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224009091235134836
@@ -1802,7 +1806,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 295, y: -8}
+  m_AnchoredPosition: {x: 293, y: 0}
   m_SizeDelta: {x: 85, y: 85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224167103470453496
@@ -1901,7 +1905,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2, y: 90}
+  m_AnchoredPosition: {x: -1.2, y: 86}
   m_SizeDelta: {x: 85, y: 85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224255377079829664
@@ -2165,7 +2169,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 1.6, y: 1}
-  m_SizeDelta: {x: 179.2, y: 2.2}
+  m_SizeDelta: {x: 179.2, y: 2.93}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &225495631657288808
 CanvasGroup:

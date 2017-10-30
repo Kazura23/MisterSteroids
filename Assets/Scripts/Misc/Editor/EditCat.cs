@@ -16,7 +16,7 @@ public class EditCat : Editor
 	{
 		CatShop myTarget = (CatShop)target;
 
-		myTarget.NameCategorie = EditorGUILayout.TextField ( "NameCategorie", myTarget.NameCategorie );
+		myTarget.NameCat = EditorGUILayout.TextField ( "NameCat", myTarget.NameCat );
 
 		myTarget.UseColor = EditorGUILayout.Toggle ( "UseColor", myTarget.UseColor );
 		myTarget.UseSprite = EditorGUILayout.Toggle ( "UseSprite", myTarget.UseSprite );

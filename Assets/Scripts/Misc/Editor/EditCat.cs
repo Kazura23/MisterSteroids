@@ -16,7 +16,7 @@ public class EditCat : Editor
 	{
 		CatShop myTarget = (CatShop)target;
 
-		myTarget.NameCategorie = EditorGUILayout.TextField ( "NameCategorie", myTarget.NameCategorie );
+		myTarget.NameCat = EditorGUILayout.TextField ( "NameCat", myTarget.NameCat );
 
 		myTarget.UseColor = EditorGUILayout.Toggle ( "UseColor", myTarget.UseColor );
 		myTarget.UseSprite = EditorGUILayout.Toggle ( "UseSprite", myTarget.UseSprite );
@@ -52,11 +52,11 @@ public class EditCat : Editor
 
 			if ( myTarget.Selected )
 			{
-				myTarget.GetComponent<Image> ( ).sprite = myTarget.SpriteSelected;
+				//myTarget.GetComponent<Image> ( ).sprite = myTarget.SpriteSelected;
 			}
 			else
 			{
-				myTarget.GetComponent<Image> ( ).sprite = myTarget.SpriteUnSelected;
+				//myTarget.GetComponent<Image> ( ).sprite = myTarget.SpriteUnSelected;
 			}
 		}
 

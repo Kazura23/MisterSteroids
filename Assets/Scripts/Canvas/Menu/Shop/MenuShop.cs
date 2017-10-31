@@ -143,24 +143,28 @@ public class MenuShop : UiParent
 	// -1 = gauche _ 1 droite _ 2 haut _ -2 bas
 	public void NextItem ( int thisDir )
 	{
-		CheckSelectItem ( false );
+        DOVirtual.DelayedCall(.1f, () => {
+            CheckSelectItem ( false );
+            switch (thisDir)
+            {
+                case -1:
+                    currItemSeled = currItemSeled.LeftItem;
+                    ItemLeft();
+                    break;
+                case 1:
+                    currItemSeled = currItemSeled.RightItem;
+                    ItemRight();
+                    break;
+                case -2:
+                    currItemSeled = currItemSeled.DownItem;
+                    break;
+                case 2:
+                    currItemSeled = currItemSeled.UpItem;
+                    break;
+            }
 
-		switch ( thisDir )
-		{
-		case -1:
-			currItemSeled = currItemSeled.LeftItem;
-			break;
-		case 1:
-			currItemSeled = currItemSeled.RightItem;
-			break;
-		case -2:
-			currItemSeled = currItemSeled.DownItem;
-			break;
-		case 2:
-			currItemSeled = currItemSeled.UpItem;
-			break;
-		}
-
+        });
+		
 		CheckSelectItem ( true );
 	}
 
@@ -276,19 +280,20 @@ public class MenuShop : UiParent
             
             
 
-            transform.DORotate(new Vector3(moleculeContainer.transform.localEulerAngles.x, moleculeContainer.transform.localEulerAngles.y, -130),.5f);
+            transform.DORotate(new Vector3(moleculeContainer.transform.localEulerAngles.x, moleculeContainer.transform.localEulerAngles.y, -130),1f);
             transform.DOLocalMoveX(transform.localPosition.x -625, 1f);
             transform.DOLocalMoveY(transform.localPosition.y - 200, 1f);
             transform.DOScale(1.25f, 1f).OnComplete(()=> {
                 thisShop.GetComponent<Image>().DOFade(1, 0.1f);
                 iconCategory.transform.DORotate(Vector3.zero, 0);
-                textCategory.transform.DORotate(Vector3.zero, 0);
-                barCategory.transform.DORotate(Vector3.zero, 0);
-                iconCategory.transform.DOMoveY(transform.position.y + 500,0);
-                textCategory.transform.DOMoveY(transform.position.y + 450, 0);
-                textCategory.transform.DOMoveX(transform.position.x -40, 0);
-                barCategory.transform.DOMoveX(transform.position.x - 40, 0);
-                barCategory.transform.DOMoveY(transform.position.y + 450, 0);
+                textCategory.transform.DORotate(new Vector3(0,0,423), 0);
+                barCategory.transform.DORotate(new Vector3(0,0,423), 0);
+                iconCategory.transform.DOMoveX(thisShop.transform.position.x + 110, 0);
+                iconCategory.transform.DOMoveY(thisShop.transform.position.y + 40,0);
+                textCategory.transform.DOMoveY(transform.position.y + 300, 0);
+                textCategory.transform.DOMoveX(transform.position.x -90, 0);
+                barCategory.transform.DOMoveX(transform.position.x - 90, 0);
+                barCategory.transform.DOMoveY(transform.position.y + 300, 0);
                 iconCategory.DOFade(1, .25f);
                 textCategory.DOFade(1, .25f);
                 barCategory.DOFade(1, .25f);
@@ -299,13 +304,18 @@ public class MenuShop : UiParent
             {
                 cat.GetComponent<Image>().DOFade(0, 0.1f);
             }
-            foreach (Transform trans in thisShop.transform)
-            {
-                trans.GetComponent<CanvasGroup>().DOFade(1, 0.5f);
-                trans.DOLocalRotate(new Vector3(0, 0, 130), 0);
-                trans.DOLocalMove(new Vector2(-280,600),0);
-                trans.GetComponent<CanvasGroup>().DOFade(1, .1f);
-            }
+
+            DOVirtual.DelayedCall(1f, () => {
+                foreach (Transform trans in thisShop.transform)
+                {
+                    trans.GetComponent<CanvasGroup>().DOFade(1, 0.5f);
+                    trans.DOLocalRotate(new Vector3(0, 0, 130), 0);
+                    trans.DOLocalMove(new Vector2(-280, 600), 0);
+                    trans.DOScale(.75f, 0);
+                }
+            });
+
+            
         }
 		else if ( !goItem && !catCurrSelected ) // Changement de item a cat
 		{
@@ -315,9 +325,11 @@ public class MenuShop : UiParent
 
     void ChangeToCat()
     {
-        iconCategory.DOFade(0, .1f);
-        textCategory.DOFade(0, .1f);
-        barCategory.DOFade(0, .1f);
+        CatShop thisShop = currCatSeled;
+
+        iconCategory.DOFade(0, .05f);
+        textCategory.DOFade(0, .05f);
+        barCategory.DOFade(0, .05f);
         transform.DORotate(Vector3.zero, .5f);
         transform.DOScale(1, .5f);
         transform.DOLocalMove(Vector2.zero, .5f).OnComplete(()=> {
@@ -327,12 +339,33 @@ public class MenuShop : UiParent
             iconCategory.DOFade(1, .1f);
             textCategory.DOFade(1, .1f);
             barCategory.DOFade(1, .1f);
+
+            if (textCategory.text == "ABILITIES")
+            {
+                textCategory.transform.DOMoveX(thisShop.GetComponent<Image>().transform.position.x - 55, 0);
+                barCategory.transform.DOMoveX(thisShop.GetComponent<Image>().transform.position.x - 55, 0);
+                iconCategory.transform.DOMoveX(thisShop.GetComponent<Image>().transform.position.x - 40, 0);
+            }
+            else
+            {
+                textCategory.transform.DOMoveX(thisShop.GetComponent<Image>().transform.position.x, 0);
+                barCategory.transform.DOMoveX(thisShop.GetComponent<Image>().transform.position.x, 0);
+                iconCategory.transform.DOMoveX(thisShop.GetComponent<Image>().transform.position.x, 0);
+            }
+            iconCategory.transform.DOMoveY(thisShop.GetComponent<Image>().transform.position.y + 160, 0);
+            textCategory.transform.DOMoveY(thisShop.GetComponent<Image>().transform.position.y + 75, 0);
+            barCategory.transform.DOMoveY(thisShop.GetComponent<Image>().transform.position.y + 75, 0);
         });
 
         //On remet les molécules à leur couleur initiale
         foreach (Transform cat in DefCatSelected.transform.parent)
         {
             cat.GetComponent<Image>().DOFade(1, 0.1f);
+        }
+
+        foreach (Transform trans in thisShop.transform)
+        {
+            trans.GetComponent<CanvasGroup>().DOFade(0, 0);
         }
     }
 
@@ -362,10 +395,7 @@ public class MenuShop : UiParent
                 thisShop.GetComponent<Image>().transform.DOScale(1.25f, .2f);
                 //thisShop.GetComponent<Image>().DOFade(1f, .05f);
                 iconCategory.GetComponent<Image>().sprite = thisShop.SpriteSelected;
-                iconCategory.transform.DOMoveY(thisShop.GetComponent<Image>().transform.position.y + 160, 0);
-
-
-                textCategory.transform.DOMoveY(thisShop.GetComponent<Image>().transform.position.y + 75, 0);
+                
 
                 barCategory.transform.GetChild(0).GetComponent<Image>().DOColor(thisShop.ColorSelected, 0);
 
@@ -381,7 +411,8 @@ public class MenuShop : UiParent
                     barCategory.transform.DOMoveX(thisShop.GetComponent<Image>().transform.position.x, 0);
                     iconCategory.transform.DOMoveX(thisShop.GetComponent<Image>().transform.position.x, 0);
                 }
-
+                iconCategory.transform.DOMoveY(thisShop.GetComponent<Image>().transform.position.y + 160, 0);
+                textCategory.transform.DOMoveY(thisShop.GetComponent<Image>().transform.position.y + 75, 0);
                 barCategory.transform.DOMoveY(thisShop.GetComponent<Image>().transform.position.y + 75, 0);
             });
             /*
@@ -425,6 +456,22 @@ public class MenuShop : UiParent
 			}
 		}
 	}
+
+    void ItemLeft()
+    {
+        ItemModif thisItem = currItemSeled;
+
+        thisItem.transform.DOLocalMove(new Vector2(-50, 340), .5f);
+        thisItem.GetComponent<CanvasGroup>().DOFade(0, .2f);
+
+        thisItem.RightItem.transform.DOLocalMoveX(thisItem.RightItem.transform.localPosition.x - 300, .5f);
+
+    }
+
+    void ItemRight()
+    {
+
+    }
 
 	// Selection d'un nouvelle item
 	void CheckSelectItem ( bool selected )

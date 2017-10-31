@@ -281,9 +281,9 @@ public class MenuShop : UiParent
 
 
             moleculeContainer.transform.DORotate(new Vector3(moleculeContainer.transform.localEulerAngles.x, moleculeContainer.transform.localEulerAngles.y, -130),1f);
-            moleculeContainer.transform.DOLocalMoveX(transform.localPosition.x -625, 1f);
-            moleculeContainer.transform.transform.DOLocalMoveY(transform.localPosition.y - 200, 1f);
-            moleculeContainer.transform.DOScale(1.25f, 1f).OnComplete(()=> {
+            transform.DOLocalMoveX(transform.localPosition.x -625, 1f);
+            transform.DOLocalMoveY(transform.localPosition.y - 200, 1f);
+            transform.DOScale(1.25f, 1f).OnComplete(()=> {
                 thisShop.GetComponent<Image>().DOFade(1, 0.1f);
                 iconCategory.transform.DORotate(Vector3.zero, 0);
                 textCategory.transform.DORotate(new Vector3(0,0,423), 0);
@@ -540,3 +540,13 @@ public class MenuShop : UiParent
 	}
 	#endregion
 }
+
+            barCategory.DOFade(0, .1f);
+
+
+
+
+            moleculeContainer.transform.DORotate(new Vector3(moleculeContainer.transform.localEulerAngles.x, moleculeContainer.transform.localEulerAngles.y, -130),1f);
+            moleculeContainer.transform.DOLocalMoveX(transform.localPosition.x -625, 1f);
+            moleculeContainer.transform.transform.DOLocalMoveY(transform.localPosition.y - 200, 1f);
+            moleculeContainer.transform.DOScale(1.25f, 1f).OnComplete(()=> {

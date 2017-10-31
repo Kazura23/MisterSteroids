@@ -333,7 +333,7 @@ public class MenuShop : UiParent
         iconCategory.DOFade(0, .05f);
         textCategory.DOFade(0, .05f);
         barCategory.DOFade(0, .05f);
-        transform.DORotate(Vector3.zero, .5f);
+        moleculeContainer.transform.DORotate(Vector3.zero, .5f);
         transform.DOScale(1, .5f);
         transform.DOLocalMove(Vector2.zero, .5f).OnComplete(()=> {
             iconCategory.transform.DORotate(Vector3.zero, 0);

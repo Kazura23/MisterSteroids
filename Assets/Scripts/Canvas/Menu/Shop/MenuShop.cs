@@ -305,12 +305,15 @@ public class MenuShop : UiParent
                 cat.GetComponent<Image>().DOFade(0, 0.1f);
             }
 
+            //Seul le premier item est centré
+            thisShop.transform.GetChild(0).DOLocalMove(new Vector2(-280, 600), 0);
+            thisShop.transform.GetChild(1).DOLocalMove(new Vector2(-525, 895), 0);
+
             DOVirtual.DelayedCall(1f, () => {
                 foreach (Transform trans in thisShop.transform)
                 {
                     trans.GetComponent<CanvasGroup>().DOFade(1, 0.5f);
                     trans.DOLocalRotate(new Vector3(0, 0, 130), 0);
-                    trans.DOLocalMove(new Vector2(-280, 600), 0);
                     trans.DOScale(.75f, 0);
                 }
             });
@@ -461,10 +464,10 @@ public class MenuShop : UiParent
     {
         ItemModif thisItem = currItemSeled;
 
-        thisItem.transform.DOLocalMove(new Vector2(-50, 340), .5f);
-        thisItem.GetComponent<CanvasGroup>().DOFade(0, .2f);
+        thisItem.RightItem.transform.DOLocalMove(new Vector2(-50, 340), .5f);
+        thisItem.RightItem.GetComponent<CanvasGroup>().DOFade(0, .2f);
 
-        thisItem.RightItem.transform.DOLocalMoveX(thisItem.RightItem.transform.localPosition.x - 300, .5f);
+        thisItem.transform.DOLocalMove(new Vector2 (-280,600), .5f);
 
     }
 

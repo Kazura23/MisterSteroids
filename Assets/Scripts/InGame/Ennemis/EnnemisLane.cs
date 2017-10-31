@@ -104,15 +104,27 @@ public class EnnemisLane : AbstractObject
 			playerDetected = false;
 		}
 	}
-	#endregion
 
-	#region Private Methode
 	public override void Dead ( bool enemy = false ) 
 	{
 		base.Dead ( enemy );
-        
+
 
 		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
+	}
+	#endregion
+
+	#region Private Methode
+	protected override void OnCollisionEnter ( Collision thisColl )
+	{
+		if ( thisColl.gameObject.tag == Constants._PlayerTag && thisColl.gameObject.GetComponent<PlayerController> ( ).Dash )
+		{
+			CollDetect ( );
+		}
+		else
+		{
+			base.OnCollisionEnter ( thisColl );
+		}
 	}
 
 	IEnumerator changeLane ( bool rightLine ) 

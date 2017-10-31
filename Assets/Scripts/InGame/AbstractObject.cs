@@ -120,6 +120,7 @@ public class AbstractObject : MonoBehaviour
 		{
 			CollDetect ( );
 		}
+
 		/*else if ( getThis.tag == Constants._PlayerTag && gameObject.tag == Constants._ObjDeadTag )
 		{
 			Physics.IgnoreCollision ( thisColl.collider, GetComponent<Collider> ( ) );

@@ -18,7 +18,6 @@ public class EditItemMod : Editor
 
 		myTarget.ItemName = EditorGUILayout.TextField ( "ItemName", myTarget.ItemName );
 		myTarget.Price = EditorGUILayout.IntField ( "Price", myTarget.Price );
-		myTarget.BuyForLife = EditorGUILayout.Toggle ( "BuyForLife", myTarget.BuyForLife );
 		myTarget.UseColor = EditorGUILayout.Toggle ( "UseColor", myTarget.UseColor );
 		myTarget.UseSprite = EditorGUILayout.Toggle ( "UseSprite", myTarget.UseSprite );
 

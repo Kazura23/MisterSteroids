@@ -21,14 +21,21 @@ public class Punch : MonoBehaviour {
     {
 		if( canPunc && ( other.gameObject.tag == Constants._EnnemisTag || other.gameObject.tag == Constants._ObsTag) )
         {
+			AbstractObject tryGet = other.GetComponentInChildren<AbstractObject> ( );
+			if ( !tryGet )
+			{
+				return;
+			}
+
             switch (numTechnic)
             {
 			case (int)Technic.basic_punch:
 				projection_basic.x *= Random.Range ( -projection_basic.x, projection_basic.x + 1 );
-				other.GetComponentInChildren<AbstractObject> ( ).Degat ( projection_basic, numTechnic );
+
+				tryGet.Degat ( projection_basic, numTechnic );
 				break;
 			case (int)Technic.double_punch:
-				other.GetComponentInChildren<AbstractObject> ( ).Degat ( projection_double, numTechnic );
+				tryGet.Degat ( projection_double, numTechnic );
            	 	break;
             }
         }else if (other.gameObject.tag == Constants._MissileBazoo)

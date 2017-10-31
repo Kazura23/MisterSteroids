@@ -33,16 +33,25 @@ public class RiffleMan : AbstractObject
 			StartCoroutine ( shootPlayer ( new WaitForSeconds ( SpeedSpawn ), false ) );
 		}
 	}
+
+	public override void Dead ( bool enemy = false ) 
+	{
+		base.Dead ( enemy );
+
+		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
+	}
 	#endregion
 
 	#region Private Methods
 	protected override void OnCollisionEnter ( Collision thisColl )
 	{
-		base.OnCollisionEnter ( thisColl );
-
 		if ( thisColl.gameObject.tag == Constants._PlayerTag && thisColl.gameObject.GetComponent<PlayerController> ( ).Dash )
 		{
 			CollDetect ( );
+		}
+		else
+		{
+			base.OnCollisionEnter ( thisColl );
 		}
 	}
 
@@ -78,13 +87,6 @@ public class RiffleMan : AbstractObject
 		{
 			StartCoroutine ( shootPlayer ( thisF, !checkDir ) );
 		}
-	}
-
-	public override void Dead ( bool enemy = false ) 
-	{
-		base.Dead ( enemy );
-
-		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
 	}
 	#endregion
 }

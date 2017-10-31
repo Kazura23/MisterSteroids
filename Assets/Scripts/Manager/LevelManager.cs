@@ -22,7 +22,7 @@ public class LevelManager : ManagerParent
 		SceneManager.LoadScene ( thisScene, LoadSceneMode.Single );
 	}
 
-	private void OnSceneLoaded(Scene scene, LoadSceneMode mode) 
+	private void checkSceneLoaded(Scene scene, LoadSceneMode mode) 
 	{
 		switch ( scene.name )
 		{
@@ -44,7 +44,7 @@ public class LevelManager : ManagerParent
 	#region Private Methods
 	protected override void InitializeManager ( )
 	{
-		SceneManager.sceneLoaded += OnSceneLoaded;
+		SceneManager.sceneLoaded += checkSceneLoaded;
 	}
 	#endregion
 }

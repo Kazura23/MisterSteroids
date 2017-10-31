@@ -53,6 +53,8 @@ public class PlayerController : MonoBehaviour
 
 	[Header ("Caractérique de temps sur les punchs")]
     public float delayPunch = 1;
+	public float delayDoublePunch = 1;
+	public float CooldownDoublePunch = 1;
 	public float delayHitbox = 0.3f;
 	public float delayPrepare = 0.1f;
 
@@ -81,12 +83,15 @@ public class PlayerController : MonoBehaviour
 	public bool playerDead = false;
 	[HideInInspector]
 	public bool Dash = false;
+	[HideInInspector]
+	public int Life = 1;
 
 	public bool StopPlayer = false;
 
 	private Collider punchBox;
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
+	bool canDPunch = true;
 	//private Coroutine corou/*, preparPunch*/;
 
 	//Rigidbody thisRig;
@@ -147,7 +152,7 @@ public class PlayerController : MonoBehaviour
 
 	void Update ( )
 	{
-		punch.CanPunch ( !playerDead );
+		punch.SetPunch ( !playerDead );
 
 		if ( !Dash && !playerDead )
 		{
@@ -530,17 +535,19 @@ public class PlayerController : MonoBehaviour
             StartCoroutine("StartPunch", 0);
 			propPunch = propulsePunch ( TimePropulsePunch );
 			StartCoroutine ( propPunch );
-		}else if(Input.GetAxis("CoupDouble") != 0 && canPunch && resetAxeD )
+		}
+		else if(Input.GetAxis("CoupDouble") != 0 && canDPunch && canPunch && resetAxeD )
         {
 			propDP = true;
 			resetAxeD = false;
             canPunch = false;
+			canDPunch = false;
             poingDroite.SetActive(true);
             poingGauche.SetActive(true);
             StartCoroutine("StartPunch", 1);
 
-			currCouL = animePunch ( false );
-			currCouR = animePunch ( true );
+			currCouL = animePunch ( false, true );
+			currCouR = animePunch ( true, true );
 
 			StartCoroutine ( currCouL );
 			StartCoroutine ( currCouR );
@@ -595,7 +602,14 @@ public class PlayerController : MonoBehaviour
         punch.setTechnic(type_technic);
         punchBox.enabled = true;
        /* corou =*/ StartCoroutine("TimerHitbox");
-        StartCoroutine("CooldownPunch");
+		if ( type_technic == 1 )
+		{
+			StartCoroutine(CooldownPunch( true ));
+		}
+		else
+		{
+			StartCoroutine(CooldownPunch());
+		}
 
         // en stock
 		/*if (preparRight && preparLeft)
@@ -608,7 +622,7 @@ public class PlayerController : MonoBehaviour
 			{
 				punchBox.enabled = false;
 				StopCoroutine(corou);
-				punchBox.enabled = true;
+				punchBox.enabled = true;a
 			}
 			corou = StartCoroutine("TimerHitbox");*/
 			/*StartCoroutine("CooldownLeft");
@@ -658,9 +672,17 @@ public class PlayerController : MonoBehaviour
 	}
 
 
-    private IEnumerator CooldownPunch()
+	private IEnumerator CooldownPunch ( bool doublePunch = false )
     {
-        yield return new WaitForSeconds(delayPunch);
+		if ( doublePunch )
+		{
+			yield return new WaitForSeconds(delayDoublePunch);
+			StartCoroutine ( WaitCooldown ( ));
+		}
+		else
+		{
+			yield return new WaitForSeconds(delayPunch);
+		}
         if (poingDroite.activeInHierarchy)
         {
             poingDroite.SetActive(false);
@@ -671,6 +693,13 @@ public class PlayerController : MonoBehaviour
         }
         canPunch = true;
     }
+
+	IEnumerator WaitCooldown ( )
+	{
+		yield return new WaitForSeconds ( CooldownDoublePunch );
+
+		canDPunch = true;
+	}
     //en stock
 	/*private IEnumerator CooldownLeft()
 	{
@@ -693,14 +722,23 @@ public class PlayerController : MonoBehaviour
 		//corou = null;
 	}
 
-	IEnumerator animePunch ( bool rightPoing )
+	IEnumerator animePunch ( bool rightPoing, bool doublePunch = false )
 	{
 		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
 		Transform thisPoing;
 		Vector3 getStart;
 		Vector3 thisDist;
 
-		float getTime = delayPunch / 2;
+		float getTime;
+		if ( doublePunch )
+		{
+			getTime = delayDoublePunch / 2;
+		}
+		else
+		{
+			getTime = delayPunch / 2;
+		}
+
 		float currTime = 0;
 
 		if ( rightPoing )
@@ -836,6 +874,13 @@ public class PlayerController : MonoBehaviour
 	IEnumerator GameOver ( )
 	{
 		WaitForSeconds thisS = new WaitForSeconds ( 1 );
+		Life--;
+
+		if ( Life > 0 )
+		{
+			yield break;
+		}
+
 		playerDead = true;
 		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
 

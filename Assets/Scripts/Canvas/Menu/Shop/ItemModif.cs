@@ -8,7 +8,6 @@ public class ItemModif : MonoBehaviour
 	public bool ItemBought;
 	public string ItemName;
 	public int Price;
-	public bool BuyForLife;
 
 	public bool UseSprite;
 	public bool UseOtherSprite;

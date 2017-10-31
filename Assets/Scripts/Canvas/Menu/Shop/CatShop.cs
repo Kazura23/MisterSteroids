@@ -10,6 +10,9 @@ public class CatShop : MonoBehaviour
     public string NameCat;
     public bool Selected;
 	public bool UseColor;
+	public bool BuyForLife;
+	public bool Progression;
+
 	public Color ColorSelected;
 	public Color ColorUnSelected;
 

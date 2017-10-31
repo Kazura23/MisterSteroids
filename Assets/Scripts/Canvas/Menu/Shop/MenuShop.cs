@@ -211,13 +211,28 @@ public class MenuShop : UiParent
 		}
 		else
 		{
-			if ( AllPlayerPrefs.GetIntValue ( Constants.Coin ) > currItemSeled.Price )
-			{
-				AllPlayerPrefs.SetIntValue ( Constants.Coin, -currItemSeled.Price );
+			bool checkProg = false;
+			ItemModif currIT = currItemSeled;
 
-				if ( currItemSeled.BuyForLife )
+			if ( currCatSeled.Progression )
+			{
+				if ( currIT.UpItem.ItemBought || currIT.DownItem.ItemBought || currIT.LeftItem.ItemBought || currIT.RightItem.ItemBought )
 				{
-					AllPlayerPrefs.SetStringValue ( getCons + currItemSeled.ItemName );
+					checkProg = true;
+				}
+			}
+			else
+			{
+				checkProg = true;	
+			}
+
+			if ( checkProg && AllPlayerPrefs.GetIntValue ( Constants.Coin ) > currIT.Price )
+			{
+				AllPlayerPrefs.SetIntValue ( Constants.Coin, -currIT.Price );
+
+				if ( currCatSeled.BuyForLife )
+				{
+					AllPlayerPrefs.SetStringValue ( getCons + currIT.ItemName );
 				}
 			}
 		}

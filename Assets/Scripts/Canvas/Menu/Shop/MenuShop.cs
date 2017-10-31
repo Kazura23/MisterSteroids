@@ -34,7 +34,7 @@ public class MenuShop : UiParent
 	public ItemModif currItemSeled;
 
 	Dictionary <string, ItemModif> allConfirm;
-
+	GameObject fixBackShop;
 	bool catCurrSelected = true;
 	bool waitInputH = false;
 	bool waitInputV = false;
@@ -106,7 +106,7 @@ public class MenuShop : UiParent
 	public override void OpenThis ( MenuTokenAbstract GetTok = null )
 	{
 		base.OpenThis ( GetTok );
-
+		fixBackShop.SetActive ( true );
 		currCatSeled = DefCatSelected;
 		if ( currItemSeled != currCatSeled.DefautItem )
 		{
@@ -119,6 +119,7 @@ public class MenuShop : UiParent
 
 	public override void CloseThis ( )
 	{
+		fixBackShop.SetActive ( false );
 		base.CloseThis (  );
 	}
 
@@ -249,6 +250,7 @@ public class MenuShop : UiParent
 		currCatSeled = DefCatSelected;
 		currItemSeled = currCatSeled.DefautItem;
 
+		fixBackShop = transform.parent.Find ( "GlobalBackGround/Shop" ).gameObject;
 		ItemModif[] checkAllItem = GetComponentsInChildren<ItemModif> ( true );
 		ItemModif currItem;
 

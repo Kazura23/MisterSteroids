@@ -495,7 +495,6 @@ MonoBehaviour:
   ItemBought: 0
   ItemName: 1
   Price: 0
-  BuyForLife: 0
   UseSprite: 1
   UseOtherSprite: 0
   UseColor: 1
@@ -652,7 +651,6 @@ MonoBehaviour:
   ItemBought: 0
   ItemName: 1
   Price: 0
-  BuyForLife: 0
   UseSprite: 0
   UseOtherSprite: 1
   UseColor: 1
@@ -863,7 +861,6 @@ MonoBehaviour:
   ItemBought: 0
   ItemName: 1
   Price: 0
-  BuyForLife: 0
   UseSprite: 0
   UseOtherSprite: 1
   UseColor: 1
@@ -906,6 +903,8 @@ MonoBehaviour:
   NameCat: UPGRADES
   Selected: 0
   UseColor: 1
+  BuyForLife: 0
+  Progression: 0
   ColorSelected: {r: 0.77254903, g: 0.8117647, b: 0.39607844, a: 1}
   ColorUnSelected: {r: 0.77254903, g: 0.8117647, b: 0.39607844, a: 1}
   UseSprite: 1
@@ -929,7 +928,6 @@ MonoBehaviour:
   ItemBought: 0
   ItemName: 2
   Price: 0
-  BuyForLife: 0
   UseSprite: 0
   UseOtherSprite: 1
   UseColor: 1
@@ -970,6 +968,8 @@ MonoBehaviour:
   NameCat: ABILITIES
   Selected: 0
   UseColor: 1
+  BuyForLife: 0
+  Progression: 0
   ColorSelected: {r: 0.53333336, g: 0.80784315, b: 0.9529412, a: 1}
   ColorUnSelected: {r: 0.53333336, g: 0.80784315, b: 0.9529412, a: 1}
   UseSprite: 1
@@ -1080,7 +1080,6 @@ MonoBehaviour:
   ItemBought: 0
   ItemName: 2
   Price: 0
-  BuyForLife: 0
   UseSprite: 0
   UseOtherSprite: 1
   UseColor: 1
@@ -1121,6 +1120,8 @@ MonoBehaviour:
   NameCat: COSMETICS
   Selected: 0
   UseColor: 1
+  BuyForLife: 0
+  Progression: 0
   ColorSelected: {r: 0.9843137, g: 0.8, b: 0.35686275, a: 1}
   ColorUnSelected: {r: 0.9843137, g: 0.8, b: 0.35686275, a: 1}
   UseSprite: 1
@@ -1161,7 +1162,6 @@ MonoBehaviour:
   ItemBought: 0
   ItemName: 1
   Price: 0
-  BuyForLife: 0
   UseSprite: 0
   UseOtherSprite: 1
   UseColor: 1
@@ -1357,7 +1357,6 @@ MonoBehaviour:
   ItemBought: 0
   ItemName: 2
   Price: 0
-  BuyForLife: 0
   UseSprite: 0
   UseOtherSprite: 1
   UseColor: 1
@@ -1485,6 +1484,8 @@ MonoBehaviour:
   NameCat: BONUS
   Selected: 0
   UseColor: 1
+  BuyForLife: 0
+  Progression: 0
   ColorSelected: {r: 0.95686275, g: 0.42352942, b: 0.43137255, a: 1}
   ColorUnSelected: {r: 0.95686275, g: 0.42352942, b: 0.43137255, a: 1}
   UseSprite: 1
@@ -1595,7 +1596,6 @@ MonoBehaviour:
   ItemBought: 0
   ItemName: 1
   Price: 0
-  BuyForLife: 0
   UseSprite: 0
   UseOtherSprite: 1
   UseColor: 1

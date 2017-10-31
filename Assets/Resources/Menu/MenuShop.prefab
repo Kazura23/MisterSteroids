@@ -373,7 +373,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1748116327442200
 GameObject:
   m_ObjectHideFlags: 1
@@ -585,7 +585,7 @@ MonoBehaviour:
   UseOtherColor: 0
   ColorConfirm: {r: 0.23529412, g: 0.21568628, b: 0.21568628, a: 1}
   ColorSelected: {r: 0.23529412, g: 0.21568628, b: 0.21568628, a: 1}
-  ColorUnSelected: {r: 0.23529412, g: 0.21568628, b: 0.21568628, a: 0.291}
+  ColorUnSelected: {r: 0.23529412, g: 0.21568628, b: 0.21568628, a: 1}
   BoughtColorSelected: {r: 0, g: 0, b: 0, a: 0}
   BoughtColorUnSelected: {r: 0, g: 0, b: 0, a: 0}
   SpriteConfirm: {fileID: 21300000, guid: cb58b946183fe7d4c89e83a042150f40, type: 3}
@@ -763,21 +763,21 @@ MonoBehaviour:
   ItemName: 1
   Price: 0
   BuyForLife: 0
-  UseSprite: 0
+  UseSprite: 1
   UseOtherSprite: 1
   UseColor: 1
   UseOtherColor: 0
   ColorConfirm: {r: 0.23529412, g: 0.21568628, b: 0.21568628, a: 1}
   ColorSelected: {r: 0.23529412, g: 0.21568628, b: 0.21568628, a: 1}
-  ColorUnSelected: {r: 0.2352941, g: 0.21453287, b: 0.21453287, a: 0.234}
+  ColorUnSelected: {r: 0.2352941, g: 0.21453287, b: 0.21453287, a: 1}
   BoughtColorSelected: {r: 0, g: 0, b: 0, a: 0}
   BoughtColorUnSelected: {r: 0, g: 0, b: 0, a: 0}
-  SpriteConfirm: {fileID: 21300000, guid: fc88ce24a47f4014cb0ad237abc8d1dd, type: 3}
-  SpriteSelected: {fileID: 21300000, guid: fc88ce24a47f4014cb0ad237abc8d1dd, type: 3}
-  SpriteUnselected: {fileID: 21300000, guid: fc88ce24a47f4014cb0ad237abc8d1dd, type: 3}
-  BoughtSpriteUnselected: {fileID: 21300000, guid: fc88ce24a47f4014cb0ad237abc8d1dd,
+  SpriteConfirm: {fileID: 21300000, guid: cb58b946183fe7d4c89e83a042150f40, type: 3}
+  SpriteSelected: {fileID: 21300000, guid: cb58b946183fe7d4c89e83a042150f40, type: 3}
+  SpriteUnselected: {fileID: 21300000, guid: cb58b946183fe7d4c89e83a042150f40, type: 3}
+  BoughtSpriteUnselected: {fileID: 21300000, guid: cb58b946183fe7d4c89e83a042150f40,
     type: 3}
-  BoughtSpriteSelected: {fileID: 21300000, guid: fc88ce24a47f4014cb0ad237abc8d1dd,
+  BoughtSpriteSelected: {fileID: 21300000, guid: cb58b946183fe7d4c89e83a042150f40,
     type: 3}
   RightItem: {fileID: 114010657436254904}
   LeftItem: {fileID: 114010657436254904}
@@ -803,7 +803,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2352941, g: 0.21453287, b: 0.21453287, a: 0.234}
+  m_Color: {r: 0.2352941, g: 0.21453287, b: 0.21453287, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1045,6 +1045,7 @@ MonoBehaviour:
   UseColor: 1
   ColorSelected: {r: 0.77254903, g: 0.8117647, b: 0.39607844, a: 1}
   ColorUnSelected: {r: 0.77254903, g: 0.8117647, b: 0.39607844, a: 1}
+  lol: {fileID: 0}
   UseSprite: 1
   SpriteSelected: {fileID: 21300000, guid: 99082c0f905d6b840a1d6b9dc3e9d47a, type: 3}
   SpriteUnSelected: {fileID: 21300000, guid: 99082c0f905d6b840a1d6b9dc3e9d47a, type: 3}
@@ -1109,6 +1110,7 @@ MonoBehaviour:
   UseColor: 1
   ColorSelected: {r: 0.53333336, g: 0.80784315, b: 0.9529412, a: 1}
   ColorUnSelected: {r: 0.53333336, g: 0.80784315, b: 0.9529412, a: 1}
+  lol: {fileID: 0}
   UseSprite: 1
   SpriteSelected: {fileID: 21300000, guid: f673b653d0b4e5740a8ec8597a345cb0, type: 3}
   SpriteUnSelected: {fileID: 21300000, guid: f673b653d0b4e5740a8ec8597a345cb0, type: 3}
@@ -1287,6 +1289,7 @@ MonoBehaviour:
   UseColor: 1
   ColorSelected: {r: 0.9843137, g: 0.8, b: 0.35686275, a: 1}
   ColorUnSelected: {r: 0.9843137, g: 0.8, b: 0.35686275, a: 1}
+  lol: {fileID: 0}
   UseSprite: 1
   SpriteSelected: {fileID: 21300000, guid: c4d8aecd1981f66408728a6f1bc6f8e4, type: 3}
   SpriteUnSelected: {fileID: 21300000, guid: c4d8aecd1981f66408728a6f1bc6f8e4, type: 3}
@@ -1453,7 +1456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.23529412, g: 0.21568628, b: 0.21568628, a: 0.291}
+  m_Color: {r: 0.23529412, g: 0.21568628, b: 0.21568628, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1678,6 +1681,7 @@ MonoBehaviour:
   UseColor: 1
   ColorSelected: {r: 0.95686275, g: 0.42352942, b: 0.43137255, a: 1}
   ColorUnSelected: {r: 0.95686275, g: 0.42352942, b: 0.43137255, a: 1}
+  lol: {fileID: 0}
   UseSprite: 1
   SpriteSelected: {fileID: 21300000, guid: 6f08b6b6f2d6ea14c9eb9cd2d56405c1, type: 3}
   SpriteUnSelected: {fileID: 21300000, guid: 6f08b6b6f2d6ea14c9eb9cd2d56405c1, type: 3}
@@ -2030,7 +2034,7 @@ RectTransform:
   m_GameObject: {fileID: 1627256911172310}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_Children:
   - {fileID: 224254322340396988}
   - {fileID: 224640870238943888}
@@ -2190,7 +2194,7 @@ RectTransform:
   m_GameObject: {fileID: 1595196241161160}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children:
   - {fileID: 224458609012737962}
   - {fileID: 224488760028622400}

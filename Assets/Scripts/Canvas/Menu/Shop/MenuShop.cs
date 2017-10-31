@@ -293,11 +293,11 @@ public class MenuShop : UiParent
             iconCategory.DOFade(0, .1f);
             textCategory.DOFade(0, .1f);
             barCategory.DOFade(0, .1f);
-        
-            
-            
 
-            transform.DORotate(new Vector3(moleculeContainer.transform.localEulerAngles.x, moleculeContainer.transform.localEulerAngles.y, -130),1f);
+
+
+
+            moleculeContainer.transform.DORotate(new Vector3(moleculeContainer.transform.localEulerAngles.x, moleculeContainer.transform.localEulerAngles.y, -130),1f);
             transform.DOLocalMoveX(transform.localPosition.x -625, 1f);
             transform.DOLocalMoveY(transform.localPosition.y - 200, 1f);
             transform.DOScale(1.25f, 1f).OnComplete(()=> {
@@ -350,7 +350,7 @@ public class MenuShop : UiParent
         iconCategory.DOFade(0, .05f);
         textCategory.DOFade(0, .05f);
         barCategory.DOFade(0, .05f);
-        transform.DORotate(Vector3.zero, .5f);
+        moleculeContainer.transform.DORotate(Vector3.zero, .5f);
         transform.DOScale(1, .5f);
         transform.DOLocalMove(Vector2.zero, .5f).OnComplete(()=> {
             iconCategory.transform.DORotate(Vector3.zero, 0);

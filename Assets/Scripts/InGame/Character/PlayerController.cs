@@ -92,6 +92,7 @@ public class PlayerController : MonoBehaviour
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
 	bool canDPunch = true;
+	int currLife;
 	//private Coroutine corou/*, preparPunch*/;
 
 	//Rigidbody thisRig;
@@ -146,6 +147,7 @@ public class PlayerController : MonoBehaviour
 		SliderSlow = GlobalManager.Ui.MotionSlider;
 		SliderContent = 10;
 		SliderSlow.maxValue = 10;
+		currLife = Life;
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
     }
@@ -287,13 +289,19 @@ public class PlayerController : MonoBehaviour
 	#endregion
 
 	#region Public Functions
+	public void ResetPlayer ( )
+	{
+		currLife = Life;
+		playerDead = false;
+		StopPlayer = true;
+	}
 
 	public IEnumerator GameOver ( )
 	{
 		WaitForSeconds thisS = new WaitForSeconds ( 1 );
-		Life--;
+		currLife--;
 
-		if ( Life > 0 )
+		if ( currLife > 0 || playerDead )
 		{
 			yield break;
 		}
@@ -743,17 +751,16 @@ public class PlayerController : MonoBehaviour
 			if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ElemDash )
 			{
 				thisColl.gameObject.GetComponent<Rigidbody> ( ).AddForce ( getPunch.projection_double, ForceMode.VelocityChange );
+				return;
 			}
 			else if ( getObj.tag == Constants._Balls )
 			{
 				StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 5, true ) );
+				return;
 			}
-
-			return;
-
-			StartCoroutine ( GameOver ( ) );
 		}
-		else if ( getObj.tag == Constants._MissileBazoo )
+
+		if ( getObj.tag == Constants._MissileBazoo )
 		{
 			getObj.GetComponent<MissileBazooka>().Explosion();
 			StartCoroutine ( GameOver ( ) );

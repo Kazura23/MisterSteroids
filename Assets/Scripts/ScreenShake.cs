@@ -1,0 +1,41 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using DG.Tweening;
+
+public class ScreenShake : MonoBehaviour
+{
+	public static ScreenShake Singleton;
+
+	void Awake ()
+	{
+		if (ScreenShake.Singleton == null) {
+			ScreenShake.Singleton = this;
+		} else {
+			Destroy (gameObject);
+		}
+	}
+
+
+	void Update ( )
+	{
+		
+	}
+
+	public void ShakeHit ()
+	{
+        //transform.DOKill(true);
+        //side = UnityEngine.Random.RandomRange(-2, 2);
+        //transform.DOPunchRotation (Vector3.one * .5f, .3f, 3, 1);
+        transform.DOPunchPosition(new Vector3(1 * .5f, 0, 1 * .5f), .15f, 2, 1);
+    }
+
+    public void ShakeEnemy()
+    {
+        //transform.DOKill(true);
+        //side = UnityEngine.Random.RandomRange(-2, 2);
+        //transform.DOPunchRotation (Vector3.one * .5f, .3f, 3, 1);
+        transform.DOPunchPosition(new Vector3(1*.15f, 0, 1*.15f), .15f, 4, 1);
+    }
+
+}

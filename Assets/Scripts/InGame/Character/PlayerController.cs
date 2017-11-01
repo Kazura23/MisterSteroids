@@ -531,7 +531,7 @@ public class PlayerController : MonoBehaviour
             canPunch = false;
 			propP = true;
 
-            ScreenShake.Singleton.ShakeHit();
+            ScreenShake.Singleton.ShakeHitSimple();
 
            
 
@@ -564,7 +564,9 @@ public class PlayerController : MonoBehaviour
 		}
 		else if(Input.GetAxis("CoupDouble") != 0 && canDPunch && canPunch && resetAxeD )
         {
-			propDP = true;
+            ScreenShake.Singleton.ShakeHitDouble();
+
+            propDP = true;
 			resetAxeD = false;
             canPunch = false;
 			canDPunch = false;

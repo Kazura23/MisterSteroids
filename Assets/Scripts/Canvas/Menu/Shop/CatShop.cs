@@ -15,7 +15,7 @@ public class CatShop : MonoBehaviour
 
 	public Color ColorSelected;
 	public Color ColorUnSelected;
-
+    public GameObject lol;
 
 
     public bool UseSprite;

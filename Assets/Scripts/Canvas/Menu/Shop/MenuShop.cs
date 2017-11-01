@@ -297,7 +297,7 @@ public class MenuShop : UiParent
 
 
 
-            moleculeContainer.transform.DORotate(new Vector3(moleculeContainer.transform.localEulerAngles.x, moleculeContainer.transform.localEulerAngles.y, -130),1f);
+            transform.DORotate(new Vector3(moleculeContainer.transform.localEulerAngles.x, moleculeContainer.transform.localEulerAngles.y, -130),1f);
             transform.DOLocalMoveX(transform.localPosition.x -625, 1f);
             transform.DOLocalMoveY(transform.localPosition.y - 200, 1f);
             transform.DOScale(1.25f, 1f).OnComplete(()=> {
@@ -305,12 +305,12 @@ public class MenuShop : UiParent
                 iconCategory.transform.DORotate(Vector3.zero, 0);
                 textCategory.transform.DORotate(new Vector3(0,0,423), 0);
                 barCategory.transform.DORotate(new Vector3(0,0,423), 0);
-                iconCategory.transform.DOMoveX(thisShop.transform.position.x + 110, 0);
-                iconCategory.transform.DOMoveY(thisShop.transform.position.y + 40,0);
-                textCategory.transform.DOMoveY(transform.position.y + 300, 0);
-                textCategory.transform.DOMoveX(transform.position.x -90, 0);
-                barCategory.transform.DOMoveX(transform.position.x - 90, 0);
-                barCategory.transform.DOMoveY(transform.position.y + 300, 0);
+                iconCategory.transform.DOMoveX(thisShop.transform.position.x + 200, 0);
+                iconCategory.transform.DOMoveY(thisShop.transform.position.y ,0);
+                textCategory.transform.DOMoveY(moleculeContainer.transform.position.y + 300, 0);
+                textCategory.transform.DOMoveX(moleculeContainer.transform.position.x -90, 0);
+                barCategory.transform.DOMoveX(moleculeContainer.transform.position.x - 90, 0);
+                barCategory.transform.DOMoveY(moleculeContainer.transform.position.y + 300, 0);
                 iconCategory.DOFade(1, .25f);
                 textCategory.DOFade(1, .25f);
                 barCategory.DOFade(1, .25f);
@@ -350,7 +350,7 @@ public class MenuShop : UiParent
         iconCategory.DOFade(0, .05f);
         textCategory.DOFade(0, .05f);
         barCategory.DOFade(0, .05f);
-        moleculeContainer.transform.DORotate(Vector3.zero, .5f);
+        transform.DORotate(Vector3.zero, .5f);
         transform.DOScale(1, .5f);
         transform.DOLocalMove(Vector2.zero, .5f).OnComplete(()=> {
             iconCategory.transform.DORotate(Vector3.zero, 0);
@@ -412,6 +412,8 @@ public class MenuShop : UiParent
 
                 textCategory.text = thisShop.NameCat;
                 iconCategory.sprite = thisShop.SpriteSelected;
+                
+
                 thisShop.GetComponent<Image>().transform.DOScale(1.25f, .2f);
                 //thisShop.GetComponent<Image>().DOFade(1f, .05f);
                 iconCategory.GetComponent<Image>().sprite = thisShop.SpriteSelected;
@@ -481,24 +483,38 @@ public class MenuShop : UiParent
     {
         ItemModif thisItem = currItemSeled;
 
-        thisItem.RightItem.transform.DOLocalMove(new Vector2(-50, 340), .5f);
-        thisItem.RightItem.GetComponent<CanvasGroup>().DOFade(0, .2f);
+        thisItem.LeftItem.transform.DOLocalMove(new Vector2(-50, 340), .5f);
+        thisItem.LeftItem.GetComponent<CanvasGroup>().DOFade(.75f, .2f);
+        thisItem.LeftItem.transform.DOScale(.4f, .2f);
 
         thisItem.transform.DOLocalMove(new Vector2 (-280,600), .5f);
+        thisItem.transform.DOScale(.75f, .2f);
+        thisItem.GetComponent<CanvasGroup>().DOFade(1, .2f);
 
     }
 
     void ItemRight()
     {
+        ItemModif thisItem = currItemSeled;
 
+        thisItem.RightItem.transform.DOLocalMove(new Vector2(-50, 340), .5f);
+        thisItem.RightItem.GetComponent<CanvasGroup>().DOFade(.75f, .2f);
+        thisItem.LeftItem.transform.DOScale(.4f, .2f);
+
+        thisItem.transform.DOLocalMove(new Vector2(-280, 600), .5f);
+        thisItem.transform.DOScale(.75f, .2f);
+        thisItem.GetComponent<CanvasGroup>().DOFade(1, .2f);
+
+
+        //thisItem.transform.DOLocalMove(new Vector2(-448, 800), .5f);
     }
 
 	// Selection d'un nouvelle item
 	void CheckSelectItem ( bool selected )
 	{
-		ItemModif thisItem = currItemSeled;
+        ItemModif thisItem = currItemSeled;
 
-		if ( selected )
+        if ( selected )
 		{
 			thisItem.Selected = true;
 

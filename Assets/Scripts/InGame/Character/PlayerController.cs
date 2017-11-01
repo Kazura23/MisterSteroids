@@ -316,7 +316,7 @@ public class PlayerController : MonoBehaviour
 	{
 		WaitForSeconds thisS = new WaitForSeconds ( 1 );
 		currLife--;
-        Debug.Log("Yo");
+        GlobalManager.Ui.StartBonusLife();
 
 		if ( currLife > 0 || playerDead )
 		{

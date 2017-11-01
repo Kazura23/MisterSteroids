@@ -73,13 +73,15 @@ public class GameController : ManagerParent
 					getObj = ( GameObject ) Instantiate ( getObj, parentObj );
 				}
 
-				getObj.transform.position = thisPos;
+                Destroy(getObj, .35f);
+
+                getObj.transform.position = thisPos;
 
 				break;
 			}
 		}
 
-	}
+    }
 
     public void Restart ( ) 
 	{

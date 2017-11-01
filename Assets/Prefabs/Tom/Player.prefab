@@ -397,6 +397,7 @@ MonoBehaviour:
   projection_basic: {x: 10, y: 1, z: 150}
   projection_double: {x: 0, y: 0, z: 300}
   facteurVitesseRenvoie: 1.5
+  RightPunch: 0
 --- !u!114 &114396453940007926
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -459,6 +460,7 @@ MonoBehaviour:
   PourcRal: 50
   DashTime: 1
   DashSpeed: 2
+  TimeInvincible: 2
   SlowMotion: 2
   SpeedSlowMot: 3
   SpeedDeacSM: 5
@@ -486,6 +488,7 @@ MonoBehaviour:
   Dash: 0
   Life: 1
   StopPlayer: 0
+  currLife: 2
 --- !u!114 &114461424696399938
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -529,8 +532,8 @@ MonoBehaviour:
   time: 0.4
   movesType: 0
   moves:
-  - {x: 0, y: 0, z: 5}
-  - {x: 0, y: 0, z: -5}
+  - {x: 0, y: 0, z: 7}
+  - {x: 0, y: 0, z: -7}
   easeType: 2
 --- !u!114 &114997091371556078
 MonoBehaviour:

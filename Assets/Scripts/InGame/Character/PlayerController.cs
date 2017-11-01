@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour
 		totalDis += Vector3.Distance ( lastPos, pTrans.position );
 		lastPos = pTrans.position;
 
-		Debug.Log ( totalDis );
+	//	Debug.Log ( totalDis );
 		punch.SetPunch ( !playerDead );
 
 		if ( !Dash && !playerDead )
@@ -545,6 +545,7 @@ public class PlayerController : MonoBehaviour
 
             if (punchRight)
             {
+				punch.RightPunch = true;
                 poingDroite.SetActive(true);
 
 				if ( currCouR != null )
@@ -556,6 +557,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
+				punch.RightPunch = false;
                 poingGauche.SetActive(true);
 
 				if ( currCouL != null )

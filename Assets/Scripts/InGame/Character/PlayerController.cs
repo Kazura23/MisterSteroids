@@ -186,7 +186,7 @@ public class PlayerController : MonoBehaviour
 			StartCoroutine ( waitStopDash ( ) );
 		}
 
-		if ( Input.GetAxis ( "SlowMot" ) > 0 && SliderContent > 0 )
+		if ( Input.GetAxis ( "SpecialAction" ) > 0 && SliderContent > 0 )
 		{
             Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
 

@@ -1,8 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Punch : MonoBehaviour {
+    private Slider barMadness;
+    public float addPointBarByPunch = 3;
+    private PlayerController control;
 
     private enum Technic
     {
@@ -16,6 +20,13 @@ public class Punch : MonoBehaviour {
     public float facteurVitesseRenvoie = 1.5f;
 
 	bool canPunc = true;
+
+
+    private void Awake()
+    {
+        control = GetComponentInParent<PlayerController>();
+        barMadness = control.barMadness;
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -38,9 +49,11 @@ public class Punch : MonoBehaviour {
 				tryGet.Degat ( projection_double, numTechnic );
            	 	break;
             }
+            MadnessMana();
         }else if (other.gameObject.tag == Constants._MissileBazoo)
         {
             other.gameObject.GetComponent<MissileBazooka>().ActiveTir(-other.gameObject.GetComponent<MissileBazooka>().GetDirection(), facteurVitesseRenvoie, true);
+            MadnessMana();
         }
     }
 
@@ -53,4 +66,18 @@ public class Punch : MonoBehaviour {
 	{
 		canPunc = canPush;
 	}
+
+
+    private void MadnessMana()
+    {
+        if (barMadness.value + addPointBarByPunch < barMadness.maxValue)
+        {
+            barMadness.value += addPointBarByPunch;
+        }
+        else
+        {
+            barMadness.value = barMadness.maxValue;
+            control.SetInMadness(true);
+        }
+    }
 }

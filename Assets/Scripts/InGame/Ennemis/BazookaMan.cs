@@ -38,4 +38,16 @@ public class BazookaMan : AbstractObject {
             timer += Time.deltaTime;
         }
 	}
+
+	protected override void OnCollisionEnter ( Collision thisColl )
+	{
+		if ( thisColl.gameObject.tag == Constants._PlayerTag && thisColl.gameObject.GetComponent<PlayerController> ( ).Dash )
+		{
+			CollDetect ( );
+		}
+		else
+		{
+			base.OnCollisionEnter ( thisColl );
+		}
+	}
 }

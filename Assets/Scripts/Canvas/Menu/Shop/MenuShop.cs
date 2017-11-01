@@ -34,7 +34,7 @@ public class MenuShop : UiParent
 	public ItemModif currItemSeled;
 
 	Dictionary <string, ItemModif> allConfirm;
-
+	GameObject fixBackShop;
 	bool catCurrSelected = true;
 	bool waitInputH = false;
 	bool waitInputV = false;
@@ -106,7 +106,7 @@ public class MenuShop : UiParent
 	public override void OpenThis ( MenuTokenAbstract GetTok = null )
 	{
 		base.OpenThis ( GetTok );
-
+		fixBackShop.SetActive ( true );
 		currCatSeled = DefCatSelected;
 		if ( currItemSeled != currCatSeled.DefautItem )
 		{
@@ -119,6 +119,7 @@ public class MenuShop : UiParent
 
 	public override void CloseThis ( )
 	{
+		fixBackShop.SetActive ( false );
 		base.CloseThis (  );
 	}
 
@@ -215,13 +216,28 @@ public class MenuShop : UiParent
 		}
 		else
 		{
-			if ( AllPlayerPrefs.GetIntValue ( Constants.Coin ) > currItemSeled.Price )
-			{
-				AllPlayerPrefs.SetIntValue ( Constants.Coin, -currItemSeled.Price );
+			bool checkProg = false;
+			ItemModif currIT = currItemSeled;
 
-				if ( currItemSeled.BuyForLife )
+			if ( currCatSeled.Progression )
+			{
+				if ( currIT.UpItem.ItemBought || currIT.DownItem.ItemBought || currIT.LeftItem.ItemBought || currIT.RightItem.ItemBought )
 				{
-					AllPlayerPrefs.SetStringValue ( getCons + currItemSeled.ItemName );
+					checkProg = true;
+				}
+			}
+			else
+			{
+				checkProg = true;	
+			}
+
+			if ( checkProg && AllPlayerPrefs.GetIntValue ( Constants.Coin ) > currIT.Price )
+			{
+				AllPlayerPrefs.SetIntValue ( Constants.Coin, -currIT.Price );
+
+				if ( currCatSeled.BuyForLife )
+				{
+					AllPlayerPrefs.SetStringValue ( getCons + currIT.ItemName );
 				}
 			}
 		}
@@ -234,6 +250,7 @@ public class MenuShop : UiParent
 		currCatSeled = DefCatSelected;
 		currItemSeled = currCatSeled.DefautItem;
 
+		fixBackShop = transform.parent.Find ( "GlobalBackGround/Shop" ).gameObject;
 		ItemModif[] checkAllItem = GetComponentsInChildren<ItemModif> ( true );
 		ItemModif currItem;
 

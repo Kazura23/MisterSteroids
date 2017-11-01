@@ -17,6 +17,8 @@ public class EditCat : Editor
 		CatShop myTarget = (CatShop)target;
 
 		myTarget.NameCat = EditorGUILayout.TextField ( "NameCat", myTarget.NameCat );
+		myTarget.BuyForLife = EditorGUILayout.Toggle ( "BuyForLife", myTarget.BuyForLife );
+		myTarget.Progression = EditorGUILayout.Toggle ( "Progression", myTarget.Progression );
 
 		myTarget.UseColor = EditorGUILayout.Toggle ( "UseColor", myTarget.UseColor );
 		myTarget.UseSprite = EditorGUILayout.Toggle ( "UseSprite", myTarget.UseSprite );

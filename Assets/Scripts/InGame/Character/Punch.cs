@@ -30,7 +30,7 @@ public class Punch : MonoBehaviour {
             switch (numTechnic)
             {
 			case (int)Technic.basic_punch:
-				projection_basic.x *= Random.Range ( -projection_basic.x, projection_basic.x + 1 );
+				//projection_basic.x *= Random.Range ( -projection_basic.x, projection_basic.x + 1 );
 
 				tryGet.Degat ( projection_basic, numTechnic );
 				break;

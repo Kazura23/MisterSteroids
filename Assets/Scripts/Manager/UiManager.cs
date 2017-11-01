@@ -19,7 +19,20 @@ public class UiManager : ManagerParent
 	public GameObject PatternBackground;
 	public GameObject GlobalBack;
 
-	Dictionary <MenuType, UiParent> AllMenu;
+    public GameObject ScorePoints;
+
+    [HideInInspector]
+    public float totalDistance;
+
+    [Header("SHOP STUFF")]
+    public Image SlowMotion;
+    public Image BonusLife;
+
+    [Header("MISC GAMEFEEL")]
+    public Image CircleFeel;
+    
+
+    Dictionary <MenuType, UiParent> AllMenu;
 	MenuType menuOpen;
 
 	GameObject InGame;
@@ -87,6 +100,45 @@ public class UiManager : ManagerParent
 		}
 	}
 
+    public void StartSlowMo()
+    {
+        SlowMotion.transform.DOLocalMove(new Vector2(960, -540), .2f);
+        SlowMotion.DOFade(0, .05f);
+        DOVirtual.DelayedCall(.2f, () => {
+            SlowMotion.DOFade(1, .1f);
+            SlowMotion.transform.DOScale(4, 0f);
+            SlowMotion.transform.DOPunchPosition(Vector3.one * 20f, .5f, 18, 1).OnComplete(()=> {
+                SlowMotion.transform.DOLocalMove(new Vector2(0, 0), .2f);
+                SlowMotion.DOFade(0, .05f);
+                DOVirtual.DelayedCall(.2f, () =>
+                {
+                    SlowMotion.DOFade(1, .15f);
+                    SlowMotion.transform.DOScale(1, 0f);
+                });
+            });
+        });
+    }
+
+    public void StartBonusLife()
+    {
+        CircleFeel.transform.DOScale(1, 0);
+        BonusLife.transform.DOLocalMove(new Vector2(960, -480), .1f);
+        BonusLife.GetComponent<RainbowScale>().enabled = false;
+        BonusLife.DOFade(0, .05f);
+        DOVirtual.DelayedCall(.1f, () => {
+            BonusLife.DOFade(.75f, .1f);
+            BonusLife.transform.DOScale(10, 0f);
+            BonusLife.transform.DOPunchPosition(Vector3.one * 20f, .7f, 18, 1).OnComplete(() => {
+                CircleFeel.transform.DOScale(28, .8f);
+                CircleFeel.DOFade(1, .2f).OnComplete(() => {
+                    CircleFeel.DOFade(0, .4f);
+                });
+                BonusLife.transform.DOScale(40f, .5f);
+                BonusLife.DOFade(0, .5f);
+            });
+        });
+    }
+
 	public void CloseDashSpeed()
 	{
 		if ( speedEffect != null )
@@ -131,7 +183,13 @@ public class UiManager : ManagerParent
 		#endif
 	}
 
-	void InitializeUI ( )
+    void Update()
+    {
+
+        ScorePoints.transform.GetChild(0).GetComponent<Text>().text = "" + Mathf.RoundToInt(totalDistance);
+    }
+
+    void InitializeUI ( )
 	{
 		//	InvokeRepeating ( "checkCurosr", 0, 0.5f );
 
@@ -142,6 +200,7 @@ public class UiManager : ManagerParent
 			}).SetLoops(-1, LoopType.Restart);
 		}
 	}
+    
 
 	void checkCurosr ( )
 	{

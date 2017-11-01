@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
 	public float DashTime = 2;
 	[Tooltip ("La valeur de DashSpeed est un multiplicateur sur la vitesse du joueur")]
 	public float DashSpeed = 2;
+	[Tooltip ("Temps d'invicibilité apres avoir pris des dégats")]
+	public float TimeInvincible = 2;
 
 	[Header ("Slow Motion Caractéristique")]
 	[Tooltip ("De combien la vitesse va diminuer au maximun par rapport à la vitesse standard")]
@@ -83,8 +85,7 @@ public class PlayerController : MonoBehaviour
 	public bool playerDead = false;
 	[HideInInspector]
 	public bool Dash = false;
-	[HideInInspector]
-	public int Life = 1;
+	public int Life = 3;
 
 	public bool StopPlayer = false;
 
@@ -133,6 +134,7 @@ public class PlayerController : MonoBehaviour
 	bool canDash = true;
 	bool inAir = false;
 	bool canChange = true;
+	bool invDamage = false;
 	#endregion
 
 	#region Mono
@@ -306,11 +308,19 @@ public class PlayerController : MonoBehaviour
 
 	public IEnumerator GameOver ( )
 	{
+		if ( invDamage )
+		{
+			yield break;
+		}
+
 		WaitForSeconds thisS = new WaitForSeconds ( 1 );
 		currLife--;
 
 		if ( currLife > 0 || playerDead )
 		{
+			invDamage = true;
+			Invoke ( "waitInvDmg", TimeInvincible );
+
 			yield break;
 		}
 
@@ -324,6 +334,11 @@ public class PlayerController : MonoBehaviour
 	#endregion
 
 	#region Private Functions
+	void waitInvDmg ( )
+	{
+		invDamage = false;
+	}
+
 	void checkInAir ( )
 	{
 		RaycastHit[] allHit;
@@ -774,13 +789,19 @@ public class PlayerController : MonoBehaviour
 
 		if ( getObj.tag == Constants._MissileBazoo )
 		{
-			getObj.GetComponent<MissileBazooka>().Explosion();
+			getObj.GetComponent<MissileBazooka> ( ).Explosion ( );
 			StartCoroutine ( GameOver ( ) );
 		}
-		else if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ObsTag || getObj.tag == Constants._MissileBazoo )
+		else if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._MissileBazoo )
 		{
 			StartCoroutine ( GameOver ( ) );
 		}
+		else if ( getObj.tag == Constants._ObsTag )
+		{
+			Life = 0;
+			StartCoroutine ( GameOver ( ) );
+		}
 	}
+
 	#endregion
 }

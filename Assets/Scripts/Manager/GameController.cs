@@ -45,7 +45,8 @@ public class GameController : ManagerParent
 		Player = GameObject.FindGameObjectWithTag("Player");
 
 		SpawnerChunck.FirstSpawn ( );
-		Player.GetComponent<PlayerController>().StopPlayer = true;
+		Player.GetComponent<PlayerController> ( ).ResetPlayer ( );
+
         Camera.main.GetComponent<RainbowRotate>().time = 2;
         Camera.main.GetComponent<RainbowMove>().time = 1;
 		GlobalManager.Ui.CloseThisMenu ( );
@@ -72,19 +73,20 @@ public class GameController : ManagerParent
 					getObj = ( GameObject ) Instantiate ( getObj, parentObj );
 				}
 
-				getObj.transform.position = thisPos;
+                Destroy(getObj, .35f);
+
+                getObj.transform.position = thisPos;
 
 				break;
 			}
 		}
 
-	}
+    }
 
     public void Restart ( ) 
 	{
 		SceneManager.LoadScene ( "ProtoAlex", LoadSceneMode.Single );
         GameStarted = false;
-        StartGame ( );
     }   
     #endregion
 

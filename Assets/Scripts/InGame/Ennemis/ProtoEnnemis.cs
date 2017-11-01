@@ -45,8 +45,6 @@ public class ProtoEnnemis : AbstractObject
 
 	public override void Dead ( bool enemy = false ) 
 	{
-       // GameObject fx = (GameObject) Instantiate(FXDestroy, transform.position, Quaternion.identity, transform);
-        //Destroy(fx, 1);
 
 		base.Dead ( enemy );
 		GlobalManager.Ui.BloodHit();
@@ -55,5 +53,20 @@ public class ProtoEnnemis : AbstractObject
 	#endregion
 
 	#region Private Methods
+	protected override void OnCollisionEnter ( Collision thisColl )
+	{
+		if ( thisColl.gameObject.tag == Constants._PlayerTag && thisColl.gameObject.GetComponent<PlayerController> ( ).Dash )
+		{
+
+            GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
+            CollDetect ( );
+		}
+		else
+		{
+
+            GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
+            base.OnCollisionEnter ( thisColl );
+		}
+	}
 	#endregion
 }

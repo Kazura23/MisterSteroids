@@ -32,15 +32,34 @@ public class ShieldMan : AbstractObject {
     #endregion
 
     #region Private Methods 
-    public override void Dead(bool enemy = false)
-    {
-        base.Dead(enemy);
+	protected override void OnCollisionEnter ( Collision thisColl )
+	{
+		if ( thisColl.gameObject.tag == Constants._PlayerTag && thisColl.gameObject.GetComponent<PlayerController> ( ).Dash )
+		{
+			if ( !shieldActive )
+			{
+				CollDetect ( );
+			}
+			else
+			{
+				StartCoroutine ( thisColl.gameObject.GetComponent<PlayerController> ( ).GameOver ( ) );
+			}
+		}
+		else
+		{
+			base.OnCollisionEnter ( thisColl );
+		}
+	}
+    #endregion
+	public override void Dead(bool enemy = false)
+	{
+		base.Dead(enemy);
 
-        //mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
-    }
+		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
+	}
 
 	public override void PlayerDetected( GameObject thisObj, bool isDetected )
-    {
+	{
 		base.PlayerDetected ( thisObj, isDetected );
 
 		if ( isDetected )
@@ -51,8 +70,7 @@ public class ShieldMan : AbstractObject {
 		{
 			parMat.color = saveCol;
 		}
-    }
-    #endregion
+	}
 
     public override void Degat(Vector3 p_damage, int p_technic)
     {

@@ -92,6 +92,7 @@ public class PlayerController : MonoBehaviour
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
 	bool canDPunch = true;
+	int currLife;
 	//private Coroutine corou/*, preparPunch*/;
 
 	//Rigidbody thisRig;
@@ -146,6 +147,7 @@ public class PlayerController : MonoBehaviour
 		SliderSlow = GlobalManager.Ui.MotionSlider;
 		SliderContent = 10;
 		SliderSlow.maxValue = 10;
+		currLife = Life;
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
     }
@@ -287,6 +289,30 @@ public class PlayerController : MonoBehaviour
 	#endregion
 
 	#region Public Functions
+	public void ResetPlayer ( )
+	{
+		currLife = Life;
+		playerDead = false;
+		StopPlayer = true;
+	}
+
+	public IEnumerator GameOver ( )
+	{
+		WaitForSeconds thisS = new WaitForSeconds ( 1 );
+		currLife--;
+
+		if ( currLife > 0 || playerDead )
+		{
+			yield break;
+		}
+
+		playerDead = true;
+		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
+
+		yield return thisS;
+
+		GlobalManager.GameCont.Restart ( );
+	}
 	#endregion
 
 	#region Private Functions
@@ -505,7 +531,7 @@ public class PlayerController : MonoBehaviour
             canPunch = false;
 			propP = true;
 
-            ScreenShake.Singleton.ShakeHit();
+            ScreenShake.Singleton.ShakeHitSimple();
 
            
 
@@ -538,7 +564,9 @@ public class PlayerController : MonoBehaviour
 		}
 		else if(Input.GetAxis("CoupDouble") != 0 && canDPunch && canPunch && resetAxeD )
         {
-			propDP = true;
+            ScreenShake.Singleton.ShakeHitDouble();
+
+            propDP = true;
 			resetAxeD = false;
             canPunch = false;
 			canDPunch = false;
@@ -554,46 +582,6 @@ public class PlayerController : MonoBehaviour
 			propPunch = propulsePunch ( TimePropulseDoublePunch );
 			StartCoroutine ( propPunch );
         }
-         
-        
-        
-        
-        //en stock
-        /*if (Input.GetKeyDown(KeyCode.A) && punchLeft)
-		{
-			preparLeft = true;
-			poingGauche.SetActive (true);
-
-			if(preparPunch == null)
-			{
-				preparPunch = StartCoroutine("StartPunch");
-			}
-
-			StartCoroutine ( animePunch ( true ) );
-		}
-		if (Input.GetKeyDown(KeyCode.E) && punchRight)
-		{
-			preparRight = true;
-			poingDroite.SetActive (true);
-
-			if (preparPunch == null)
-			{
-				preparPunch = StartCoroutine("StartPunch");
-			}
-		}*/
-
-		/*
-	   	if (Input.GetKey(KeyCode.R) && punchLeft && punchRight)
-        {
-            defense = true;
-            //ajout animation defense active
-        }
-        if (Input.GetKeyUp(KeyCode.R) || punchLeft || punchRight)
-        {
-            defense = false;
-            //ajout animation defense desactive
-        } 
-		 */
 	}
 
 	private IEnumerator StartPunch(int type_technic)
@@ -610,65 +598,6 @@ public class PlayerController : MonoBehaviour
 		{
 			StartCoroutine(CooldownPunch());
 		}
-
-        // en stock
-		/*if (preparRight && preparLeft)
-		{
-			punch.setTechnic(1);
-			punchBox.enabled = true;
-			punchLeft = false;
-			punchRight = false;
-			if (corou != null)
-			{
-				punchBox.enabled = false;
-				StopCoroutine(corou);
-				punchBox.enabled = true;a
-			}
-			corou = StartCoroutine("TimerHitbox");*/
-			/*StartCoroutine("CooldownLeft");
-            StartCoroutine("CooldownRight");*/
-		/*}else if (preparLeft)
-		{
-			punchLeft = false;
-			punch.setTechnic(0);
-			punchBox.enabled = true;
-			//bool
-			if (corou != null)
-			{
-				punchBox.enabled = false;
-				StopCoroutine(corou);
-				punchBox.enabled = true;
-			}
-			corou = StartCoroutine("TimerHitbox");
-			//StartCoroutine("CooldownLeft");
-
-		}else if (preparRight)
-		{
-			punchRight = false;
-			punch.setTechnic(0);
-			punchBox.enabled = true;
-			// bool
-			if (corou != null)
-			{
-				punchBox.enabled = false;
-				StopCoroutine(corou);
-				punchBox.enabled = true;
-			}
-			corou = StartCoroutine("TimerHitbox");
-			//StartCoroutine("CooldownRight");
-
-		}
-		if (preparLeft)
-		{
-			preparLeft = false;
-			StartCoroutine("CooldownLeft");
-		}
-		if (preparRight)
-		{
-			preparRight = false;
-			StartCoroutine("CooldownRight");
-		}
-		preparPunch = null;*/
 	}
 
 
@@ -700,26 +629,11 @@ public class PlayerController : MonoBehaviour
 
 		canDPunch = true;
 	}
-    //en stock
-	/*private IEnumerator CooldownLeft()
-	{
-		yield return new WaitForSeconds(delayLeft);
-		poingGauche.SetActive (false);
-		punchLeft = true;
-	}
-
-	private IEnumerator CooldownRight()
-	{
-		yield return new WaitForSeconds(delayRight);
-		poingDroite.SetActive (false);
-		punchRight = true;
-	}*/
-
+   
 	private IEnumerator TimerHitbox()
 	{
 		yield return new WaitForSeconds(delayHitbox);
 		punchBox.enabled = false;
-		//corou = null;
 	}
 
 	IEnumerator animePunch ( bool rightPoing, bool doublePunch = false )
@@ -820,18 +734,10 @@ public class PlayerController : MonoBehaviour
 		propDP = false;
 	}
 
-	/* public bool IsDefense()
-    {
-        return defense;
-    }*/
-
 	void OnTriggerEnter ( Collider thisColl )
 	{
 		if ( thisColl.tag == Constants._NewDirec )
 		{
-			//posDir = thisColl.transform.position;
-			//befRot = thisColl.GetComponent<BoxCollider> ( ).size.z / 2 + pTrans.GetComponent<BoxCollider> ( ).size.z ;
-
 			newPos = true;
 			newDir = thisColl.GetComponent<NewDirect> ( ).NewDirection;
 			befRot = Vector3.Distance ( thisColl.transform.position, pTrans.position );
@@ -842,25 +748,21 @@ public class PlayerController : MonoBehaviour
 	{
 		GameObject getObj = thisColl.gameObject;
 
-		if ( getObj.tag == Constants._Balls || getObj.tag == Constants._ElemDash )
+		if ( Dash )
 		{
-			if ( Dash )
+			if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ElemDash )
 			{
-				if ( getObj.tag == Constants._ElemDash )
-				{
-					thisColl.gameObject.GetComponent<Rigidbody> ( ).AddForce ( getPunch.projection_double, ForceMode.VelocityChange );
-				}
-				else
-				{
-					StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 5, true ) );
-				}
-
+				thisColl.gameObject.GetComponent<Rigidbody> ( ).AddForce ( getPunch.projection_double, ForceMode.VelocityChange );
 				return;
 			}
-
-			StartCoroutine ( GameOver ( ) );
+			else if ( getObj.tag == Constants._Balls )
+			{
+				StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 5, true ) );
+				return;
+			}
 		}
-		else if ( getObj.tag == Constants._MissileBazoo )
+
+		if ( getObj.tag == Constants._MissileBazoo )
 		{
 			getObj.GetComponent<MissileBazooka>().Explosion();
 			StartCoroutine ( GameOver ( ) );
@@ -870,32 +772,5 @@ public class PlayerController : MonoBehaviour
 			StartCoroutine ( GameOver ( ) );
 		}
 	}
-
-	IEnumerator GameOver ( )
-	{
-		WaitForSeconds thisS = new WaitForSeconds ( 1 );
-		Life--;
-
-		if ( Life > 0 )
-		{
-			yield break;
-		}
-
-		playerDead = true;
-		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
-
-		yield return thisS;
-
-		GlobalManager.GameCont.Restart ( );
-	}
-
-
-	/*void OnCollisionStay ( Collision thisColl )
-	{
-		if ( thisColl.gameObject.layer == 9 )
-		{
-			canJump = true;
-		}
-	}*/
 	#endregion
 }

@@ -81,15 +81,19 @@ public class UiManager : ManagerParent
 
 	public void OpenDashSpeed()
 	{
-		speedEffect.GetComponent<CanvasGroup>().DOFade(1, .25f);
+		if ( speedEffect != null )
+		{
+			speedEffect.GetComponent<CanvasGroup>().DOFade(1, .25f); 
+		}
 	}
 
 	public void CloseDashSpeed()
 	{
-		speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f);
+		if ( speedEffect != null )
+		{
+			speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f); 
+		}
 	}
-
-
 	#endregion
 
 	#region Private Methods

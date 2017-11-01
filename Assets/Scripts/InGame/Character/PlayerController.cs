@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
 	bool canDPunch = true;
-	int currLife;
+	public int currLife;
 	//private Coroutine corou/*, preparPunch*/;
 
 	//Rigidbody thisRig;
@@ -159,8 +159,9 @@ public class PlayerController : MonoBehaviour
 	{
 		totalDis += Vector3.Distance ( lastPos, pTrans.position );
 		lastPos = pTrans.position;
+        GlobalManager.Ui.totalDistance = totalDis;
 
-		Debug.Log ( totalDis );
+		//Debug.Log ( totalDis );
 		punch.SetPunch ( !playerDead );
 
 		if ( !Dash && !playerDead )
@@ -186,9 +187,16 @@ public class PlayerController : MonoBehaviour
 			StartCoroutine ( waitStopDash ( ) );
 		}
 
-		if ( Input.GetAxis ( "SpecialAction" ) > 0 && SliderContent > 0 )
+        if (Input.GetAxis("SpecialAction") >.2f && SliderContent > 0)
+        {
+            GlobalManager.Ui.StartSlowMo();
+        }
+
+            if ( Input.GetAxis ( "SpecialAction" ) > 0 && SliderContent > 0 )
 		{
             Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
+
+            
 
 			if ( Time.timeScale > 1 / SlowMotion )
 			{
@@ -308,6 +316,7 @@ public class PlayerController : MonoBehaviour
 	{
 		WaitForSeconds thisS = new WaitForSeconds ( 1 );
 		currLife--;
+        Debug.Log("Yo");
 
 		if ( currLife > 0 || playerDead )
 		{

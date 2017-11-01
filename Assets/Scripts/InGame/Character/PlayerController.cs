@@ -102,6 +102,7 @@ public class PlayerController : MonoBehaviour
 	Direction newDir = Direction.North;
 	//Vector3 posDir;
 	Vector3 dirLine = Vector3.zero;
+	Vector3 lastPos;
 	IEnumerator currCouR;
 	IEnumerator currCouL;
 	IEnumerator propPunch;
@@ -117,6 +118,7 @@ public class PlayerController : MonoBehaviour
 	float saveDist;
 	float befRot = 0;
 	float SliderContent;
+	float totalDis = 0;
 	int currLine = 0;
 
 	int LastImp = 0;
@@ -148,12 +150,17 @@ public class PlayerController : MonoBehaviour
 		SliderContent = 10;
 		SliderSlow.maxValue = 10;
 		currLife = Life;
+		lastPos = pTrans.position;
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
     }
 
 	void Update ( )
 	{
+		totalDis += Vector3.Distance ( lastPos, pTrans.position );
+		lastPos = pTrans.position;
+
+		Debug.Log ( totalDis );
 		punch.SetPunch ( !playerDead );
 
 		if ( !Dash && !playerDead )
@@ -179,7 +186,7 @@ public class PlayerController : MonoBehaviour
 			StartCoroutine ( waitStopDash ( ) );
 		}
 
-		if ( Input.GetAxis ( "SlowMot" ) > 0 && SliderContent > 0 )
+		if ( Input.GetAxis ( "SpecialAction" ) > 0 && SliderContent > 0 )
 		{
             Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
 
@@ -294,6 +301,7 @@ public class PlayerController : MonoBehaviour
 		currLife = Life;
 		playerDead = false;
 		StopPlayer = true;
+		totalDis = 0;
 	}
 
 	public IEnumerator GameOver ( )

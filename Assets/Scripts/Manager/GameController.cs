@@ -10,6 +10,7 @@ public class GameController : ManagerParent
 
 	public Transform GarbageTransform;
 	public MeshDesctruc MeshDest;
+	[HideInInspector]
 	public GameObject Player;
 	public SpawnChunks SpawnerChunck;
     public bool GameStarted;

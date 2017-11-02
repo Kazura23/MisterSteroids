@@ -143,6 +143,8 @@ public class PlayerController : MonoBehaviour
 	bool canChange = true;
 	bool invDamage = false;
     bool InMadness = false;
+	bool animeSlo = false;
+	bool canSpe = true;
 	#endregion
 
 	#region Mono
@@ -199,16 +201,15 @@ public class PlayerController : MonoBehaviour
 			StartCoroutine ( waitStopDash ( ) );
 		}
 
-        if (Input.GetAxis("SpecialAction") >.2f && SliderContent > 0)
-        {
-            GlobalManager.Ui.StartSlowMo();
-        }
-
-            if ( Input.GetAxis ( "SpecialAction" ) > 0 && SliderContent > 0 )
+		if ( Input.GetAxis ( "SpecialAction" ) > 0 && canSpe && SliderContent > 0 )
 		{
             Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
 
-            
+			if ( !animeSlo )
+			{
+				animeSlo = true;
+				GlobalManager.Ui.StartSlowMo();
+			}
 
 			if ( Time.timeScale > 1 / SlowMotion )
 			{
@@ -221,6 +222,7 @@ public class PlayerController : MonoBehaviour
 		{
 			if ( SliderContent < 0 )
 			{
+				canSpe = false;
 				SliderContent = 0;
 			}
 
@@ -228,12 +230,20 @@ public class PlayerController : MonoBehaviour
 		}
 		else if ( SliderContent < 10 )
 		{
+			animeSlo = false;
 			Time.timeScale = 1;
 			SliderContent += RecovSlider * Time.deltaTime;
             Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = false;
+
+			if ( SliderContent > 2 )
+			{
+				canSpe = true;
+			}
+
         }
 		else
 		{
+			canSpe = true;
 			SliderContent = 10;
 		}
 
@@ -840,7 +850,7 @@ public class PlayerController : MonoBehaviour
 	{
 		GameObject getObj = thisColl.gameObject;
 
-		if ( Dash )
+		if ( Dash || InMadness )
 		{
 			if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ElemDash )
 			{

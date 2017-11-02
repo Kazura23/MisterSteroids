@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
 	bool canDPunch = true;
-	public int currLife;
+	int currLife;
 	//private Coroutine corou/*, preparPunch*/;
 
 	//Rigidbody thisRig;
@@ -327,9 +327,9 @@ public class PlayerController : MonoBehaviour
 		totalDis = 0;
 	}
 
-	public IEnumerator GameOver ( )
+	public IEnumerator GameOver ( bool forceDead = false )
 	{
-		if ( invDamage )
+		if ( invDamage  && !forceDead )
 		{
 			yield break;
 		}
@@ -844,7 +844,18 @@ public class PlayerController : MonoBehaviour
 		{
 			if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ElemDash )
 			{
-				thisColl.gameObject.GetComponent<Rigidbody> ( ).AddForce ( getPunch.projection_double, ForceMode.VelocityChange );
+				/*Vector3 getProj = getPunch.projection_basic;
+
+				if ( Random.Range ( 0,2 ) == 0 )
+				{
+					getProj.x *= Random.Range ( -getProj.x, -getProj.x / 2 );
+				}
+				else
+				{
+					getProj.x *= Random.Range ( getProj.x / 2, getProj.x );
+				}*/
+				thisColl.collider.enabled = false;
+				thisColl.gameObject.GetComponent<AbstractObject> ( ).ForceProp (  getPunch.projection_double );
 				return;
 			}
 			else if ( getObj.tag == Constants._Balls )
@@ -865,8 +876,8 @@ public class PlayerController : MonoBehaviour
 		}
 		else if ( getObj.tag == Constants._ObsTag )
 		{
-			Life = 0;
-			StartCoroutine ( GameOver ( ) );
+			currLife = 0;
+			StartCoroutine ( GameOver ( true ) );
 		}
 	}
 

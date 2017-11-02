@@ -34,20 +34,10 @@ public class ShieldMan : AbstractObject {
     #region Private Methods 
 	protected override void OnCollisionEnter ( Collision thisColl )
 	{
-		if ( thisColl.gameObject.tag == Constants._PlayerTag && thisColl.gameObject.GetComponent<PlayerController> ( ).Dash )
+		base.OnCollisionEnter ( thisColl );
+		if ( isDead )
 		{
-			if ( !shieldActive )
-			{
-				CollDetect ( );
-			}
-			else
-			{
-				StartCoroutine ( thisColl.gameObject.GetComponent<PlayerController> ( ).GameOver ( ) );
-			}
-		}
-		else
-		{
-			base.OnCollisionEnter ( thisColl );
+			GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
 		}
 	}
     #endregion
@@ -103,4 +93,9 @@ public class ShieldMan : AbstractObject {
         }
     }
 
+	protected override void CollDetect ( )
+	{
+		base.CollDetect ( );
+		GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
+	}
 }

@@ -112,6 +112,7 @@ public class UiManager : ManagerParent
     public void GameOver()
     {
         Debug.Log("GameOver");
+        PointsGameOver.text = "" + Mathf.RoundToInt(totalDistance);
         YouGameOver.DOFade(0, 0);
         MadeGameOver.DOFade(0, 0);
         PointsGameOver.DOFade(0, 0);

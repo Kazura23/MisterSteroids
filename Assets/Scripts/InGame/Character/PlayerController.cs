@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
 	public float DashTime = 2;
 	[Tooltip ("La valeur de DashSpeed est un multiplicateur sur la vitesse du joueur")]
 	public float DashSpeed = 2;
+	[Tooltip ("Temps d'invicibilité apres avoir pris des dégats")]
+	public float TimeInvincible = 2;
 
 	[Header ("Slow Motion Caractéristique")]
 	[Tooltip ("De combien la vitesse va diminuer au maximun par rapport à la vitesse standard")]
@@ -57,6 +59,12 @@ public class PlayerController : MonoBehaviour
 	public float CooldownDoublePunch = 1;
 	public float delayHitbox = 0.3f;
 	public float delayPrepare = 0.1f;
+
+    [Header("Caractéristique Madness")]
+    public Slider barMadness;
+    public float ratioMaxMadness = 4;
+    public float delayDownBar = 1;
+    public float lessPointPunchInMadness = 3;
 
 	[Header ("Caractéristique de force des punchs")]
 	public float PropulseBalls = 100;
@@ -83,8 +91,7 @@ public class PlayerController : MonoBehaviour
 	public bool playerDead = false;
 	[HideInInspector]
 	public bool Dash = false;
-	[HideInInspector]
-	public int Life = 1;
+	public int Life = 3;
 
 	public bool StopPlayer = false;
 
@@ -120,6 +127,7 @@ public class PlayerController : MonoBehaviour
 	float SliderContent;
 	float totalDis = 0;
 	int currLine = 0;
+    float rationUse = 1;
 
 	int LastImp = 0;
 	int clDir = 0;
@@ -133,6 +141,8 @@ public class PlayerController : MonoBehaviour
 	bool canDash = true;
 	bool inAir = false;
 	bool canChange = true;
+	bool invDamage = false;
+    bool InMadness = false;
 	#endregion
 
 	#region Mono
@@ -161,8 +171,10 @@ public class PlayerController : MonoBehaviour
 		lastPos = pTrans.position;
         GlobalManager.Ui.totalDistance = totalDis;
 
-		//Debug.Log ( totalDis );
+	//	Debug.Log ( totalDis );
 		punch.SetPunch ( !playerDead );
+
+        rationUse = 1 + (ratioMaxMadness * (InMadness ? 1 : (barMadness.value / barMadness.maxValue)));
 
 		if ( !Dash && !playerDead )
 		{
@@ -234,6 +246,9 @@ public class PlayerController : MonoBehaviour
 		Shader.SetGlobalFloat ( "GlobaleMask_Radius", Radius );
 		Shader.SetGlobalFloat ( "GlobaleMask_SoftNess", SoftNess );
 		Shader.SetGlobalFloat ( "_SlowMot", Time.timeScale );
+
+        //slider madness
+        MadnessManager();
 	}
 
 	void FixedUpdate ( )
@@ -314,12 +329,20 @@ public class PlayerController : MonoBehaviour
 
 	public IEnumerator GameOver ( )
 	{
+		if ( invDamage )
+		{
+			yield break;
+		}
+
 		WaitForSeconds thisS = new WaitForSeconds ( 1 );
 		currLife--;
         GlobalManager.Ui.StartBonusLife();
 
 		if ( currLife > 0 || playerDead )
 		{
+			invDamage = true;
+			Invoke ( "waitInvDmg", TimeInvincible );
+
 			yield break;
 		}
 
@@ -333,6 +356,11 @@ public class PlayerController : MonoBehaviour
 	#endregion
 
 	#region Private Functions
+	void waitInvDmg ( )
+	{
+		invDamage = false;
+	}
+
 	void checkInAir ( )
 	{
 		RaycastHit[] allHit;
@@ -554,6 +582,7 @@ public class PlayerController : MonoBehaviour
 
             if (punchRight)
             {
+				punch.RightPunch = true;
                 poingDroite.SetActive(true);
 
 				if ( currCouR != null )
@@ -565,6 +594,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
+				punch.RightPunch = false;
                 poingGauche.SetActive(true);
 
 				if ( currCouL != null )
@@ -603,7 +633,7 @@ public class PlayerController : MonoBehaviour
 
 	private IEnumerator StartPunch(int type_technic)
 	{
-		yield return new WaitForSeconds(delayPrepare);
+		yield return new WaitForSeconds(delayPrepare / rationUse);
         punch.setTechnic(type_technic);
         punchBox.enabled = true;
        /* corou =*/ StartCoroutine("TimerHitbox");
@@ -615,6 +645,18 @@ public class PlayerController : MonoBehaviour
 		{
 			StartCoroutine(CooldownPunch());
 		}
+        if (InMadness)
+        {
+            if(barMadness.value - lessPointPunchInMadness < 0)
+            {
+                barMadness.value = 0;
+                InMadness = false;
+            }
+            else
+            {
+                barMadness.value -= lessPointPunchInMadness;
+            }
+        }
 	}
 
 
@@ -622,12 +664,12 @@ public class PlayerController : MonoBehaviour
     {
 		if ( doublePunch )
 		{
-			yield return new WaitForSeconds(delayDoublePunch);
+			yield return new WaitForSeconds(delayDoublePunch /rationUse);
 			StartCoroutine ( WaitCooldown ( ));
 		}
 		else
 		{
-			yield return new WaitForSeconds(delayPunch);
+			yield return new WaitForSeconds(delayPunch / rationUse);
 		}
         if (poingDroite.activeInHierarchy)
         {
@@ -751,6 +793,39 @@ public class PlayerController : MonoBehaviour
 		propDP = false;
 	}
 
+    private void MadnessManager()
+    {
+        float timer = Time.deltaTime;
+        if (InMadness) // a optimiser si la descente de la barre par le temps est la meme en madness et en normal
+        {
+            if (barMadness.value - (timer * delayDownBar) > 0)
+            {
+                barMadness.value -= timer * delayDownBar;
+            }
+            else
+            {
+                barMadness.value = 0;
+                InMadness = false;
+            }
+        }
+        else
+        {
+            if (barMadness.value - (timer * delayDownBar) > 0)
+            {
+                barMadness.value -= timer * delayDownBar;
+            }
+            else
+            {
+                barMadness.value = 0;
+            }
+        }
+    }
+
+    public void SetInMadness(bool p_bool)
+    {
+        InMadness = p_bool;
+    }
+
 	void OnTriggerEnter ( Collider thisColl )
 	{
 		if ( thisColl.tag == Constants._NewDirec )
@@ -781,13 +856,19 @@ public class PlayerController : MonoBehaviour
 
 		if ( getObj.tag == Constants._MissileBazoo )
 		{
-			getObj.GetComponent<MissileBazooka>().Explosion();
+			getObj.GetComponent<MissileBazooka> ( ).Explosion ( );
 			StartCoroutine ( GameOver ( ) );
 		}
-		else if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ObsTag || getObj.tag == Constants._MissileBazoo )
+		else if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._MissileBazoo )
 		{
 			StartCoroutine ( GameOver ( ) );
 		}
+		else if ( getObj.tag == Constants._ObsTag )
+		{
+			Life = 0;
+			StartCoroutine ( GameOver ( ) );
+		}
 	}
+
 	#endregion
 }

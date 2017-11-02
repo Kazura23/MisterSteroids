@@ -13,6 +13,7 @@ public class UiManager : ManagerParent
 	public bool lauchGame = false;
 	#endif
 	public Slider MotionSlider;
+    public Slider Madness;
 	public Image RedScreen;
 	public GameObject speedEffect;
 	public Transform MenuParent;

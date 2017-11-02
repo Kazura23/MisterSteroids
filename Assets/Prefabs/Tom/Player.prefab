@@ -471,6 +471,10 @@ MonoBehaviour:
   CooldownDoublePunch: 0.8
   delayHitbox: 0.05
   delayPrepare: 0.05
+  barMadness: {fileID: 0}
+  ratioMaxMadness: 4
+  delayDownBar: 0.1
+  lessPointPunchInMadness: 3
   PropulseBalls: 100
   TimePropulsePunch: 0.1
   TimePropulseDoublePunch: 2
@@ -486,7 +490,7 @@ MonoBehaviour:
   NbrLineLeft: 1
   playerDead: 0
   Dash: 0
-  Life: 1
+  Life: 3
   StopPlayer: 0
   currLife: 2
 --- !u!114 &114461424696399938

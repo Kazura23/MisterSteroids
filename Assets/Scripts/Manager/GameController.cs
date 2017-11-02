@@ -27,7 +27,7 @@ public class GameController : ManagerParent
 			GlobalManager.Ui.OpenThisMenu(MenuType.Pause);
 		}
 
-		if (Input.GetKeyDown(KeyCode.A))
+		if (Input.GetKeyDown(KeyCode.W))
 		{
 			if (!GameStarted)
 			{

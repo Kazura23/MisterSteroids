@@ -32,7 +32,12 @@ public class UiManager : ManagerParent
 
     [Header("MISC GAMEFEEL")]
     public Image CircleFeel;
-    
+
+    [Header("GAME OVER")]
+    public GameObject GameOverObject;
+    public GameObject PatternGameOver, BarGameOver;
+    public Text YouGameOver, MadeGameOver, PointsGameOver, PressGameOver;
+
 
     Dictionary <MenuType, UiParent> AllMenu;
 	MenuType menuOpen;
@@ -83,10 +88,12 @@ public class UiManager : ManagerParent
 
 	public void BloodHit()
 	{
-		Time.timeScale = 0;
-		DOVirtual.DelayedCall(.065f, () => {
+		Time.timeScale = 0f;
+        Time.fixedDeltaTime = 0.02F * Time.timeScale;
+        DOVirtual.DelayedCall(.11f, () => {
 			Time.timeScale = 1;
-		});
+            Time.fixedDeltaTime = .02F;
+        });
 		Camera.main.DOFieldOfView(45, .12f);//.SetEase(Ease.InBounce);
 		RedScreen.DOFade(.4f, .12f).OnComplete(() => {
 			RedScreen.DOFade(0, .08f);
@@ -102,15 +109,59 @@ public class UiManager : ManagerParent
 		}
 	}
 
+    public void GameOver()
+    {
+        Debug.Log("GameOver");
+        YouGameOver.DOFade(0, 0);
+        MadeGameOver.DOFade(0, 0);
+        PointsGameOver.DOFade(0, 0);
+        YouGameOver.transform.DOScale(5, 0);
+        MadeGameOver.transform.DOScale(5, 0);
+        PointsGameOver.transform.DOScale(5, 0);
+        BarGameOver.transform.DOScaleY(0, 0);
+
+        PatternGameOver.transform.DOLocalMoveY(-60, 5f).SetEase(Ease.Linear).OnComplete(() => {
+            PatternGameOver.transform.DOLocalMoveY(1092, 0);
+        }).SetLoops(-1, LoopType.Restart);
+
+
+        GameOverObject.GetComponent<CanvasGroup>().DOFade(1f, 1f).OnComplete(() =>
+        {
+            YouGameOver.DOFade(1, .25f);
+            YouGameOver.transform.DOScale(1, .25f).OnComplete(()=> {
+                MadeGameOver.DOFade(1, .25f);
+                MadeGameOver.transform.DOScale(1, .25f).OnComplete(() =>
+                {
+                    PointsGameOver.DOFade(1, .25f);
+                    BarGameOver.transform.DOScaleY(1.25f, .2f).OnComplete(() =>
+                    {
+                        BarGameOver.transform.DOScaleY(1, .05f);
+                    });
+                    PointsGameOver.transform.DOScale(1, .25f);
+
+                    DOVirtual.DelayedCall(1.5f, () => {
+                        PressGameOver.GetComponent<CanvasGroup>().DOFade(1, .5f);
+                    });
+                });
+            });
+        });
+    }
+
     public void StartSlowMo()
     {
-        SlowMotion.transform.DOLocalMove(new Vector2(960, -540), .2f);
+        SlowMotion.transform.DOLocalMove(new Vector2(960, -540), .05f);
+        CircleFeel.transform.DOScale(1, 0);
+        CircleFeel.DOColor(Color.white, 0);
         SlowMotion.DOFade(0, .05f);
-        DOVirtual.DelayedCall(.2f, () => {
-            SlowMotion.DOFade(1, .1f);
+        DOVirtual.DelayedCall(.1f, () => {
+            SlowMotion.DOFade(.75f, .1f);
             SlowMotion.transform.DOScale(4, 0f);
-            SlowMotion.transform.DOPunchPosition(Vector3.one * 20f, .5f, 18, 1).OnComplete(()=> {
-                SlowMotion.transform.DOLocalMove(new Vector2(0, 0), .2f);
+            CircleFeel.transform.DOScale(25, .25f);
+            CircleFeel.DOFade(.75f, .15f).OnComplete(() => {
+                CircleFeel.DOFade(0, .1f);
+            });
+            SlowMotion.transform.DOPunchPosition(Vector3.one * 30f, .15f, 18, 1).OnComplete(()=> {
+                SlowMotion.transform.DOLocalMove(new Vector2(0, 0), .05f);
                 SlowMotion.DOFade(0, .05f);
                 DOVirtual.DelayedCall(.2f, () =>
                 {
@@ -124,6 +175,7 @@ public class UiManager : ManagerParent
     public void StartBonusLife()
     {
         CircleFeel.transform.DOScale(1, 0);
+        CircleFeel.DOColor(new Color32(0xf4,0x6c,0x6e,0xff),0);
         BonusLife.transform.DOLocalMove(new Vector2(960, -480), .1f);
         BonusLife.GetComponent<RainbowScale>().enabled = false;
         BonusLife.DOFade(0, .05f);

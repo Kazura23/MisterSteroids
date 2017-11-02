@@ -60,6 +60,12 @@ public class PlayerController : MonoBehaviour
 	public float delayHitbox = 0.3f;
 	public float delayPrepare = 0.1f;
 
+    [Header("Caractéristique Madness")]
+    public Slider barMadness;
+    public float ratioMaxMadness = 4;
+    public float delayDownBar = 1;
+    public float lessPointPunchInMadness = 3;
+
 	[Header ("Caractéristique de force des punchs")]
 	public float PropulseBalls = 100;
 	[Tooltip ("Le temps max sera delayPunch")]
@@ -121,6 +127,7 @@ public class PlayerController : MonoBehaviour
 	float SliderContent;
 	float totalDis = 0;
 	int currLine = 0;
+    float rationUse = 1;
 
 	int LastImp = 0;
 	int clDir = 0;
@@ -135,6 +142,7 @@ public class PlayerController : MonoBehaviour
 	bool inAir = false;
 	bool canChange = true;
 	bool invDamage = false;
+    bool InMadness = false;
 	#endregion
 
 	#region Mono
@@ -164,6 +172,8 @@ public class PlayerController : MonoBehaviour
 
 	//	Debug.Log ( totalDis );
 		punch.SetPunch ( !playerDead );
+
+        rationUse = 1 + (ratioMaxMadness * (InMadness ? 1 : (barMadness.value / barMadness.maxValue)));
 
 		if ( !Dash && !playerDead )
 		{
@@ -228,6 +238,9 @@ public class PlayerController : MonoBehaviour
 		Shader.SetGlobalFloat ( "GlobaleMask_Radius", Radius );
 		Shader.SetGlobalFloat ( "GlobaleMask_SoftNess", SoftNess );
 		Shader.SetGlobalFloat ( "_SlowMot", Time.timeScale );
+
+        //slider madness
+        MadnessManager();
 	}
 
 	void FixedUpdate ( )
@@ -611,7 +624,7 @@ public class PlayerController : MonoBehaviour
 
 	private IEnumerator StartPunch(int type_technic)
 	{
-		yield return new WaitForSeconds(delayPrepare);
+		yield return new WaitForSeconds(delayPrepare / rationUse);
         punch.setTechnic(type_technic);
         punchBox.enabled = true;
        /* corou =*/ StartCoroutine("TimerHitbox");
@@ -623,6 +636,18 @@ public class PlayerController : MonoBehaviour
 		{
 			StartCoroutine(CooldownPunch());
 		}
+        if (InMadness)
+        {
+            if(barMadness.value - lessPointPunchInMadness < 0)
+            {
+                barMadness.value = 0;
+                InMadness = false;
+            }
+            else
+            {
+                barMadness.value -= lessPointPunchInMadness;
+            }
+        }
 	}
 
 
@@ -630,12 +655,12 @@ public class PlayerController : MonoBehaviour
     {
 		if ( doublePunch )
 		{
-			yield return new WaitForSeconds(delayDoublePunch);
+			yield return new WaitForSeconds(delayDoublePunch /rationUse);
 			StartCoroutine ( WaitCooldown ( ));
 		}
 		else
 		{
-			yield return new WaitForSeconds(delayPunch);
+			yield return new WaitForSeconds(delayPunch / rationUse);
 		}
         if (poingDroite.activeInHierarchy)
         {
@@ -758,6 +783,39 @@ public class PlayerController : MonoBehaviour
 		propP = false;
 		propDP = false;
 	}
+
+    private void MadnessManager()
+    {
+        float timer = Time.deltaTime;
+        if (InMadness) // a optimiser si la descente de la barre par le temps est la meme en madness et en normal
+        {
+            if (barMadness.value - (timer * delayDownBar) > 0)
+            {
+                barMadness.value -= timer * delayDownBar;
+            }
+            else
+            {
+                barMadness.value = 0;
+                InMadness = false;
+            }
+        }
+        else
+        {
+            if (barMadness.value - (timer * delayDownBar) > 0)
+            {
+                barMadness.value -= timer * delayDownBar;
+            }
+            else
+            {
+                barMadness.value = 0;
+            }
+        }
+    }
+
+    public void SetInMadness(bool p_bool)
+    {
+        InMadness = p_bool;
+    }
 
 	void OnTriggerEnter ( Collider thisColl )
 	{

@@ -171,7 +171,7 @@ public class PlayerController : MonoBehaviour
 		lastPos = pTrans.position;
         GlobalManager.Ui.totalDistance = totalDis;
 
-	//	Debug.Log ( totalDis );
+		//Debug.Log ( totalDis );
 		punch.SetPunch ( !playerDead );
 
         rationUse = 1 + (ratioMaxMadness * (InMadness ? 1 : (barMadness.value / barMadness.maxValue)));

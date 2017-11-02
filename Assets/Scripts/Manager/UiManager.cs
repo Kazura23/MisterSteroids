@@ -21,6 +21,7 @@ public class UiManager : ManagerParent
 	public GameObject GlobalBack;
 
     public GameObject ScorePoints;
+    public GameObject MoneyPoints;
 
     [HideInInspector]
     public float totalDistance;
@@ -188,6 +189,7 @@ public class UiManager : ManagerParent
     {
 
         ScorePoints.transform.GetChild(0).GetComponent<Text>().text = "" + Mathf.RoundToInt(totalDistance);
+        MoneyPoints.transform.GetChild(0).GetComponent<Text>().text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
     }
 
     void InitializeUI ( )

@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class Punch : MonoBehaviour {
     private Slider barMadness;
-    public float addPointBarByPunch = 3;
+    public float addPointBarByPunchSimple = 3;
+    public float addPointBarByPunchDouble = 5;
     private PlayerController control;
 
     private enum Technic
@@ -57,11 +58,11 @@ public class Punch : MonoBehaviour {
 				tryGet.Degat ( projection_double, numTechnic );
            	 	break;
             }
-            MadnessMana();
+            MadnessMana("Double");
         }else if (other.gameObject.tag == Constants._MissileBazoo)
         {
             other.gameObject.GetComponent<MissileBazooka>().ActiveTir(-other.gameObject.GetComponent<MissileBazooka>().GetDirection(), facteurVitesseRenvoie, true);
-            MadnessMana();
+            MadnessMana("Double");
         }
     }
 
@@ -76,11 +77,14 @@ public class Punch : MonoBehaviour {
 	}
 
 
-    private void MadnessMana()
+    public void MadnessMana(string type)
     {
-        if (barMadness.value + addPointBarByPunch < barMadness.maxValue)
+        if (barMadness.value + addPointBarByPunchSimple < barMadness.maxValue && type == "Simple")
         {
-            barMadness.value += addPointBarByPunch;
+            barMadness.value += addPointBarByPunchSimple;
+        } else if (barMadness.value + addPointBarByPunchDouble < barMadness.maxValue && type == "Double")
+        {
+            barMadness.value += addPointBarByPunchDouble;
         }
         else
         {

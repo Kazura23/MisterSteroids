@@ -194,8 +194,7 @@ public class PlayerController : MonoBehaviour
 			{
 				resetAxeD = true;
 			}
-
-			playerFight ( );
+            playerFight ( );
 		}
 
 		if ( Input.GetAxis ( "Dash") != 0 && newH == 0 && canDash )
@@ -218,8 +217,10 @@ public class PlayerController : MonoBehaviour
 
 			if ( Time.timeScale > 1 / SlowMotion )
 			{
+                
 				Time.timeScale -= Time.deltaTime * SpeedSlowMot;
-			}
+                Time.fixedDeltaTime = 0.02F;
+            }
 
 			SliderContent -= ReduceSlider * Time.deltaTime;
 		}
@@ -511,7 +512,7 @@ public class PlayerController : MonoBehaviour
 		float newImp = Input.GetAxis ( "Horizontal" );
 		float lineDistance = Constants.LineDist;
 
-		if ( ( canChange || newH == 0 ) && !Dash && !inAir )
+		if ( ( canChange || newH == 0 ) && !Dash && !inAir && !InMadness)
 		{
 			if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLineRight && ( clDir == 1 || newH == 0 ) )
 			{
@@ -592,48 +593,54 @@ public class PlayerController : MonoBehaviour
 
 	void playerFight ( )
 	{
-		if(Input.GetAxis("CoupSimple") != 0 && canPunch && resetAxeS )
+		if(Input.GetAxis("CoupSimple") != 0 && canPunch && resetAxeS  )
         {
-			resetAxeS = false;
-            canPunch = false;
-			propP = true;
+            
+                resetAxeS = false;
+                canPunch = false;
+                propP = true;
 
-            ScreenShake.Singleton.ShakeHitSimple();
+                transform.GetChild(0).GetComponent<Punch>().MadnessMana("Simple");
+                ScreenShake.Singleton.ShakeHitSimple();
 
            
+                if (punchRight)
+                {
+                    punch.RightPunch = true;
+                    poingDroite.SetActive(true);
 
-            if (punchRight)
-            {
-				punch.RightPunch = true;
-                poingDroite.SetActive(true);
 
-				if ( currCouR != null )
-				{
-					StopCoroutine ( currCouR );
-				}
-				currCouR = animePunch ( true );
-				StartCoroutine ( currCouR );
-            }
-            else
-            {
-				punch.RightPunch = false;
-                poingGauche.SetActive(true);
+                    if (currCouR != null)
+                    {
+                        StopCoroutine(currCouR);
+                    }
+                    currCouR = animePunch(true);
+                    StartCoroutine(currCouR);
 
-				if ( currCouL != null )
-				{
-					StopCoroutine ( currCouL );
-				}
-				currCouL = animePunch ( false );
-				StartCoroutine ( currCouL );
-            }
-            punchRight = !punchRight;
-            StartCoroutine("StartPunch", 0);
-			propPunch = propulsePunch ( TimePropulsePunch );
-			StartCoroutine ( propPunch );
+                }
+                else
+                {
+                    punch.RightPunch = false;
+                    poingGauche.SetActive(true);
+
+                    if (currCouL != null)
+                    {
+                        StopCoroutine(currCouL);
+                    }
+                    currCouL = animePunch(false);
+                    StartCoroutine(currCouL);
+                }
+                punchRight = !punchRight;
+                StartCoroutine("StartPunch", 0);
+                propPunch = propulsePunch(TimePropulsePunch);
+                StartCoroutine(propPunch);
+			
 		}
-		else if(Input.GetAxis("CoupDouble") != 0 && canDPunch && canPunch && resetAxeD )
+		else if(Input.GetAxis("CoupDouble") != 0 && canDPunch && canPunch && resetAxeD  )
         {
             ScreenShake.Singleton.ShakeHitDouble();
+
+            transform.GetChild(0).GetComponent<Punch>().MadnessMana("Double");
 
             propDP = true;
 			resetAxeD = false;
@@ -669,13 +676,17 @@ public class PlayerController : MonoBehaviour
 		}
         if (InMadness)
         {
-            if(barMadness.value - lessPointPunchInMadness < 0)
+
+            Debug.Log("gyg");
+            if (barMadness.value - lessPointPunchInMadness < 0)
             {
                 barMadness.value = 0;
                 InMadness = false;
             }
             else
             {
+                   
+                Debug.Log("gyg2");
                 barMadness.value -= lessPointPunchInMadness;
             }
         }
@@ -839,8 +850,17 @@ public class PlayerController : MonoBehaviour
             else
             {
                 barMadness.value = 0;
+                GlobalManager.Ui.CloseMadness();
             }
         }
+
+        if(barMadness.value > 99)
+        {
+            InMadness = true;
+            Debug.Log("100%");
+            GlobalManager.Ui.OpenMadness();
+        }
+
     }
 
     public void SetInMadness(bool p_bool)

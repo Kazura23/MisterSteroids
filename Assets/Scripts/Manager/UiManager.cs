@@ -86,6 +86,36 @@ public class UiManager : ManagerParent
 		});
 	}
 
+    public void OpenMadness()
+    {
+        Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().enabled = true;
+        Camera.main.GetComponent<CameraFilterPack_Color_YUV>().enabled = true;
+        Camera.main.transform.GetComponent<RainbowMove>().enabled = false;
+
+        Camera.main.transform.DOKill(false);
+
+        Camera.main.transform.DOLocalMoveY(0, .3f).OnComplete(() => {
+            DOVirtual.DelayedCall(.65f,()=>{
+                Camera.main.transform.DOLocalMoveY(.9f, .1f);
+            });
+        }).SetLoops(-1,LoopType.Yoyo);
+        
+        Camera.main.DOFieldOfView(40, .35f).OnComplete(() => {
+            Camera.main.DOFieldOfView(60, .35f);
+        }).SetLoops(-1,LoopType.Yoyo);
+        
+    }
+
+    public void CloseMadness()
+    {
+        Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().enabled = false;
+        Camera.main.GetComponent<CameraFilterPack_Color_YUV>().enabled = false;
+
+        Camera.main.transform.DOKill(false);
+
+        Camera.main.transform.GetComponent<RainbowMove>().enabled = true;
+    }
+
 	public void DashSpeedEffect ( bool enable )
 	{
 		if ( speedEffect == null )

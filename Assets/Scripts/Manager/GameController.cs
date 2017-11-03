@@ -27,11 +27,10 @@ public class GameController : ManagerParent
 			GlobalManager.Ui.OpenThisMenu(MenuType.Pause);
 		}
 
-		if (Input.GetKeyDown(KeyCode.W))
-		{
-			if (!GameStarted)
+		if (Input.GetAxis("CoupSimple") == 1 || Input.GetAxis("CoupDouble") == 1)
+        {
+			if (GameStarted)
 			{
-				GameStarted = true;
 				Player.GetComponent<PlayerController>().StopPlayer = false;
 				Camera.main.GetComponent<RainbowRotate>().time = .4f;
 				Camera.main.GetComponent<RainbowMove>().time = .2f;

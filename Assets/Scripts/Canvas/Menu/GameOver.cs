@@ -29,7 +29,7 @@ public class GameOver : UiParent
 
 		Debug.Log("GameOver");
 		GameOverTok thisTok = GetTok as GameOverTok;
-		PointsGameOver.text = thisTok.totalDist.ToString ( );
+		PointsGameOver.text = Mathf.RoundToInt( thisTok.totalDist ).ToString();
 		YouGameOver.DOFade(0, 0);
 		MadeGameOver.DOFade(0, 0);
 		PointsGameOver.DOFade(0, 0);

@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
 	public float DashTime = 2;
 	[Tooltip ("La valeur de DashSpeed est un multiplicateur sur la vitesse du joueur")]
 	public float DashSpeed = 2;
+	[Tooltip ("Temps d'invicibilité apres avoir pris des dégats")]
+	public float TimeInvincible = 2;
 
 	[Header ("Slow Motion Caractéristique")]
 	[Tooltip ("De combien la vitesse va diminuer au maximun par rapport à la vitesse standard")]
@@ -53,8 +55,16 @@ public class PlayerController : MonoBehaviour
 
 	[Header ("Caractérique de temps sur les punchs")]
     public float delayPunch = 1;
+	public float delayDoublePunch = 1;
+	public float CooldownDoublePunch = 1;
 	public float delayHitbox = 0.3f;
 	public float delayPrepare = 0.1f;
+
+    [Header("Caractéristique Madness")]
+    public Slider barMadness;
+    public float ratioMaxMadness = 4;
+    public float delayDownBar = 1;
+    public float lessPointPunchInMadness = 3;
 
 	[Header ("Caractéristique de force des punchs")]
 	public float PropulseBalls = 100;
@@ -81,12 +91,15 @@ public class PlayerController : MonoBehaviour
 	public bool playerDead = false;
 	[HideInInspector]
 	public bool Dash = false;
+	public int Life = 3;
 
 	public bool StopPlayer = false;
 
 	private Collider punchBox;
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
+	bool canDPunch = true;
+	int currLife;
 	//private Coroutine corou/*, preparPunch*/;
 
 	//Rigidbody thisRig;
@@ -96,6 +109,7 @@ public class PlayerController : MonoBehaviour
 	Direction newDir = Direction.North;
 	//Vector3 posDir;
 	Vector3 dirLine = Vector3.zero;
+	Vector3 lastPos;
 	IEnumerator currCouR;
 	IEnumerator currCouL;
 	IEnumerator propPunch;
@@ -111,7 +125,9 @@ public class PlayerController : MonoBehaviour
 	float saveDist;
 	float befRot = 0;
 	float SliderContent;
+	float totalDis = 0;
 	int currLine = 0;
+    float rationUse = 1;
 
 	int LastImp = 0;
 	int clDir = 0;
@@ -125,6 +141,10 @@ public class PlayerController : MonoBehaviour
 	bool canDash = true;
 	bool inAir = false;
 	bool canChange = true;
+	bool invDamage = false;
+    bool InMadness = false;
+	bool animeSlo = false;
+	bool canSpe = true;
 	#endregion
 
 	#region Mono
@@ -141,13 +161,22 @@ public class PlayerController : MonoBehaviour
 		SliderSlow = GlobalManager.Ui.MotionSlider;
 		SliderContent = 10;
 		SliderSlow.maxValue = 10;
+		currLife = Life;
+		lastPos = pTrans.position;
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
     }
 
 	void Update ( )
 	{
-		punch.CanPunch ( !playerDead );
+		totalDis += Vector3.Distance ( lastPos, pTrans.position );
+		lastPos = pTrans.position;
+        GlobalManager.Ui.totalDistance = totalDis;
+
+		//Debug.Log ( totalDis );
+		punch.SetPunch ( !playerDead );
+
+        rationUse = 1 + (ratioMaxMadness * (InMadness ? 1 : (barMadness.value / barMadness.maxValue)));
 
 		if ( !Dash && !playerDead )
 		{
@@ -172,9 +201,15 @@ public class PlayerController : MonoBehaviour
 			StartCoroutine ( waitStopDash ( ) );
 		}
 
-		if ( Input.GetAxis ( "SlowMot" ) > 0 && SliderContent > 0 )
+		if ( Input.GetAxis ( "SpecialAction" ) > 0 && canSpe && SliderContent > 0 )
 		{
             Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
+
+			if ( !animeSlo )
+			{
+				animeSlo = true;
+				GlobalManager.Ui.StartSlowMo();
+			}
 
 			if ( Time.timeScale > 1 / SlowMotion )
 			{
@@ -187,6 +222,7 @@ public class PlayerController : MonoBehaviour
 		{
 			if ( SliderContent < 0 )
 			{
+				canSpe = false;
 				SliderContent = 0;
 			}
 
@@ -194,12 +230,20 @@ public class PlayerController : MonoBehaviour
 		}
 		else if ( SliderContent < 10 )
 		{
+			animeSlo = false;
 			Time.timeScale = 1;
 			SliderContent += RecovSlider * Time.deltaTime;
             Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = false;
+
+			if ( SliderContent > 2 )
+			{
+				canSpe = true;
+			}
+
         }
 		else
 		{
+			canSpe = true;
 			SliderContent = 10;
 		}
 
@@ -212,6 +256,9 @@ public class PlayerController : MonoBehaviour
 		Shader.SetGlobalFloat ( "GlobaleMask_Radius", Radius );
 		Shader.SetGlobalFloat ( "GlobaleMask_SoftNess", SoftNess );
 		Shader.SetGlobalFloat ( "_SlowMot", Time.timeScale );
+
+        //slider madness
+        MadnessManager();
 	}
 
 	void FixedUpdate ( )
@@ -282,9 +329,52 @@ public class PlayerController : MonoBehaviour
 	#endregion
 
 	#region Public Functions
+	public void ResetPlayer ( )
+	{
+		currLife = Life;
+		playerDead = false;
+		StopPlayer = true;
+		totalDis = 0;
+	}
+
+	public IEnumerator GameOver ( bool forceDead = false )
+	{
+		if ( invDamage  && !forceDead )
+		{
+			yield break;
+		}
+
+        GlobalManager.Ui.GameOver();
+        ScreenShake.Singleton.ShakeGameOver();
+		WaitForSeconds thisS = new WaitForSeconds ( 1 );
+        if (Life > 1)
+            GlobalManager.Ui.StartBonusLife();
+        currLife--;
+        
+
+		if ( currLife > 0 || playerDead )
+		{
+			invDamage = true;
+			Invoke ( "waitInvDmg", TimeInvincible );
+
+			yield break;
+		}
+
+		playerDead = true;
+		//GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
+
+		yield return thisS;
+
+		//GlobalManager.GameCont.Restart ( );
+	}
 	#endregion
 
 	#region Private Functions
+	void waitInvDmg ( )
+	{
+		invDamage = false;
+	}
+
 	void checkInAir ( )
 	{
 		RaycastHit[] allHit;
@@ -500,12 +590,13 @@ public class PlayerController : MonoBehaviour
             canPunch = false;
 			propP = true;
 
-            ScreenShake.Singleton.ShakeHit();
+            ScreenShake.Singleton.ShakeHitSimple();
 
            
 
             if (punchRight)
             {
+				punch.RightPunch = true;
                 poingDroite.SetActive(true);
 
 				if ( currCouR != null )
@@ -517,6 +608,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
+				punch.RightPunch = false;
                 poingGauche.SetActive(true);
 
 				if ( currCouL != null )
@@ -530,137 +622,69 @@ public class PlayerController : MonoBehaviour
             StartCoroutine("StartPunch", 0);
 			propPunch = propulsePunch ( TimePropulsePunch );
 			StartCoroutine ( propPunch );
-		}else if(Input.GetAxis("CoupDouble") != 0 && canPunch && resetAxeD )
+		}
+		else if(Input.GetAxis("CoupDouble") != 0 && canDPunch && canPunch && resetAxeD )
         {
-			propDP = true;
+            ScreenShake.Singleton.ShakeHitDouble();
+
+            propDP = true;
 			resetAxeD = false;
             canPunch = false;
+			canDPunch = false;
             poingDroite.SetActive(true);
             poingGauche.SetActive(true);
             StartCoroutine("StartPunch", 1);
 
-			currCouL = animePunch ( false );
-			currCouR = animePunch ( true );
+			currCouL = animePunch ( false, true );
+			currCouR = animePunch ( true, true );
 
 			StartCoroutine ( currCouL );
 			StartCoroutine ( currCouR );
 			propPunch = propulsePunch ( TimePropulseDoublePunch );
 			StartCoroutine ( propPunch );
         }
-         
-        
-        
-        
-        //en stock
-        /*if (Input.GetKeyDown(KeyCode.A) && punchLeft)
-		{
-			preparLeft = true;
-			poingGauche.SetActive (true);
-
-			if(preparPunch == null)
-			{
-				preparPunch = StartCoroutine("StartPunch");
-			}
-
-			StartCoroutine ( animePunch ( true ) );
-		}
-		if (Input.GetKeyDown(KeyCode.E) && punchRight)
-		{
-			preparRight = true;
-			poingDroite.SetActive (true);
-
-			if (preparPunch == null)
-			{
-				preparPunch = StartCoroutine("StartPunch");
-			}
-		}*/
-
-		/*
-	   	if (Input.GetKey(KeyCode.R) && punchLeft && punchRight)
-        {
-            defense = true;
-            //ajout animation defense active
-        }
-        if (Input.GetKeyUp(KeyCode.R) || punchLeft || punchRight)
-        {
-            defense = false;
-            //ajout animation defense desactive
-        } 
-		 */
 	}
 
 	private IEnumerator StartPunch(int type_technic)
 	{
-		yield return new WaitForSeconds(delayPrepare);
+		yield return new WaitForSeconds(delayPrepare / rationUse);
         punch.setTechnic(type_technic);
         punchBox.enabled = true;
        /* corou =*/ StartCoroutine("TimerHitbox");
-        StartCoroutine("CooldownPunch");
-
-        // en stock
-		/*if (preparRight && preparLeft)
+		if ( type_technic == 1 )
 		{
-			punch.setTechnic(1);
-			punchBox.enabled = true;
-			punchLeft = false;
-			punchRight = false;
-			if (corou != null)
-			{
-				punchBox.enabled = false;
-				StopCoroutine(corou);
-				punchBox.enabled = true;
-			}
-			corou = StartCoroutine("TimerHitbox");*/
-			/*StartCoroutine("CooldownLeft");
-            StartCoroutine("CooldownRight");*/
-		/*}else if (preparLeft)
-		{
-			punchLeft = false;
-			punch.setTechnic(0);
-			punchBox.enabled = true;
-			//bool
-			if (corou != null)
-			{
-				punchBox.enabled = false;
-				StopCoroutine(corou);
-				punchBox.enabled = true;
-			}
-			corou = StartCoroutine("TimerHitbox");
-			//StartCoroutine("CooldownLeft");
-
-		}else if (preparRight)
-		{
-			punchRight = false;
-			punch.setTechnic(0);
-			punchBox.enabled = true;
-			// bool
-			if (corou != null)
-			{
-				punchBox.enabled = false;
-				StopCoroutine(corou);
-				punchBox.enabled = true;
-			}
-			corou = StartCoroutine("TimerHitbox");
-			//StartCoroutine("CooldownRight");
-
+			StartCoroutine(CooldownPunch( true ));
 		}
-		if (preparLeft)
+		else
 		{
-			preparLeft = false;
-			StartCoroutine("CooldownLeft");
+			StartCoroutine(CooldownPunch());
 		}
-		if (preparRight)
-		{
-			preparRight = false;
-			StartCoroutine("CooldownRight");
-		}
-		preparPunch = null;*/
+        if (InMadness)
+        {
+            if(barMadness.value - lessPointPunchInMadness < 0)
+            {
+                barMadness.value = 0;
+                InMadness = false;
+            }
+            else
+            {
+                barMadness.value -= lessPointPunchInMadness;
+            }
+        }
 	}
 
 
-    private IEnumerator CooldownPunch()
+	private IEnumerator CooldownPunch ( bool doublePunch = false )
     {
-        yield return new WaitForSeconds(delayPunch);
+		if ( doublePunch )
+		{
+			yield return new WaitForSeconds(delayDoublePunch /rationUse);
+			StartCoroutine ( WaitCooldown ( ));
+		}
+		else
+		{
+			yield return new WaitForSeconds(delayPunch / rationUse);
+		}
         if (poingDroite.activeInHierarchy)
         {
             poingDroite.SetActive(false);
@@ -671,36 +695,37 @@ public class PlayerController : MonoBehaviour
         }
         canPunch = true;
     }
-    //en stock
-	/*private IEnumerator CooldownLeft()
+
+	IEnumerator WaitCooldown ( )
 	{
-		yield return new WaitForSeconds(delayLeft);
-		poingGauche.SetActive (false);
-		punchLeft = true;
+		yield return new WaitForSeconds ( CooldownDoublePunch );
+
+		canDPunch = true;
 	}
-
-	private IEnumerator CooldownRight()
-	{
-		yield return new WaitForSeconds(delayRight);
-		poingDroite.SetActive (false);
-		punchRight = true;
-	}*/
-
+   
 	private IEnumerator TimerHitbox()
 	{
 		yield return new WaitForSeconds(delayHitbox);
 		punchBox.enabled = false;
-		//corou = null;
 	}
 
-	IEnumerator animePunch ( bool rightPoing )
+	IEnumerator animePunch ( bool rightPoing, bool doublePunch = false )
 	{
 		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
 		Transform thisPoing;
 		Vector3 getStart;
 		Vector3 thisDist;
 
-		float getTime = delayPunch / 2;
+		float getTime;
+		if ( doublePunch )
+		{
+			getTime = delayDoublePunch / 2;
+		}
+		else
+		{
+			getTime = delayPunch / 2;
+		}
+
 		float currTime = 0;
 
 		if ( rightPoing )
@@ -782,18 +807,43 @@ public class PlayerController : MonoBehaviour
 		propDP = false;
 	}
 
-	/* public bool IsDefense()
+    private void MadnessManager()
     {
-        return defense;
-    }*/
+        float timer = Time.deltaTime;
+        if (InMadness) // a optimiser si la descente de la barre par le temps est la meme en madness et en normal
+        {
+            if (barMadness.value - (timer * delayDownBar) > 0)
+            {
+                barMadness.value -= timer * delayDownBar;
+            }
+            else
+            {
+                barMadness.value = 0;
+                InMadness = false;
+            }
+        }
+        else
+        {
+            if (barMadness.value - (timer * delayDownBar) > 0)
+            {
+                barMadness.value -= timer * delayDownBar;
+            }
+            else
+            {
+                barMadness.value = 0;
+            }
+        }
+    }
+
+    public void SetInMadness(bool p_bool)
+    {
+        InMadness = p_bool;
+    }
 
 	void OnTriggerEnter ( Collider thisColl )
 	{
 		if ( thisColl.tag == Constants._NewDirec )
 		{
-			//posDir = thisColl.transform.position;
-			//befRot = thisColl.GetComponent<BoxCollider> ( ).size.z / 2 + pTrans.GetComponent<BoxCollider> ( ).size.z ;
-
 			newPos = true;
 			newDir = thisColl.GetComponent<NewDirect> ( ).NewDirection;
 			befRot = Vector3.Distance ( thisColl.transform.position, pTrans.position );
@@ -804,53 +854,46 @@ public class PlayerController : MonoBehaviour
 	{
 		GameObject getObj = thisColl.gameObject;
 
-		if ( getObj.tag == Constants._Balls || getObj.tag == Constants._ElemDash )
+		if ( Dash || InMadness )
 		{
-			if ( Dash )
+			if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ElemDash )
 			{
-				if ( getObj.tag == Constants._ElemDash )
+				/*Vector3 getProj = getPunch.projection_basic;
+
+				if ( Random.Range ( 0,2 ) == 0 )
 				{
-					thisColl.gameObject.GetComponent<Rigidbody> ( ).AddForce ( getPunch.projection_double, ForceMode.VelocityChange );
+					getProj.x *= Random.Range ( -getProj.x, -getProj.x / 2 );
 				}
 				else
 				{
-					StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 5, true ) );
-				}
-
+					getProj.x *= Random.Range ( getProj.x / 2, getProj.x );
+				}*/
+				thisColl.collider.enabled = false;
+				thisColl.gameObject.GetComponent<AbstractObject> ( ).ForceProp (  getPunch.projection_double );
 				return;
 			}
+			else if ( getObj.tag == Constants._Balls )
+			{
+				StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 5, true ) );
+				return;
+			}
+		}
 
+		if ( getObj.tag == Constants._MissileBazoo )
+		{
+			getObj.GetComponent<MissileBazooka> ( ).Explosion ( );
 			StartCoroutine ( GameOver ( ) );
 		}
-		else if ( getObj.tag == Constants._MissileBazoo )
+		else if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._MissileBazoo )
 		{
-			getObj.GetComponent<MissileBazooka>().Explosion();
 			StartCoroutine ( GameOver ( ) );
 		}
-		else if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ObsTag || getObj.tag == Constants._MissileBazoo )
+		else if ( getObj.tag == Constants._ObsTag )
 		{
-			StartCoroutine ( GameOver ( ) );
+			currLife = 0;
+			StartCoroutine ( GameOver ( true ) );
 		}
 	}
 
-	IEnumerator GameOver ( )
-	{
-		WaitForSeconds thisS = new WaitForSeconds ( 1 );
-		playerDead = true;
-		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
-
-		yield return thisS;
-
-		GlobalManager.GameCont.Restart ( );
-	}
-
-
-	/*void OnCollisionStay ( Collision thisColl )
-	{
-		if ( thisColl.gameObject.layer == 9 )
-		{
-			canJump = true;
-		}
-	}*/
 	#endregion
 }

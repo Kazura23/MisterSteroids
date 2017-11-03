@@ -10,8 +10,6 @@ public class AbstractObject : MonoBehaviour
 	public bool isDead;
 	public float delayDead = 2;
 
-    public GameObject FXDestroy;
-
     [Header ("Contact avec obs")]
 	[Tooltip ("pourcentage de velocité restante en pourcentage lors d'une collision avec un ennmis ( situation ou ce gameobject est en mouvement )")]
 	public float VelRestant = 5;
@@ -98,7 +96,7 @@ public class AbstractObject : MonoBehaviour
 		Destroy ( this.gameObject, delayDead );
 	}
 
-	public void CollDetect (  )
+	protected virtual void CollDetect (  )
 	{
 		if ( !isDead )
 		{
@@ -108,6 +106,27 @@ public class AbstractObject : MonoBehaviour
 		{
 			mainCorps.velocity = mainCorps.velocity * ( VelRestant / 100 );
 		}
+	}
+
+	public void ForceProp ( Vector3 forceProp )
+	{
+		isDead = true;
+
+		getTrans.tag = Constants._ObjDeadTag;
+		for ( int i = 0; i < corps.Count; i++ )
+		{
+			corps [ i ].useGravity = true;
+		}
+
+		mainCorps.constraints = RigidbodyConstraints.None;
+
+		if ( useGravity )
+		{
+			mainCorps.useGravity = true;
+		}
+
+		mainCorps.AddForce ( forceProp, ForceMode.VelocityChange );
+		StartCoroutine ( enableColl ( ) );
 	}
 	#endregion
 
@@ -120,11 +139,27 @@ public class AbstractObject : MonoBehaviour
 		{
 			CollDetect ( );
 		}
+
 		/*else if ( getThis.tag == Constants._PlayerTag && gameObject.tag == Constants._ObjDeadTag )
 		{
 			Physics.IgnoreCollision ( thisColl.collider, GetComponent<Collider> ( ) );
 		}*/
 	}
+
+	IEnumerator enableColl ( )
+	{
+		WaitForEndOfFrame thisF = new WaitForEndOfFrame ( );
+		Transform savePos = transform;
+		Transform playPos = GlobalManager.GameCont.Player.transform;
+
+		while ( Vector3.Distance ( savePos.position, playPos.position ) < 5 )
+		{
+			yield return thisF;
+		}
+
+		GetComponent<BoxCollider> ( ).enabled = true;
+	}
+
 
 	/*void checkConstAxe ( )
 	{

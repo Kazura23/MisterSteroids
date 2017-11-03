@@ -3,8 +3,6 @@
 public abstract class UiParent : MonoBehaviour
 {
 	#region Variables
-	protected bool pause;
-
 	public abstract MenuType ThisMenu
 	{
 		get;
@@ -29,11 +27,6 @@ public abstract class UiParent : MonoBehaviour
 	public virtual void CloseThis ( )
 	{
 		gameObject.SetActive ( false );
-	}
-
-	public virtual void Pause ( bool setPause )
-	{
-		pause = setPause;
 	}
 	#endregion
 

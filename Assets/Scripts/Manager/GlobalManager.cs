@@ -6,8 +6,8 @@ public class GlobalManager : MonoBehaviour
    	static GlobalManager mainManagerInstance;
 
 	//Add new managers here
-	static UIManager ui;
-	public static UIManager Ui { get { return ui; } }
+	static UiManager ui;
+	public static UiManager Ui { get { return ui; } }
 
     static EventManager evnt;
     public static EventManager Event { get { return evnt; } }
@@ -45,9 +45,9 @@ public class GlobalManager : MonoBehaviour
 	void InitializeManagers()
 	{
 		InitializeManager ( ref evnt );
-		InitializeManager ( ref scene );
 		InitializeManager ( ref gCont );
 		InitializeManager ( ref ui );
+		InitializeManager ( ref scene );
     }
 
 	void InitializeManager<T>(ref T manager) where T : ManagerParent

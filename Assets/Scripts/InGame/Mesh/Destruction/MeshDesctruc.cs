@@ -58,12 +58,13 @@ public class MeshDesctruc : MonoBehaviour
 	//	List<GameObject> getAllSt;
 
 		Transform getTrans = objSource.transform;
-		Vector3 explosionPos;
 		Vector3 getSize = M.bounds.size;
-		Vector3 calDir = getTrans.forward * forcePro;
+		Vector3 calDir = getTrans.forward;
 		GameObject GO;
 		GameObject getTri = TriangPrefb;
 		Mesh mesh;
+
+		float matCD = calDir.magnitude / 4;
 
 		int[] indices;
 
@@ -185,22 +186,12 @@ public class MeshDesctruc : MonoBehaviour
 				}
 
 				GO.GetComponent<MeshFilter> ( ).mesh = mesh;
-				GO.AddComponent<BoxCollider> ( );
 
 				GO.layer = LayerMask.NameToLayer ( "Particle" );
 				GO.transform.position = getTrans.position;
 				GO.transform.rotation = getTrans.rotation;
 
-				explosionPos = new Vector3 ( getTrans.position.x + Random.Range ( -getSize.x, getSize.x ), getTrans.position.y + Random.Range ( -getSize.y, getSize.y ), getTrans.position.z + Random.Range ( -getSize.z, getSize.z ) );
-
-				if ( Random.Range ( 0, 20 ) < 1 )
-				{
-					GO.GetComponent<Rigidbody> ( ).AddExplosionForce ( 10, explosionPos, 0, 0, ForceMode.Impulse );
-				}
-				else
-				{
-					GO.GetComponent<Rigidbody> ( ).AddForce ( calDir, ForceMode.VelocityChange );
-				}
+				GO.GetComponent<Rigidbody> ( ).AddForce ( ( new Vector3 ( Random.Range ( -matCD, matCD ), Random.Range ( 0, matCD ), Random.Range ( -matCD, matCD ) ) + calDir ) * Random.Range ( forcePro / 10, forcePro ), ForceMode.VelocityChange );
 
 				GO.GetComponent<TimeToDisable> ( ).DisableThis ( deleayDest + Random.Range ( 0.0f, deleayDest ) );
 			}

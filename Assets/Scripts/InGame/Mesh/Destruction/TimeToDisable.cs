@@ -7,8 +7,14 @@ public class TimeToDisable : MonoBehaviour
 	public void DisableThis ( float time )
 	{
 		Invoke ( "disable", time );
+		Invoke ( "addColl", 0.2f );
 	}
 
+	void addColl () 
+	{
+		gameObject.AddComponent<BoxCollider> ( );
+	}
+		
 	void disable ( )
 	{
 		Destroy ( gameObject );

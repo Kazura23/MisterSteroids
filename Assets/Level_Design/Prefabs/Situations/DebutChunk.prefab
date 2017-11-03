@@ -21,9 +21,10 @@ GameObject:
   - component: {fileID: 4439656102251332}
   - component: {fileID: 65424773750243860}
   - component: {fileID: 114217999866744284}
+  - component: {fileID: 114271918232904606}
   m_Layer: 0
-  m_Name: Entree
-  m_TagString: Untagged
+  m_Name: DebutChunk
+  m_TagString: DebutFinChunk
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -35,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1932266622343094}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 118}
+  m_LocalPosition: {x: 0, y: 3, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -64,4 +65,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c5eb305b96f1ba428daacde6ecba2b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nbLine: 1
+  NbrLineLeft: 0
+  NbrLineRigh: 0
+--- !u!114 &114271918232904606
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1932266622343094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a95e408bd992bb499080f1142d91049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LevelParent: {fileID: 0}

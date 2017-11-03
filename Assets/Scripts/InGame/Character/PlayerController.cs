@@ -344,9 +344,13 @@ public class PlayerController : MonoBehaviour
 			yield break;
 		}
 
+        GlobalManager.Ui.GameOver();
+        ScreenShake.Singleton.ShakeGameOver();
 		WaitForSeconds thisS = new WaitForSeconds ( 1 );
-		currLife--;
-        GlobalManager.Ui.StartBonusLife();
+        if (Life > 1)
+            GlobalManager.Ui.StartBonusLife();
+        currLife--;
+        
 
 		if ( currLife > 0 || playerDead )
 		{
@@ -357,11 +361,11 @@ public class PlayerController : MonoBehaviour
 		}
 
 		playerDead = true;
-		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
+		//GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
 
 		yield return thisS;
 
-		GlobalManager.GameCont.Restart ( );
+		//GlobalManager.GameCont.Restart ( );
 	}
 	#endregion
 

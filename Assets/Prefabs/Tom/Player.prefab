@@ -394,7 +394,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae96edcd53504dc4685017eec4ca3880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projection_basic: {x: 10, y: 1, z: 150}
+  addPointBarByPunch: 3
+  projection_basic: {x: 7, y: 1, z: 150}
   projection_double: {x: 0, y: 0, z: 300}
   facteurVitesseRenvoie: 1.5
   RightPunch: 0
@@ -460,7 +461,7 @@ MonoBehaviour:
   PourcRal: 50
   DashTime: 1
   DashSpeed: 2
-  TimeInvincible: 2
+  TimeInvincible: 0.5
   SlowMotion: 2
   SpeedSlowMot: 3
   SpeedDeacSM: 5
@@ -490,9 +491,8 @@ MonoBehaviour:
   NbrLineLeft: 1
   playerDead: 0
   Dash: 0
-  Life: 3
+  Life: 1
   StopPlayer: 0
-  currLife: 2
 --- !u!114 &114461424696399938
 MonoBehaviour:
   m_ObjectHideFlags: 1

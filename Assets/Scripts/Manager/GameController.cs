@@ -17,6 +17,8 @@ public class GameController : ManagerParent
 
 	[HideInInspector]
 	public Dictionary <string, ItemModif> AllModifItem;
+
+	bool checkStart = false;
     #endregion
 
     #region Mono
@@ -29,9 +31,10 @@ public class GameController : ManagerParent
 
 		if (Input.GetAxis("CoupSimple") == 1 || Input.GetAxis("CoupDouble") == 1)
         {
-			if (GameStarted)
+			if ( GameStarted && !checkStart )
 			{
-				Player.GetComponent<PlayerController>().StopPlayer = false;
+				checkStart = true;
+				Player.GetComponent<PlayerController> ( ).StopPlayer = false;
 				Camera.main.GetComponent<RainbowRotate>().time = .4f;
 				Camera.main.GetComponent<RainbowMove>().time = .2f;
 			}
@@ -43,9 +46,13 @@ public class GameController : ManagerParent
 	public void StartGame ( )
 	{
 		Player = GameObject.FindGameObjectWithTag("Player");
+		Player.GetComponent<PlayerController> ( ).ResetPlayer ( );
+
+		SetAllBonus ( );
+		GameStarted = true;
+		checkStart = false;
 
 		SpawnerChunck.FirstSpawn ( );
-		Player.GetComponent<PlayerController> ( ).ResetPlayer ( );
 
         Camera.main.GetComponent<RainbowRotate>().time = 2;
         Camera.main.GetComponent<RainbowMove>().time = 1;
@@ -100,10 +107,23 @@ public class GameController : ManagerParent
 	void SetAllBonus ( )
 	{
 		Dictionary <string, ItemModif> getMod = AllModifItem;
+		PlayerController currPlayer = Player.GetComponent<PlayerController> ( );
 
-		for ( int a = 0; a < getMod.Count; a++ )
+		foreach (ItemModif thisItem in getMod.Values )
 		{
-			
+			Debug.Log ( getMod.Values );
+			if ( thisItem.ModifVie )
+			{
+				currPlayer.Life += thisItem.NombreVie;
+			}
+
+			if ( thisItem.ModifReduceMot )
+			{
+			}
+
+			if ( thisItem.ModifRecovereMot )
+			{
+			}
 		}
 	}
 	#endregion

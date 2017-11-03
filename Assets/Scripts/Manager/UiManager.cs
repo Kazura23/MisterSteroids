@@ -153,6 +153,7 @@ public class UiManager : ManagerParent
 	#region Private Methods
 	protected override void InitializeManager ( )
 	{
+		AllPlayerPrefs.SetIntValue ( Constants.Coin, 1000000 );
 		InitializeUI ( );
 
 		Object[] getAllMenu =Resources.LoadAll ( "Menu" );

@@ -108,7 +108,7 @@ public class AbstractObject : MonoBehaviour
 		}
 	}
 
-	public void ForceProp ( Vector3 forceProp )
+	public virtual void ForceProp ( Vector3 forceProp )
 	{
 		isDead = true;
 

@@ -59,6 +59,11 @@ public class MenuShop : UiParent
             ChangeToCat();
 		}
 
+		if ( Input.GetKeyDown ( KeyCode.A ) && !catCurrSelected )
+		{
+			BuyItem ( );
+		}
+
 		// Navigation horizontale des catégories ou items
 		if ( getH != 0 && !waitInputH )
 		{
@@ -233,6 +238,7 @@ public class MenuShop : UiParent
 
 			if ( checkProg && AllPlayerPrefs.GetIntValue ( Constants.Coin ) > currIT.Price )
 			{
+				Debug.Log ( "buy" );
 				AllPlayerPrefs.SetIntValue ( Constants.Coin, -currIT.Price );
 
 				if ( currCatSeled.BuyForLife )

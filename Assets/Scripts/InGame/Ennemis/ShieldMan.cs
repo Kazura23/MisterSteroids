@@ -48,6 +48,18 @@ public class ShieldMan : AbstractObject {
 		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
 	}
 
+	public override void ForceProp ( Vector3 forceProp )
+	{
+		if ( shieldActive )
+		{
+			GlobalManager.GameCont.Player.GetComponent<PlayerController> ( ).GameOver ( );
+		}
+		else
+		{
+			base.ForceProp ( forceProp );
+		}
+	}
+
 	public override void PlayerDetected( GameObject thisObj, bool isDetected )
 	{
 		base.PlayerDetected ( thisObj, isDetected );

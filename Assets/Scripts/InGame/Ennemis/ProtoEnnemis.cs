@@ -21,7 +21,6 @@ public class ProtoEnnemis : AbstractObject
 	{
 		parMat = getTrans.GetComponent<MeshRenderer> ( ).material;
 		saveCol = parMat.color;
-
 	}
 	#endregion
 
@@ -55,18 +54,18 @@ public class ProtoEnnemis : AbstractObject
 	#region Private Methods
 	protected override void OnCollisionEnter ( Collision thisColl )
 	{
-		if ( thisColl.gameObject.tag == Constants._PlayerTag && thisColl.gameObject.GetComponent<PlayerController> ( ).Dash )
-		{
+        base.OnCollisionEnter ( thisColl );
 
-            GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
-            CollDetect ( );
-		}
-		else
+		if ( isDead )
 		{
-
-            GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
-            base.OnCollisionEnter ( thisColl );
+			GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
 		}
+	}
+
+	protected override void CollDetect ( )
+	{
+		base.CollDetect ( );
+		GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
 	}
 	#endregion
 }

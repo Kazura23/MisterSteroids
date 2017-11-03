@@ -14,9 +14,9 @@ public class Piece : MonoBehaviour {
             // AllPlayerPrefs.piece += piece;
 
             Physics.IgnoreCollision(this.GetComponent<Collider>(), other.GetComponent<Collider>());
-
            
             AllPlayerPrefs.SetIntValue ( Constants.Coin, piece );
+			GlobalManager.Ui.MoneyPoints.text = "" + AllPlayerPrefs.GetIntValue ( Constants.Coin );
 
             transform.DOLocalRotate(new Vector3(0, 2000, 0),1f,RotateMode.FastBeyond360);
 

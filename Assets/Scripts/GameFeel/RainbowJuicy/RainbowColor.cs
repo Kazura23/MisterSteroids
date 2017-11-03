@@ -36,7 +36,9 @@ public class RainbowColor : MonoBehaviour
 		    GetComponent<Image> ().DOColor (colors [index], time).OnComplete (() => Next ());
 
         if (ComponentType == Type.Material)
-            GetComponent<Material>().DOColor(colors[index], time).OnComplete(() => Next());
+        {
+            GetComponent<Renderer>().material.DOColor(colors[index], time).OnComplete(() => Next());
+        }
 
         if (ComponentType == Type.MaterialFont)
             GetComponent<Font>().material.DOColor(colors[index], time).OnComplete(() => Next());

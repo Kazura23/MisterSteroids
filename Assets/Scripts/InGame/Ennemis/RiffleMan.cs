@@ -45,14 +45,17 @@ public class RiffleMan : AbstractObject
 	#region Private Methods
 	protected override void OnCollisionEnter ( Collision thisColl )
 	{
-		if ( thisColl.gameObject.tag == Constants._PlayerTag && thisColl.gameObject.GetComponent<PlayerController> ( ).Dash )
+		base.OnCollisionEnter ( thisColl );
+		if ( isDead )
 		{
-			CollDetect ( );
+			GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
 		}
-		else
-		{
-			base.OnCollisionEnter ( thisColl );
-		}
+	}
+
+	protected override void CollDetect ( )
+	{
+		base.CollDetect ( );
+		GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
 	}
 
 	IEnumerator shootPlayer ( WaitForSeconds thisF, bool checkDir )

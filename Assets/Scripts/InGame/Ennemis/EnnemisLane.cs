@@ -117,16 +117,18 @@ public class EnnemisLane : AbstractObject
 	#region Private Methode
 	protected override void OnCollisionEnter ( Collision thisColl )
 	{
-		if ( thisColl.gameObject.tag == Constants._PlayerTag && thisColl.gameObject.GetComponent<PlayerController> ( ).Dash )
+		base.OnCollisionEnter ( thisColl );
+		if ( isDead )
 		{
-			CollDetect ( );
-		}
-		else
-		{
-			base.OnCollisionEnter ( thisColl );
+			GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
 		}
 	}
 
+	protected override void CollDetect ( )
+	{
+		base.CollDetect ( );
+		GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
+	}
 	IEnumerator changeLane ( bool rightLine ) 
 	{
 		moving = true;

@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
 	bool canDPunch = true;
-	public int currLife;
+	int currLife;
 	//private Coroutine corou/*, preparPunch*/;
 
 	//Rigidbody thisRig;
@@ -116,6 +116,8 @@ public class PlayerController : MonoBehaviour
 	Punch getPunch;
 	Camera thisCam;
 	Slider SliderSlow;
+	Text textDist;
+	Text textCoin;
 
 	float currSpeed = 0;
 	float currSpLine = 0;
@@ -143,6 +145,8 @@ public class PlayerController : MonoBehaviour
 	bool canChange = true;
 	bool invDamage = false;
     bool InMadness = false;
+	bool animeSlo = false;
+	bool canSpe = true;
 	#endregion
 
 	#region Mono
@@ -161,6 +165,8 @@ public class PlayerController : MonoBehaviour
 		SliderSlow.maxValue = 10;
 		currLife = Life;
 		lastPos = pTrans.position;
+		textDist = GlobalManager.Ui.ScorePoints;
+		textCoin = GlobalManager.Ui.MoneyPoints;
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
     }
@@ -169,7 +175,8 @@ public class PlayerController : MonoBehaviour
 	{
 		totalDis += Vector3.Distance ( lastPos, pTrans.position );
 		lastPos = pTrans.position;
-        GlobalManager.Ui.totalDistance = totalDis;
+
+		textDist.text = "" + Mathf.RoundToInt ( totalDis );
 
 		//Debug.Log ( totalDis );
 		punch.SetPunch ( !playerDead );
@@ -199,16 +206,15 @@ public class PlayerController : MonoBehaviour
 			StartCoroutine ( waitStopDash ( ) );
 		}
 
-        if (Input.GetAxis("SpecialAction") >.2f && SliderContent > 0)
-        {
-            GlobalManager.Ui.StartSlowMo();
-        }
-
-            if ( Input.GetAxis ( "SpecialAction" ) > 0 && SliderContent > 0 )
+		if ( Input.GetAxis ( "SpecialAction" ) > 0 && canSpe && SliderContent > 0 )
 		{
             Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
 
-            
+			if ( !animeSlo )
+			{
+				animeSlo = true;
+				GlobalManager.Ui.StartSlowMo();
+			}
 
 			if ( Time.timeScale > 1 / SlowMotion )
 			{
@@ -221,6 +227,7 @@ public class PlayerController : MonoBehaviour
 		{
 			if ( SliderContent < 0 )
 			{
+				canSpe = false;
 				SliderContent = 0;
 			}
 
@@ -228,12 +235,20 @@ public class PlayerController : MonoBehaviour
 		}
 		else if ( SliderContent < 10 )
 		{
+			animeSlo = false;
 			Time.timeScale = 1;
 			SliderContent += RecovSlider * Time.deltaTime;
             Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = false;
+
+			if ( SliderContent > 2 )
+			{
+				canSpe = true;
+			}
+
         }
 		else
 		{
+			canSpe = true;
 			SliderContent = 10;
 		}
 
@@ -327,16 +342,23 @@ public class PlayerController : MonoBehaviour
 		totalDis = 0;
 	}
 
-	public IEnumerator GameOver ( )
+	public IEnumerator GameOver ( bool forceDead = false )
 	{
-		if ( invDamage )
+		if ( invDamage  && !forceDead )
 		{
 			yield break;
 		}
 
+        GameOverTok thisTok = new GameOverTok ( );
+		thisTok.totalDist = totalDis;
+
+		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver, thisTok );
+        ScreenShake.Singleton.ShakeGameOver();
 		WaitForSeconds thisS = new WaitForSeconds ( 1 );
-		currLife--;
-        GlobalManager.Ui.StartBonusLife();
+        if (Life > 1)
+            GlobalManager.Ui.StartBonusLife();
+        currLife--;
+        
 
 		if ( currLife > 0 || playerDead )
 		{
@@ -347,11 +369,11 @@ public class PlayerController : MonoBehaviour
 		}
 
 		playerDead = true;
-		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
+		//GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
 
 		yield return thisS;
 
-		GlobalManager.GameCont.Restart ( );
+		//GlobalManager.GameCont.Restart ( );
 	}
 	#endregion
 
@@ -404,7 +426,7 @@ public class PlayerController : MonoBehaviour
 		Vector3 calTrans = Vector3.zero;
 		delTime = Time.deltaTime;
 
-        GlobalManager.Ui.CloseDashSpeed();
+		GlobalManager.Ui.DashSpeedEffect ( false );
         Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole>().enabled = false;
 
         if ( inAir )
@@ -416,7 +438,7 @@ public class PlayerController : MonoBehaviour
 		{
 			speed *= DashSpeed;
 
-            GlobalManager.Ui.OpenDashSpeed();
+			GlobalManager.Ui.DashSpeedEffect ( true );
             Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole>().enabled = true;
 
         }
@@ -840,11 +862,22 @@ public class PlayerController : MonoBehaviour
 	{
 		GameObject getObj = thisColl.gameObject;
 
-		if ( Dash )
+		if ( Dash || InMadness )
 		{
 			if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ElemDash )
 			{
-				thisColl.gameObject.GetComponent<Rigidbody> ( ).AddForce ( getPunch.projection_double, ForceMode.VelocityChange );
+				/*Vector3 getProj = getPunch.projection_basic;
+
+				if ( Random.Range ( 0,2 ) == 0 )
+				{
+					getProj.x *= Random.Range ( -getProj.x, -getProj.x / 2 );
+				}
+				else
+				{
+					getProj.x *= Random.Range ( getProj.x / 2, getProj.x );
+				}*/
+				thisColl.collider.enabled = false;
+				thisColl.gameObject.GetComponent<AbstractObject> ( ).ForceProp (  getPunch.projection_double );
 				return;
 			}
 			else if ( getObj.tag == Constants._Balls )
@@ -865,8 +898,8 @@ public class PlayerController : MonoBehaviour
 		}
 		else if ( getObj.tag == Constants._ObsTag )
 		{
-			Life = 0;
-			StartCoroutine ( GameOver ( ) );
+			currLife = 0;
+			StartCoroutine ( GameOver ( true ) );
 		}
 	}
 

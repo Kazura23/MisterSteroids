@@ -20,11 +20,8 @@ public class UiManager : ManagerParent
 	public GameObject PatternBackground;
 	public GameObject GlobalBack;
 
-    public GameObject ScorePoints;
-    public GameObject MoneyPoints;
-
-    [HideInInspector]
-    public float totalDistance;
+	public Text ScorePoints;
+	public Text MoneyPoints;
 
     [Header("SHOP STUFF")]
     public Image SlowMotion;
@@ -32,7 +29,6 @@ public class UiManager : ManagerParent
 
     [Header("MISC GAMEFEEL")]
     public Image CircleFeel;
-    
 
     Dictionary <MenuType, UiParent> AllMenu;
 	MenuType menuOpen;
@@ -73,20 +69,16 @@ public class UiManager : ManagerParent
 			thisUi.CloseThis (  );
 			menuOpen = MenuType.Nothing;
 		}
-
-	}
-
-	public void DisplayOver ( bool display )
-	{
-		//GameOver.gameObject.SetActive ( display );
 	}
 
 	public void BloodHit()
 	{
-		Time.timeScale = 0;
-		DOVirtual.DelayedCall(.065f, () => {
+		Time.timeScale = 0f;
+        Time.fixedDeltaTime = 0.02F * Time.timeScale;
+        DOVirtual.DelayedCall(.11f, () => {
 			Time.timeScale = 1;
-		});
+            Time.fixedDeltaTime = .02F;
+        });
 		Camera.main.DOFieldOfView(45, .12f);//.SetEase(Ease.InBounce);
 		RedScreen.DOFade(.4f, .12f).OnComplete(() => {
 			RedScreen.DOFade(0, .08f);
@@ -94,23 +86,38 @@ public class UiManager : ManagerParent
 		});
 	}
 
-	public void OpenDashSpeed()
+	public void DashSpeedEffect ( bool enable )
 	{
-		if ( speedEffect != null )
+		if ( speedEffect == null )
+		{
+			return;
+		}
+
+		if ( enable )
 		{
 			speedEffect.GetComponent<CanvasGroup>().DOFade(1, .25f); 
 		}
+		else
+		{
+			speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f); 
+		}
 	}
 
-    public void StartSlowMo()
+	public void StartSlowMo()
     {
-        SlowMotion.transform.DOLocalMove(new Vector2(960, -540), .2f);
+        SlowMotion.transform.DOLocalMove(new Vector2(960, -540), .05f);
+        CircleFeel.transform.DOScale(1, 0);
+        CircleFeel.DOColor(Color.white, 0);
         SlowMotion.DOFade(0, .05f);
-        DOVirtual.DelayedCall(.2f, () => {
-            SlowMotion.DOFade(1, .1f);
+        DOVirtual.DelayedCall(.1f, () => {
+            SlowMotion.DOFade(.75f, .1f);
             SlowMotion.transform.DOScale(4, 0f);
-            SlowMotion.transform.DOPunchPosition(Vector3.one * 20f, .5f, 18, 1).OnComplete(()=> {
-                SlowMotion.transform.DOLocalMove(new Vector2(0, 0), .2f);
+            CircleFeel.transform.DOScale(25, .25f);
+            CircleFeel.DOFade(.75f, .15f).OnComplete(() => {
+                CircleFeel.DOFade(0, .1f);
+            });
+            SlowMotion.transform.DOPunchPosition(Vector3.one * 30f, .15f, 18, 1).OnComplete(()=> {
+                SlowMotion.transform.DOLocalMove(new Vector2(0, 0), .05f);
                 SlowMotion.DOFade(0, .05f);
                 DOVirtual.DelayedCall(.2f, () =>
                 {
@@ -124,6 +131,7 @@ public class UiManager : ManagerParent
     public void StartBonusLife()
     {
         CircleFeel.transform.DOScale(1, 0);
+        CircleFeel.DOColor(new Color32(0xf4,0x6c,0x6e,0xff),0);
         BonusLife.transform.DOLocalMove(new Vector2(960, -480), .1f);
         BonusLife.GetComponent<RainbowScale>().enabled = false;
         BonusLife.DOFade(0, .05f);
@@ -140,19 +148,9 @@ public class UiManager : ManagerParent
             });
         });
     }
-
-	public void CloseDashSpeed()
-	{
-		if ( speedEffect != null )
-		{
-			speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f); 
-		}
-	}
 	#endregion
 
 	#region Private Methods
-
-
 	protected override void InitializeManager ( )
 	{
 		InitializeUI ( );
@@ -185,13 +183,6 @@ public class UiManager : ManagerParent
 		#endif
 	}
 
-    void Update()
-    {
-
-        ScorePoints.transform.GetChild(0).GetComponent<Text>().text = "" + Mathf.RoundToInt(totalDistance);
-        MoneyPoints.transform.GetChild(0).GetComponent<Text>().text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
-    }
-
     void InitializeUI ( )
 	{
 		//	InvokeRepeating ( "checkCurosr", 0, 0.5f );
@@ -204,7 +195,6 @@ public class UiManager : ManagerParent
 		}
 	}
     
-
 	void checkCurosr ( )
 	{
 		if ( menuOpen != MenuType.Nothing )

@@ -152,7 +152,7 @@ public class AbstractObject : MonoBehaviour
 		Transform savePos = transform;
 		Transform playPos = GlobalManager.GameCont.Player.transform;
 
-		while ( Vector3.Distance ( savePos.position, playPos.position ) < 5 )
+		while ( Vector3.Distance ( savePos.position, playPos.position ) < 2.5f )
 		{
 			yield return thisF;
 		}

@@ -146,8 +146,7 @@ public class EditItemMod : Editor
 		EditorGUILayout.LabelField("Modification", EditorStyles.boldLabel);
 
 		myTarget.ModifVie = EditorGUILayout.Toggle ( "ModifieVie", myTarget.ModifVie );
-		myTarget.ModifReduceMot = EditorGUILayout.Toggle ( "ModifMotionTime", myTarget.ModifReduceMot );
-		myTarget.ModifRecovereMot = EditorGUILayout.Toggle ( "ModifRecovereMot", myTarget.ModifRecovereMot );
+		myTarget.ModifSpecial = EditorGUILayout.Toggle ( "ModifSpecial", myTarget.ModifSpecial );
 
 		if ( myTarget.ModifVie )
 		{
@@ -158,25 +157,14 @@ public class EditItemMod : Editor
 				myTarget.NombreVie = 1;
 			}
 		}
-		if ( myTarget.ModifReduceMot )
-		{
-			myTarget.ReduceSlowMot = EditorGUILayout.FloatField ( "ReduceSlowMot", myTarget.ReduceSlowMot );
 
-			if ( myTarget.ReduceSlowMot <= 0 )
+		if ( myTarget.ModifSpecial )
+		{
+			if ( myTarget.SpecAction == SpecialAction.SlowMot )
 			{
-				myTarget.ReduceSlowMot = 0.1f;
 			}
 		}
-		if ( myTarget.ModifRecovereMot )
-		{
-			myTarget.RecoverSlowMot = EditorGUILayout.FloatField ( "RecoverSlowMot", myTarget.RecoverSlowMot );
-
-			if ( myTarget.RecoverSlowMot <= 0 )
-			{
-				myTarget.RecoverSlowMot = 0.1f;
-			}
-		}
-
+	
 		if ( myTarget.RightItem == null )
 		{
 			myTarget.RightItem = myTarget.GetComponent<ItemModif> ( );

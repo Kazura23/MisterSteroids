@@ -88,6 +88,9 @@ public class PlayerController : MonoBehaviour
 	public float SoftNess;
 
 	[HideInInspector]
+	public SpecialAction ThisAct;
+
+	[HideInInspector]
 	public int NbrLineRight = 1;
 	[HideInInspector]
 	public int NbrLineLeft = 1;
@@ -224,20 +227,7 @@ public class PlayerController : MonoBehaviour
 
 		if ( Input.GetAxis ( "SpecialAction" ) > 0 && canSpe && SliderContent > 0 )
 		{
-            Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
-
-			if ( !animeSlo )
-			{
-				animeSlo = true;
-				GlobalManager.Ui.StartSlowMo();
-			}
-
-			if ( Time.timeScale > 1 / SlowMotion )
-			{
-				Time.timeScale -= Time.deltaTime * SpeedSlowMot;
-			}
-
-			SliderContent -= ReduceSlider * Time.deltaTime;
+			speAction ( );
 		}
 		else if ( Time.timeScale < 1 )
 		{
@@ -394,6 +384,27 @@ public class PlayerController : MonoBehaviour
 	#endregion
 
 	#region Private Functions
+	void speAction ( )
+	{
+		if ( ThisAct == SpecialAction.SlowMot )
+		{
+			Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
+
+			if ( !animeSlo )
+			{
+				animeSlo = true;
+				GlobalManager.Ui.StartSlowMo();
+			}
+
+			if ( Time.timeScale > 1 / SlowMotion )
+			{
+				Time.timeScale -= Time.deltaTime * SpeedSlowMot;
+			}
+
+			SliderContent -= ReduceSlider * Time.deltaTime;
+		}
+	}
+
 	void waitInvDmg ( )
 	{
 		invDamage = false;

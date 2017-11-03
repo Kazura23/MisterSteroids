@@ -36,12 +36,10 @@ public class ItemModif : MonoBehaviour
 	public string CatName;
 
 	public bool ModifVie;
-	public bool ModifReduceMot;
-	public bool ModifRecovereMot;
+	public bool ModifSpecial;
 
 	public int NombreVie;
-	public float ReduceSlowMot;
-	public float RecoverSlowMot;
+	public SpecialAction SpecAction;
 
 	public bool Selected;
 	#endregion

@@ -47,6 +47,7 @@ public class GameController : ManagerParent
 	{
 		Player = GameObject.FindGameObjectWithTag("Player");
 		Player.GetComponent<PlayerController> ( ).ResetPlayer ( );
+		Player.GetComponent<PlayerController> ( ).ThisAct = SpecialAction.Nothing;
 
 		SetAllBonus ( );
 		GameStarted = true;
@@ -117,12 +118,9 @@ public class GameController : ManagerParent
 				currPlayer.Life += thisItem.NombreVie;
 			}
 
-			if ( thisItem.ModifReduceMot )
+			if ( thisItem.ModifSpecial )
 			{
-			}
-
-			if ( thisItem.ModifRecovereMot )
-			{
+				Player.GetComponent<PlayerController> ( ).ThisAct = thisItem.SpecAction;
 			}
 		}
 	}

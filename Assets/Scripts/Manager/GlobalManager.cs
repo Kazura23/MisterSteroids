@@ -52,7 +52,7 @@ public class GlobalManager : MonoBehaviour
 
 	void InitializeManager<T>(ref T manager) where T : ManagerParent
 	{
-		Debug.Log("Initializing managers");
+		//Debug.Log("Initializing managers");
 		T[] managers = GetComponentsInChildren<T>();
 
 		if(managers.Length == 0)

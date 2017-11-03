@@ -34,6 +34,7 @@ public class UiManager : ManagerParent
 	MenuType menuOpen;
 
 	GameObject InGame;
+	bool onMainScene = true;
 	#endregion
 
 	#region Mono
@@ -49,7 +50,7 @@ public class UiManager : ManagerParent
 			InGame.SetActive ( false );
 			if ( menuOpen != MenuType.Nothing )
 			{
-				CloseThisMenu ( );
+				CloseThisMenu ( true );
 			}
 
 			menuOpen = thisType;
@@ -58,7 +59,7 @@ public class UiManager : ManagerParent
 		}
 	}
 
-	public void CloseThisMenu ( )
+	public void CloseThisMenu ( bool openNew = false )
 	{
 		UiParent thisUi;
 
@@ -66,8 +67,13 @@ public class UiManager : ManagerParent
 		{
 			InGame.SetActive ( true );
 			GlobalBack.SetActive ( false );
-			thisUi.CloseThis (  );
+			thisUi.CloseThis ( );
 			menuOpen = MenuType.Nothing;
+
+			if ( onMainScene && !openNew )
+			{
+				OpenThisMenu ( MenuType.MenuHome );
+			}
 		}
 	}
 
@@ -154,7 +160,7 @@ public class UiManager : ManagerParent
 	protected override void InitializeManager ( )
 	{
 		AllPlayerPrefs.SetIntValue ( Constants.Coin, 1000000 );
-		InitializeUI ( );
+		InieUI ( );
 
 		Object[] getAllMenu =Resources.LoadAll ( "Menu" );
 		Dictionary<MenuType, UiParent> setAllMenu = new Dictionary<MenuType, UiParent> ( getAllMenu.Length );
@@ -184,9 +190,16 @@ public class UiManager : ManagerParent
 		#endif
 	}
 
-    void InitializeUI ( )
+	void InieUI ( )
 	{
         //	InvokeRepeating ( "checkCurosr", 0, 0.5f );
+
+		System.Action <HomeEvent> checkLevel = delegate ( HomeEvent thisEvnt )
+		{
+			onMainScene = thisEvnt.onMenuHome;
+		};
+
+		GlobalManager.Event.Register ( checkLevel );
 
         MoneyPoints.text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
 

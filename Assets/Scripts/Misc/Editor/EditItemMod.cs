@@ -146,7 +146,6 @@ public class EditItemMod : Editor
 		EditorGUILayout.LabelField("Modification", EditorStyles.boldLabel);
 
 		myTarget.ModifVie = EditorGUILayout.Toggle ( "ModifieVie", myTarget.ModifVie );
-		myTarget.ModifSpecial = EditorGUILayout.Toggle ( "ModifSpecial", myTarget.ModifSpecial );
 
 		if ( myTarget.ModifVie )
 		{
@@ -158,10 +157,19 @@ public class EditItemMod : Editor
 			}
 		}
 
+		myTarget.ModifSpecial = EditorGUILayout.Toggle ( "ModifSpecial", myTarget.ModifSpecial );
+
 		if ( myTarget.ModifSpecial )
 		{
+			myTarget.SpecAction = (SpecialAction) EditorGUILayout.EnumPopup ( "SpecAction", myTarget.SpecAction );
+
 			if ( myTarget.SpecAction == SpecialAction.SlowMot )
 			{
+				myTarget.SlowMotion = EditorGUILayout.FloatField ( new GUIContent ( "SlowMotion","De combien la vitesse va diminuer au maximun par rapport à la vitesse standard" ), myTarget.SlowMotion );
+				myTarget.SpeedSlowMot = EditorGUILayout.FloatField ( new GUIContent ( "SpeedSlowMot", "Vitesse pour atteindre le slowMotion" ), myTarget.SpeedSlowMot );
+				myTarget.SpeedDeacSM = EditorGUILayout.FloatField ( new GUIContent ( "SpeedDeacSM", "Vitesse pour revenir à la vitesse normal" ), myTarget.SpeedDeacSM );
+				myTarget.ReduceSlider = EditorGUILayout.FloatField ( new GUIContent ( "ReduceSlider", "Vitesse de descente du slider content" ), myTarget.ReduceSlider );
+				myTarget.RecovSlider = EditorGUILayout.FloatField ( new GUIContent ( "RecovSlider", "Vitesse de récupération du slider content" ), myTarget.RecovSlider );
 			}
 		}
 	

@@ -109,10 +109,13 @@ public class GameController : ManagerParent
 	{
 		Dictionary <string, ItemModif> getMod = AllModifItem;
 		PlayerController currPlayer = Player.GetComponent<PlayerController> ( );
+		ItemModif thisItem;
+		List<string> getKey = new List<string> ( );
 
-		foreach (ItemModif thisItem in getMod.Values )
+		foreach ( KeyValuePair <string, ItemModif> thisKV in getMod )
 		{
-			Debug.Log ( getMod.Values );
+			thisItem = thisKV.Value;
+		
 			if ( thisItem.ModifVie )
 			{
 				currPlayer.Life += thisItem.NombreVie;
@@ -120,8 +123,27 @@ public class GameController : ManagerParent
 
 			if ( thisItem.ModifSpecial )
 			{
-				Player.GetComponent<PlayerController> ( ).ThisAct = thisItem.SpecAction;
+				currPlayer.ThisAct = thisItem.SpecAction;
+
+				if ( thisItem.SpecAction == SpecialAction.SlowMot )
+				{
+					currPlayer.SlowMotion = thisItem.SlowMotion;
+					currPlayer.SpeedSlowMot = thisItem.SpeedSlowMot;
+					currPlayer.SpeedDeacSM = thisItem.SpeedDeacSM;
+					currPlayer.ReduceSlider = thisItem.ReduceSlider;
+					currPlayer.RecovSlider = thisItem.RecovSlider;
+				}
 			}
+
+			if ( !thisItem.buyFLife )
+			{
+				getKey.Add ( thisKV.Key );
+			}
+		}
+
+		for ( int a = 0; a < getKey.Count; a++ )
+		{
+			getMod.Remove ( getKey [ a ] );
 		}
 	}
 	#endregion

@@ -26,7 +26,6 @@ public class MenuShop : UiParent
     public Image moleculeCategory;
     public GameObject moleculeContainer;
 
-
 	[HideInInspector]
 	public CatShop currCatSeled;
 
@@ -38,6 +37,8 @@ public class MenuShop : UiParent
 	bool catCurrSelected = true;
 	bool waitInputH = false;
 	bool waitInputV = false;
+	bool waitImpCan = false;
+	bool waitImpSub = false;
 	#endregion
 
 	#region Mono
@@ -47,21 +48,40 @@ public class MenuShop : UiParent
 		float getV = Input.GetAxis ( "Vertical" );
 
 		// Touche pour pouvoir selectionner les items
-		if ( Input.GetAxis ( "Submit" ) == 1 )
+		if ( Input.GetAxis ( "Submit" ) == 1 && !waitImpSub )
 		{
-			ChangeToItem ( true );
+			waitImpSub = true;
+			if ( !catCurrSelected )
+			{
+				BuyItem ( );
+			}
+			else
+			{
+				ChangeToItem ( true );
+			}
+		}
+		else if (  Input.GetAxis ( "Submit" ) == 0 )
+		{
+			waitImpSub = false;
 		}
 
 		// Touche pour sortir des items
-		if ( Input.GetAxis ( "Cancel" ) == 1 )
+		if ( Input.GetAxis ( "Cancel" ) == 1 && !waitImpCan )
 		{
-			ChangeToItem ( false );
-            ChangeToCat();
+			waitImpCan = true;
+			if ( !catCurrSelected )
+			{
+				ChangeToItem ( false );
+				ChangeToCat();
+			}
+			else
+			{
+				GlobalManager.Ui.CloseThisMenu ( );
+			}
 		}
-
-		if ( Input.GetKeyDown ( KeyCode.A ) && !catCurrSelected )
+		else if (  Input.GetAxis ( "Cancel" ) == 0 )
 		{
-			BuyItem ( );
+			waitImpCan = false;
 		}
 
 		// Navigation horizontale des catégories ou items
@@ -178,6 +198,7 @@ public class MenuShop : UiParent
 	public void BuyItem ( )
 	{
 		string getCons = Constants.ItemBought;
+
 		if ( AllPlayerPrefs.GetBoolValue ( getCons + currItemSeled.ItemName ) )
 		{
 			getCons += currItemSeled.CatName;
@@ -210,8 +231,6 @@ public class MenuShop : UiParent
 				allConfirm.Remove ( getCons );
 			}
 
-			allConfirm.Add ( getCons, currItemSeled );
-
 			currItemSeled.GetComponent<Image> ( ).sprite = currItemSeled.SpriteConfirm;
 
 			if ( currItemSeled.UseColor )
@@ -243,10 +262,13 @@ public class MenuShop : UiParent
 
 				if ( currCatSeled.BuyForLife )
 				{
+					currIT.buyFLife = true;
 					AllPlayerPrefs.SetStringValue ( getCons + currIT.ItemName );
 				}
 			}
 		}
+
+		allConfirm.Add ( getCons + currItemSeled.ItemName, currItemSeled );
 	}
 	#endregion
 
@@ -299,9 +321,7 @@ public class MenuShop : UiParent
             iconCategory.DOFade(0, .1f);
             textCategory.DOFade(0, .1f);
             barCategory.DOFade(0, .1f);
-
-
-
+		
 
             transform.DORotate(new Vector3(moleculeContainer.transform.localEulerAngles.x, moleculeContainer.transform.localEulerAngles.y, -130),1f);
             transform.DOLocalMoveX(transform.localPosition.x -625, 1f);

@@ -349,7 +349,7 @@ public class PlayerController : MonoBehaviour
 			yield break;
 		}
 
-		GameOverTok thisTok = new GameOverTok ( );
+        GameOverTok thisTok = new GameOverTok ( );
 		thisTok.totalDist = totalDis;
 
 		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver, thisTok );

@@ -186,9 +186,11 @@ public class UiManager : ManagerParent
 
     void InitializeUI ( )
 	{
-		//	InvokeRepeating ( "checkCurosr", 0, 0.5f );
+        //	InvokeRepeating ( "checkCurosr", 0, 0.5f );
 
-		if ( PatternBackground != null )
+        MoneyPoints.text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
+
+        if ( PatternBackground != null )
 		{
 			PatternBackground.transform.DOLocalMoveY(-60, 5f).SetEase(Ease.Linear).OnComplete(() => {
 				PatternBackground.transform.DOLocalMoveY(1092, 0);

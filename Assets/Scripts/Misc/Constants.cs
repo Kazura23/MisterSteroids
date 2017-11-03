@@ -26,12 +26,11 @@ public static class Constants
 	#region PlayerPref
 	public const string Coin = "Coins";
 	public const string ItemBought = "Item_";
+    #endregion
 
-	#endregion
 
-
-	#region Other
-	public const int DefFov = 60;
+    #region Other
+    public const int DefFov = 60;
 	public const int LineDist = 6;
 	//public const float ChunkLengh = 470;
 	#endregion

@@ -32,15 +32,24 @@ public class ShieldMan : AbstractObject {
     #endregion
 
     #region Private Methods 
-    public override void Dead(bool enemy = false)
-    {
-        base.Dead(enemy);
+	protected override void OnCollisionEnter ( Collision thisColl )
+	{
+		base.OnCollisionEnter ( thisColl );
+		if ( isDead )
+		{
+			GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
+		}
+	}
+    #endregion
+	public override void Dead(bool enemy = false)
+	{
+		base.Dead(enemy);
 
-        //mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
-    }
+		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
+	}
 
 	public override void PlayerDetected( GameObject thisObj, bool isDetected )
-    {
+	{
 		base.PlayerDetected ( thisObj, isDetected );
 
 		if ( isDetected )
@@ -51,8 +60,7 @@ public class ShieldMan : AbstractObject {
 		{
 			parMat.color = saveCol;
 		}
-    }
-    #endregion
+	}
 
     public override void Degat(Vector3 p_damage, int p_technic)
     {
@@ -71,7 +79,23 @@ public class ShieldMan : AbstractObject {
             {
                 base.Degat(p_damage, p_technic);
             }
+        }else
+        {
+            if (shieldActive)
+            {
+                Debug.Log("Fracas bouclier");
+                // animation ou son sur le bouclier
+            }
+            else
+            {
+                base.Degat(p_damage, p_technic);
+            }
         }
     }
 
+	protected override void CollDetect ( )
+	{
+		base.CollDetect ( );
+		GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
+	}
 }

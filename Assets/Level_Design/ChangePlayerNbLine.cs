@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class ChangePlayerNbLine : MonoBehaviour {
 
-	public int nbLine ;
+	public int NbrLineLeft;
+	public int NbrLineRigh;
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (other.gameObject.tag == "Player") {
-			other.gameObject.GetComponent<PlayerController>().NbrLine = nbLine ;
+		if (other.gameObject.tag == "Player") 
+		{
+			other.gameObject.GetComponent<PlayerController>().NbrLineLeft = NbrLineLeft ;
+			other.gameObject.GetComponent<PlayerController>().NbrLineRight = NbrLineRigh ;
 		}
 	}
 }

@@ -116,6 +116,8 @@ public class PlayerController : MonoBehaviour
 	Punch getPunch;
 	Camera thisCam;
 	Slider SliderSlow;
+	Text textDist;
+	Text textCoin;
 
 	float currSpeed = 0;
 	float currSpLine = 0;
@@ -163,6 +165,8 @@ public class PlayerController : MonoBehaviour
 		SliderSlow.maxValue = 10;
 		currLife = Life;
 		lastPos = pTrans.position;
+		textDist = GlobalManager.Ui.ScorePoints;
+		textCoin = GlobalManager.Ui.MoneyPoints;
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
     }
@@ -171,7 +175,8 @@ public class PlayerController : MonoBehaviour
 	{
 		totalDis += Vector3.Distance ( lastPos, pTrans.position );
 		lastPos = pTrans.position;
-        GlobalManager.Ui.totalDistance = totalDis;
+
+		textDist.text = "" + Mathf.RoundToInt ( totalDis );
 
 		//Debug.Log ( totalDis );
 		punch.SetPunch ( !playerDead );
@@ -344,7 +349,10 @@ public class PlayerController : MonoBehaviour
 			yield break;
 		}
 
-        GlobalManager.Ui.GameOver();
+		GameOverTok thisTok = new GameOverTok ( );
+		thisTok.totalDist = totalDis;
+
+		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver, thisTok );
         ScreenShake.Singleton.ShakeGameOver();
 		WaitForSeconds thisS = new WaitForSeconds ( 1 );
         if (Life > 1)
@@ -418,7 +426,7 @@ public class PlayerController : MonoBehaviour
 		Vector3 calTrans = Vector3.zero;
 		delTime = Time.deltaTime;
 
-        GlobalManager.Ui.CloseDashSpeed();
+		GlobalManager.Ui.DashSpeedEffect ( false );
         Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole>().enabled = false;
 
         if ( inAir )
@@ -430,7 +438,7 @@ public class PlayerController : MonoBehaviour
 		{
 			speed *= DashSpeed;
 
-            GlobalManager.Ui.OpenDashSpeed();
+			GlobalManager.Ui.DashSpeedEffect ( true );
             Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole>().enabled = true;
 
         }

@@ -20,11 +20,8 @@ public class UiManager : ManagerParent
 	public GameObject PatternBackground;
 	public GameObject GlobalBack;
 
-    public GameObject ScorePoints;
-    public GameObject MoneyPoints;
-
-    [HideInInspector]
-    public float totalDistance;
+	public Text ScorePoints;
+	public Text MoneyPoints;
 
     [Header("SHOP STUFF")]
     public Image SlowMotion;
@@ -32,12 +29,6 @@ public class UiManager : ManagerParent
 
     [Header("MISC GAMEFEEL")]
     public Image CircleFeel;
-
-    [Header("GAME OVER")]
-    public GameObject GameOverObject;
-    public GameObject PatternGameOver, BarGameOver;
-    public Text YouGameOver, MadeGameOver, PointsGameOver, PressGameOver;
-
 
     Dictionary <MenuType, UiParent> AllMenu;
 	MenuType menuOpen;
@@ -78,12 +69,6 @@ public class UiManager : ManagerParent
 			thisUi.CloseThis (  );
 			menuOpen = MenuType.Nothing;
 		}
-
-	}
-
-	public void DisplayOver ( bool display )
-	{
-		//GameOver.gameObject.SetActive ( display );
 	}
 
 	public void BloodHit()
@@ -101,54 +86,24 @@ public class UiManager : ManagerParent
 		});
 	}
 
-	public void OpenDashSpeed()
+	public void DashSpeedEffect ( bool enable )
 	{
-		if ( speedEffect != null )
+		if ( speedEffect == null )
+		{
+			return;
+		}
+
+		if ( enable )
 		{
 			speedEffect.GetComponent<CanvasGroup>().DOFade(1, .25f); 
 		}
+		else
+		{
+			speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f); 
+		}
 	}
 
-    public void GameOver()
-    {
-        Debug.Log("GameOver");
-        PointsGameOver.text = "" + Mathf.RoundToInt(totalDistance);
-        YouGameOver.DOFade(0, 0);
-        MadeGameOver.DOFade(0, 0);
-        PointsGameOver.DOFade(0, 0);
-        YouGameOver.transform.DOScale(5, 0);
-        MadeGameOver.transform.DOScale(5, 0);
-        PointsGameOver.transform.DOScale(5, 0);
-        BarGameOver.transform.DOScaleY(0, 0);
-
-        PatternGameOver.transform.DOLocalMoveY(-60, 5f).SetEase(Ease.Linear).OnComplete(() => {
-            PatternGameOver.transform.DOLocalMoveY(1092, 0);
-        }).SetLoops(-1, LoopType.Restart);
-
-
-        GameOverObject.GetComponent<CanvasGroup>().DOFade(1f, 1f).OnComplete(() =>
-        {
-            YouGameOver.DOFade(1, .25f);
-            YouGameOver.transform.DOScale(1, .25f).OnComplete(()=> {
-                MadeGameOver.DOFade(1, .25f);
-                MadeGameOver.transform.DOScale(1, .25f).OnComplete(() =>
-                {
-                    PointsGameOver.DOFade(1, .25f);
-                    BarGameOver.transform.DOScaleY(1.25f, .2f).OnComplete(() =>
-                    {
-                        BarGameOver.transform.DOScaleY(1, .05f);
-                    });
-                    PointsGameOver.transform.DOScale(1, .25f);
-
-                    DOVirtual.DelayedCall(1.5f, () => {
-                        PressGameOver.GetComponent<CanvasGroup>().DOFade(1, .5f);
-                    });
-                });
-            });
-        });
-    }
-
-    public void StartSlowMo()
+	public void StartSlowMo()
     {
         SlowMotion.transform.DOLocalMove(new Vector2(960, -540), .05f);
         CircleFeel.transform.DOScale(1, 0);
@@ -193,19 +148,9 @@ public class UiManager : ManagerParent
             });
         });
     }
-
-	public void CloseDashSpeed()
-	{
-		if ( speedEffect != null )
-		{
-			speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f); 
-		}
-	}
 	#endregion
 
 	#region Private Methods
-
-
 	protected override void InitializeManager ( )
 	{
 		InitializeUI ( );
@@ -238,13 +183,6 @@ public class UiManager : ManagerParent
 		#endif
 	}
 
-    void Update()
-    {
-
-        ScorePoints.transform.GetChild(0).GetComponent<Text>().text = "" + Mathf.RoundToInt(totalDistance);
-        MoneyPoints.transform.GetChild(0).GetComponent<Text>().text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
-    }
-
     void InitializeUI ( )
 	{
 		//	InvokeRepeating ( "checkCurosr", 0, 0.5f );
@@ -257,7 +195,6 @@ public class UiManager : ManagerParent
 		}
 	}
     
-
 	void checkCurosr ( )
 	{
 		if ( menuOpen != MenuType.Nothing )

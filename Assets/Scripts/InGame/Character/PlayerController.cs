@@ -282,6 +282,17 @@ public class PlayerController : MonoBehaviour
 			return;
 		}
 
+		if ( barMadness.value > 99 && !InMadness )
+		{
+			InMadness = true;
+			GlobalManager.Ui.OpenMadness();
+		}
+		else if( barMadness.value == 0 && InMadness)
+		{
+			InMadness = false;
+			GlobalManager.Ui.CloseMadness();
+		}
+
 		if (barMadness.value - (getTime * delayDownBar) > 0)
 		{
 			barMadness.value -= getTime * delayDownBar;

@@ -29,6 +29,11 @@ public class PlayerController : MonoBehaviour
 	public float BonusGrav = 0;
 	[Tooltip ("Pourcentage de ralentissement du personnage dans les airs")]
 	public float PourcRal = 50;
+	[Tooltip ("Distance a parcourir pour augmenter la vitesse Max")]
+	public int DistIncMaxSpeed = 100;
+	[Tooltip ("Augmentation du speed max")]
+	public float MaxSpeedIncrease = 0;
+	public float MaxCLSpeedIncrease = 0;
 
 	//public float JumpForce = 200;
     [Header("Caractéristique Fight")]
@@ -83,6 +88,9 @@ public class PlayerController : MonoBehaviour
 	public float SoftNess;
 
 	[HideInInspector]
+	public SpecialAction ThisAct;
+
+	[HideInInspector]
 	public int NbrLineRight = 1;
 	[HideInInspector]
 	public int NbrLineLeft = 1;
@@ -99,7 +107,6 @@ public class PlayerController : MonoBehaviour
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
 	bool canDPunch = true;
-	int currLife;
 	//private Coroutine corou/*, preparPunch*/;
 
 	//Rigidbody thisRig;
@@ -128,9 +135,12 @@ public class PlayerController : MonoBehaviour
 	float befRot = 0;
 	float SliderContent;
 	float totalDis = 0;
-	int currLine = 0;
     float rationUse = 1;
+	float nextIncrease = 0;
+	float maxSpeed = 0;
+	float maxSpeedCL = 0;
 
+	int currLine = 0;
 	int LastImp = 0;
 	int clDir = 0;
 
@@ -163,10 +173,12 @@ public class PlayerController : MonoBehaviour
 		SliderSlow = GlobalManager.Ui.MotionSlider;
 		SliderContent = 10;
 		SliderSlow.maxValue = 10;
-		currLife = Life;
 		lastPos = pTrans.position;
 		textDist = GlobalManager.Ui.ScorePoints;
 		textCoin = GlobalManager.Ui.MoneyPoints;
+		nextIncrease = DistIncMaxSpeed;
+		maxSpeed = MaxSpeed;
+		maxSpeedCL = MaxSpeedCL;
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
     }
@@ -177,6 +189,13 @@ public class PlayerController : MonoBehaviour
 		lastPos = pTrans.position;
 
 		textDist.text = "" + Mathf.RoundToInt ( totalDis );
+
+		if ( totalDis > nextIncrease )
+		{
+			nextIncrease += DistIncMaxSpeed;
+			maxSpeed += MaxSpeedIncrease;
+			maxSpeedCL += MaxCLSpeedIncrease;
+		}
 
 		//Debug.Log ( totalDis );
 		punch.SetPunch ( !playerDead );
@@ -300,13 +319,13 @@ public class PlayerController : MonoBehaviour
 
 		if ( Running )
 		{
-			if ( currSpeed < MaxSpeed )
+			if ( currSpeed < maxSpeed )
 			{
 				currSpeed += Acceleration * deltTime;
 			}
-			else if ( currSpeed > MaxSpeed )
+			else if ( currSpeed > maxSpeed )
 			{
-				currSpeed = MaxSpeed;
+				currSpeed = maxSpeed;
 			}
 		}
 		else
@@ -337,17 +356,19 @@ public class PlayerController : MonoBehaviour
 	#region Public Functions
 	public void ResetPlayer ( )
 	{
-		currLife = Life;
+		Life = 1;
 		playerDead = false;
 		StopPlayer = true;
 		totalDis = 0;
+		maxSpeed = MaxSpeed;
+		maxSpeedCL = MaxSpeedCL;
 	}
 
-	public IEnumerator GameOver ( bool forceDead = false )
+	public void GameOver ( bool forceDead = false )
 	{
 		if ( invDamage  && !forceDead )
 		{
-			yield break;
+			return;
 		}
 
         GameOverTok thisTok = new GameOverTok ( );
@@ -358,27 +379,46 @@ public class PlayerController : MonoBehaviour
 		WaitForSeconds thisS = new WaitForSeconds ( 1 );
         if (Life > 1)
             GlobalManager.Ui.StartBonusLife();
-        currLife--;
+		Life--;
         
 
-		if ( currLife > 0 || playerDead )
+		if ( Life > 0 || playerDead )
 		{
 			invDamage = true;
 			Invoke ( "waitInvDmg", TimeInvincible );
 
-			yield break;
+			return;
 		}
 
 		playerDead = true;
 		//GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
-
-		yield return thisS;
 
 		//GlobalManager.GameCont.Restart ( );
 	}
 	#endregion
 
 	#region Private Functions
+	void speAction ( )
+	{
+		if ( ThisAct == SpecialAction.SlowMot )
+		{
+			Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
+
+			if ( !animeSlo )
+			{
+				animeSlo = true;
+				GlobalManager.Ui.StartSlowMo();
+			}
+
+			if ( Time.timeScale > 1 / SlowMotion )
+			{
+				Time.timeScale -= Time.deltaTime * SpeedSlowMot;
+			}
+
+			SliderContent -= ReduceSlider * Time.deltaTime;
+		}
+	}
+
 	void waitInvDmg ( )
 	{
 		invDamage = false;
@@ -452,9 +492,9 @@ public class PlayerController : MonoBehaviour
 			speed *= SpeedDoublePunchRun;
 		}
 
-		float calCFov = Constants.DefFov * ( speed / MaxSpeed );
+		float calCFov = Constants.DefFov * ( speed / maxSpeed );
 
-		Shader.SetGlobalFloat ( "_ReduceVis", speed / MaxSpeed);
+		Shader.SetGlobalFloat ( "_ReduceVis", speed / maxSpeed);
 
 		if ( thisCam.fieldOfView < calCFov)
 		{
@@ -555,9 +595,9 @@ public class PlayerController : MonoBehaviour
 						currSpLine = 0;
 					}
 				}
-				else if ( currSpLine < MaxSpeedCL )
+				else if ( currSpLine < maxSpeedCL )
 				{
-					accLine = ( currSpLine * ImpulsionCL )/ MaxSpeedCL; 
+					accLine = ( currSpLine * ImpulsionCL ) / maxSpeedCL; 
 
 					if ( accLine > 1 || accLine == 0 )
 					{
@@ -566,9 +606,9 @@ public class PlayerController : MonoBehaviour
 
 					currSpLine += AccelerationCL * accLine * delTime;
 				}
-				else if ( currSpLine > MaxSpeedCL )
+				else if ( currSpLine > maxSpeedCL )
 				{
-					currSpLine = MaxSpeedCL;
+					currSpLine = maxSpeedCL;
 				}
 			}
 
@@ -913,16 +953,16 @@ public class PlayerController : MonoBehaviour
 		if ( getObj.tag == Constants._MissileBazoo )
 		{
 			getObj.GetComponent<MissileBazooka> ( ).Explosion ( );
-			StartCoroutine ( GameOver ( ) );
+			GameOver ( );
 		}
-		else if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._MissileBazoo )
+		else if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._MissileBazoo || getObj.tag == Constants._Balls )
 		{
-			StartCoroutine ( GameOver ( ) );
+			GameOver ( );
 		}
 		else if ( getObj.tag == Constants._ObsTag )
 		{
-			currLife = 0;
-			StartCoroutine ( GameOver ( true ) );
+			Life = 0;
+			GameOver ( true );
 		}
 	}
 

@@ -1,0 +1,261 @@
+fileFormatVersion: 2
+guid: be42b738a6a2b104485d644a92a6ad1a
+timeCreated: 1509814473
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: mr_steroid:polySurface1
+    100002: Mr_steroid_Head
+    100004: Mr_steroid_Hips
+    100006: Mr_steroid_LeftArm
+    100008: Mr_steroid_LeftFoot
+    100010: Mr_steroid_LeftForeArm
+    100012: Mr_steroid_LeftHand
+    100014: Mr_steroid_LeftHandIndex1
+    100016: Mr_steroid_LeftHandIndex2
+    100018: Mr_steroid_LeftHandIndex3
+    100020: Mr_steroid_LeftHandMiddle1
+    100022: Mr_steroid_LeftHandMiddle2
+    100024: Mr_steroid_LeftHandMiddle3
+    100026: Mr_steroid_LeftHandPinky1
+    100028: Mr_steroid_LeftHandPinky2
+    100030: Mr_steroid_LeftHandPinky3
+    100032: Mr_steroid_LeftHandRing1
+    100034: Mr_steroid_LeftHandRing2
+    100036: Mr_steroid_LeftHandRing3
+    100038: Mr_steroid_LeftHandThumb1
+    100040: Mr_steroid_LeftHandThumb2
+    100042: Mr_steroid_LeftHandThumb3
+    100044: Mr_steroid_LeftLeg
+    100046: Mr_steroid_LeftShoulder
+    100048: Mr_steroid_LeftToeBase
+    100050: Mr_steroid_LeftUpLeg
+    100052: Mr_steroid_Neck
+    100054: Mr_steroid_Reference
+    100056: Mr_steroid_RightArm
+    100058: Mr_steroid_RightFoot
+    100060: Mr_steroid_RightForeArm
+    100062: Mr_steroid_RightHand
+    100064: Mr_steroid_RightHandIndex1
+    100066: Mr_steroid_RightHandIndex2
+    100068: Mr_steroid_RightHandIndex3
+    100070: Mr_steroid_RightHandMiddle1
+    100072: Mr_steroid_RightHandMiddle2
+    100074: Mr_steroid_RightHandMiddle3
+    100076: Mr_steroid_RightHandPinky1
+    100078: Mr_steroid_RightHandPinky2
+    100080: Mr_steroid_RightHandPinky3
+    100082: Mr_steroid_RightHandRing1
+    100084: Mr_steroid_RightHandRing2
+    100086: Mr_steroid_RightHandRing3
+    100088: Mr_steroid_RightHandThumb1
+    100090: Mr_steroid_RightHandThumb2
+    100092: Mr_steroid_RightHandThumb3
+    100094: Mr_steroid_RightLeg
+    100096: Mr_steroid_RightShoulder
+    100098: Mr_steroid_RightToeBase
+    100100: Mr_steroid_RightUpLeg
+    100102: Mr_steroid_Spine
+    100104: Mr_steroid_Spine1
+    100106: polySurface3
+    100108: //RootNode
+    400000: mr_steroid:polySurface1
+    400002: Mr_steroid_Head
+    400004: Mr_steroid_Hips
+    400006: Mr_steroid_LeftArm
+    400008: Mr_steroid_LeftFoot
+    400010: Mr_steroid_LeftForeArm
+    400012: Mr_steroid_LeftHand
+    400014: Mr_steroid_LeftHandIndex1
+    400016: Mr_steroid_LeftHandIndex2
+    400018: Mr_steroid_LeftHandIndex3
+    400020: Mr_steroid_LeftHandMiddle1
+    400022: Mr_steroid_LeftHandMiddle2
+    400024: Mr_steroid_LeftHandMiddle3
+    400026: Mr_steroid_LeftHandPinky1
+    400028: Mr_steroid_LeftHandPinky2
+    400030: Mr_steroid_LeftHandPinky3
+    400032: Mr_steroid_LeftHandRing1
+    400034: Mr_steroid_LeftHandRing2
+    400036: Mr_steroid_LeftHandRing3
+    400038: Mr_steroid_LeftHandThumb1
+    400040: Mr_steroid_LeftHandThumb2
+    400042: Mr_steroid_LeftHandThumb3
+    400044: Mr_steroid_LeftLeg
+    400046: Mr_steroid_LeftShoulder
+    400048: Mr_steroid_LeftToeBase
+    400050: Mr_steroid_LeftUpLeg
+    400052: Mr_steroid_Neck
+    400054: Mr_steroid_Reference
+    400056: Mr_steroid_RightArm
+    400058: Mr_steroid_RightFoot
+    400060: Mr_steroid_RightForeArm
+    400062: Mr_steroid_RightHand
+    400064: Mr_steroid_RightHandIndex1
+    400066: Mr_steroid_RightHandIndex2
+    400068: Mr_steroid_RightHandIndex3
+    400070: Mr_steroid_RightHandMiddle1
+    400072: Mr_steroid_RightHandMiddle2
+    400074: Mr_steroid_RightHandMiddle3
+    400076: Mr_steroid_RightHandPinky1
+    400078: Mr_steroid_RightHandPinky2
+    400080: Mr_steroid_RightHandPinky3
+    400082: Mr_steroid_RightHandRing1
+    400084: Mr_steroid_RightHandRing2
+    400086: Mr_steroid_RightHandRing3
+    400088: Mr_steroid_RightHandThumb1
+    400090: Mr_steroid_RightHandThumb2
+    400092: Mr_steroid_RightHandThumb3
+    400094: Mr_steroid_RightLeg
+    400096: Mr_steroid_RightShoulder
+    400098: Mr_steroid_RightToeBase
+    400100: Mr_steroid_RightUpLeg
+    400102: Mr_steroid_Spine
+    400104: Mr_steroid_Spine1
+    400106: polySurface3
+    400108: //RootNode
+    4300000: polySurface3
+    7400000: double_shoot
+    7400002: multi_shoot
+    9500000: //RootNode
+    13700000: polySurface3
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mr_steroid_Human_refSG1
+    second: {fileID: 2100000, guid: d9c8f1aa6b8309142a17243d2fc531b5, type: 2}
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: double_shoot
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 11
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: multi_shoot
+      takeName: Take 001
+      firstFrame: 31
+      lastFrame: 70
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

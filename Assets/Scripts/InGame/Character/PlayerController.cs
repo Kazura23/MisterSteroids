@@ -282,7 +282,7 @@ public class PlayerController : MonoBehaviour
 			return;
 		}
 
-		if ( barMadness.value > 99 && !InMadness )
+		if ( barMadness.value > 98 && !InMadness )
 		{
 			InMadness = true;
 			GlobalManager.Ui.OpenMadness();
@@ -701,6 +701,8 @@ public class PlayerController : MonoBehaviour
                     punch.RightPunch = true;
                     poingDroite.SetActive(true);
 
+                GetComponentInChildren<Animator>().SetTrigger("Right");
+
 
                     if (currCouR != null)
                     {
@@ -715,7 +717,9 @@ public class PlayerController : MonoBehaviour
                     punch.RightPunch = false;
                     poingGauche.SetActive(true);
 
-                    if (currCouL != null)
+                GetComponentInChildren<Animator>().SetTrigger("Left");
+
+                if (currCouL != null)
                     {
                         StopCoroutine(currCouL);
                     }
@@ -731,6 +735,8 @@ public class PlayerController : MonoBehaviour
 		else if(Input.GetAxis("CoupDouble") != 0 && canDPunch && canPunch && resetAxeD  )
         {
             ScreenShake.Singleton.ShakeHitDouble();
+
+            GetComponentInChildren<Animator>().SetTrigger("Double");
 
             if (!InMadness)
                 transform.GetChild(0).GetComponent<Punch>().MadnessMana("Double");

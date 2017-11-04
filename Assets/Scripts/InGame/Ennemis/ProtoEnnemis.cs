@@ -40,6 +40,8 @@ public class ProtoEnnemis : AbstractObject
 			parMat.color = saveCol;
 		}
 		parMat.color = NewColor;
+
+        GetComponentInChildren<Animator>().SetTrigger("Attack");
 	}
 
 	public override void Dead ( bool enemy = false ) 

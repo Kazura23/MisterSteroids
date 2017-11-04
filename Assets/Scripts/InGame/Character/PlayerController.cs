@@ -600,7 +600,9 @@ public class PlayerController : MonoBehaviour
                 canPunch = false;
                 propP = true;
 
-                transform.GetChild(0).GetComponent<Punch>().MadnessMana("Simple");
+                if(!InMadness)
+                    transform.GetChild(0).GetComponent<Punch>().MadnessMana("Simple");
+
                 ScreenShake.Singleton.ShakeHitSimple();
 
            
@@ -640,7 +642,8 @@ public class PlayerController : MonoBehaviour
         {
             ScreenShake.Singleton.ShakeHitDouble();
 
-            transform.GetChild(0).GetComponent<Punch>().MadnessMana("Double");
+            if (!InMadness)
+                transform.GetChild(0).GetComponent<Punch>().MadnessMana("Double");
 
             propDP = true;
 			resetAxeD = false;

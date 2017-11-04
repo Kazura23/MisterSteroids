@@ -31,7 +31,7 @@ public class ProtoEnnemis : AbstractObject
 	{
 		base.PlayerDetected ( thisObj, isDetected );
 
-		if ( isDetected )
+		if ( isDetected && !isDead)
 		{
 			parMat.color = NewColor;
 		}

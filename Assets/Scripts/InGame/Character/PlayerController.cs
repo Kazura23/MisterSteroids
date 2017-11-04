@@ -282,7 +282,7 @@ public class PlayerController : MonoBehaviour
 			return;
 		}
 
-		if ( barMadness.value > 99 && !InMadness )
+		if ( barMadness.value > 98 && !InMadness )
 		{
 			InMadness = true;
 			GlobalManager.Ui.OpenMadness();

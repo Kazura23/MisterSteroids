@@ -23,9 +23,9 @@ public class Punch : MonoBehaviour {
 	bool canPunc = true;
 
 
-    private void Awake()
+    void Start()
     {
-        control = GetComponentInParent<PlayerController>();
+		control = GlobalManager.GameCont.Player.GetComponent<PlayerController>();
         barMadness = control.barMadness;
     }
 

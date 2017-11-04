@@ -575,6 +575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d610c30b9769c084588927bac7c334b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buyFLife: 0
   ItemBought: 0
   ItemName: 1
   Price: 0
@@ -600,12 +601,15 @@ MonoBehaviour:
   DownItem: {fileID: 114010657436254904}
   CatName: ABILITIES
   ModifVie: 0
-  ModifReduceMot: 0
-  ModifRecovereMot: 0
+  ModifSpecial: 1
   NombreVie: 1
-  ReduceSlowMot: 0.1
-  RecoverSlowMot: 0.1
+  SpecAction: 1
   Selected: 0
+  SlowMotion: 1
+  SpeedSlowMot: 1
+  SpeedDeacSM: 3
+  ReduceSlider: 1
+  RecovSlider: 1
 --- !u!114 &114015580293343388
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -758,10 +762,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d610c30b9769c084588927bac7c334b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buyFLife: 0
   ItemBought: 0
   ItemName: 1
   Price: 0
-  BuyForLife: 0
   UseSprite: 1
   UseOtherSprite: 1
   UseColor: 1
@@ -784,12 +788,15 @@ MonoBehaviour:
   DownItem: {fileID: 114217308538624764}
   CatName: ABILITIES
   ModifVie: 0
-  ModifReduceMot: 0
-  ModifRecovereMot: 0
+  ModifSpecial: 0
   NombreVie: 1
-  ReduceSlowMot: 0.1
-  RecoverSlowMot: 0.1
+  SpecAction: 0
   Selected: 0
+  SlowMotion: 1
+  SpeedSlowMot: 1
+  SpeedDeacSM: 3
+  ReduceSlider: 0
+  RecovSlider: 0
 --- !u!114 &114229326202066720
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -996,6 +1003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d610c30b9769c084588927bac7c334b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buyFLife: 0
   ItemBought: 0
   ItemName: 1
   Price: 0
@@ -1019,14 +1027,17 @@ MonoBehaviour:
   LeftItem: {fileID: 114514843011345102}
   UpItem: {fileID: 114330215925973218}
   DownItem: {fileID: 114330215925973218}
-  CatName: Cat3
-  ModifVie: 0
-  ModifReduceMot: 0
-  ModifRecovereMot: 0
+  CatName: BONUS
+  ModifVie: 1
+  ModifSpecial: 0
   NombreVie: 1
-  ReduceSlowMot: 0.1
-  RecoverSlowMot: 0.1
+  SpecAction: 0
   Selected: 0
+  SlowMotion: 1
+  SpeedSlowMot: 1
+  SpeedDeacSM: 3
+  ReduceSlider: 0
+  RecovSlider: 0
 --- !u!114 &114333564198533622
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1064,6 +1075,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d610c30b9769c084588927bac7c334b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buyFLife: 0
   ItemBought: 0
   ItemName: 2
   Price: 0
@@ -1087,12 +1099,15 @@ MonoBehaviour:
   DownItem: {fileID: 114367654753381756}
   CatName: COSMETICS
   ModifVie: 0
-  ModifReduceMot: 0
-  ModifRecovereMot: 0
+  ModifSpecial: 0
   NombreVie: 1
-  ReduceSlowMot: 0.1
-  RecoverSlowMot: 0.1
+  SpecAction: 0
   Selected: 0
+  SlowMotion: 1
+  SpeedSlowMot: 1
+  SpeedDeacSM: 3
+  ReduceSlider: 0
+  RecovSlider: 0
 --- !u!114 &114393931049529872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1244,6 +1259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d610c30b9769c084588927bac7c334b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buyFLife: 0
   ItemBought: 0
   ItemName: 2
   Price: 0
@@ -1265,14 +1281,17 @@ MonoBehaviour:
   LeftItem: {fileID: 114330215925973218}
   UpItem: {fileID: 114514843011345102}
   DownItem: {fileID: 114514843011345102}
-  CatName: Cat3
-  ModifVie: 0
-  ModifReduceMot: 0
-  ModifRecovereMot: 0
+  CatName: BONUS
+  ModifVie: 1
+  ModifSpecial: 0
   NombreVie: 1
-  ReduceSlowMot: 0.1
-  RecoverSlowMot: 0.1
+  SpecAction: 0
   Selected: 0
+  SlowMotion: 1
+  SpeedSlowMot: 1
+  SpeedDeacSM: 3
+  ReduceSlider: 0
+  RecovSlider: 0
 --- !u!114 &114516059223440440
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1327,6 +1346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d610c30b9769c084588927bac7c334b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buyFLife: 0
   ItemBought: 0
   ItemName: 1
   Price: 0
@@ -1352,12 +1372,15 @@ MonoBehaviour:
   DownItem: {fileID: 114622677290450882}
   CatName: UPGRADES
   ModifVie: 0
-  ModifReduceMot: 0
-  ModifRecovereMot: 0
+  ModifSpecial: 0
   NombreVie: 1
-  ReduceSlowMot: 0.1
-  RecoverSlowMot: 0.1
+  SpecAction: 0
   Selected: 0
+  SlowMotion: 1
+  SpeedSlowMot: 1
+  SpeedDeacSM: 3
+  ReduceSlider: 0
+  RecovSlider: 0
 --- !u!114 &114640957295652222
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1522,6 +1545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d610c30b9769c084588927bac7c334b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buyFLife: 0
   ItemBought: 0
   ItemName: 2
   Price: 0
@@ -1545,12 +1569,15 @@ MonoBehaviour:
   DownItem: {fileID: 114728806705325854}
   CatName: UPGRADES
   ModifVie: 0
-  ModifReduceMot: 0
-  ModifRecovereMot: 0
+  ModifSpecial: 0
   NombreVie: 1
-  ReduceSlowMot: 0.1
-  RecoverSlowMot: 0.1
+  SpecAction: 0
   Selected: 0
+  SlowMotion: 1
+  SpeedSlowMot: 1
+  SpeedDeacSM: 3
+  ReduceSlider: 0
+  RecovSlider: 0
 --- !u!114 &114777753795382744
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1789,6 +1816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d610c30b9769c084588927bac7c334b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buyFLife: 0
   ItemBought: 0
   ItemName: 1
   Price: 0
@@ -1814,12 +1842,15 @@ MonoBehaviour:
   DownItem: {fileID: 114989528735432808}
   CatName: COSMETICS
   ModifVie: 0
-  ModifReduceMot: 0
-  ModifRecovereMot: 0
+  ModifSpecial: 0
   NombreVie: 1
-  ReduceSlowMot: 0.1
-  RecoverSlowMot: 0.1
+  SpecAction: 0
   Selected: 0
+  SlowMotion: 1
+  SpeedSlowMot: 1
+  SpeedDeacSM: 3
+  ReduceSlider: 0
+  RecovSlider: 0
 --- !u!114 &114991785414473876
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2184,7 +2215,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -60}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224206631854354374
@@ -2575,7 +2606,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -60}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224992032329349496

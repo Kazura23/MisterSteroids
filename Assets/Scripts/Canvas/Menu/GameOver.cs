@@ -20,6 +20,13 @@ public class GameOver : UiParent
 	#endregion
 
 	#region Mono
+	void Update ( )
+	{
+		if ( Input.GetAxis("CoupSimple") != 0 )
+		{
+			GlobalManager.GameCont.Restart ( );
+		}
+	}
 	#endregion
 
 	#region Public Methods

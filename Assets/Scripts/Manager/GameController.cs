@@ -17,6 +17,8 @@ public class GameController : ManagerParent
 
 	[HideInInspector]
 	public Dictionary <string, ItemModif> AllModifItem;
+
+	bool checkStart = false;
     #endregion
 
     #region Mono
@@ -29,9 +31,10 @@ public class GameController : ManagerParent
 
 		if (Input.GetAxis("CoupSimple") == 1 || Input.GetAxis("CoupDouble") == 1)
         {
-			if (GameStarted)
+			if ( GameStarted && !checkStart )
 			{
-				Player.GetComponent<PlayerController>().StopPlayer = false;
+				checkStart = true;
+				Player.GetComponent<PlayerController> ( ).StopPlayer = false;
 				Camera.main.GetComponent<RainbowRotate>().time = .4f;
 				Camera.main.GetComponent<RainbowMove>().time = .2f;
 			}
@@ -43,9 +46,14 @@ public class GameController : ManagerParent
 	public void StartGame ( )
 	{
 		Player = GameObject.FindGameObjectWithTag("Player");
+		Player.GetComponent<PlayerController> ( ).ResetPlayer ( );
+		Player.GetComponent<PlayerController> ( ).ThisAct = SpecialAction.Nothing;
+
+		SetAllBonus ( );
+		GameStarted = true;
+		checkStart = false;
 
 		SpawnerChunck.FirstSpawn ( );
-		Player.GetComponent<PlayerController> ( ).ResetPlayer ( );
 
         Camera.main.GetComponent<RainbowRotate>().time = 2;
         Camera.main.GetComponent<RainbowMove>().time = 1;
@@ -100,10 +108,42 @@ public class GameController : ManagerParent
 	void SetAllBonus ( )
 	{
 		Dictionary <string, ItemModif> getMod = AllModifItem;
+		PlayerController currPlayer = Player.GetComponent<PlayerController> ( );
+		ItemModif thisItem;
+		List<string> getKey = new List<string> ( );
 
-		for ( int a = 0; a < getMod.Count; a++ )
+		foreach ( KeyValuePair <string, ItemModif> thisKV in getMod )
 		{
-			
+			thisItem = thisKV.Value;
+		
+			if ( thisItem.ModifVie )
+			{
+				currPlayer.Life += thisItem.NombreVie;
+			}
+
+			if ( thisItem.ModifSpecial )
+			{
+				currPlayer.ThisAct = thisItem.SpecAction;
+
+				if ( thisItem.SpecAction == SpecialAction.SlowMot )
+				{
+					currPlayer.SlowMotion = thisItem.SlowMotion;
+					currPlayer.SpeedSlowMot = thisItem.SpeedSlowMot;
+					currPlayer.SpeedDeacSM = thisItem.SpeedDeacSM;
+					currPlayer.ReduceSlider = thisItem.ReduceSlider;
+					currPlayer.RecovSlider = thisItem.RecovSlider;
+				}
+			}
+
+			if ( !thisItem.buyFLife )
+			{
+				getKey.Add ( thisKV.Key );
+			}
+		}
+
+		for ( int a = 0; a < getKey.Count; a++ )
+		{
+			getMod.Remove ( getKey [ a ] );
 		}
 	}
 	#endregion

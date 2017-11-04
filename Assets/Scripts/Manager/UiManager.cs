@@ -34,6 +34,7 @@ public class UiManager : ManagerParent
 	MenuType menuOpen;
 
 	GameObject InGame;
+	bool onMainScene = true;
 	#endregion
 
 	#region Mono
@@ -49,7 +50,7 @@ public class UiManager : ManagerParent
 			InGame.SetActive ( false );
 			if ( menuOpen != MenuType.Nothing )
 			{
-				CloseThisMenu ( );
+				CloseThisMenu ( true );
 			}
 
 			menuOpen = thisType;
@@ -58,7 +59,7 @@ public class UiManager : ManagerParent
 		}
 	}
 
-	public void CloseThisMenu ( )
+	public void CloseThisMenu ( bool openNew = false )
 	{
 		UiParent thisUi;
 
@@ -66,8 +67,13 @@ public class UiManager : ManagerParent
 		{
 			InGame.SetActive ( true );
 			GlobalBack.SetActive ( false );
-			thisUi.CloseThis (  );
+			thisUi.CloseThis ( );
 			menuOpen = MenuType.Nothing;
+
+			if ( onMainScene && !openNew )
+			{
+				OpenThisMenu ( MenuType.MenuHome );
+			}
 		}
 	}
 
@@ -86,6 +92,37 @@ public class UiManager : ManagerParent
 		});
 	}
 
+    public void OpenMadness()
+    {
+        Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().enabled = true;
+        Camera.main.GetComponent<CameraFilterPack_Color_YUV>().enabled = true;
+        //Camera.main.transform.GetComponent<RainbowMove>().enabled = false;
+
+        //Camera.main.transform.DOKill(false);
+
+        /*
+        Camera.main.transform.DOLocalMoveY(0, .3f).OnComplete(() => {
+            DOVirtual.DelayedCall(.65f,()=>{
+                Camera.main.transform.DOLocalMoveY(.9f, .1f);
+            });
+        }).SetLoops(-1,LoopType.Yoyo);*/
+        
+        Camera.main.DOFieldOfView(40, .35f).OnComplete(() => {
+            Camera.main.DOFieldOfView(60, .35f);
+        }).SetLoops(-1,LoopType.Yoyo);
+        
+    }
+
+    public void CloseMadness()
+    {
+        Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().enabled = false;
+        Camera.main.GetComponent<CameraFilterPack_Color_YUV>().enabled = false;
+
+        //Camera.main.transform.DOKill(false);
+
+        //Camera.main.transform.GetComponent<RainbowMove>().enabled = true;
+    }
+
 	public void DashSpeedEffect ( bool enable )
 	{
 		if ( speedEffect == null )
@@ -103,9 +140,16 @@ public class UiManager : ManagerParent
 		}
 	}
 
+    public void TakeCoin()
+    {
+        MoneyPoints.transform.DOScale(1.5f, .1f).SetEase(Ease.InBounce).OnComplete(() => {
+            MoneyPoints.transform.DOScale(1f, .05f).SetEase(Ease.InBounce);
+        });
+    }
+
 	public void StartSlowMo()
     {
-        SlowMotion.transform.DOLocalMove(new Vector2(960, -540), .05f);
+        SlowMotion.transform.DOLocalMove(new Vector2(930, -510), .05f);
         CircleFeel.transform.DOScale(1, 0);
         CircleFeel.DOColor(Color.white, 0);
         SlowMotion.DOFade(0, .05f);
@@ -153,7 +197,8 @@ public class UiManager : ManagerParent
 	#region Private Methods
 	protected override void InitializeManager ( )
 	{
-		InitializeUI ( );
+		AllPlayerPrefs.SetIntValue ( Constants.Coin, 1000000 );
+		InieUI ( );
 
 		Object[] getAllMenu =Resources.LoadAll ( "Menu" );
 		Dictionary<MenuType, UiParent> setAllMenu = new Dictionary<MenuType, UiParent> ( getAllMenu.Length );
@@ -183,11 +228,20 @@ public class UiManager : ManagerParent
 		#endif
 	}
 
-    void InitializeUI ( )
+	void InieUI ( )
 	{
-		//	InvokeRepeating ( "checkCurosr", 0, 0.5f );
+        //	InvokeRepeating ( "checkCurosr", 0, 0.5f );
 
-		if ( PatternBackground != null )
+		System.Action <HomeEvent> checkLevel = delegate ( HomeEvent thisEvnt )
+		{
+			onMainScene = thisEvnt.onMenuHome;
+		};
+
+		GlobalManager.Event.Register ( checkLevel );
+
+        MoneyPoints.text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
+
+        if ( PatternBackground != null )
 		{
 			PatternBackground.transform.DOLocalMoveY(-60, 5f).SetEase(Ease.Linear).OnComplete(() => {
 				PatternBackground.transform.DOLocalMoveY(1092, 0);

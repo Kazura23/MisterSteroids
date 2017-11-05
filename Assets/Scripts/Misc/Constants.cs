@@ -9,6 +9,7 @@ public static class Constants
 	public const string _EnnemisTag = "Enemy";
 	public const string _ObjDeadTag = "ObjDead";
 	public const string _ObsTag = "objectEnv";
+	public const string _ObsEnn = "ObsPunch";
 	public const string _DebrisEnv = "Debris";
 	public const string _UnTagg = "Untagged";
     public const string _MissileBazoo = "MissileBazooka";
@@ -20,10 +21,17 @@ public static class Constants
 	public const string _SAbleDestObs = "SpawnableDestObs";
 	public const string _SAbleCoin = "SpawnableCoin";
 	public const string _DebutFinChunk = "DebutFinChunk";
+	public const string _ObsPropSafe = "ObsPropSafe";
 	#endregion
 
-	#region Other
-	public const int DefFov = 60;
+	#region PlayerPref
+	public const string Coin = "Coins";
+	public const string ItemBought = "Item_";
+    #endregion
+
+
+    #region Other
+    public const int DefFov = 60;
 	public const int LineDist = 6;
 	//public const float ChunkLengh = 470;
 	#endregion

@@ -10,7 +10,7 @@ public class AbstractObject : MonoBehaviour
 	public bool isDead;
 	public float delayDead = 2;
 
-	[Header ("Contact avec obs")]
+    [Header ("Contact avec obs")]
 	[Tooltip ("pourcentage de velocité restante en pourcentage lors d'une collision avec un ennmis ( situation ou ce gameobject est en mouvement )")]
 	public float VelRestant = 5;
 
@@ -73,7 +73,7 @@ public class AbstractObject : MonoBehaviour
 		}
 
 		mainCorps.constraints = RigidbodyConstraints.None;
-
+		checkConstAxe ( );
 		if ( useGravity )
 		{
 			mainCorps.useGravity = true;
@@ -96,7 +96,7 @@ public class AbstractObject : MonoBehaviour
 		Destroy ( this.gameObject, delayDead );
 	}
 
-	public void CollDetect (  )
+	protected virtual void CollDetect (  )
 	{
 		if ( !isDead )
 		{
@@ -106,6 +106,27 @@ public class AbstractObject : MonoBehaviour
 		{
 			mainCorps.velocity = mainCorps.velocity * ( VelRestant / 100 );
 		}
+	}
+
+	public virtual void ForceProp ( Vector3 forceProp )
+	{
+		isDead = true;
+
+		getTrans.tag = Constants._ObjDeadTag;
+		for ( int i = 0; i < corps.Count; i++ )
+		{
+			corps [ i ].useGravity = true;
+		}
+
+		mainCorps.constraints = RigidbodyConstraints.None;
+		checkConstAxe ( );
+		if ( useGravity )
+		{
+			mainCorps.useGravity = true;
+		}
+
+		mainCorps.AddForce ( forceProp, ForceMode.VelocityChange );
+		StartCoroutine ( enableColl ( ) );
 	}
 	#endregion
 
@@ -118,19 +139,30 @@ public class AbstractObject : MonoBehaviour
 		{
 			CollDetect ( );
 		}
+
 		/*else if ( getThis.tag == Constants._PlayerTag && gameObject.tag == Constants._ObjDeadTag )
 		{
 			Physics.IgnoreCollision ( thisColl.collider, GetComponent<Collider> ( ) );
 		}*/
 	}
 
-	/*void checkConstAxe ( )
+	IEnumerator enableColl ( )
 	{
-		if ( useGravity )
+		WaitForEndOfFrame thisF = new WaitForEndOfFrame ( );
+		Transform savePos = transform;
+		Transform playPos = GlobalManager.GameCont.Player.transform;
+
+		while ( Vector3.Distance ( savePos.position, playPos.position ) < 2.5f )
 		{
-			mainCorps.useGravity = true;
+			yield return thisF;
 		}
 
+		GetComponent<BoxCollider> ( ).enabled = true;
+	}
+
+
+	void checkConstAxe ( )
+	{
 		if ( FreezeAxe.x != 0 )
 		{
 			mainCorps.constraints = RigidbodyConstraints.FreezePositionX;
@@ -160,7 +192,7 @@ public class AbstractObject : MonoBehaviour
 		{
 			mainCorps.constraints = RigidbodyConstraints.FreezeRotationZ;
 		}
-	}*/
+	}
 		
 	IEnumerator disableColl ( )
 	{

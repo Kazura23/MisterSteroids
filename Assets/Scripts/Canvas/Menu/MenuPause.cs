@@ -41,11 +41,6 @@ public class MenuPause : UiParent
 		PauseObject.GetComponent<CanvasGroup>().DOFade(0, .2f);
 		PauseText.transform.DOScale(7, .2f);
 	}
-
-	public override void Pause ( bool setPause )
-	{
-		base.Pause ( setPause );
-	}
 	#endregion
 
 	#region Private Methods

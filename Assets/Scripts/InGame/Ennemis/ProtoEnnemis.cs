@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class ProtoEnnemis : AbstractObject
 {
-	#region Variables
-	[Space]
+    #region Variables
+
+    [Space]
 	public Color NewColor;
 	Color saveCol;
 
 
 	Material parMat;
+
+
 	#endregion
 
 	#region Mono
@@ -21,12 +24,14 @@ public class ProtoEnnemis : AbstractObject
 	}
 	#endregion
 
+    
+
 	#region Public Methods
 	public override void PlayerDetected ( GameObject thisObj, bool isDetected )
 	{
 		base.PlayerDetected ( thisObj, isDetected );
 
-		if ( isDetected )
+		if ( isDetected && !isDead)
 		{
 			parMat.color = NewColor;
 		}
@@ -35,10 +40,17 @@ public class ProtoEnnemis : AbstractObject
 			parMat.color = saveCol;
 		}
 		parMat.color = NewColor;
+
+		try {
+			GetComponentInChildren<Animator>().SetTrigger("Attack");
+		}
+		catch{
+		}
 	}
 
 	public override void Dead ( bool enemy = false ) 
 	{
+
 		base.Dead ( enemy );
 		GlobalManager.Ui.BloodHit();
         //mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
@@ -46,5 +58,20 @@ public class ProtoEnnemis : AbstractObject
 	#endregion
 
 	#region Private Methods
+	protected override void OnCollisionEnter ( Collision thisColl )
+	{
+        base.OnCollisionEnter ( thisColl );
+
+		if ( isDead )
+		{
+			GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
+		}
+	}
+
+	protected override void CollDetect ( )
+	{
+		base.CollDetect ( );
+		GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
+	}
 	#endregion
 }

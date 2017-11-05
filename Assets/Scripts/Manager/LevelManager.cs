@@ -22,17 +22,25 @@ public class LevelManager : ManagerParent
 		SceneManager.LoadScene ( thisScene, LoadSceneMode.Single );
 	}
 
-	private void OnSceneLoaded(Scene scene, LoadSceneMode mode) 
+	private void checkSceneLoaded(Scene scene, LoadSceneMode mode) 
 	{
+		var e = new HomeEvent ( );
 		switch ( scene.name )
 		{
 		case "ProtoAlex":
+			e.onMenuHome = false;
+			e.Raise ( );
+
 			GlobalManager.GameCont.StartGame ( );
 			break;
 		case "HomeMenu":
+			e.onMenuHome = true;
+			e.Raise ( );
+
 			GlobalManager.Ui.OpenThisMenu ( MenuType.MenuHome );
 			break;
 		}
+
 	}
 
 	void OnNewLevel  ( string thisScene )
@@ -44,7 +52,7 @@ public class LevelManager : ManagerParent
 	#region Private Methods
 	protected override void InitializeManager ( )
 	{
-		SceneManager.sceneLoaded += OnSceneLoaded;
+		SceneManager.sceneLoaded += checkSceneLoaded;
 	}
 	#endregion
 }

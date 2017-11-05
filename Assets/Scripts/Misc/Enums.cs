@@ -2,7 +2,7 @@
 
 public enum TokenType
 {
-	
+	GoTok
 }
 
 
@@ -24,3 +24,9 @@ public enum MenuType
 	GameOver
 }
 
+
+public enum SpecialAction
+{
+	Nothing,
+	SlowMot
+}

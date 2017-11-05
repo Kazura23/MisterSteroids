@@ -28,6 +28,7 @@ public class RainbowScale : MonoBehaviour
 
     void OnDisable()
     {
+        transform.DOKill(false);
         transform.DOScale(Vector3.one, 0);
     }
 }

@@ -104,13 +104,38 @@ public class SpawnChunks : MonoBehaviour
 		currNbrCh = 0;
 		currLevel = 0;
 		List<GameObject> getSpc = getSpawnChunks;
-		List<ChunksScriptable> getChunks = ChunksInfo;
+		bool doubleFirst = false;
 
 		while ( getSpc.Count > 0 )
 		{
+			doubleFirst = true;
 			Destroy ( getSpc [ 0 ] );
 			getSpc.RemoveAt ( 0 );
 		}
+
+		if ( doubleFirst )
+		{
+			StartCoroutine ( waitSpawn ( ) );
+		}
+		else
+		{
+			List<ChunksScriptable> getChunks = ChunksInfo;
+
+			spawnAfterThis ( DefaultPos, Quaternion.identity );
+
+			if ( getChunks [ currLevel ].NbrChunkOneLvl <= currNbrCh )
+			{
+				newLevel ( );
+			}
+		}
+	}
+	#endregion
+	
+	#region Private
+	IEnumerator waitSpawn ( )
+	{
+		yield return new WaitForEndOfFrame ( );
+		List<ChunksScriptable> getChunks = ChunksInfo;
 
 		spawnAfterThis ( DefaultPos, Quaternion.identity );
 
@@ -119,9 +144,7 @@ public class SpawnChunks : MonoBehaviour
 			newLevel ( );
 		}
 	}
-	#endregion
-	
-	#region Private
+
 	void newLevel ( )
 	{
 		List<ChunksScriptable> getChunks = ChunksInfo;
@@ -157,7 +180,7 @@ public class SpawnChunks : MonoBehaviour
 
 		if ( getChunks [ currLevel ].ChunkAleat )
 		{
-			thisSpawn = getChunks [ currLevel ].TheseChunks [ Random.Range ( 0, getChunks [ currLevel ].TheseChunks.Count - 1 ) ];
+			thisSpawn = getChunks [ currLevel ].TheseChunks [ Random.Range ( 0, getChunks [ currLevel ].TheseChunks.Count ) ];
 		}
 		else
 		{

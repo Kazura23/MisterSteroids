@@ -14,17 +14,17 @@ public class TestBarProgress : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        SaveData.LoadData();
+       // SaveData.LoadData();
         timer = 0;
         empty = new Rect(pos.x, pos.y, widthMax, heightMax);
         progress = new Rect(pos.x, pos.y, 0.01f, heightMax);
-        Debug.Log("nb piece = "+AllPlayerPrefs.piece);
+       // Debug.Log("nb piece = "+AllPlayerPrefs.piece);
 	}
 
-    private void OnApplicationQuit()
+  /*  private void OnApplicationQuit()
     {
         SaveData.SaveDataS();
-    }
+    }*/
 
     // Update is called once per frame
     void Update () {

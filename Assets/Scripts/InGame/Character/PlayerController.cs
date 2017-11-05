@@ -112,8 +112,8 @@ public class PlayerController : MonoBehaviour
 	public bool Dash = false;
 	[HideInInspector]
 	public bool Running = true;
-	[HideInInspector]
-	public int Life = 3;
+	
+	public int Life = 1;
 
 	public bool StopPlayer = false;
 

@@ -74,5 +74,12 @@ public class GlobalManager : MonoBehaviour
 		    }
 		} 
 	}
+
+    void Update()
+    {
+
+        if (Input.GetKeyDown(KeyCode.O))
+            PlayerPrefs.DeleteAll();
+    }
 	#endregion
 }

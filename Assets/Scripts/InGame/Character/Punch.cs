@@ -23,16 +23,15 @@ public class Punch : MonoBehaviour {
 
 	bool canPunc = true;
 
-
-    private void Awake()
+    void Start()
     {
-        control = GetComponentInParent<PlayerController>();
+		control = GlobalManager.GameCont.Player.GetComponent<PlayerController>();
         barMadness = control.barMadness;
     }
 
     void OnTriggerEnter(Collider other)
     {
-		if( canPunc && other.gameObject.tag == Constants._EnnemisTag )
+		if( canPunc && ( other.gameObject.tag == Constants._EnnemisTag || other.gameObject.tag == Constants._ObsPropSafe))
         {
 			AbstractObject tryGet = other.GetComponentInChildren<AbstractObject> ( );
 			if ( !tryGet )

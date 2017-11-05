@@ -26,13 +26,11 @@ public class ProtoObs : AbstractObject
 	#region Private Methods
 	protected override void OnCollisionEnter ( Collision thisColl )
 	{
-		if ( thisColl.gameObject.tag == Constants._PlayerTag && thisColl.gameObject.GetComponent<PlayerController> ( ).Dash )
+		base.OnCollisionEnter ( thisColl );
+
+		if ( isDead )
 		{
-			CollDetect ( );
-		}
-		else
-		{
-			base.OnCollisionEnter ( thisColl );
+			GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
 		}
 	}
 	#endregion

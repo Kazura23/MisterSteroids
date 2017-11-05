@@ -222,7 +222,11 @@ public class PlayerController : MonoBehaviour
 		Shader.SetGlobalFloat ( "GlobaleMask_Radius", Radius );
 		Shader.SetGlobalFloat ( "GlobaleMask_SoftNess", SoftNess );
 		Shader.SetGlobalFloat ( "_SlowMot", Time.timeScale );
-	}
+
+        if(Input.GetKeyDown(KeyCode.O))
+            PlayerPrefs.DeleteAll();
+
+    }
 	#endregion
 
 	#region Public Functions
@@ -293,8 +297,9 @@ public class PlayerController : MonoBehaviour
 		}
 		else if( barMadness.value == 0 && InMadness)
 		{
-			InMadness = false;
-			GlobalManager.Ui.CloseMadness();
+            Debug.Log("Mad");
+            GlobalManager.Ui.CloseMadness();
+            InMadness = false;
 		}
 
 		if (barMadness.value - (getTime * delayDownBar) > 0 )

@@ -117,6 +117,7 @@ public class UiManager : ManagerParent
     {
         Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().enabled = false;
         Camera.main.GetComponent<CameraFilterPack_Color_YUV>().enabled = false;
+		Camera.main.DOKill ( true );
 
         Camera.main.transform.DOKill(true);
 

@@ -115,19 +115,25 @@ public class GameController : ManagerParent
 		ItemModif thisItem;
 		List<string> getKey = new List<string> ( );
 
-
-		foreach ( KeyValuePair <string, ItemModif> thisKV in getMod )
+		if ( getMod != null )
 		{
-			thisItem = thisKV.Value;
-		
-			setItemToPlayer ( thisItem, currPlayer );
+			foreach ( KeyValuePair <string, ItemModif> thisKV in getMod )
+			{
+				thisItem = thisKV.Value;
+
+				setItemToPlayer ( thisItem, currPlayer );
+			}
 		}
 
-		while ( AllTI.Count > 0 )
-		{
-			setItemToPlayer ( AllTI [ 0 ], currPlayer );
 
-			AllTI.RemoveAt ( 0 );
+		if ( AllTI != null )
+		{
+			while ( AllTI.Count > 0 )
+			{
+				setItemToPlayer ( AllTI [ 0 ], currPlayer );
+
+				AllTI.RemoveAt ( 0 );
+			}
 		}
 	}
 

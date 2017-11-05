@@ -8,6 +8,7 @@ public class SpawnChunks : MonoBehaviour
 	public List<ChunksScriptable> ChunksInfo;
 	public Vector3 DefaultPos;
 
+
 	[HideInInspector]
 	public int currLevel = 0;
 
@@ -100,6 +101,7 @@ public class SpawnChunks : MonoBehaviour
 
 	public void FirstSpawn ( )
 	{
+
 		randAllChunk = false;
 		currNbrCh = 0;
 		currLevel = 0;

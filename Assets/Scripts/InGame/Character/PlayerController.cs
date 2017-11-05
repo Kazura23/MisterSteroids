@@ -123,9 +123,12 @@ public class PlayerController : MonoBehaviour
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
 	bool canDPunch = true;
-	//private Coroutine corou/*, preparPunch*/;
+    //private Coroutine corou/*, preparPunch*/;
 
-	Transform pTrans;
+
+    public GameObject Plafond;
+
+    Transform pTrans;
 	Rigidbody pRig;
 	Direction currentDir = Direction.North;
 	Direction newDir = Direction.North;
@@ -206,6 +209,9 @@ public class PlayerController : MonoBehaviour
 		playAnimator = GetComponentInChildren<Animator> ( );
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
+
+
+        Plafond.GetComponent<MeshRenderer>().enabled = true;
     }
 
 	void Update ( )

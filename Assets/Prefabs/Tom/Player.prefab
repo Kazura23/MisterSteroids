@@ -1502,14 +1502,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1488018743905684}
-  m_LocalRotation: {x: 0, y: 0, z: 0.026176924, w: 0.99965733}
+  m_LocalRotation: {x: 0, y: 0, z: -0.026176924, w: 0.99965733}
   m_LocalPosition: {x: 0, y: 0.312, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4196273438699692}
   m_Father: {fileID: 4437041050613948}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 3}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -3}
 --- !u!4 &4677225698914570
 Transform:
   m_ObjectHideFlags: 1
@@ -2110,7 +2110,6 @@ MonoBehaviour:
   CooldownDoublePunch: 0.8
   delayHitbox: 0.05
   delayPrepare: 0.05
-  barMadness: {fileID: 0}
   ratioMaxMadness: 4
   delayDownBar: 3
   lessPointPunchInMadness: 10
@@ -2125,6 +2124,7 @@ MonoBehaviour:
   poingDroite: {fileID: 1406027018080338}
   Radius: 15
   SoftNess: 15
+  barMadness: {fileID: 0}
   ThisAct: 0
   NbrLineRight: 1
   NbrLineLeft: 1
@@ -2133,6 +2133,7 @@ MonoBehaviour:
   Running: 1
   Life: 1
   StopPlayer: 0
+  Plafond: {fileID: 0}
 --- !u!114 &114461424696399938
 MonoBehaviour:
   m_ObjectHideFlags: 1

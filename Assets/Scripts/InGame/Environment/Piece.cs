@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class Piece : MonoBehaviour {
-
-
-    
+public class Piece : MonoBehaviour 
+{
 
     void OnTriggerEnter(Collider other)
     {

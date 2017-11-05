@@ -17,6 +17,8 @@ public class GameController : ManagerParent
 
 	[HideInInspector]
 	public Dictionary <string, ItemModif> AllModifItem;
+	[HideInInspector]
+	public List <ItemModif> AllTempsItem;
 
 	bool checkStart = false;
     #endregion
@@ -109,41 +111,45 @@ public class GameController : ManagerParent
 	{
 		Dictionary <string, ItemModif> getMod = AllModifItem;
 		PlayerController currPlayer = Player.GetComponent<PlayerController> ( );
+		List <ItemModif> AllTI = AllTempsItem;
 		ItemModif thisItem;
 		List<string> getKey = new List<string> ( );
+
 
 		foreach ( KeyValuePair <string, ItemModif> thisKV in getMod )
 		{
 			thisItem = thisKV.Value;
 		
-			if ( thisItem.ModifVie )
-			{
-				currPlayer.Life += thisItem.NombreVie;
-			}
+			setItemToPlayer ( thisItem, currPlayer );
+		}
 
-			if ( thisItem.ModifSpecial )
-			{
-				currPlayer.ThisAct = thisItem.SpecAction;
+		while ( AllTI.Count > 0 )
+		{
+			setItemToPlayer ( AllTI [ 0 ], currPlayer );
 
-				if ( thisItem.SpecAction == SpecialAction.SlowMot )
-				{
-					currPlayer.SlowMotion = thisItem.SlowMotion;
-					currPlayer.SpeedSlowMot = thisItem.SpeedSlowMot;
-					currPlayer.SpeedDeacSM = thisItem.SpeedDeacSM;
-					currPlayer.ReduceSlider = thisItem.ReduceSlider;
-					currPlayer.RecovSlider = thisItem.RecovSlider;
-				}
-			}
+			AllTI.RemoveAt ( 0 );
+		}
+	}
 
-			if ( !thisItem.buyFLife )
+	void setItemToPlayer ( ItemModif thisItem, PlayerController currPlayer )
+	{
+		if ( thisItem.ModifSpecial )
+		{
+			currPlayer.ThisAct = thisItem.SpecAction;
+
+			if ( thisItem.SpecAction == SpecialAction.SlowMot )
 			{
-				getKey.Add ( thisKV.Key );
+				currPlayer.SlowMotion = thisItem.SlowMotion;
+				currPlayer.SpeedSlowMot = thisItem.SpeedSlowMot;
+				currPlayer.SpeedDeacSM = thisItem.SpeedDeacSM;
+				currPlayer.ReduceSlider = thisItem.ReduceSlider;
+				currPlayer.RecovSlider = thisItem.RecovSlider;
 			}
 		}
 
-		for ( int a = 0; a < getKey.Count; a++ )
+		if ( thisItem.ModifVie )
 		{
-			getMod.Remove ( getKey [ a ] );
+			currPlayer.Life += thisItem.NombreVie;
 		}
 	}
 	#endregion

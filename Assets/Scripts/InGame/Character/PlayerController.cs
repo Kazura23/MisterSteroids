@@ -77,7 +77,6 @@ public class PlayerController : MonoBehaviour
 	public float delayPrepare = 0.1f;
 
     [Header("Caractéristique Madness")]
-    public Slider barMadness;
     public float ratioMaxMadness = 4;
     public float delayDownBar = 1;
     public float lessPointPunchInMadness = 3;
@@ -99,6 +98,9 @@ public class PlayerController : MonoBehaviour
 	public float SoftNess;
 
 	[HideInInspector]
+	public Slider barMadness;
+
+	[HideInInspector]
 	public SpecialAction ThisAct;
 
 	[HideInInspector]
@@ -112,7 +114,6 @@ public class PlayerController : MonoBehaviour
 	public bool Dash = false;
 	[HideInInspector]
 	public bool Running = true;
-	[HideInInspector]
 	public int Life = 3;
 
 	public bool StopPlayer = false;
@@ -139,6 +140,7 @@ public class PlayerController : MonoBehaviour
 	Slider SliderSlow;
 	Text textDist;
 	Text textCoin;
+	Animator playAnimator;
 
 	float currSpeed = 0;
 	float currSpLine = 0;
@@ -201,6 +203,7 @@ public class PlayerController : MonoBehaviour
 		acceleration = Acceleration;
 		impulsionCL = ImpulsionCL;
 		decelerationCL = DecelerationCL;
+		playAnimator = GetComponentInChildren<Animator> ( );
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
     }
@@ -242,7 +245,9 @@ public class PlayerController : MonoBehaviour
 		acceleration = Acceleration;
 		impulsionCL = ImpulsionCL;
 		decelerationCL = DecelerationCL;
+		ThisAct = SpecialAction.Nothing;
 
+		barMadness = GlobalManager.Ui.Madness;
 		barMadness.value = 0;
 		InMadness = false;
 		GlobalManager.Ui.CloseMadness ( );
@@ -257,23 +262,20 @@ public class PlayerController : MonoBehaviour
 
         GameOverTok thisTok = new GameOverTok ( );
 		thisTok.totalDist = totalDis;
-
-		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver, thisTok );
-        ScreenShake.Singleton.ShakeGameOver();
-		WaitForSeconds thisS = new WaitForSeconds ( 1 );
-        if (Life > 1)
-            GlobalManager.Ui.StartBonusLife();
+           
 		Life--;
-        
 
 		if ( Life > 0 || playerDead )
 		{
 			invDamage = true;
 			Invoke ( "waitInvDmg", TimeInvincible );
+			GlobalManager.Ui.StartBonusLife();
 
 			return;
 		}
 
+		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver, thisTok );
+		ScreenShake.Singleton.ShakeGameOver();
 		playerDead = true;
 		//GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
 
@@ -295,7 +297,7 @@ public class PlayerController : MonoBehaviour
 			InMadness = true;
 			GlobalManager.Ui.OpenMadness();
 		}
-		else if( barMadness.value == 0 && InMadness)
+		else if( barMadness.value == 0 && InMadness )
 		{
             Debug.Log("Mad");
             GlobalManager.Ui.CloseMadness();
@@ -363,56 +365,7 @@ public class PlayerController : MonoBehaviour
 			StartCoroutine ( waitStopDash ( ) );
 		}
 
-		if ( Input.GetAxis ( "SpecialAction" ) > 0 && canSpe && SliderContent > 0 )
-		{
-            Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
-
-			if ( !animeSlo )
-			{
-				animeSlo = true;
-				GlobalManager.Ui.StartSlowMo();
-			}
-
-			if ( Time.timeScale > 1 / SlowMotion )
-			{
-                
-				Time.timeScale -= Time.deltaTime * SpeedSlowMot;
-                Time.fixedDeltaTime = 0.02F;
-            }
-
-			SliderContent -= ReduceSlider * Time.deltaTime;
-		}
-		else if ( Time.timeScale < 1 )
-		{
-			if ( SliderContent < 0 )
-			{
-				canSpe = false;
-				SliderContent = 0;
-			}
-
-			Time.timeScale += getTime * SpeedDeacSM;
-		}
-		else if ( SliderContent < 10 )
-		{
-			animeSlo = false;
-			Time.timeScale = 1;
-			SliderContent += RecovSlider * getTime;
-			Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = false;
-
-			if ( SliderContent > 2 )
-			{
-				canSpe = true;
-			}
-
-		}
-		else
-		{
-			canSpe = true;
-			SliderContent = 10;
-		}
-
-		SliderSlow.value = SliderContent;
-
+		speAction ( getTime);
 
 		changeLine ( getTime );
 
@@ -456,25 +409,65 @@ public class PlayerController : MonoBehaviour
 		Debug.Log ( maxSpeed );
 	}
 
-	void speAction ( )
+	void speAction ( float getTime )
 	{
 		if ( ThisAct == SpecialAction.SlowMot )
 		{
-			Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
-
-			if ( !animeSlo )
+			if ( Input.GetAxis ( "SpecialAction" ) > 0 && canSpe && SliderContent > 0 )
 			{
-				animeSlo = true;
-				GlobalManager.Ui.StartSlowMo();
+				Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
+
+				if ( !animeSlo )
+				{
+					animeSlo = true;
+					GlobalManager.Ui.StartSlowMo();
+				}
+
+				if ( Time.timeScale > 1 / SlowMotion )
+				{
+					Time.timeScale -= Time.deltaTime * SpeedSlowMot;
+				}
+
+				SliderContent -= ReduceSlider * Time.deltaTime;
+			}
+			else if ( Time.timeScale < 1 )
+			{
+				Debug.Log ( 1 );
+				if ( SliderContent < 0 )
+				{
+					canSpe = false;
+					SliderContent = 0;
+				}
+
+				Time.timeScale += getTime * SpeedDeacSM;
+			}
+			else if ( SliderContent < 10 )
+			{
+				Debug.Log ( 1 );
+
+				animeSlo = false;
+				Time.timeScale = 1;
+				SliderContent += RecovSlider * getTime;
+				Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = false;
+
+				if ( SliderContent > 2 )
+				{
+					canSpe = true;
+				}
+
+			}
+			else
+			{
+				Debug.Log ( 1 );
+				canSpe = true;
+				SliderContent = 10;
 			}
 
-			if ( Time.timeScale > 1 / SlowMotion )
-			{
-				Time.timeScale -= Time.deltaTime * SpeedSlowMot;
-			}
+			SliderSlow.value = SliderContent;
 
-			SliderContent -= ReduceSlider * Time.deltaTime;
+
 		}
+
 	}
 
 	void waitInvDmg ( )
@@ -709,7 +702,7 @@ public class PlayerController : MonoBehaviour
                     punch.RightPunch = true;
                     poingDroite.SetActive(true);
 
-                GetComponentInChildren<Animator>().SetTrigger("Right");
+					playAnimator.SetTrigger("Right");
 
 
                     if (currCouR != null)
@@ -725,7 +718,7 @@ public class PlayerController : MonoBehaviour
                     punch.RightPunch = false;
                     poingGauche.SetActive(true);
 
-                GetComponentInChildren<Animator>().SetTrigger("Left");
+					playAnimator.SetTrigger("Left");
 
                 if (currCouL != null)
                     {
@@ -744,7 +737,7 @@ public class PlayerController : MonoBehaviour
         {
             ScreenShake.Singleton.ShakeHitDouble();
 
-            GetComponentInChildren<Animator>().SetTrigger("Double");
+			playAnimator.SetTrigger("Double");
 
             if (!InMadness)
                 transform.GetChild(0).GetComponent<Punch>().MadnessMana("Double");

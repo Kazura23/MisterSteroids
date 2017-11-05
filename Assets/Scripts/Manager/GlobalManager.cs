@@ -22,7 +22,7 @@ public class GlobalManager : MonoBehaviour
 	#region Mono
 	void Awake()
 	{
-		//PlayerPrefs.DeleteAll ( );
+		PlayerPrefs.DeleteAll ( );
 	
 		//Keep manager a singleton
 		if ( mainManagerInstance != null )

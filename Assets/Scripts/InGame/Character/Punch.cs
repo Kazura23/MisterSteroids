@@ -75,12 +75,11 @@ public class Punch : MonoBehaviour {
 		canPunc = canPush;
 	}
 
-
     public void MadnessMana(string type)
     {
         if (barMadness.value + addPointBarByPunchSimple < barMadness.maxValue && type == "Simple")
         {
-            barMadness.value += addPointBarByPunchSimple;
+	      barMadness.value += addPointBarByPunchSimple;
         } else if (barMadness.value + addPointBarByPunchDouble < barMadness.maxValue && type == "Double")
         {
             barMadness.value += addPointBarByPunchDouble;

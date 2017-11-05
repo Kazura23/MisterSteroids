@@ -27,7 +27,6 @@ public class MenuShop : UiParent
     public Image barCategory;
     public Image moleculeCategory;
     public GameObject moleculeContainer;
-    public Text moneyNumberPlayer;
 
 	[HideInInspector]
 	public CatShop currCatSeled;
@@ -36,7 +35,10 @@ public class MenuShop : UiParent
 	public ItemModif currItemSeled;
 
 	Dictionary <string, ItemModif> allConfirm;
+	List<ItemModif> allTempItem;
 	GameObject fixBackShop;
+	Text moneyNumberPlayer;
+
 	bool catCurrSelected = true;
 	bool waitInputH = false;
 	bool waitInputV = false;
@@ -144,9 +146,6 @@ public class MenuShop : UiParent
 		currItemSeled = currCatSeled.DefautItem;
 		CheckSelectItem ( true );
 
-
-        moneyNumberPlayer.transform.parent.SetParent(moneyNumberPlayer.transform.parent.parent.parent.parent.parent);
-
     }
 
 	public override void CloseThis ( )
@@ -204,19 +203,18 @@ public class MenuShop : UiParent
 	// achete ou confirme un item
 	public void BuyItem ( )
 	{
-		string getCons = Constants.ItemBought;
+		string getCons = Constants.ItemBought + currItemSeled.CatName;
+		Dictionary <string, ItemModif> getAllBuy = allConfirm;
 
 		if ( AllPlayerPrefs.GetBoolValue ( getCons + currItemSeled.ItemName ) )
 		{
-			getCons += currItemSeled.CatName;
-			AllPlayerPrefs.SetStringValue ( getCons, "Confirm" );
+			AllPlayerPrefs.SetStringValue ( getCons + currItemSeled.ItemName, "Confirm" );
 			ItemModif getThis;
 
-
-            moneyNumberPlayer.text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
-
-            if ( allConfirm.TryGetValue ( getCons, out getThis ) )
+			if ( getAllBuy.TryGetValue ( getCons, out getThis ) )
 			{
+				AllPlayerPrefs.SetStringValue ( getCons + getThis.ItemName, "ok" );
+
 				if ( getThis.UseOtherSprite )
 				{
 					getThis.GetComponent<Image> ( ).sprite = currItemSeled.BoughtSpriteUnselected;
@@ -238,17 +236,20 @@ public class MenuShop : UiParent
 					}
 				}
 
-				allConfirm.Remove ( getCons );
+				getAllBuy.Remove ( getCons );
 			}
 
-			currItemSeled.GetComponent<Image> ( ).sprite = currItemSeled.SpriteConfirm;
+			getThis = currItemSeled;
+			getThis.GetComponent<Image> ( ).sprite = getThis.SpriteConfirm;
 
-			if ( currItemSeled.UseColor )
+			if ( getThis.UseColor )
 			{
-				currItemSeled.GetComponent<Image> ( ).color = currItemSeled.ColorConfirm;
+				getThis.GetComponent<Image> ( ).color = getThis.ColorConfirm;
 			}
+
+			getAllBuy.Add ( getCons, getThis );
 		}
-		else
+		else 
 		{
 			bool checkProg = false;
 			ItemModif currIT = currItemSeled;
@@ -272,13 +273,17 @@ public class MenuShop : UiParent
 
 				if ( currCatSeled.BuyForLife )
 				{
-					currIT.buyFLife = true;
+					getAllBuy.Add ( getCons, currItemSeled );
 					AllPlayerPrefs.SetStringValue ( getCons + currIT.ItemName );
+				}
+				else
+				{
+					allTempItem.Add ( currItemSeled );
 				}
 			}
 		}
 
-		allConfirm.Add ( getCons + currItemSeled.ItemName, currItemSeled );
+		moneyNumberPlayer.text = "" + AllPlayerPrefs.GetIntValue ( Constants.Coin );
 	}
 	#endregion
 
@@ -288,24 +293,29 @@ public class MenuShop : UiParent
 		currCatSeled = DefCatSelected;
 		currItemSeled = currCatSeled.DefautItem;
 
-        
-        moneyNumberPlayer.text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
-
-        
 
         fixBackShop = transform.parent.Find ( "GlobalBackGround/Shop" ).gameObject;
+		moneyNumberPlayer = fixBackShop.transform.Find ( "MoneyMutation/MoneyNumber" ).GetComponent<Text> ( );
+
+		moneyNumberPlayer.text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
+
 		ItemModif[] checkAllItem = GetComponentsInChildren<ItemModif> ( true );
 		ItemModif currItem;
 
 		string getCons = Constants.ItemBought;
 		Dictionary <string, ItemModif> getItemConf = new Dictionary<string, ItemModif> ( );
+		allTempItem = new List<ItemModif> ( );
 
 		for ( int a = 0; a < checkAllItem.Length; a++ )
 		{
-			if ( AllPlayerPrefs.GetBoolValue ( getCons + checkAllItem [ a ].CatName ) )
+			if ( AllPlayerPrefs.GetBoolValue ( getCons + checkAllItem [ a ].CatName + checkAllItem [ a ].ItemName ) )
 			{
 				currItem = checkAllItem [ a ];
-				getItemConf.Add ( getCons + currItem, currItem ); 
+
+				try{
+					getItemConf.Add ( getCons + checkAllItem [ a ].CatName, currItem ); 
+
+				}catch{Debug.Log("key same");}
 
 				currItem.GetComponent<Image> ( ).sprite = currItem.SpriteConfirm;
 
@@ -320,8 +330,7 @@ public class MenuShop : UiParent
 
 		allConfirm = getItemConf;
 		GlobalManager.GameCont.AllModifItem = getItemConf;
-
-
+		GlobalManager.GameCont.AllTempsItem = allTempItem;
     }
     
 	//Changement de catégorie a item et inversement

@@ -16,7 +16,7 @@ public class MeshDesctruc : MonoBehaviour
 		//stockElem = new List<GameObject> ( );
 	}
 
-	public IEnumerator SplitMesh ( GameObject objSource, float forcePro, float deleayDest, int lim = 10, bool little = false )    
+	public IEnumerator SplitMesh ( GameObject objSource, Transform thisPlayer, float forcePro, float deleayDest, int lim = 10, bool little = false )    
 	{
 		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
 
@@ -59,7 +59,7 @@ public class MeshDesctruc : MonoBehaviour
 
 		Transform getTrans = objSource.transform;
 		Vector3 getSize = M.bounds.size;
-		Vector3 calDir = getTrans.forward;
+		Vector3 calDir = thisPlayer.forward;
 		GameObject GO;
 		GameObject getTri = TriangPrefb;
 		Mesh mesh;

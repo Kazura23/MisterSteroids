@@ -238,6 +238,10 @@ public class PlayerController : MonoBehaviour
 		acceleration = Acceleration;
 		impulsionCL = ImpulsionCL;
 		decelerationCL = DecelerationCL;
+
+		barMadness.value = 0;
+		InMadness = false;
+		GlobalManager.Ui.CloseMadness ( );
 	}
 
 	public void GameOver ( bool forceDead = false )
@@ -293,14 +297,13 @@ public class PlayerController : MonoBehaviour
 			GlobalManager.Ui.CloseMadness();
 		}
 
-		if (barMadness.value - (getTime * delayDownBar) > 0)
+		if (barMadness.value - (getTime * delayDownBar) > 0 )
 		{
 			barMadness.value -= getTime * delayDownBar;
 		}
 		else
 		{
 			barMadness.value = 0;
-			InMadness = false;
 		}
 
 		if ( Running )
@@ -780,7 +783,6 @@ public class PlayerController : MonoBehaviour
             if (barMadness.value - lessPointPunchInMadness < 0)
             {
                 barMadness.value = 0;
-                InMadness = false;
             }
             else
             {

@@ -1,8 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 using DG.Tweening;
+using System.Runtime.CompilerServices;
+using System.Collections;
+using UnityEngine.EventSystems;
 
 public class MenuShop : UiParent 
 {
@@ -25,6 +27,7 @@ public class MenuShop : UiParent
     public Image barCategory;
     public Image moleculeCategory;
     public GameObject moleculeContainer;
+    public Text moneyNumberPlayer;
 
 	[HideInInspector]
 	public CatShop currCatSeled;
@@ -140,7 +143,11 @@ public class MenuShop : UiParent
 
 		currItemSeled = currCatSeled.DefautItem;
 		CheckSelectItem ( true );
-	}
+
+
+        moneyNumberPlayer.transform.parent.SetParent(moneyNumberPlayer.transform.parent.parent.parent.parent.parent);
+
+    }
 
 	public override void CloseThis ( )
 	{
@@ -205,7 +212,10 @@ public class MenuShop : UiParent
 			AllPlayerPrefs.SetStringValue ( getCons, "Confirm" );
 			ItemModif getThis;
 
-			if ( allConfirm.TryGetValue ( getCons, out getThis ) )
+
+            moneyNumberPlayer.text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
+
+            if ( allConfirm.TryGetValue ( getCons, out getThis ) )
 			{
 				if ( getThis.UseOtherSprite )
 				{
@@ -278,7 +288,12 @@ public class MenuShop : UiParent
 		currCatSeled = DefCatSelected;
 		currItemSeled = currCatSeled.DefautItem;
 
-		fixBackShop = transform.parent.Find ( "GlobalBackGround/Shop" ).gameObject;
+        
+        moneyNumberPlayer.text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
+
+        
+
+        fixBackShop = transform.parent.Find ( "GlobalBackGround/Shop" ).gameObject;
 		ItemModif[] checkAllItem = GetComponentsInChildren<ItemModif> ( true );
 		ItemModif currItem;
 
@@ -305,8 +320,10 @@ public class MenuShop : UiParent
 
 		allConfirm = getItemConf;
 		GlobalManager.GameCont.AllModifItem = getItemConf;
-	}
 
+
+    }
+    
 	//Changement de catégorie a item et inversement
 	void ChangeToItem ( bool goItem )
 	{

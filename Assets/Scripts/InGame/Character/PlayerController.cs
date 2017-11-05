@@ -362,9 +362,9 @@ public class PlayerController : MonoBehaviour
 			StartCoroutine ( waitStopDash ( ) );
 		}
 
-		checkInAir ( );
+		checkInAir ( getTime );
 
-		speAction ( getTime);
+		speAction ( getTime );
 
 		changeLine ( getTime );
 
@@ -467,7 +467,7 @@ public class PlayerController : MonoBehaviour
 		invDamage = false;
 	}
 
-	void checkInAir ( )
+	void checkInAir ( float getTime )
 	{
 		RaycastHit[] allHit;
 		bool checkAir = true;
@@ -497,7 +497,7 @@ public class PlayerController : MonoBehaviour
 		if ( checkAir )
 		{
 			pRig.useGravity = true;
-			pRig.AddForce ( Vector3.down * BonusGrav, ForceMode.Force );
+			pRig.AddForce ( Vector3.down * BonusGrav * getTime, ForceMode.Force );
 		}
 
 		inAir = checkAir;

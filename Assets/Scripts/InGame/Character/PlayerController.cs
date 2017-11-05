@@ -432,7 +432,6 @@ public class PlayerController : MonoBehaviour
 			}
 			else if ( Time.timeScale < 1 )
 			{
-				Debug.Log ( 1 );
 				if ( SliderContent < 0 )
 				{
 					canSpe = false;
@@ -443,8 +442,6 @@ public class PlayerController : MonoBehaviour
 			}
 			else if ( SliderContent < 10 )
 			{
-				Debug.Log ( 1 );
-
 				animeSlo = false;
 				Time.timeScale = 1;
 				SliderContent += RecovSlider * getTime;
@@ -458,7 +455,6 @@ public class PlayerController : MonoBehaviour
 			}
 			else
 			{
-				Debug.Log ( 1 );
 				canSpe = true;
 				SliderContent = 10;
 			}

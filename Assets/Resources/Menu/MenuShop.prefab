@@ -632,12 +632,12 @@ MonoBehaviour:
   UseSprite: 1
   UseOtherSprite: 0
   UseColor: 1
-  UseOtherColor: 0
+  UseOtherColor: 1
   ColorConfirm: {r: 0.23529412, g: 0.21568628, b: 0.21568628, a: 1}
   ColorSelected: {r: 0.23529412, g: 0.21568628, b: 0.21568628, a: 1}
   ColorUnSelected: {r: 0.23529412, g: 0.21568628, b: 0.21568628, a: 1}
-  BoughtColorSelected: {r: 0, g: 0, b: 0, a: 0}
-  BoughtColorUnSelected: {r: 0, g: 0, b: 0, a: 0}
+  BoughtColorSelected: {r: 1, g: 0, b: 0, a: 1}
+  BoughtColorUnSelected: {r: 1, g: 0, b: 0, a: 1}
   SpriteConfirm: {fileID: 21300000, guid: cb58b946183fe7d4c89e83a042150f40, type: 3}
   SpriteSelected: {fileID: 21300000, guid: cb58b946183fe7d4c89e83a042150f40, type: 3}
   SpriteUnselected: {fileID: 21300000, guid: cb58b946183fe7d4c89e83a042150f40, type: 3}

@@ -297,7 +297,7 @@ public class PlayerController : MonoBehaviour
 		}
 		else if( barMadness.value == 0 && InMadness)
 		{
-
+            Debug.Log("Mad");
             GlobalManager.Ui.CloseMadness();
             InMadness = false;
 		}

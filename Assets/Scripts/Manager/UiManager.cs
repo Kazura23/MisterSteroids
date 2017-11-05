@@ -30,6 +30,8 @@ public class UiManager : ManagerParent
     [Header("MISC GAMEFEEL")]
     public Image CircleFeel;
 
+    private Camera camTw1;
+
     Dictionary <MenuType, UiParent> AllMenu;
 	MenuType menuOpen;
 
@@ -117,11 +119,17 @@ public class UiManager : ManagerParent
     {
         Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().enabled = false;
         Camera.main.GetComponent<CameraFilterPack_Color_YUV>().enabled = false;
-		Camera.main.DOKill ( true );
 
-        Camera.main.transform.DOKill(true);
+        Camera.main.GetComponent<RainbowRotate>().enabled = false;
+        
 
-        //Camera.main.transform.GetComponent<RainbowMove>().enabled = true;
+        Camera.main.DOKill(true);
+
+        Camera.main.transform.DORotate(new Vector3(0, 0, 3), 0f);
+        Debug.Log("CloseMad");
+        Camera.main.GetComponent<RainbowRotate>().enabled = true;
+
+       //Camera.main.transform.GetComponent<RainbowMove>().enabled = true;
     }
 
 	public void DashSpeedEffect ( bool enable )

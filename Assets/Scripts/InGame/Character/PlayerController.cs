@@ -124,7 +124,6 @@ public class PlayerController : MonoBehaviour
 	bool canDPunch = true;
 	//private Coroutine corou/*, preparPunch*/;
 
-	//Rigidbody thisRig;
 	Transform pTrans;
 	Rigidbody pRig;
 	Direction currentDir = Direction.North;
@@ -341,8 +340,6 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 
-		checkInAir ( );
-
 		if ( !Dash && !playerDead )
 		{
 			if ( Input.GetAxis ( "CoupSimple" ) == 0 )
@@ -364,6 +361,8 @@ public class PlayerController : MonoBehaviour
 
 			StartCoroutine ( waitStopDash ( ) );
 		}
+
+		checkInAir ( );
 
 		speAction ( getTime);
 
@@ -460,10 +459,7 @@ public class PlayerController : MonoBehaviour
 			}
 
 			SliderSlow.value = SliderContent;
-
-
 		}
-
 	}
 
 	void waitInvDmg ( )
@@ -474,15 +470,15 @@ public class PlayerController : MonoBehaviour
 	void checkInAir ( )
 	{
 		RaycastHit[] allHit;
-		bool inAir = true;
+		bool checkAir = true;
 
-		allHit = Physics.RaycastAll ( pTrans.position, Vector3.down, 5 );
+		allHit = Physics.RaycastAll ( pTrans.position, Vector3.down, 2 );
 		foreach ( RaycastHit thisRay in allHit )
 		{
-			if ( thisRay.collider.gameObject.layer == 9 )
-			{
-				inAir = false;
+			checkAir = false;
 
+			if ( thisRay.collider.gameObject.layer == 9)
+			{
 				Transform getThis = thisRay.collider.transform;
 
 				if ( getThis.rotation.x < 0 )
@@ -495,17 +491,16 @@ public class PlayerController : MonoBehaviour
 					pTrans.Translate ( new Vector3 ( 0, ( -getThis.eulerAngles.x / 4 ) * Time.deltaTime, 0 ), Space.World );
 					pRig.useGravity = true;
 				}
-
-				inAir = false;
 			}
 		}
 
-		if ( inAir )
+		if ( checkAir )
 		{
-			inAir = true;
 			pRig.useGravity = true;
-			pRig.AddForce ( Vector3.down * BonusGrav, ForceMode.Acceleration );
+			pRig.AddForce ( Vector3.down * BonusGrav, ForceMode.Force );
 		}
+
+		inAir = checkAir;
 	}
 
 	void playerMove ( float delTime, float speed )
@@ -517,10 +512,14 @@ public class PlayerController : MonoBehaviour
 		GlobalManager.Ui.DashSpeedEffect ( false );
         Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole>().enabled = false;
 
-        if ( inAir )
+		if ( inAir )
 		{
 			speed = ( speed / 100 ) * PourcRal;
 		}
+		/*else
+		{
+			canJump = true;
+		}*/
 
 		if ( Dash )
 		{
@@ -541,15 +540,18 @@ public class PlayerController : MonoBehaviour
 
 		float calCFov = Constants.DefFov * ( speed / maxSpeed );
 
-		Shader.SetGlobalFloat ( "_ReduceVis", speed / maxSpeed);
+		if ( !inAir )
+		{
+			Shader.SetGlobalFloat ( "_ReduceVis", speed / maxSpeed);
 
-		if ( thisCam.fieldOfView < calCFov)
-		{
-			thisCam.fieldOfView += Time.deltaTime * SpeedEffectTime;
-		}
-		else if ( thisCam.fieldOfView > calCFov)
-		{
-			thisCam.fieldOfView -= Time.deltaTime * SpeedEffectTime;
+			if ( thisCam.fieldOfView < calCFov)
+			{
+				thisCam.fieldOfView += Time.deltaTime * SpeedEffectTime;
+			}
+			else if ( thisCam.fieldOfView > calCFov)
+			{
+				thisCam.fieldOfView -= Time.deltaTime * SpeedEffectTime;
+			}
 		}
 
 		if ( currentDir == Direction.North )
@@ -590,7 +592,7 @@ public class PlayerController : MonoBehaviour
 		/*if ( canJump && Input.GetAxis ( "Jump" ) > 0 )
 		{
 			canJump = false;
-			thisRig.AddForce ( transPlayer.up * JumpForce, ForceMode.Impulse );
+			pRig.AddForce ( transPlayer.up * JumpForce, ForceMode.Impulse );
 		}*/
 	}
 
@@ -660,6 +662,11 @@ public class PlayerController : MonoBehaviour
 			}
 
 			float calTrans = clDir * currSpLine * delTime;
+
+			if ( inAir )
+			{
+				calTrans = ( calTrans / 100 ) * PourcRal;
+			}
 			newH -= calTrans;
 
 			if ( saveDist > 0 && newH - calTrans < 0 || saveDist < 0 && newH > 0 )
@@ -668,6 +675,8 @@ public class PlayerController : MonoBehaviour
 				newH = 0;
 				currSpLine = 0;
 			}
+
+
 
 			dirLine = pTrans.right * calTrans;
 			pTrans.Translate ( dirLine, Space.World );

@@ -3,7 +3,7 @@ guid: be42b738a6a2b104485d644a92a6ad1a
 timeCreated: 1509814473
 licenseType: Free
 ModelImporter:
-  serializedVersion: 22
+  serializedVersion: 21
   fileIDToRecycleName:
     100000: mr_steroid:polySurface1
     100002: Mr_steroid_Head
@@ -60,6 +60,86 @@ ModelImporter:
     100104: Mr_steroid_Spine1
     100106: polySurface3
     100108: //RootNode
+    100110: Mr_steroid_Ctrl_ChestEndEffector
+    100112: Mr_steroid_Ctrl_ChestOriginEffector
+    100114: Mr_steroid_Ctrl_Head
+    100116: Mr_steroid_Ctrl_HeadEffector
+    100118: Mr_steroid_Ctrl_Hips
+    100120: Mr_steroid_Ctrl_HipsEffector
+    100122: Mr_steroid_Ctrl_LeftAnkleEffector
+    100124: Mr_steroid_Ctrl_LeftArm
+    100126: Mr_steroid_Ctrl_LeftElbowEffector
+    100128: Mr_steroid_Ctrl_LeftFoot
+    100130: Mr_steroid_Ctrl_LeftFootEffector
+    100132: Mr_steroid_Ctrl_LeftForeArm
+    100134: Mr_steroid_Ctrl_LeftHand
+    100136: Mr_steroid_Ctrl_LeftHandIndex1
+    100138: Mr_steroid_Ctrl_LeftHandIndex2
+    100140: Mr_steroid_Ctrl_LeftHandIndex3
+    100142: Mr_steroid_Ctrl_LeftHandIndexEffector
+    100144: Mr_steroid_Ctrl_LeftHandMiddle1
+    100146: Mr_steroid_Ctrl_LeftHandMiddle2
+    100148: Mr_steroid_Ctrl_LeftHandMiddle3
+    100150: Mr_steroid_Ctrl_LeftHandMiddleEffector
+    100152: Mr_steroid_Ctrl_LeftHandPinky1
+    100154: Mr_steroid_Ctrl_LeftHandPinky2
+    100156: Mr_steroid_Ctrl_LeftHandPinky3
+    100158: Mr_steroid_Ctrl_LeftHandPinkyEffector
+    100160: Mr_steroid_Ctrl_LeftHandRing1
+    100162: Mr_steroid_Ctrl_LeftHandRing2
+    100164: Mr_steroid_Ctrl_LeftHandRing3
+    100166: Mr_steroid_Ctrl_LeftHandRingEffector
+    100168: Mr_steroid_Ctrl_LeftHandThumb1
+    100170: Mr_steroid_Ctrl_LeftHandThumb2
+    100172: Mr_steroid_Ctrl_LeftHandThumb3
+    100174: Mr_steroid_Ctrl_LeftHandThumbEffector
+    100176: Mr_steroid_Ctrl_LeftHipEffector
+    100178: Mr_steroid_Ctrl_LeftKneeEffector
+    100180: Mr_steroid_Ctrl_LeftLeg
+    100182: Mr_steroid_Ctrl_LeftShoulder
+    100184: Mr_steroid_Ctrl_LeftShoulderEffector
+    100186: Mr_steroid_Ctrl_LeftToeBase
+    100188: Mr_steroid_Ctrl_LeftUpLeg
+    100190: Mr_steroid_Ctrl_LeftWristEffector
+    100192: Mr_steroid_Ctrl_Neck
+    100194: Mr_steroid_Ctrl_Reference
+    100196: Mr_steroid_Ctrl_RightAnkleEffector
+    100198: Mr_steroid_Ctrl_RightArm
+    100200: Mr_steroid_Ctrl_RightElbowEffector
+    100202: Mr_steroid_Ctrl_RightFoot
+    100204: Mr_steroid_Ctrl_RightFootEffector
+    100206: Mr_steroid_Ctrl_RightForeArm
+    100208: Mr_steroid_Ctrl_RightHand
+    100210: Mr_steroid_Ctrl_RightHandIndex1
+    100212: Mr_steroid_Ctrl_RightHandIndex2
+    100214: Mr_steroid_Ctrl_RightHandIndex3
+    100216: Mr_steroid_Ctrl_RightHandIndexEffector
+    100218: Mr_steroid_Ctrl_RightHandMiddle1
+    100220: Mr_steroid_Ctrl_RightHandMiddle2
+    100222: Mr_steroid_Ctrl_RightHandMiddle3
+    100224: Mr_steroid_Ctrl_RightHandMiddleEffector
+    100226: Mr_steroid_Ctrl_RightHandPinky1
+    100228: Mr_steroid_Ctrl_RightHandPinky2
+    100230: Mr_steroid_Ctrl_RightHandPinky3
+    100232: Mr_steroid_Ctrl_RightHandPinkyEffector
+    100234: Mr_steroid_Ctrl_RightHandRing1
+    100236: Mr_steroid_Ctrl_RightHandRing2
+    100238: Mr_steroid_Ctrl_RightHandRing3
+    100240: Mr_steroid_Ctrl_RightHandRingEffector
+    100242: Mr_steroid_Ctrl_RightHandThumb1
+    100244: Mr_steroid_Ctrl_RightHandThumb2
+    100246: Mr_steroid_Ctrl_RightHandThumb3
+    100248: Mr_steroid_Ctrl_RightHandThumbEffector
+    100250: Mr_steroid_Ctrl_RightHipEffector
+    100252: Mr_steroid_Ctrl_RightKneeEffector
+    100254: Mr_steroid_Ctrl_RightLeg
+    100256: Mr_steroid_Ctrl_RightShoulder
+    100258: Mr_steroid_Ctrl_RightShoulderEffector
+    100260: Mr_steroid_Ctrl_RightToeBase
+    100262: Mr_steroid_Ctrl_RightUpLeg
+    100264: Mr_steroid_Ctrl_RightWristEffector
+    100266: Mr_steroid_Ctrl_Spine
+    100268: Mr_steroid_Ctrl_Spine1
     400000: mr_steroid:polySurface1
     400002: Mr_steroid_Head
     400004: Mr_steroid_Hips
@@ -115,22 +195,96 @@ ModelImporter:
     400104: Mr_steroid_Spine1
     400106: polySurface3
     400108: //RootNode
+    400110: Mr_steroid_Ctrl_ChestEndEffector
+    400112: Mr_steroid_Ctrl_ChestOriginEffector
+    400114: Mr_steroid_Ctrl_Head
+    400116: Mr_steroid_Ctrl_HeadEffector
+    400118: Mr_steroid_Ctrl_Hips
+    400120: Mr_steroid_Ctrl_HipsEffector
+    400122: Mr_steroid_Ctrl_LeftAnkleEffector
+    400124: Mr_steroid_Ctrl_LeftArm
+    400126: Mr_steroid_Ctrl_LeftElbowEffector
+    400128: Mr_steroid_Ctrl_LeftFoot
+    400130: Mr_steroid_Ctrl_LeftFootEffector
+    400132: Mr_steroid_Ctrl_LeftForeArm
+    400134: Mr_steroid_Ctrl_LeftHand
+    400136: Mr_steroid_Ctrl_LeftHandIndex1
+    400138: Mr_steroid_Ctrl_LeftHandIndex2
+    400140: Mr_steroid_Ctrl_LeftHandIndex3
+    400142: Mr_steroid_Ctrl_LeftHandIndexEffector
+    400144: Mr_steroid_Ctrl_LeftHandMiddle1
+    400146: Mr_steroid_Ctrl_LeftHandMiddle2
+    400148: Mr_steroid_Ctrl_LeftHandMiddle3
+    400150: Mr_steroid_Ctrl_LeftHandMiddleEffector
+    400152: Mr_steroid_Ctrl_LeftHandPinky1
+    400154: Mr_steroid_Ctrl_LeftHandPinky2
+    400156: Mr_steroid_Ctrl_LeftHandPinky3
+    400158: Mr_steroid_Ctrl_LeftHandPinkyEffector
+    400160: Mr_steroid_Ctrl_LeftHandRing1
+    400162: Mr_steroid_Ctrl_LeftHandRing2
+    400164: Mr_steroid_Ctrl_LeftHandRing3
+    400166: Mr_steroid_Ctrl_LeftHandRingEffector
+    400168: Mr_steroid_Ctrl_LeftHandThumb1
+    400170: Mr_steroid_Ctrl_LeftHandThumb2
+    400172: Mr_steroid_Ctrl_LeftHandThumb3
+    400174: Mr_steroid_Ctrl_LeftHandThumbEffector
+    400176: Mr_steroid_Ctrl_LeftHipEffector
+    400178: Mr_steroid_Ctrl_LeftKneeEffector
+    400180: Mr_steroid_Ctrl_LeftLeg
+    400182: Mr_steroid_Ctrl_LeftShoulder
+    400184: Mr_steroid_Ctrl_LeftShoulderEffector
+    400186: Mr_steroid_Ctrl_LeftToeBase
+    400188: Mr_steroid_Ctrl_LeftUpLeg
+    400190: Mr_steroid_Ctrl_LeftWristEffector
+    400192: Mr_steroid_Ctrl_Neck
+    400194: Mr_steroid_Ctrl_Reference
+    400196: Mr_steroid_Ctrl_RightAnkleEffector
+    400198: Mr_steroid_Ctrl_RightArm
+    400200: Mr_steroid_Ctrl_RightElbowEffector
+    400202: Mr_steroid_Ctrl_RightFoot
+    400204: Mr_steroid_Ctrl_RightFootEffector
+    400206: Mr_steroid_Ctrl_RightForeArm
+    400208: Mr_steroid_Ctrl_RightHand
+    400210: Mr_steroid_Ctrl_RightHandIndex1
+    400212: Mr_steroid_Ctrl_RightHandIndex2
+    400214: Mr_steroid_Ctrl_RightHandIndex3
+    400216: Mr_steroid_Ctrl_RightHandIndexEffector
+    400218: Mr_steroid_Ctrl_RightHandMiddle1
+    400220: Mr_steroid_Ctrl_RightHandMiddle2
+    400222: Mr_steroid_Ctrl_RightHandMiddle3
+    400224: Mr_steroid_Ctrl_RightHandMiddleEffector
+    400226: Mr_steroid_Ctrl_RightHandPinky1
+    400228: Mr_steroid_Ctrl_RightHandPinky2
+    400230: Mr_steroid_Ctrl_RightHandPinky3
+    400232: Mr_steroid_Ctrl_RightHandPinkyEffector
+    400234: Mr_steroid_Ctrl_RightHandRing1
+    400236: Mr_steroid_Ctrl_RightHandRing2
+    400238: Mr_steroid_Ctrl_RightHandRing3
+    400240: Mr_steroid_Ctrl_RightHandRingEffector
+    400242: Mr_steroid_Ctrl_RightHandThumb1
+    400244: Mr_steroid_Ctrl_RightHandThumb2
+    400246: Mr_steroid_Ctrl_RightHandThumb3
+    400248: Mr_steroid_Ctrl_RightHandThumbEffector
+    400250: Mr_steroid_Ctrl_RightHipEffector
+    400252: Mr_steroid_Ctrl_RightKneeEffector
+    400254: Mr_steroid_Ctrl_RightLeg
+    400256: Mr_steroid_Ctrl_RightShoulder
+    400258: Mr_steroid_Ctrl_RightShoulderEffector
+    400260: Mr_steroid_Ctrl_RightToeBase
+    400262: Mr_steroid_Ctrl_RightUpLeg
+    400264: Mr_steroid_Ctrl_RightWristEffector
+    400266: Mr_steroid_Ctrl_Spine
+    400268: Mr_steroid_Ctrl_Spine1
     4300000: polySurface3
     7400000: double_shoot
     7400002: multi_shoot
+    7400004: Idlle
     9500000: //RootNode
     13700000: polySurface3
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: mr_steroid_Human_refSG1
-    second: {fileID: 2100000, guid: d9c8f1aa6b8309142a17243d2fc531b5, type: 2}
   materials:
     importMaterials: 0
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -143,7 +297,6 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    importAnimatedCustomProperties: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -193,6 +346,34 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Idlle
+      takeName: Take 001
+      firstFrame: 108
+      lastFrame: 162
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0

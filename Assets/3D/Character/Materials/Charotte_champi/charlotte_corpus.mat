@@ -7,12 +7,12 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: charlotte_corpus
-  m_Shader: {fileID: 4800000, guid: e570c2adf90d6a24b8634788025bb2bb, type: 3}
+  m_Shader: {fileID: 4800000, guid: 7b09b17138bed4344aa7353cdb913dfc, type: 3}
   m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -56,6 +56,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
         m_Texture: {fileID: 2800000, guid: e9742c575b8f4644fb9379e7347ff62e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal_map:
+        m_Texture: {fileID: 2800000, guid: 11cacf550de92934d9e3a00c06943a48, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normals:
@@ -116,7 +120,7 @@ Material:
     - _attenuation_shadow: 1
     - _diffuseforce: 2
     - _gloss: 0.444
-    - _gloss_color: 1.566
+    - _gloss_color: 1.605
     - _light_force: 0
     - _node_1265: 0
     - _node_2055: 0
@@ -127,7 +131,7 @@ Material:
     - _normal_force: 38.1
     - _posterize: 0.6
     - _posterizeshadow: 1.08
-    - _saturation: 10
+    - _saturation: 0.38
     - _shadow_posterization: -7.27
     - _shadowforce: 0.1
     m_Colors:

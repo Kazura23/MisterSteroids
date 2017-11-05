@@ -109,10 +109,11 @@ public class UiManager : ManagerParent
             });
         }).SetLoops(-1,LoopType.Yoyo);*/
         
+        /*
         Camera.main.DOFieldOfView(40, .35f).OnComplete(() => {
             Camera.main.DOFieldOfView(60, .35f);
         }).SetLoops(-1,LoopType.Yoyo);
-        
+        */
     }
 
     public void CloseMadness()
@@ -120,14 +121,14 @@ public class UiManager : ManagerParent
         Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().enabled = false;
         Camera.main.GetComponent<CameraFilterPack_Color_YUV>().enabled = false;
 
-        Camera.main.GetComponent<RainbowRotate>().enabled = false;
+        //Camera.main.GetComponent<RainbowRotate>().enabled = false;
         
 
-        Camera.main.DOKill(true);
+        //Camera.main.DOKill(true);
 
         Camera.main.transform.DORotate(new Vector3(0, 0, 3), 0f);
         Debug.Log("CloseMad");
-        Camera.main.GetComponent<RainbowRotate>().enabled = true;
+        //Camera.main.GetComponent<RainbowRotate>().enabled = true;
 
        //Camera.main.transform.GetComponent<RainbowMove>().enabled = true;
     }

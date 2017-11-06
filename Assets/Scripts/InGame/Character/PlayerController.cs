@@ -125,7 +125,6 @@ public class PlayerController : MonoBehaviour
 	bool canDPunch = true;
     //private Coroutine corou/*, preparPunch*/;
 
-
     public GameObject Plafond;
 
     Transform pTrans;
@@ -298,12 +297,7 @@ public class PlayerController : MonoBehaviour
 			return;
 		}
 
-		if ( barMadness.value > 98 && !InMadness )
-		{
-			InMadness = true;
-			GlobalManager.Ui.OpenMadness();
-		}
-		else if( barMadness.value == 0 && InMadness )
+		if( barMadness.value == 0 && InMadness )
 		{
             Debug.Log("Mad");
             GlobalManager.Ui.CloseMadness();
@@ -412,7 +406,6 @@ public class PlayerController : MonoBehaviour
 				maxSpeedCL = MaxCLInc;
 			}
 		}
-		Debug.Log ( maxSpeed );
 	}
 
 	void speAction ( float getTime )
@@ -648,7 +641,7 @@ public class PlayerController : MonoBehaviour
 
 					if ( currSpLine < 0 )
 					{
-						currSpLine = 0;
+						currSpLine = 0.1f;
 					}
 				}
 				else if ( currSpLine < maxSpeedCL )
@@ -683,7 +676,7 @@ public class PlayerController : MonoBehaviour
 				currSpLine = 0;
 			}
 
-
+			Debug.Log ( currSpLine );
 
 			dirLine = pTrans.right * calTrans;
 			pTrans.Translate ( dirLine, Space.World );
@@ -696,54 +689,69 @@ public class PlayerController : MonoBehaviour
 
 	void playerFight ( )
 	{
+		if ( Input.anyKeyDown && Input.GetAxis ( "SpecialAction" ) == 0 )
+		{
+			if (InMadness)
+			{
+				if (barMadness.value - lessPointPunchInMadness < 0)
+				{
+					barMadness.value = 0;
+				}
+				else
+				{
+
+					barMadness.value -= lessPointPunchInMadness;
+				}
+			}
+		}
+
 		if(Input.GetAxis("CoupSimple") != 0 && canPunch && resetAxeS  )
         {
-            
-                resetAxeS = false;
-                canPunch = false;
-                propP = true;
+            resetAxeS = false;
+            canPunch = false;
+            propP = true;
 
-                if(!InMadness)
-                    transform.GetChild(0).GetComponent<Punch>().MadnessMana("Simple");
+			if ( !InMadness )
+			{
+				punch.MadnessMana("Simple");
+			}
 
-                ScreenShake.Singleton.ShakeHitSimple();
+            ScreenShake.Singleton.ShakeHitSimple();
+       
+            if (punchRight)
+            {
+                punch.RightPunch = true;
+                poingDroite.SetActive(true);
 
-           
-                if (punchRight)
+				playAnimator.SetTrigger("Right");
+
+                if (currCouR != null)
                 {
-                    punch.RightPunch = true;
-                    poingDroite.SetActive(true);
-
-					playAnimator.SetTrigger("Right");
-
-
-                    if (currCouR != null)
-                    {
-                        StopCoroutine(currCouR);
-                    }
-                    currCouR = animePunch(true);
-                    StartCoroutine(currCouR);
-
+                    StopCoroutine(currCouR);
                 }
-                else
-                {
-                    punch.RightPunch = false;
-                    poingGauche.SetActive(true);
 
-					playAnimator.SetTrigger("Left");
+                currCouR = animePunch(true);
+                StartCoroutine(currCouR);
+            }
+            else
+            {
+                punch.RightPunch = false;
+                poingGauche.SetActive(true);
 
-                if (currCouL != null)
-                    {
-                        StopCoroutine(currCouL);
-                    }
-                    currCouL = animePunch(false);
-                    StartCoroutine(currCouL);
-                }
-                punchRight = !punchRight;
-                StartCoroutine("StartPunch", 0);
-                propPunch = propulsePunch(TimePropulsePunch);
-                StartCoroutine(propPunch);
-			
+				playAnimator.SetTrigger("Left");
+
+		        if (currCouL != null)
+		        {
+		            StopCoroutine(currCouL);
+		        }
+
+                currCouL = animePunch(false);
+                StartCoroutine(currCouL);
+            }
+            punchRight = !punchRight;
+            StartCoroutine("StartPunch", 0);
+            propPunch = propulsePunch(TimePropulsePunch);
+            StartCoroutine(propPunch);
 		}
 		else if(Input.GetAxis("CoupDouble") != 0 && canDPunch && canPunch && resetAxeD  )
         {
@@ -751,8 +759,10 @@ public class PlayerController : MonoBehaviour
 
 			playAnimator.SetTrigger("Double");
 
-            if (!InMadness)
-                transform.GetChild(0).GetComponent<Punch>().MadnessMana("Double");
+			if ( !InMadness )
+			{
+				punch.MadnessMana("Double");
+			}
 
             propDP = true;
 			resetAxeD = false;
@@ -786,21 +796,6 @@ public class PlayerController : MonoBehaviour
 		{
 			StartCoroutine(CooldownPunch());
 		}
-        if (InMadness)
-        {
-
-            Debug.Log("gyg");
-            if (barMadness.value - lessPointPunchInMadness < 0)
-            {
-                barMadness.value = 0;
-            }
-            else
-            {
-                   
-                Debug.Log("gyg2");
-                barMadness.value -= lessPointPunchInMadness;
-            }
-        }
 	}
 
 
@@ -940,6 +935,11 @@ public class PlayerController : MonoBehaviour
 	public void SetInMadness(bool p_bool)
     {
         InMadness = p_bool;
+
+		if ( p_bool )
+		{
+			GlobalManager.Ui.OpenMadness();
+		}
     }
 
 	void OnTriggerEnter ( Collider thisColl )

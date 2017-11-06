@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44479203, g: 0.494339, b: 0.57353723, a: 1}
+  m_IndirectSpecularColor: {r: 0.44479245, g: 0.49433935, b: 0.57353824, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -11520,7 +11520,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChunksInfo:
   - {fileID: 11400000, guid: 18a71cb75a9df274fa9a247199684f9c, type: 2}
-  DefaultPos: {x: 0, y: 0, z: 30}
+  DefaultPos: {x: 0, y: 0, z: 34}
   currLevel: 0
 --- !u!1 &846869079
 GameObject:
@@ -14329,7 +14329,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1084249219
 Transform:
   m_ObjectHideFlags: 0

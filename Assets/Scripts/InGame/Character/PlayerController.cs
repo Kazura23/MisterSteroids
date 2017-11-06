@@ -708,6 +708,8 @@ public class PlayerController : MonoBehaviour
 
                 ScreenShake.Singleton.ShakeHitSimple();
 
+
+                GlobalManager.Ui.SimpleCoup();
            
                 if (punchRight)
                 {
@@ -749,6 +751,8 @@ public class PlayerController : MonoBehaviour
         {
             ScreenShake.Singleton.ShakeHitDouble();
 
+            GlobalManager.Ui.DoubleCoup();
+
 			playAnimator.SetTrigger("Double");
 
             if (!InMadness)
@@ -788,8 +792,7 @@ public class PlayerController : MonoBehaviour
 		}
         if (InMadness)
         {
-
-            Debug.Log("gyg");
+            
             if (barMadness.value - lessPointPunchInMadness < 0)
             {
                 barMadness.value = 0;
@@ -797,7 +800,6 @@ public class PlayerController : MonoBehaviour
             else
             {
                    
-                Debug.Log("gyg2");
                 barMadness.value -= lessPointPunchInMadness;
             }
         }
@@ -960,6 +962,8 @@ public class PlayerController : MonoBehaviour
 		{
 			if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ElemDash )
 			{
+                GlobalManager.Ui.BloodHit();
+
 				/*Vector3 getProj = getPunch.projection_basic;
 
 				if ( Random.Range ( 0,2 ) == 0 )

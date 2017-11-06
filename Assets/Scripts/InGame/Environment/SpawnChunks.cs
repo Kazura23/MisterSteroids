@@ -156,10 +156,13 @@ public class SpawnChunks : MonoBehaviour
 
 		float distChunk = Vector3.Distance ( AllSpawnable [ currLevel ].getDebutFinCh [ 0 ].transform.position, AllSpawnable [ currLevel ].getDebutFinCh [ 1 ].transform.position );
 
-		thisObj = ( GameObject ) Instantiate ( getChunks [ currLevel ].WallOnLastChunk, thisT );
-		thisObj.transform.position = getChunkT.position + getChunkT.forward * distChunk;
-		thisObj.transform.localPosition += thisObj.transform.up * thisObj.GetComponent<MeshRenderer> ( ).bounds.size.y / 2;
-
+        if (getChunks[currLevel].WallOnLastChunk != null )
+        {
+            thisObj = (GameObject)Instantiate(getChunks[currLevel].WallOnLastChunk, thisT);
+            thisObj.transform.position = getChunkT.position + getChunkT.forward * distChunk;
+            thisObj.transform.localPosition += thisObj.transform.up * thisObj.GetComponent<MeshRenderer>().bounds.size.y / 2;
+        }
+		
 		currLevel++;
 
 		if ( currLevel >= getChunks.Count || randAllChunk )

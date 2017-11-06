@@ -79,11 +79,25 @@ public class UiManager : ManagerParent
 		}
 	}
 
+    public void SimpleCoup()
+    {
+        Camera.main.DOFieldOfView(51, .1f).OnComplete(() => {
+            Camera.main.DOFieldOfView(60, .07f);
+        });
+    }
+
+    public void DoubleCoup()
+    {
+        Camera.main.DOFieldOfView(47, .15f).OnComplete(() => {
+            Camera.main.DOFieldOfView(60, .1f);
+        });
+    }
+
 	public void BloodHit()
 	{
-		Time.timeScale = 0.1f;
+		Time.timeScale = 0f;
         Time.fixedDeltaTime = 0.02F * Time.timeScale;
-        DOVirtual.DelayedCall(.08f, () => {
+        DOVirtual.DelayedCall(.1f, () => {
 			Time.timeScale = 1;
             Time.fixedDeltaTime = .02F;
         });

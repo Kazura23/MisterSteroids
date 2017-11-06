@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour
     public float ratioMaxMadness = 4;
     public float delayDownBar = 1;
     public float lessPointPunchInMadness = 3;
+    public float smoothSpeed = 100;
 
 	[Header ("Caractéristique de force des punchs")]
 	public float PropulseBalls = 100;
@@ -161,6 +162,8 @@ public class PlayerController : MonoBehaviour
 	float acceleration = 0;
 	float impulsionCL = 0;
 	float decelerationCL = 0;
+    float valueSmooth = 0;
+    float valueSmoothUse = 0;
 
 	int currLine = 0;
 	int LastImp = 0;
@@ -233,7 +236,18 @@ public class PlayerController : MonoBehaviour
 		Shader.SetGlobalFloat ( "GlobaleMask_SoftNess", SoftNess );
 		Shader.SetGlobalFloat ( "_SlowMot", Time.timeScale );
 
-        if(Input.GetKeyDown(KeyCode.O))
+
+        SmoothBar();
+
+        if (barMadness.value - (getTime * delayDownBar) > 0)
+        {
+            barMadness.value -= getTime * delayDownBar;
+        }
+        else
+        {
+            barMadness.value = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.O))
             PlayerPrefs.DeleteAll();
 
     }
@@ -310,12 +324,25 @@ public class PlayerController : MonoBehaviour
 
 		//GlobalManager.GameCont.Restart ( );
 	}
+
+    public void AddSmoothCurve(float p_value)
+    {
+        valueSmooth = valueSmoothUse + p_value;
+        valueSmoothUse = valueSmooth;
+    }
+
+    public bool IsInMadness()
+    {
+        return InMadness;
+    }
 	#endregion
 
 	#region Private Functions
 	void playerAction ( float getTime )
 	{
-		if ( playerDead || StopPlayer )
+        
+
+        if ( playerDead || StopPlayer )
 		{
 			thisCam.fieldOfView = Constants.DefFov;
 			return;
@@ -330,14 +357,7 @@ public class PlayerController : MonoBehaviour
             InMadness = false;
 		}
 
-		if (barMadness.value - (getTime * delayDownBar) > 0 )
-		{
-			barMadness.value -= getTime * delayDownBar;
-		}
-		else
-		{
-			barMadness.value = 0;
-		}
+		
 
 		if ( Running )
 		{
@@ -845,6 +865,7 @@ public class PlayerController : MonoBehaviour
                    
                 barMadness.value -= lessPointPunchInMadness;
             }
+            AddSmoothCurve(-lessPointPunchInMadness);
         }
 	}
 
@@ -1051,5 +1072,37 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+    private void SmoothBar()
+    {
+        float res = valueSmoothUse * (Time.deltaTime * smoothSpeed);
+        if(barMadness.value + res < 0)
+        {
+            barMadness.value = 0;
+            valueSmooth = 0;
+            valueSmoothUse = 0;
+            if (InMadness)
+            {
+                InMadness = !InMadness;
+                GlobalManager.Ui.CloseMadness();
+            }
+        }else if (barMadness.value + res >= 100)
+        {
+            Debug.Log("first etape");
+            barMadness.value = 100;
+            valueSmooth = 0;
+            valueSmoothUse = 0;
+            if (!InMadness)
+            {
+                Debug.Log("MADDDDDDDD");
+                InMadness = !InMadness;
+                GlobalManager.Ui.OpenMadness();
+            }
+        }
+        else
+        {
+            barMadness.value += res;
+            valueSmoothUse -= res;
+        }
+    }
 	#endregion
 }

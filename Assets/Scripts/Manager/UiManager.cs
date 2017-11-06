@@ -108,6 +108,23 @@ public class UiManager : ManagerParent
 		});
 	}
 
+    public void GameOver()
+    {
+        Debug.Log("ShakeOver");
+
+
+        Time.timeScale = 0f;
+        Time.fixedDeltaTime = 0.02F * Time.timeScale;
+        DOVirtual.DelayedCall(.4f, () => {
+            Time.timeScale = 1;
+            Time.fixedDeltaTime = .02F;
+            ScreenShake.Singleton.ShakeGameOver();
+        });
+        RedScreen.DOFade(.7f, .25f).OnComplete(() => {
+            RedScreen.DOFade(0, .0f);
+        });
+    }
+
     public void OpenMadness()
     {
         Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().enabled = true;

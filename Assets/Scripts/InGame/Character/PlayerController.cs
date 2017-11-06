@@ -355,7 +355,7 @@ public class PlayerController : MonoBehaviour
 
             GlobalManager.Ui.CloseMadness();
             InMadness = false;
-		}*/
+		}
 
 		
 
@@ -864,7 +864,7 @@ public class PlayerController : MonoBehaviour
             {
                    
                 barMadness.value -= lessPointPunchInMadness;
-            }*/
+            }
             AddSmoothCurve(-lessPointPunchInMadness);
         }
 	}

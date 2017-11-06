@@ -21,7 +21,7 @@ public class ScreenShake : MonoBehaviour
 	{
         if (Input.GetKeyDown(KeyCode.H))
         {
-            ShakeGameOver();
+            ShakeMad();
         }
 	}
 
@@ -52,7 +52,10 @@ public class ScreenShake : MonoBehaviour
         transform.DOPunchPosition(new Vector3(1*.15f, 0, 1*.15f), .15f, 4, 1);
     }
 
-  
+    public void ShakeMad()
+    {
+        transform.DOShakePosition(.4f, .65f, 22, 90);
+    }
 
     public void ShakeGameOver()
     {
@@ -62,9 +65,6 @@ public class ScreenShake : MonoBehaviour
 
         //transform.DOShakeRotation(1f, 2f, 22, 90);
         transform.DOShakePosition(1f, 2f, 22, 90);
-        /*
-        transform.DOPunchRotation (Vector3.one * .5f, .5f, 3, 1);
-        transform.DOPunchPosition(new Vector3(1 * .5f, 0, 1 * .25f), .5f, 4, 2);*/
     }
 
 }

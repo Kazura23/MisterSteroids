@@ -323,7 +323,9 @@ public class PlayerController : MonoBehaviour
 
 		if( barMadness.value == 0 && InMadness )
 		{
-            Debug.Log("Mad");
+            GetComponentInChildren<Animator>().SetBool("InMadness", false);
+
+
             GlobalManager.Ui.CloseMadness();
             InMadness = false;
 		}
@@ -700,7 +702,7 @@ public class PlayerController : MonoBehaviour
 				currSpLine = 0;
 			}
 
-			Debug.Log ( currSpLine );
+			//Debug.Log ( currSpLine );
 
 			dirLine = pTrans.right * calTrans;
 			pTrans.Translate ( dirLine, Space.World );
@@ -725,6 +727,7 @@ public class PlayerController : MonoBehaviour
 				{
 
 					barMadness.value -= lessPointPunchInMadness;
+                    ScreenShake.Singleton.ShakeMad();
 				}
 			}
 		}
@@ -983,6 +986,8 @@ public class PlayerController : MonoBehaviour
 
 		if ( p_bool )
 		{
+            GetComponentInChildren<Animator>().SetTrigger("Mad");
+            GetComponentInChildren<Animator>().SetBool("InMadness", true);
 			GlobalManager.Ui.OpenMadness();
 		}
     }

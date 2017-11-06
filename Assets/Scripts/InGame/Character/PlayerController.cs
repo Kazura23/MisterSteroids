@@ -728,7 +728,9 @@ public class PlayerController : MonoBehaviour
 
 					barMadness.value -= lessPointPunchInMadness;
                     ScreenShake.Singleton.ShakeMad();
-				}
+                    Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().Distortion = (barMadness.value/10);
+
+                }
 			}
 		}
 

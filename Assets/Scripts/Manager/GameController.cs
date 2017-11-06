@@ -35,6 +35,8 @@ public class GameController : ManagerParent
         {
 			if ( GameStarted && !checkStart )
 			{
+                GlobalManager.Ui.Intro();
+
 				checkStart = true;
 				Player.GetComponent<PlayerController> ( ).StopPlayer = false;
 				Camera.main.GetComponent<RainbowRotate>().time = .4f;

@@ -262,15 +262,33 @@ public class PlayerController : MonoBehaviour
 
 	public void GameOver ( bool forceDead = false )
 	{
-		if ( invDamage  && !forceDead )
+
+        GlobalManager.Ui.GameOver();
+
+        if ( invDamage  && !forceDead )
 		{
 			return;
 		}
 
+        ScreenShake.Singleton.ShakeGameOver();
+
         GameOverTok thisTok = new GameOverTok ( );
 		thisTok.totalDist = totalDis;
-           
-		Life--;
+
+        StopPlayer = true;
+
+        Camera.main.GetComponent<RainbowMove>().enabled = false;
+        Camera.main.GetComponent<RainbowRotate>().enabled = false;
+
+        DOVirtual.DelayedCall(.2f, () => {
+
+            Camera.main.transform.DORotate(new Vector3(-220, 0, 0), 1.8f, RotateMode.LocalAxisAdd);
+            Camera.main.transform.DOLocalMoveZ(-50f, .4f);
+        });
+
+
+
+        Life--;
 
 		if ( Life > 0 || playerDead )
 		{
@@ -281,9 +299,13 @@ public class PlayerController : MonoBehaviour
 			return;
 		}
 
-		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver, thisTok );
-		ScreenShake.Singleton.ShakeGameOver();
-		playerDead = true;
+
+        DOVirtual.DelayedCall(1f, () => {
+
+            GlobalManager.Ui.OpenThisMenu(MenuType.GameOver, thisTok);
+            ScreenShake.Singleton.ShakeGameOver();
+            playerDead = true;
+        });
 		//GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
 
 		//GlobalManager.GameCont.Restart ( );
@@ -301,7 +323,9 @@ public class PlayerController : MonoBehaviour
 
 		if( barMadness.value == 0 && InMadness )
 		{
-            Debug.Log("Mad");
+            GetComponentInChildren<Animator>().SetBool("InMadness", false);
+
+
             GlobalManager.Ui.CloseMadness();
             InMadness = false;
 		}
@@ -678,7 +702,7 @@ public class PlayerController : MonoBehaviour
 				currSpLine = 0;
 			}
 
-			Debug.Log ( currSpLine );
+			//Debug.Log ( currSpLine );
 
 			dirLine = pTrans.right * calTrans;
 			pTrans.Translate ( dirLine, Space.World );
@@ -703,6 +727,7 @@ public class PlayerController : MonoBehaviour
 				{
 
 					barMadness.value -= lessPointPunchInMadness;
+                    ScreenShake.Singleton.ShakeMad();
 				}
 			}
 		}
@@ -797,6 +822,7 @@ public class PlayerController : MonoBehaviour
        /* corou =*/ StartCoroutine("TimerHitbox");
 
         Shader.SetGlobalFloat("_saturation", barMadness.value);
+
         if ( type_technic == 1 )
 		{
 			StartCoroutine(CooldownPunch( true ));
@@ -960,6 +986,8 @@ public class PlayerController : MonoBehaviour
 
 		if ( p_bool )
 		{
+            GetComponentInChildren<Animator>().SetTrigger("Mad");
+            GetComponentInChildren<Animator>().SetBool("InMadness", true);
 			GlobalManager.Ui.OpenMadness();
 		}
     }

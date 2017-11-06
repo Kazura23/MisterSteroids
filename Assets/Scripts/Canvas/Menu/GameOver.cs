@@ -50,7 +50,7 @@ public class GameOver : UiParent
 		}).SetLoops(-1, LoopType.Restart);
 
 
-		gameObject.GetComponent<CanvasGroup>().DOFade(1f, 1f).OnComplete(() =>
+		gameObject.GetComponent<CanvasGroup>().DOFade(1f, 1.5f).OnComplete(() =>
 		{
 			YouGameOver.DOFade(1, .25f);
 			YouGameOver.transform.DOScale(1, .25f).OnComplete(()=> {
@@ -76,7 +76,10 @@ public class GameOver : UiParent
 	public override void CloseThis ( )
 	{
 		base.CloseThis (  );
-	}
+
+        gameObject.GetComponent<CanvasGroup>().DOFade(0f, 0);
+
+    }
 	#endregion
 
 	#region Private Methods

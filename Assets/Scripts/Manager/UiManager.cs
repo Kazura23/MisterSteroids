@@ -79,11 +79,45 @@ public class UiManager : ManagerParent
 		}
 	}
 
+
+    public void SimpleCoup()
+    {
+    }
+
+    public void Intro()
+    {
+        Time.timeScale = .05f;
+        
+        DOVirtual.DelayedCall(.35f, () => {
+            Time.timeScale = .0f;
+            DOVirtual.DelayedCall(.1f, () =>
+            {
+                Time.timeScale = 1f;
+                Camera.main.DOFieldOfView(4, .25f);
+                DOVirtual.DelayedCall(.25f, () =>
+                {
+                    Camera.main.DOFieldOfView(120, .25f);
+                    DOVirtual.DelayedCall(2f, () =>
+                    {
+                        Camera.main.DOFieldOfView(60, .5f);
+                    });
+                });
+            });
+        });
+    }
+
+    public void DoubleCoup()
+    {
+        Camera.main.DOFieldOfView(47, .15f).OnComplete(() => {
+            Camera.main.DOFieldOfView(60, .1f);
+        });
+    }
+
 	public void BloodHit()
 	{
-		Time.timeScale = 0.1f;
+		Time.timeScale = 0f;
         Time.fixedDeltaTime = 0.02F * Time.timeScale;
-        DOVirtual.DelayedCall(.08f, () => {
+        DOVirtual.DelayedCall(.1f, () => {
 			Time.timeScale = 1;
             Time.fixedDeltaTime = .02F;
         });
@@ -93,6 +127,23 @@ public class UiManager : ManagerParent
 			Camera.main.DOFieldOfView(60, .08f);//.SetEase(Ease.InBounce);
 		});
 	}
+
+    public void GameOver()
+    {
+        Debug.Log("ShakeOver");
+
+
+        Time.timeScale = 0f;
+        Time.fixedDeltaTime = 0.02F * Time.timeScale;
+        DOVirtual.DelayedCall(.4f, () => {
+            Time.timeScale = 1;
+            Time.fixedDeltaTime = .02F;
+            ScreenShake.Singleton.ShakeGameOver();
+        });
+        RedScreen.DOFade(.7f, .25f).OnComplete(() => {
+            RedScreen.DOFade(0, .0f);
+        });
+    }
 
     public void OpenMadness()
     {

@@ -7,7 +7,6 @@ Shader "Cunstom/New/Character_Toon_shader" {
     Properties {
         _Normal_map ("Normal_map", 2D) = "bump" {}
         _Diffuse ("Diffuse", 2D) = "white" {}
-        _saturation ("saturation", Range(-10, 10)) = 0.38
         _shadow_color ("shadow_color", Color) = (0.5,0.5,0.5,1)
         _gloss_color ("gloss_color", Range(1, 2)) = 1
         _gloss ("gloss", Range(0, 1)) = 0

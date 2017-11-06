@@ -726,6 +726,10 @@ public class PlayerController : MonoBehaviour
 				playAnimator.SetTrigger("Right");
 
                 if (currCouR != null)
+
+                GlobalManager.Ui.SimpleCoup();
+           
+                if (punchRight)
                 {
                     StopCoroutine(currCouR);
                 }
@@ -756,6 +760,8 @@ public class PlayerController : MonoBehaviour
 		else if(Input.GetAxis("CoupDouble") != 0 && canDPunch && canPunch && resetAxeD  )
         {
             ScreenShake.Singleton.ShakeHitDouble();
+
+            GlobalManager.Ui.DoubleCoup();
 
 			playAnimator.SetTrigger("Double");
 
@@ -788,7 +794,9 @@ public class PlayerController : MonoBehaviour
         punch.setTechnic(type_technic);
         punchBox.enabled = true;
        /* corou =*/ StartCoroutine("TimerHitbox");
-		if ( type_technic == 1 )
+
+        Shader.SetGlobalFloat("_saturation", barMadness.value);
+        if ( type_technic == 1 )
 		{
 			StartCoroutine(CooldownPunch( true ));
 		}
@@ -796,6 +804,19 @@ public class PlayerController : MonoBehaviour
 		{
 			StartCoroutine(CooldownPunch());
 		}
+        if (InMadness)
+        {
+            
+            if (barMadness.value - lessPointPunchInMadness < 0)
+            {
+                barMadness.value = 0;
+            }
+            else
+            {
+                   
+                barMadness.value -= lessPointPunchInMadness;
+            }
+        }
 	}
 
 
@@ -960,6 +981,8 @@ public class PlayerController : MonoBehaviour
 		{
 			if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ElemDash )
 			{
+                GlobalManager.Ui.BloodHit();
+
 				/*Vector3 getProj = getPunch.projection_basic;
 
 				if ( Random.Range ( 0,2 ) == 0 )

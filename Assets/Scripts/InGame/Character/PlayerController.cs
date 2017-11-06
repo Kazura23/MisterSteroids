@@ -215,6 +215,8 @@ public class PlayerController : MonoBehaviour
 
 	void Update ( )
 	{
+		Shader.SetGlobalFloat ( "_saturation", barMadness.value / 15);
+
 		float getTime = Time.deltaTime;
 
 		rationUse = 1 + (ratioMaxMadness * (InMadness ? 1 : (barMadness.value / barMadness.maxValue)));
@@ -705,6 +707,7 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 
+
 		if(Input.GetAxis("CoupSimple") != 0 && canPunch && resetAxeS  )
         {
             resetAxeS = false;
@@ -725,14 +728,12 @@ public class PlayerController : MonoBehaviour
 
 				playAnimator.SetTrigger("Right");
 
-                if (currCouR != null)
-
-                GlobalManager.Ui.SimpleCoup();
+				if ( currCouR != null )
+				{
+					StopCoroutine(currCouR);
+				}
            
-                if (punchRight)
-                {
-                    StopCoroutine(currCouR);
-                }
+				GlobalManager.Ui.SimpleCoup();
 
                 currCouR = animePunch(true);
                 StartCoroutine(currCouR);

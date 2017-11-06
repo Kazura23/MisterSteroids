@@ -22,7 +22,7 @@ public class GlobalManager : MonoBehaviour
 	#region Mono
 	void Awake()
 	{
-		//PlayerPrefs.DeleteAll ( );
+		PlayerPrefs.DeleteAll ( );
 	
 		//Keep manager a singleton
 		if ( mainManagerInstance != null )
@@ -52,7 +52,7 @@ public class GlobalManager : MonoBehaviour
 
 	void InitializeManager<T>(ref T manager) where T : ManagerParent
 	{
-		Debug.Log("Initializing managers");
+		//Debug.Log("Initializing managers");
 		T[] managers = GetComponentsInChildren<T>();
 
 		if(managers.Length == 0)
@@ -74,5 +74,12 @@ public class GlobalManager : MonoBehaviour
 		    }
 		} 
 	}
+
+    void Update()
+    {
+
+        if (Input.GetKeyDown(KeyCode.O))
+            PlayerPrefs.DeleteAll();
+    }
 	#endregion
 }

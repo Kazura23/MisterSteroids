@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class Piece : MonoBehaviour {
-
-    public int piece;
+public class Piece : MonoBehaviour 
+{
 
     void OnTriggerEnter(Collider other)
     {
@@ -13,10 +12,23 @@ public class Piece : MonoBehaviour {
         {
             // AllPlayerPrefs.piece += piece;
 
-            Physics.IgnoreCollision(this.GetComponent<Collider>(), other.GetComponent<Collider>());
+            GlobalManager.Ui.TakeCoin();
 
-           
-            AllPlayerPrefs.SetIntValue ( Constants.Coin, piece );
+            GetComponent<CapsuleCollider>().enabled = false;
+
+            Debug.Log(GetComponent<MeshRenderer>().material.name);
+
+            if (GetComponent<MeshRenderer>().material.name == "Piece (Instance)")
+            { 
+                AllPlayerPrefs.SetIntValue(Constants.Coin, 1);
+                
+            }
+            else
+            {
+                AllPlayerPrefs.SetIntValue(Constants.Coin, 5);
+            }
+
+            GlobalManager.Ui.MoneyPoints.text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
 
             transform.DOLocalRotate(new Vector3(0, 2000, 0),1f,RotateMode.FastBeyond360);
 

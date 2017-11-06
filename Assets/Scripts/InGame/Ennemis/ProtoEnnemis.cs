@@ -31,7 +31,7 @@ public class ProtoEnnemis : AbstractObject
 	{
 		base.PlayerDetected ( thisObj, isDetected );
 
-		if ( isDetected )
+		if ( isDetected && !isDead)
 		{
 			parMat.color = NewColor;
 		}
@@ -40,6 +40,12 @@ public class ProtoEnnemis : AbstractObject
 			parMat.color = saveCol;
 		}
 		parMat.color = NewColor;
+
+		try {
+			GetComponentInChildren<Animator>().SetTrigger("Attack");
+		}
+		catch{
+		}
 	}
 
 	public override void Dead ( bool enemy = false ) 

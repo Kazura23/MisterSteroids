@@ -23,12 +23,23 @@ public class PlayerController : MonoBehaviour
 
 	[Header ("Autres runner Caractéristiques ")]
 	public float RotationSpeed = 1;
+	[Tooltip ("Effet d'augmentation du FOV")]
 	public float SpeedEffectTime;
-	public bool Running = true;
 	[Tooltip ("Force bonus en plus de la gravitée")]
 	public float BonusGrav = 0;
 	[Tooltip ("Pourcentage de ralentissement du personnage dans les airs")]
 	public float PourcRal = 50;
+
+	[Header ("IncreaseSpeed")]
+	[Tooltip ("Distance a parcourir pour augmenter la vitesse Max")]
+	public int DistIncMaxSpeed = 100;
+	[Tooltip ("Augmentation du speed max")]
+	public float SpeedIncrease = 0;
+	public float CLSpeedIncrease = 0;
+	public float MaxSpeedInc = 10;
+	public float MaxCLInc = 10;
+	public float AcceleraInc = 0;
+	public float AcceleraCLInc = 0;
 
 	//public float JumpForce = 200;
     [Header("Caractéristique Fight")]
@@ -40,17 +51,22 @@ public class PlayerController : MonoBehaviour
 	[Tooltip ("Temps d'invicibilité apres avoir pris des dégats")]
 	public float TimeInvincible = 2;
 
-	[Header ("Slow Motion Caractéristique")]
+	//[Header ("Slow Motion Caractéristique")]
 	[Tooltip ("De combien la vitesse va diminuer au maximun par rapport à la vitesse standard")]
+	[HideInInspector]
 	public float SlowMotion = 1;
 	[Tooltip ("Vitesse pour atteindre le slowMotion")]
+	[HideInInspector]
 	public float SpeedSlowMot = 1;
 	[Tooltip ("Vitesse pour revenir à la vitesse normal")]
+	[HideInInspector]
 	public float SpeedDeacSM = 3;
 
 	[Tooltip ("Vitesse de descente du slider content")]
+	[HideInInspector]
 	public float ReduceSlider;
 	[Tooltip ("Vitesse de récupération du slider content")]
+	[HideInInspector]
 	public float RecovSlider;
 
 	[Header ("Caractérique de temps sur les punchs")]
@@ -61,7 +77,6 @@ public class PlayerController : MonoBehaviour
 	public float delayPrepare = 0.1f;
 
     [Header("Caractéristique Madness")]
-    public Slider barMadness;
     public float ratioMaxMadness = 4;
     public float delayDownBar = 1;
     public float lessPointPunchInMadness = 3;
@@ -83,6 +98,12 @@ public class PlayerController : MonoBehaviour
 	public float SoftNess;
 
 	[HideInInspector]
+	public Slider barMadness;
+
+	[HideInInspector]
+	public SpecialAction ThisAct;
+
+	[HideInInspector]
 	public int NbrLineRight = 1;
 	[HideInInspector]
 	public int NbrLineLeft = 1;
@@ -91,7 +112,10 @@ public class PlayerController : MonoBehaviour
 	public bool playerDead = false;
 	[HideInInspector]
 	public bool Dash = false;
-	public int Life = 3;
+	[HideInInspector]
+	public bool Running = true;
+	
+	public int Life = 1;
 
 	public bool StopPlayer = false;
 
@@ -99,11 +123,12 @@ public class PlayerController : MonoBehaviour
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
 	bool canDPunch = true;
-	int currLife;
-	//private Coroutine corou/*, preparPunch*/;
+    //private Coroutine corou/*, preparPunch*/;
 
-	//Rigidbody thisRig;
-	Transform pTrans;
+
+    public GameObject Plafond;
+
+    Transform pTrans;
 	Rigidbody pRig;
 	Direction currentDir = Direction.North;
 	Direction newDir = Direction.North;
@@ -116,6 +141,9 @@ public class PlayerController : MonoBehaviour
 	Punch getPunch;
 	Camera thisCam;
 	Slider SliderSlow;
+	Text textDist;
+	Text textCoin;
+	Animator playAnimator;
 
 	float currSpeed = 0;
 	float currSpLine = 0;
@@ -126,9 +154,16 @@ public class PlayerController : MonoBehaviour
 	float befRot = 0;
 	float SliderContent;
 	float totalDis = 0;
-	int currLine = 0;
     float rationUse = 1;
+	float nextIncrease = 0;
+	float maxSpeed = 0;
+	float maxSpeedCL = 0;
+	float accelerationCL = 0;
+	float acceleration = 0;
+	float impulsionCL = 0;
+	float decelerationCL = 0;
 
+	int currLine = 0;
 	int LastImp = 0;
 	int clDir = 0;
 
@@ -161,22 +196,156 @@ public class PlayerController : MonoBehaviour
 		SliderSlow = GlobalManager.Ui.MotionSlider;
 		SliderContent = 10;
 		SliderSlow.maxValue = 10;
-		currLife = Life;
 		lastPos = pTrans.position;
+		textDist = GlobalManager.Ui.ScorePoints;
+		textCoin = GlobalManager.Ui.MoneyPoints;
+		nextIncrease = DistIncMaxSpeed;
+		maxSpeed = MaxSpeed;
+		maxSpeedCL = MaxSpeedCL;
+		accelerationCL = AccelerationCL;
+		acceleration = Acceleration;
+		impulsionCL = ImpulsionCL;
+		decelerationCL = DecelerationCL;
+		playAnimator = GetComponentInChildren<Animator> ( );
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
+
+
+        Plafond.GetComponent<MeshRenderer>().enabled = true;
     }
 
 	void Update ( )
 	{
-		totalDis += Vector3.Distance ( lastPos, pTrans.position );
-		lastPos = pTrans.position;
-        GlobalManager.Ui.totalDistance = totalDis;
+		float getTime = Time.deltaTime;
 
-		//Debug.Log ( totalDis );
+		rationUse = 1 + (ratioMaxMadness * (InMadness ? 1 : (barMadness.value / barMadness.maxValue)));
 		punch.SetPunch ( !playerDead );
 
-        rationUse = 1 + (ratioMaxMadness * (InMadness ? 1 : (barMadness.value / barMadness.maxValue)));
+		distCal ( );
+		playerAction ( getTime );
+
+		Mathf.Clamp ( Radius, 0, 100 );
+		Mathf.Clamp ( SoftNess, 0, 100 );
+
+		Shader.SetGlobalVector ( "GlobaleMask_Position", new Vector4 ( pTrans.position.x, pTrans.position.y, pTrans.position.z, 0 ) );
+		Shader.SetGlobalFloat ( "GlobaleMask_Radius", Radius );
+		Shader.SetGlobalFloat ( "GlobaleMask_SoftNess", SoftNess );
+		Shader.SetGlobalFloat ( "_SlowMot", Time.timeScale );
+
+        if(Input.GetKeyDown(KeyCode.O))
+            PlayerPrefs.DeleteAll();
+
+    }
+	#endregion
+
+	#region Public Functions
+	public void ResetPlayer ( )
+	{
+		Life = 1;
+		playerDead = false;
+		StopPlayer = true;
+		totalDis = 0;
+		maxSpeed = MaxSpeed;
+		maxSpeedCL = MaxSpeedCL;
+		accelerationCL = AccelerationCL;
+		acceleration = Acceleration;
+		impulsionCL = ImpulsionCL;
+		decelerationCL = DecelerationCL;
+		ThisAct = SpecialAction.Nothing;
+
+		barMadness = GlobalManager.Ui.Madness;
+		barMadness.value = 0;
+		InMadness = false;
+		GlobalManager.Ui.CloseMadness ( );
+	}
+
+	public void GameOver ( bool forceDead = false )
+	{
+		if ( invDamage  && !forceDead )
+		{
+			return;
+		}
+
+        GameOverTok thisTok = new GameOverTok ( );
+		thisTok.totalDist = totalDis;
+           
+		Life--;
+
+		if ( Life > 0 || playerDead )
+		{
+			invDamage = true;
+			Invoke ( "waitInvDmg", TimeInvincible );
+			GlobalManager.Ui.StartBonusLife();
+
+			return;
+		}
+
+		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver, thisTok );
+		ScreenShake.Singleton.ShakeGameOver();
+		playerDead = true;
+		//GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
+
+		//GlobalManager.GameCont.Restart ( );
+	}
+	#endregion
+
+	#region Private Functions
+	void playerAction ( float getTime )
+	{
+		if ( playerDead || StopPlayer )
+		{
+			thisCam.fieldOfView = Constants.DefFov;
+			return;
+		}
+
+		if ( barMadness.value > 98 && !InMadness )
+		{
+			InMadness = true;
+			GlobalManager.Ui.OpenMadness();
+		}
+		else if( barMadness.value == 0 && InMadness )
+		{
+            Debug.Log("Mad");
+            GlobalManager.Ui.CloseMadness();
+            InMadness = false;
+		}
+
+		if (barMadness.value - (getTime * delayDownBar) > 0 )
+		{
+			barMadness.value -= getTime * delayDownBar;
+		}
+		else
+		{
+			barMadness.value = 0;
+		}
+
+		if ( Running )
+		{
+			if ( currSpeed < maxSpeed )
+			{
+				currSpeed += acceleration * getTime;
+			}
+			else if ( currSpeed > maxSpeed )
+			{
+				currSpeed = maxSpeed;
+			}
+		}
+		else
+		{
+			currSpeed -= Deceleration * getTime;
+
+			if ( currSpeed < 0 )
+			{
+				currSpeed = 0;
+			}
+
+			currSpLine -= Deceleration * getTime;
+
+			if ( currSpLine < 0 )
+			{
+				currSpLine = 0;
+			}
+		}
 
 		if ( !Dash && !playerDead )
 		{
@@ -189,8 +358,7 @@ public class PlayerController : MonoBehaviour
 			{
 				resetAxeD = true;
 			}
-
-			playerFight ( );
+            playerFight ( );
 		}
 
 		if ( Input.GetAxis ( "Dash") != 0 && newH == 0 && canDash )
@@ -201,192 +369,123 @@ public class PlayerController : MonoBehaviour
 			StartCoroutine ( waitStopDash ( ) );
 		}
 
-		if ( Input.GetAxis ( "SpecialAction" ) > 0 && canSpe && SliderContent > 0 )
+		checkInAir ( getTime );
+
+		speAction ( getTime );
+
+		changeLine ( getTime );
+
+		playerMove ( getTime, currSpeed );
+	}
+
+	void distCal ( )
+	{
+		totalDis += Vector3.Distance ( lastPos, pTrans.position );
+		lastPos = pTrans.position;
+		textDist.text = "" + Mathf.RoundToInt ( totalDis );
+
+		if ( totalDis > nextIncrease )
 		{
-            Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
+			nextIncrease += DistIncMaxSpeed;
 
-			if ( !animeSlo )
+			if ( MaxSpeedInc > MaxSpeed - maxSpeed )
 			{
-				animeSlo = true;
-				GlobalManager.Ui.StartSlowMo();
+				maxSpeed += SpeedIncrease;
+				acceleration += AcceleraInc;
+
+			
+			}
+			else
+			{
+				maxSpeed = SpeedIncrease;
 			}
 
-			if ( Time.timeScale > 1 / SlowMotion )
+			if ( MaxCLInc > maxSpeedCL - MaxSpeedCL )
 			{
-				Time.timeScale -= Time.deltaTime * SpeedSlowMot;
+				maxSpeedCL += CLSpeedIncrease;
+				accelerationCL += AcceleraCLInc;
+				impulsionCL += AcceleraCLInc;
+				decelerationCL += AcceleraCLInc;
 			}
-
-			SliderContent -= ReduceSlider * Time.deltaTime;
+			else
+			{
+				maxSpeedCL = MaxCLInc;
+			}
 		}
-		else if ( Time.timeScale < 1 )
+		Debug.Log ( maxSpeed );
+	}
+
+	void speAction ( float getTime )
+	{
+		if ( ThisAct == SpecialAction.SlowMot )
 		{
-			if ( SliderContent < 0 )
+			if ( Input.GetAxis ( "SpecialAction" ) > 0 && canSpe && SliderContent > 0 )
 			{
-				canSpe = false;
-				SliderContent = 0;
+				Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = true;
+
+				if ( !animeSlo )
+				{
+					animeSlo = true;
+					GlobalManager.Ui.StartSlowMo();
+				}
+
+				if ( Time.timeScale > 1 / SlowMotion )
+				{
+					Time.timeScale -= Time.deltaTime * SpeedSlowMot;
+				}
+
+				SliderContent -= ReduceSlider * Time.deltaTime;
 			}
+			else if ( Time.timeScale < 1 )
+			{
+				if ( SliderContent < 0 )
+				{
+					canSpe = false;
+					SliderContent = 0;
+				}
 
-			Time.timeScale += Time.deltaTime * SpeedDeacSM;
-		}
-		else if ( SliderContent < 10 )
-		{
-			animeSlo = false;
-			Time.timeScale = 1;
-			SliderContent += RecovSlider * Time.deltaTime;
-            Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = false;
+				Time.timeScale += getTime * SpeedDeacSM;
+			}
+			else if ( SliderContent < 10 )
+			{
+				animeSlo = false;
+				Time.timeScale = 1;
+				SliderContent += RecovSlider * getTime;
+				Camera.main.GetComponent<CameraFilterPack_Vision_Aura>().enabled = false;
 
-			if ( SliderContent > 2 )
+				if ( SliderContent > 2 )
+				{
+					canSpe = true;
+				}
+
+			}
+			else
 			{
 				canSpe = true;
+				SliderContent = 10;
 			}
 
-        }
-		else
-		{
-			canSpe = true;
-			SliderContent = 10;
+			SliderSlow.value = SliderContent;
 		}
-
-		SliderSlow.value = SliderContent;
-
-		Mathf.Clamp ( Radius, 0, 100 );
-		Mathf.Clamp ( SoftNess, 0, 100 );
-
-		Shader.SetGlobalVector ( "GlobaleMask_Position", new Vector4 ( pTrans.position.x, pTrans.position.y, pTrans.position.z, 0 ) );
-		Shader.SetGlobalFloat ( "GlobaleMask_Radius", Radius );
-		Shader.SetGlobalFloat ( "GlobaleMask_SoftNess", SoftNess );
-		Shader.SetGlobalFloat ( "_SlowMot", Time.timeScale );
-
-        //slider madness
-        MadnessManager();
 	}
 
-	void FixedUpdate ( )
-	{
-		if ( playerDead || StopPlayer )
-		{
-			thisCam.fieldOfView = Constants.DefFov;
-			return;
-		}
-
-		/*if ( newPos )
-		{
-			float getCurr = Vector3.Distance ( posDir, pTrans.position );
-			if ( newDist != getCurr )
-			{
-				newDist = getCurr;
-
-				if ( calPos > newDist )
-				{
-					calPos = newDist;
-				}
-				else
-				{
-					currentDir = newDir;
-					pTrans.position = new Vector3 ( posDir.x, pTrans.position.y, posDir.z );
-					calPos = 0;
-					newPos = false;
-				}
-			}
-		}*/
-
-		float deltTime = Time.deltaTime;
-
-		if ( Running )
-		{
-			if ( currSpeed < MaxSpeed )
-			{
-				currSpeed += Acceleration * deltTime;
-			}
-			else if ( currSpeed > MaxSpeed )
-			{
-				currSpeed = MaxSpeed;
-			}
-		}
-		else
-		{
-			currSpeed -= Deceleration * deltTime;
-
-			if ( currSpeed < 0 )
-			{
-				currSpeed = 0;
-			}
-
-			currSpLine -= Deceleration * deltTime;
-
-			if ( currSpLine < 0 )
-			{
-				currSpLine = 0;
-			}
-		}
-
-		checkInAir ( );
-
-		changeLine ( deltTime );
-
-		playerMove ( deltTime, currSpeed );
-	}
-	#endregion
-
-	#region Public Functions
-	public void ResetPlayer ( )
-	{
-		currLife = Life;
-		playerDead = false;
-		StopPlayer = true;
-		totalDis = 0;
-	}
-
-	public IEnumerator GameOver ( bool forceDead = false )
-	{
-		if ( invDamage  && !forceDead )
-		{
-			yield break;
-		}
-
-        GlobalManager.Ui.GameOver();
-        ScreenShake.Singleton.ShakeGameOver();
-		WaitForSeconds thisS = new WaitForSeconds ( 1 );
-        if (Life > 1)
-            GlobalManager.Ui.StartBonusLife();
-        currLife--;
-        
-
-		if ( currLife > 0 || playerDead )
-		{
-			invDamage = true;
-			Invoke ( "waitInvDmg", TimeInvincible );
-
-			yield break;
-		}
-
-		playerDead = true;
-		//GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
-
-		yield return thisS;
-
-		//GlobalManager.GameCont.Restart ( );
-	}
-	#endregion
-
-	#region Private Functions
 	void waitInvDmg ( )
 	{
 		invDamage = false;
 	}
 
-	void checkInAir ( )
+	void checkInAir ( float getTime )
 	{
 		RaycastHit[] allHit;
-		bool inAir = true;
+		bool checkAir = true;
 
-		allHit = Physics.RaycastAll ( pTrans.position, Vector3.down, 5 );
+		allHit = Physics.RaycastAll ( pTrans.position, Vector3.down, 2 );
 		foreach ( RaycastHit thisRay in allHit )
 		{
-			if ( thisRay.collider.gameObject.layer == 9 )
-			{
-				inAir = false;
+			checkAir = false;
 
+			if ( thisRay.collider.gameObject.layer == 9)
+			{
 				Transform getThis = thisRay.collider.transform;
 
 				if ( getThis.rotation.x < 0 )
@@ -399,17 +498,16 @@ public class PlayerController : MonoBehaviour
 					pTrans.Translate ( new Vector3 ( 0, ( -getThis.eulerAngles.x / 4 ) * Time.deltaTime, 0 ), Space.World );
 					pRig.useGravity = true;
 				}
-
-				inAir = false;
 			}
 		}
 
-		if ( inAir )
+		if ( checkAir )
 		{
-			inAir = true;
 			pRig.useGravity = true;
-			pRig.AddForce ( Vector3.down * BonusGrav, ForceMode.Acceleration );
+			pRig.AddForce ( Vector3.down * BonusGrav * getTime, ForceMode.Force );
 		}
+
+		inAir = checkAir;
 	}
 
 	void playerMove ( float delTime, float speed )
@@ -418,19 +516,23 @@ public class PlayerController : MonoBehaviour
 		Vector3 calTrans = Vector3.zero;
 		delTime = Time.deltaTime;
 
-        GlobalManager.Ui.CloseDashSpeed();
+		GlobalManager.Ui.DashSpeedEffect ( false );
         Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole>().enabled = false;
 
-        if ( inAir )
+		if ( inAir )
 		{
 			speed = ( speed / 100 ) * PourcRal;
 		}
+		/*else
+		{
+			canJump = true;
+		}*/
 
 		if ( Dash )
 		{
 			speed *= DashSpeed;
 
-            GlobalManager.Ui.OpenDashSpeed();
+			GlobalManager.Ui.DashSpeedEffect ( true );
             Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole>().enabled = true;
 
         }
@@ -443,17 +545,20 @@ public class PlayerController : MonoBehaviour
 			speed *= SpeedDoublePunchRun;
 		}
 
-		float calCFov = Constants.DefFov * ( speed / MaxSpeed );
+		float calCFov = Constants.DefFov * ( speed / maxSpeed );
 
-		Shader.SetGlobalFloat ( "_ReduceVis", speed / MaxSpeed);
+		if ( !inAir )
+		{
+			Shader.SetGlobalFloat ( "_ReduceVis", speed / maxSpeed);
 
-		if ( thisCam.fieldOfView < calCFov)
-		{
-			thisCam.fieldOfView += Time.deltaTime * SpeedEffectTime;
-		}
-		else if ( thisCam.fieldOfView > calCFov)
-		{
-			thisCam.fieldOfView -= Time.deltaTime * SpeedEffectTime;
+			if ( thisCam.fieldOfView < calCFov)
+			{
+				thisCam.fieldOfView += Time.deltaTime * SpeedEffectTime;
+			}
+			else if ( thisCam.fieldOfView > calCFov)
+			{
+				thisCam.fieldOfView -= Time.deltaTime * SpeedEffectTime;
+			}
 		}
 
 		if ( currentDir == Direction.North )
@@ -494,7 +599,7 @@ public class PlayerController : MonoBehaviour
 		/*if ( canJump && Input.GetAxis ( "Jump" ) > 0 )
 		{
 			canJump = false;
-			thisRig.AddForce ( transPlayer.up * JumpForce, ForceMode.Impulse );
+			pRig.AddForce ( transPlayer.up * JumpForce, ForceMode.Impulse );
 		}*/
 	}
 
@@ -503,7 +608,7 @@ public class PlayerController : MonoBehaviour
 		float newImp = Input.GetAxis ( "Horizontal" );
 		float lineDistance = Constants.LineDist;
 
-		if ( ( canChange || newH == 0 ) && !Dash && !inAir )
+		if ( ( canChange || newH == 0 ) && !Dash && !inAir && !InMadness)
 		{
 			if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLineRight && ( clDir == 1 || newH == 0 ) )
 			{
@@ -537,7 +642,7 @@ public class PlayerController : MonoBehaviour
 
 				if ( saveDist < 0 && newH > -lineDistance / 2 || saveDist > 0 && newH < lineDistance / 2 )
 				{
-					currSpLine -= DecelerationCL * delTime;
+					currSpLine -= decelerationCL * delTime;
 
 					canChange = true;
 
@@ -546,24 +651,29 @@ public class PlayerController : MonoBehaviour
 						currSpLine = 0;
 					}
 				}
-				else if ( currSpLine < MaxSpeedCL )
+				else if ( currSpLine < maxSpeedCL )
 				{
-					accLine = ( currSpLine * ImpulsionCL )/ MaxSpeedCL; 
+					accLine = ( currSpLine * impulsionCL ) / maxSpeedCL; 
 
 					if ( accLine > 1 || accLine == 0 )
 					{
 						accLine = 1;
 					}
 
-					currSpLine += AccelerationCL * accLine * delTime;
+					currSpLine += accelerationCL * accLine * delTime;
 				}
-				else if ( currSpLine > MaxSpeedCL )
+				else if ( currSpLine > maxSpeedCL )
 				{
-					currSpLine = MaxSpeedCL;
+					currSpLine = maxSpeedCL;
 				}
 			}
 
 			float calTrans = clDir * currSpLine * delTime;
+
+			if ( inAir )
+			{
+				calTrans = ( calTrans / 100 ) * PourcRal;
+			}
 			newH -= calTrans;
 
 			if ( saveDist > 0 && newH - calTrans < 0 || saveDist < 0 && newH > 0 )
@@ -572,6 +682,8 @@ public class PlayerController : MonoBehaviour
 				newH = 0;
 				currSpLine = 0;
 			}
+
+
 
 			dirLine = pTrans.right * calTrans;
 			pTrans.Translate ( dirLine, Space.World );
@@ -584,48 +696,63 @@ public class PlayerController : MonoBehaviour
 
 	void playerFight ( )
 	{
-		if(Input.GetAxis("CoupSimple") != 0 && canPunch && resetAxeS )
+		if(Input.GetAxis("CoupSimple") != 0 && canPunch && resetAxeS  )
         {
-			resetAxeS = false;
-            canPunch = false;
-			propP = true;
+            
+                resetAxeS = false;
+                canPunch = false;
+                propP = true;
 
-            ScreenShake.Singleton.ShakeHitSimple();
+                if(!InMadness)
+                    transform.GetChild(0).GetComponent<Punch>().MadnessMana("Simple");
+
+                ScreenShake.Singleton.ShakeHitSimple();
 
            
+                if (punchRight)
+                {
+                    punch.RightPunch = true;
+                    poingDroite.SetActive(true);
 
-            if (punchRight)
-            {
-				punch.RightPunch = true;
-                poingDroite.SetActive(true);
+					playAnimator.SetTrigger("Right");
 
-				if ( currCouR != null )
-				{
-					StopCoroutine ( currCouR );
-				}
-				currCouR = animePunch ( true );
-				StartCoroutine ( currCouR );
-            }
-            else
-            {
-				punch.RightPunch = false;
-                poingGauche.SetActive(true);
 
-				if ( currCouL != null )
-				{
-					StopCoroutine ( currCouL );
-				}
-				currCouL = animePunch ( false );
-				StartCoroutine ( currCouL );
-            }
-            punchRight = !punchRight;
-            StartCoroutine("StartPunch", 0);
-			propPunch = propulsePunch ( TimePropulsePunch );
-			StartCoroutine ( propPunch );
+                    if (currCouR != null)
+                    {
+                        StopCoroutine(currCouR);
+                    }
+                    currCouR = animePunch(true);
+                    StartCoroutine(currCouR);
+
+                }
+                else
+                {
+                    punch.RightPunch = false;
+                    poingGauche.SetActive(true);
+
+					playAnimator.SetTrigger("Left");
+
+                if (currCouL != null)
+                    {
+                        StopCoroutine(currCouL);
+                    }
+                    currCouL = animePunch(false);
+                    StartCoroutine(currCouL);
+                }
+                punchRight = !punchRight;
+                StartCoroutine("StartPunch", 0);
+                propPunch = propulsePunch(TimePropulsePunch);
+                StartCoroutine(propPunch);
+			
 		}
-		else if(Input.GetAxis("CoupDouble") != 0 && canDPunch && canPunch && resetAxeD )
+		else if(Input.GetAxis("CoupDouble") != 0 && canDPunch && canPunch && resetAxeD  )
         {
             ScreenShake.Singleton.ShakeHitDouble();
+
+			playAnimator.SetTrigger("Double");
+
+            if (!InMadness)
+                transform.GetChild(0).GetComponent<Punch>().MadnessMana("Double");
 
             propDP = true;
 			resetAxeD = false;
@@ -661,13 +788,16 @@ public class PlayerController : MonoBehaviour
 		}
         if (InMadness)
         {
-            if(barMadness.value - lessPointPunchInMadness < 0)
+
+            Debug.Log("gyg");
+            if (barMadness.value - lessPointPunchInMadness < 0)
             {
                 barMadness.value = 0;
-                InMadness = false;
             }
             else
             {
+                   
+                Debug.Log("gyg2");
                 barMadness.value -= lessPointPunchInMadness;
             }
         }
@@ -807,35 +937,7 @@ public class PlayerController : MonoBehaviour
 		propDP = false;
 	}
 
-    private void MadnessManager()
-    {
-        float timer = Time.deltaTime;
-        if (InMadness) // a optimiser si la descente de la barre par le temps est la meme en madness et en normal
-        {
-            if (barMadness.value - (timer * delayDownBar) > 0)
-            {
-                barMadness.value -= timer * delayDownBar;
-            }
-            else
-            {
-                barMadness.value = 0;
-                InMadness = false;
-            }
-        }
-        else
-        {
-            if (barMadness.value - (timer * delayDownBar) > 0)
-            {
-                barMadness.value -= timer * delayDownBar;
-            }
-            else
-            {
-                barMadness.value = 0;
-            }
-        }
-    }
-
-    public void SetInMadness(bool p_bool)
+	public void SetInMadness(bool p_bool)
     {
         InMadness = p_bool;
     }
@@ -874,7 +976,7 @@ public class PlayerController : MonoBehaviour
 			}
 			else if ( getObj.tag == Constants._Balls )
 			{
-				StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, PropulseBalls, 1, 5, true ) );
+				StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, pTrans, PropulseBalls, 1, 5, true ) );
 				return;
 			}
 		}
@@ -882,16 +984,16 @@ public class PlayerController : MonoBehaviour
 		if ( getObj.tag == Constants._MissileBazoo )
 		{
 			getObj.GetComponent<MissileBazooka> ( ).Explosion ( );
-			StartCoroutine ( GameOver ( ) );
+			GameOver ( );
 		}
-		else if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._MissileBazoo )
+		else if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._MissileBazoo || getObj.tag == Constants._Balls )
 		{
-			StartCoroutine ( GameOver ( ) );
+			GameOver ( );
 		}
 		else if ( getObj.tag == Constants._ObsTag )
 		{
-			currLife = 0;
-			StartCoroutine ( GameOver ( true ) );
+			Life = 0;
+			GameOver ( true );
 		}
 	}
 

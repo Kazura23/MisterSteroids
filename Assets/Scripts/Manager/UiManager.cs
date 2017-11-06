@@ -20,11 +20,8 @@ public class UiManager : ManagerParent
 	public GameObject PatternBackground;
 	public GameObject GlobalBack;
 
-    public GameObject ScorePoints;
-    public GameObject MoneyPoints;
-
-    [HideInInspector]
-    public float totalDistance;
+	public Text ScorePoints;
+	public Text MoneyPoints;
 
     [Header("SHOP STUFF")]
     public Image SlowMotion;
@@ -33,16 +30,13 @@ public class UiManager : ManagerParent
     [Header("MISC GAMEFEEL")]
     public Image CircleFeel;
 
-    [Header("GAME OVER")]
-    public GameObject GameOverObject;
-    public GameObject PatternGameOver, BarGameOver;
-    public Text YouGameOver, MadeGameOver, PointsGameOver, PressGameOver;
-
+    private Camera camTw1;
 
     Dictionary <MenuType, UiParent> AllMenu;
 	MenuType menuOpen;
 
 	GameObject InGame;
+	bool onMainScene = true;
 	#endregion
 
 	#region Mono
@@ -58,7 +52,7 @@ public class UiManager : ManagerParent
 			InGame.SetActive ( false );
 			if ( menuOpen != MenuType.Nothing )
 			{
-				CloseThisMenu ( );
+				CloseThisMenu ( true );
 			}
 
 			menuOpen = thisType;
@@ -67,7 +61,7 @@ public class UiManager : ManagerParent
 		}
 	}
 
-	public void CloseThisMenu ( )
+	public void CloseThisMenu ( bool openNew = false )
 	{
 		UiParent thisUi;
 
@@ -75,22 +69,21 @@ public class UiManager : ManagerParent
 		{
 			InGame.SetActive ( true );
 			GlobalBack.SetActive ( false );
-			thisUi.CloseThis (  );
+			thisUi.CloseThis ( );
 			menuOpen = MenuType.Nothing;
+
+			if ( onMainScene && !openNew )
+			{
+				OpenThisMenu ( MenuType.MenuHome );
+			}
 		}
-
-	}
-
-	public void DisplayOver ( bool display )
-	{
-		//GameOver.gameObject.SetActive ( display );
 	}
 
 	public void BloodHit()
 	{
-		Time.timeScale = 0f;
+		Time.timeScale = 0.1f;
         Time.fixedDeltaTime = 0.02F * Time.timeScale;
-        DOVirtual.DelayedCall(.11f, () => {
+        DOVirtual.DelayedCall(.08f, () => {
 			Time.timeScale = 1;
             Time.fixedDeltaTime = .02F;
         });
@@ -101,56 +94,72 @@ public class UiManager : ManagerParent
 		});
 	}
 
-	public void OpenDashSpeed()
+    public void OpenMadness()
+    {
+        Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().enabled = true;
+        Camera.main.GetComponent<CameraFilterPack_Color_YUV>().enabled = true;
+        //Camera.main.transform.GetComponent<RainbowMove>().enabled = false;
+
+        //Camera.main.transform.DOKill(false);
+
+        /*
+        Camera.main.transform.DOLocalMoveY(0, .3f).OnComplete(() => {
+            DOVirtual.DelayedCall(.65f,()=>{
+                Camera.main.transform.DOLocalMoveY(.9f, .1f);
+            });
+        }).SetLoops(-1,LoopType.Yoyo);*/
+        
+        /*
+        Camera.main.DOFieldOfView(40, .35f).OnComplete(() => {
+            Camera.main.DOFieldOfView(60, .35f);
+        }).SetLoops(-1,LoopType.Yoyo);
+        */
+    }
+
+    public void CloseMadness()
+    {
+        Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().enabled = false;
+        Camera.main.GetComponent<CameraFilterPack_Color_YUV>().enabled = false;
+
+        //Camera.main.GetComponent<RainbowRotate>().enabled = false;
+        
+
+        //Camera.main.DOKill(true);
+
+        Camera.main.transform.DORotate(new Vector3(0, 0, 3), 0f);
+        Debug.Log("CloseMad");
+        //Camera.main.GetComponent<RainbowRotate>().enabled = true;
+
+       //Camera.main.transform.GetComponent<RainbowMove>().enabled = true;
+    }
+
+	public void DashSpeedEffect ( bool enable )
 	{
-		if ( speedEffect != null )
+		if ( speedEffect == null )
+		{
+			return;
+		}
+
+		if ( enable )
 		{
 			speedEffect.GetComponent<CanvasGroup>().DOFade(1, .25f); 
 		}
+		else
+		{
+			speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f); 
+		}
 	}
 
-    public void GameOver()
+    public void TakeCoin()
     {
-        Debug.Log("GameOver");
-        PointsGameOver.text = "" + Mathf.RoundToInt(totalDistance);
-        YouGameOver.DOFade(0, 0);
-        MadeGameOver.DOFade(0, 0);
-        PointsGameOver.DOFade(0, 0);
-        YouGameOver.transform.DOScale(5, 0);
-        MadeGameOver.transform.DOScale(5, 0);
-        PointsGameOver.transform.DOScale(5, 0);
-        BarGameOver.transform.DOScaleY(0, 0);
-
-        PatternGameOver.transform.DOLocalMoveY(-60, 5f).SetEase(Ease.Linear).OnComplete(() => {
-            PatternGameOver.transform.DOLocalMoveY(1092, 0);
-        }).SetLoops(-1, LoopType.Restart);
-
-
-        GameOverObject.GetComponent<CanvasGroup>().DOFade(1f, 1f).OnComplete(() =>
-        {
-            YouGameOver.DOFade(1, .25f);
-            YouGameOver.transform.DOScale(1, .25f).OnComplete(()=> {
-                MadeGameOver.DOFade(1, .25f);
-                MadeGameOver.transform.DOScale(1, .25f).OnComplete(() =>
-                {
-                    PointsGameOver.DOFade(1, .25f);
-                    BarGameOver.transform.DOScaleY(1.25f, .2f).OnComplete(() =>
-                    {
-                        BarGameOver.transform.DOScaleY(1, .05f);
-                    });
-                    PointsGameOver.transform.DOScale(1, .25f);
-
-                    DOVirtual.DelayedCall(1.5f, () => {
-                        PressGameOver.GetComponent<CanvasGroup>().DOFade(1, .5f);
-                    });
-                });
-            });
+        MoneyPoints.transform.DOScale(1.5f, .1f).SetEase(Ease.InBounce).OnComplete(() => {
+            MoneyPoints.transform.DOScale(1f, .05f).SetEase(Ease.InBounce);
         });
     }
 
-    public void StartSlowMo()
+	public void StartSlowMo()
     {
-        SlowMotion.transform.DOLocalMove(new Vector2(960, -540), .05f);
+        SlowMotion.transform.DOLocalMove(new Vector2(930, -510), .05f);
         CircleFeel.transform.DOScale(1, 0);
         CircleFeel.DOColor(Color.white, 0);
         SlowMotion.DOFade(0, .05f);
@@ -193,22 +202,12 @@ public class UiManager : ManagerParent
             });
         });
     }
-
-	public void CloseDashSpeed()
-	{
-		if ( speedEffect != null )
-		{
-			speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f); 
-		}
-	}
 	#endregion
 
 	#region Private Methods
-
-
 	protected override void InitializeManager ( )
 	{
-		InitializeUI ( );
+		InieUI ( );
 
 		Object[] getAllMenu =Resources.LoadAll ( "Menu" );
 		Dictionary<MenuType, UiParent> setAllMenu = new Dictionary<MenuType, UiParent> ( getAllMenu.Length );
@@ -238,18 +237,20 @@ public class UiManager : ManagerParent
 		#endif
 	}
 
-    void Update()
-    {
-
-        ScorePoints.transform.GetChild(0).GetComponent<Text>().text = "" + Mathf.RoundToInt(totalDistance);
-        MoneyPoints.transform.GetChild(0).GetComponent<Text>().text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
-    }
-
-    void InitializeUI ( )
+	void InieUI ( )
 	{
-		//	InvokeRepeating ( "checkCurosr", 0, 0.5f );
+        //	InvokeRepeating ( "checkCurosr", 0, 0.5f );
 
-		if ( PatternBackground != null )
+		System.Action <HomeEvent> checkLevel = delegate ( HomeEvent thisEvnt )
+		{
+			onMainScene = thisEvnt.onMenuHome;
+		};
+
+		GlobalManager.Event.Register ( checkLevel );
+
+        MoneyPoints.text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
+
+        if ( PatternBackground != null )
 		{
 			PatternBackground.transform.DOLocalMoveY(-60, 5f).SetEase(Ease.Linear).OnComplete(() => {
 				PatternBackground.transform.DOLocalMoveY(1092, 0);
@@ -257,7 +258,6 @@ public class UiManager : ManagerParent
 		}
 	}
     
-
 	void checkCurosr ( )
 	{
 		if ( menuOpen != MenuType.Nothing )

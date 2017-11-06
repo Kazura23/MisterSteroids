@@ -5,6 +5,7 @@ using UnityEngine;
 public class ItemModif : MonoBehaviour 
 {
 	#region Variables
+	public bool buyFLife = false;
 	public bool ItemBought;
 	public string ItemName;
 	public int Price;
@@ -14,19 +15,22 @@ public class ItemModif : MonoBehaviour
 	public bool UseColor;
 	public bool UseOtherColor;
 
+	#region ColorSprite
 	public Color ColorConfirm;
 	public Color ColorSelected;
 	public Color ColorUnSelected;
 
 	public Color BoughtColorSelected;
 	public Color BoughtColorUnSelected;
+	#endregion
 
+	#region Sprite
 	public Sprite SpriteConfirm;
 	public Sprite SpriteSelected;
 	public Sprite SpriteUnselected;
-
 	public Sprite BoughtSpriteUnselected;
 	public Sprite BoughtSpriteSelected;
+	#endregion
 
 	public ItemModif RightItem;
 	public ItemModif LeftItem;
@@ -36,22 +40,22 @@ public class ItemModif : MonoBehaviour
 	public string CatName;
 
 	public bool ModifVie;
-	public bool ModifReduceMot;
-	public bool ModifRecovereMot;
+	public bool ModifSpecial;
 
 	public int NombreVie;
-	public float ReduceSlowMot;
-	public float RecoverSlowMot;
+	public SpecialAction SpecAction;
 
 	public bool Selected;
+
+
+	#region SpecialSlowMot 
+	public float SlowMotion = 1;
+	public float SpeedSlowMot = 1;
+	public float SpeedDeacSM = 3;
+	public float ReduceSlider;
+	public float RecovSlider;
+	#endregion
 	#endregion
 
-	#region Mono
-	#endregion
 
-	#region Public Methods
-	#endregion
-
-	#region Private Methods
-	#endregion
 }

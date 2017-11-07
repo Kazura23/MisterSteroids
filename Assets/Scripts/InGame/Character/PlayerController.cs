@@ -733,7 +733,7 @@ public class PlayerController : MonoBehaviour
 
 	void playerFight ( )
 	{
-		if ( Input.anyKeyDown && Input.GetAxis ( "SpecialAction" ) == 0 )
+		if ( Input.anyKeyDown && Input.GetAxis ( "SpecialAction" ) == 0 && Input.GetAxis ( "Horizontal" ) == 0 )
 		{
 			if (InMadness)
 			{

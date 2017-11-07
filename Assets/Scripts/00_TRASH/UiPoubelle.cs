@@ -27,15 +27,15 @@ public class UiPoubelle : MonoBehaviour {
     }
     public void onActiveRagdoll()
     {
-        GameObject champi = GameObject.Find("Charlotte_champi 1");
+        GameObject champi = GameObject.Find("Charlotte_champi");
         champi.GetComponent<Animator>().enabled = false;
         Rigidbody[] rigis = champi.GetComponentsInChildren<Rigidbody>();
         foreach(Rigidbody rig in rigis)
         {
             rig.useGravity = true;
-            if(rig.gameObject.name == "charlotte_champi1_Hips")
+            if(rig.gameObject.name == "charlotte_champi1_Hips" /*&& rig.gameObject.name == "charlotte_champi1_Head"*/)
             {
-                rig.AddForce(propulsion, ForceMode.Impulse);
+                rig.AddForce(propulsion, ForceMode.VelocityChange);
             }
         }
     }

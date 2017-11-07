@@ -26,7 +26,7 @@ public class Drawer : PropertyDrawer
 
 		//Rect labelRect = new Rect ( xMin, yMin, w * 0.5f, h );
 		//EditorGUI.LabelField ( labelRect, "Ceci est un label de test" );
-		//EditorGUI.FloatField ( labelRect, property.Time );
+		//EditorGUI.FloatField ( labelRect, property.FindPropertyRelative("Time") );
 		EditorGUI.EndProperty ( );
 	}
 

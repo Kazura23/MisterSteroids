@@ -56,12 +56,35 @@ public class EditCat : Editor
 
 		EditorGUILayout.Space ( );
 		EditorGUILayout.BeginHorizontal();
-		if ( GUILayout.Button ( "UseColor", EditorStyles.miniButtonLeft ) )
+
+		var buttonStyle = new GUIStyle(EditorStyles.miniButtonLeft);
+
+		if ( myTarget.UseColor )
+		{
+			buttonStyle.normal.textColor = Color.green;
+		}
+		else
+		{
+			buttonStyle.normal.textColor = Color.red;
+		}
+
+		if ( GUILayout.Button ( "UseColor", buttonStyle ) )
 		{
 			myTarget.UseColor = !myTarget.UseColor;
 		}
 
-		if ( GUILayout.Button ( "UseSprite", EditorStyles.miniButtonRight ) )
+		buttonStyle = new GUIStyle(EditorStyles.miniButtonRight);
+		if ( myTarget.UseSprite )
+		{
+			buttonStyle.normal.textColor = Color.green;
+		}
+		else
+		{
+			buttonStyle.normal.textColor = Color.red;
+		}
+
+
+		if ( GUILayout.Button ( "UseSprite", buttonStyle ) )
 		{
 			myTarget.UseSprite = !myTarget.UseSprite;
 		}

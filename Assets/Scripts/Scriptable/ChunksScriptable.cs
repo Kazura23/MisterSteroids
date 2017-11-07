@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 
+[CreateAssetMenu(fileName = "Chunk", menuName = "Scriptable/Chunk", order = 3)]
 public class ChunksScriptable : ScriptableObject 
 {
 	[Tooltip ("Nombre de chunk pour faire un niveau")]

@@ -91,6 +91,7 @@ public class EditItemMod : Editor
 
 		myTarget.CatName = myTarget.transform.parent.GetComponent<CatShop> ( ).NameCat;
 
+		// Si l'item est acheté
 		if ( AllPlayerPrefs.GetBoolValue ( Constants.ItemBought + myTarget.ItemName ) )
 		{
 			myTarget.ItemBought = true;
@@ -101,18 +102,43 @@ public class EditItemMod : Editor
 		}
 		EditorGUILayout.Space ( );
 
+		// verification de l'utilisation de la couleur
+		var buttonStyle = new GUIStyle(EditorStyles.miniButtonLeft);
+		if ( myTarget.UseColor )
+		{
+			buttonStyle.normal.textColor = Color.green;
+		}
+		else
+		{
+			buttonStyle.normal.textColor = Color.red;
+		}
+
 		EditorGUILayout.BeginHorizontal();
-		if ( GUILayout.Button ( "UseColor", EditorStyles.miniButtonLeft ) )
+		// Bouton d'utilisation de la couleur
+		if ( GUILayout.Button ( "UseColor", buttonStyle ) )
 		{
 			myTarget.UseColor = !myTarget.UseColor;
 		}
 
-		if ( GUILayout.Button ( "UseSprite", EditorStyles.miniButtonRight ) )
+		// verification de l'utilisation de sprite
+		buttonStyle = new GUIStyle(EditorStyles.miniButtonRight);
+		if ( myTarget.UseSprite )
+		{
+			buttonStyle.normal.textColor = Color.green;
+		}
+		else
+		{
+			buttonStyle.normal.textColor = Color.red;
+		}
+
+		// Bouton d'utilisation de sprite
+		if ( GUILayout.Button ( "UseSprite", buttonStyle ) )
 		{
 			myTarget.UseSprite = !myTarget.UseSprite;
 		}
 		EditorGUILayout.EndHorizontal ( );
 
+		// Ajout des différentes couleurs
 		if ( myTarget.UseColor )
 		{
 			EditorGUI.indentLevel = 1;
@@ -120,7 +146,17 @@ public class EditItemMod : Editor
 			EditorGUILayout.Space ( );
 			EditorGUILayout.BeginHorizontal();
 
-			if ( GUILayout.Button ( "UseOtherColor", EditorStyles.miniButton ) )
+			buttonStyle = new GUIStyle(EditorStyles.miniButton);
+			if ( myTarget.UseOtherColor )
+			{
+				buttonStyle.normal.textColor = Color.green;
+			}
+			else
+			{
+				buttonStyle.normal.textColor = Color.red;
+			}
+
+			if ( GUILayout.Button ( "UseOtherColor", buttonStyle ) )
 			{
 				myTarget.UseOtherColor = !myTarget.UseOtherColor;
 			}
@@ -128,7 +164,18 @@ public class EditItemMod : Editor
 			if ( myTarget.UseSprite )
 			{
 				EditorGUILayout.Space ( );
-				if ( GUILayout.Button ( "UseOtherSprite", EditorStyles.miniButton ) )
+
+				buttonStyle = new GUIStyle(EditorStyles.miniButton);
+				if ( myTarget.UseOtherSprite )
+				{
+					buttonStyle.normal.textColor = Color.green;
+				}
+				else
+				{
+					buttonStyle.normal.textColor = Color.red;
+				}
+
+				if ( GUILayout.Button ( "UseOtherSprite", buttonStyle ) )
 				{
 					myTarget.UseOtherSprite = !myTarget.UseOtherSprite;
 				}
@@ -206,7 +253,17 @@ public class EditItemMod : Editor
 
 			if ( !myTarget.UseColor )
 			{
-				if ( GUILayout.Button ( "UseOtherSprite", EditorStyles.miniButton ) )
+				buttonStyle = new GUIStyle(EditorStyles.miniButton);
+				if ( myTarget.UseOtherSprite )
+				{
+					buttonStyle.normal.textColor = Color.green;
+				}
+				else
+				{
+					buttonStyle.normal.textColor = Color.red;
+				}
+
+				if ( GUILayout.Button ( "UseOtherSprite", buttonStyle ) )
 				{
 					myTarget.UseOtherSprite = !myTarget.UseOtherSprite;
 				}
@@ -268,7 +325,18 @@ public class EditItemMod : Editor
 		EditorGUILayout.LabelField("Modification", EditorStyles.boldLabel);
 
 		EditorGUILayout.BeginHorizontal();
-		if ( GUILayout.Button ( "ModifVie", EditorStyles.miniButton ) )
+
+		buttonStyle = new GUIStyle(EditorStyles.miniButton);
+		if ( myTarget.ModifVie )
+		{
+			buttonStyle.normal.textColor = Color.green;
+		}
+		else
+		{
+			buttonStyle.normal.textColor = Color.red;
+		}
+
+		if ( GUILayout.Button ( "ModifVie", buttonStyle ) )
 		{
 			myTarget.ModifVie = !myTarget.ModifVie;
 		}
@@ -284,7 +352,17 @@ public class EditItemMod : Editor
 		}
 		EditorGUILayout.EndHorizontal ( );
 
-		if ( GUILayout.Button ( "ModifSpecial", EditorStyles.miniButton ) )
+		buttonStyle = new GUIStyle(EditorStyles.miniButton);
+		if ( myTarget.ModifSpecial )
+		{
+			buttonStyle.normal.textColor = Color.green;
+		}
+		else
+		{
+			buttonStyle.normal.textColor = Color.red;
+		}
+
+		if ( GUILayout.Button ( "ModifSpecial", buttonStyle ) )
 		{
 			myTarget.ModifSpecial = !myTarget.ModifSpecial;
 		}

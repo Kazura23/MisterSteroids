@@ -91,6 +91,8 @@ public class EditItemMod : Editor
 
 		myTarget.CatName = myTarget.transform.parent.GetComponent<CatShop> ( ).NameCat;
 
+		#region MainButton
+
 		// Si l'item est acheté
 		if ( AllPlayerPrefs.GetBoolValue ( Constants.ItemBought + myTarget.ItemName ) )
 		{
@@ -137,7 +139,9 @@ public class EditItemMod : Editor
 			myTarget.UseSprite = !myTarget.UseSprite;
 		}
 		EditorGUILayout.EndHorizontal ( );
+		#endregion
 
+		#region Couleur
 		// Ajout des différentes couleurs
 		if ( myTarget.UseColor )
 		{
@@ -222,7 +226,9 @@ public class EditItemMod : Editor
 				}
 			}
 		}
+		#endregion
 
+		#region Sprite
 		if ( myTarget.SpriteConfirm == null )
 		{
 			myTarget.SpriteConfirm = myTarget.GetComponent<Image> ( ).sprite;
@@ -312,6 +318,7 @@ public class EditItemMod : Editor
 
 			EditorGUILayout.Space ( );
 		}
+		#endregion
 
 		EditorGUI.indentLevel = 0;
 
@@ -326,6 +333,7 @@ public class EditItemMod : Editor
 
 		EditorGUILayout.BeginHorizontal();
 
+		#region Caract
 		buttonStyle = new GUIStyle(EditorStyles.miniButton);
 		if ( myTarget.ModifVie )
 		{
@@ -361,7 +369,10 @@ public class EditItemMod : Editor
 		{
 			buttonStyle.normal.textColor = Color.red;
 		}
+		EditorGUILayout.BeginHorizontal();
+		#endregion
 
+		#region SpecialAction
 		if ( GUILayout.Button ( "ModifSpecial", buttonStyle ) )
 		{
 			myTarget.ModifSpecial = !myTarget.ModifSpecial;
@@ -370,17 +381,27 @@ public class EditItemMod : Editor
 		if ( myTarget.ModifSpecial )
 		{
 			EditorGUILayout.PropertyField ( SpecAction );
-			EditorGUI.indentLevel = 1;
 
-			if ( myTarget.SpecAction == SpecialAction.SlowMot )
-			{
-				EditorGUILayout.PropertyField ( SlowMotion );
-				EditorGUILayout.PropertyField ( SpeedSlowMot );
-				EditorGUILayout.PropertyField ( SpeedDeacSM );
-				EditorGUILayout.PropertyField ( ReduceSlider );
-				EditorGUILayout.PropertyField ( RecovSlider );
-			}
 		}
+		else
+		{
+			myTarget.SpecAction = SpecialAction.Nothing;
+		}
+
+		EditorGUILayout.EndHorizontal();
+
+		EditorGUI.indentLevel = 1;
+
+		if ( myTarget.SpecAction == SpecialAction.SlowMot )
+		{
+			EditorGUILayout.PropertyField ( SlowMotion );
+			EditorGUILayout.PropertyField ( SpeedSlowMot );
+			EditorGUILayout.PropertyField ( SpeedDeacSM );
+			EditorGUILayout.PropertyField ( ReduceSlider );
+			EditorGUILayout.PropertyField ( RecovSlider );
+		}
+		#endregion
+
 		serializedObject.ApplyModifiedProperties ( );
 	
 		EditorGUI.indentLevel = 0;

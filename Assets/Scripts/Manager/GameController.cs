@@ -64,7 +64,7 @@ public class GameController : ManagerParent
 		GlobalManager.Ui.CloseThisMenu ( );
     }
 
-	public void FxInstanciate ( Vector3 thisPos, string fxName, Transform parentObj = null )
+	public GameObject FxInstanciate ( Vector3 thisPos, string fxName, Transform parentObj = null, float timeDest = 0.35f )
 	{
 		List<FxList> getAllFx = AllFx;
 		GameObject getObj;
@@ -85,14 +85,16 @@ public class GameController : ManagerParent
 					getObj = ( GameObject ) Instantiate ( getObj, parentObj );
 				}
 
-                Destroy(getObj, 3f);
+                Destroy(getObj, .35f);
 
                 getObj.transform.position = thisPos;
 
+				return getObj;
 				break;
 			}
 		}
 
+		return null;
     }
 
     public void Restart ( ) 
@@ -170,3 +172,4 @@ public class FxList
 	public string FxName;
 	public GameObject FxObj;
 }
+				Destroy(getObj, timeDest);

@@ -770,7 +770,7 @@ public class PlayerController : MonoBehaviour
 
 		if(Input.GetAxis("CoupSimple") != 0 && canPunch && resetAxeS  )
         {
-            if (Time.timeScale < 1)
+            if (Time.timeScale < 1 && !GlobalManager.GameCont.Intro)
                 Time.timeScale = 1;
             resetAxeS = false;
                 canPunch = false;
@@ -834,7 +834,7 @@ public class PlayerController : MonoBehaviour
 
 			playAnimator.SetTrigger("Double");
 
-            if (Time.timeScale < 1)
+            if (Time.timeScale < 1 && !GlobalManager.GameCont.Intro)
                 Time.timeScale = 1;
             if (!InMadness)
                 transform.GetChild(0).GetComponent<Punch>().MadnessMana("Double");

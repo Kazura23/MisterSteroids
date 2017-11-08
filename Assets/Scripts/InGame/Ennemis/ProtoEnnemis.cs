@@ -28,9 +28,9 @@ public class ProtoEnnemis : AbstractObject
     
 
 	#region Public Methods
-    public void Update()
+    protected override void Update()
     {
-        
+        base.Update();
     }
 
 

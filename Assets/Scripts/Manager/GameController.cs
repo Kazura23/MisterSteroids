@@ -15,6 +15,7 @@ public class GameController : ManagerParent
 	public GameObject Player;
 	public SpawnChunks SpawnerChunck;
     public bool GameStarted;
+    public bool Intro;
 
 	[HideInInspector]
 	public Dictionary <string, ItemModif> AllModifItem;
@@ -68,6 +69,8 @@ public class GameController : ManagerParent
 		Player.GetComponent<PlayerController> ( ).ResetPlayer ( );
 		Player.GetComponent<PlayerController> ( ).ThisAct = SpecialAction.Nothing;
 
+        Intro = true;
+
 		SetAllBonus ( );
 		GameStarted = true;
 		checkStart = false;
@@ -102,7 +105,7 @@ public class GameController : ManagerParent
 
 
                 getObj.transform.position = thisPos;
-                Debug.Log(thisPos + " / " + getObj.transform.position);
+                //Debug.Log(thisPos + " / " + getObj.transform.position);
 
                 Destroy(getObj, timeDest);
                 

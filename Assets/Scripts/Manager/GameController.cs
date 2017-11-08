@@ -84,7 +84,7 @@ public class GameController : ManagerParent
 		List<FxList> getAllFx = AllFx;
 		GameObject getObj;
 
-		for ( int a = 0;  a < getAllFx.Count; a++ )
+		for ( int a = 0; a < getAllFx.Count; a++ )
 		{
 			if ( getAllFx [ a ].FxName == fxName )
 			{
@@ -98,30 +98,19 @@ public class GameController : ManagerParent
 				{
 					getObj = ( GameObject ) Instantiate ( getObj );
 				}
-<<<<<<< HEAD
+
 
 				getObj.transform.position = thisPos;
 
-				Destroy(getObj, timeDest);
+				Destroy ( getObj, timeDest );
 
-=======
-
-
-                getObj.transform.position = thisPos;
-                Debug.Log(thisPos + " / " + getObj.transform.position);
-
-                Destroy(getObj, timeDest);
-                
-
-
->>>>>>> Tom
 				return getObj;
 				break;
 			}
 		}
 
 		return null;
-    }
+	}
 
     public void Restart ( ) 
 	{

@@ -27,7 +27,13 @@ public class ProtoEnnemis : AbstractObject
     
 
 	#region Public Methods
-	public override void PlayerDetected ( GameObject thisObj, bool isDetected )
+    public void Update()
+    {
+        
+    }
+
+
+    public override void PlayerDetected ( GameObject thisObj, bool isDetected )
 	{
 		base.PlayerDetected ( thisObj, isDetected );
 
@@ -35,8 +41,6 @@ public class ProtoEnnemis : AbstractObject
 		{
 			parMat.color = NewColor;
 
-            Vector3 playerPos = GlobalManager.GameCont.Player.transform.position;
-            GlobalManager.GameCont.FxInstanciate(new Vector3(playerPos.x, playerPos.y + .5f, playerPos.z), "PlayerReady", GlobalManager.GameCont.Player.transform);
         }
 		else
 		{
@@ -44,7 +48,6 @@ public class ProtoEnnemis : AbstractObject
 		}
 		parMat.color = NewColor;
 
-        Debug.Log("Fx");
 
 
         try {
@@ -70,7 +73,7 @@ public class ProtoEnnemis : AbstractObject
 
 		if ( isDead )
 		{
-			GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y, transform.localPosition.z + 5f), "EnemyNormalDeath", transform.parent);
+			GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y, transform.localPosition.z + 5f), "EnemyNormalDeath", transform.parent, .35f);
 		}
 	}
 

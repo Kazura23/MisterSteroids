@@ -126,6 +126,9 @@ public class PlayerController : MonoBehaviour
 	bool canDPunch = true;
     //private Coroutine corou/*, preparPunch*/;
 
+    [Header("GRAPH")]
+    public GameObject leftHand;
+    public GameObject rightHand;
     public GameObject Plafond;
 
     Transform pTrans;

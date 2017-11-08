@@ -108,7 +108,6 @@ public class GameController : ManagerParent
 				Destroy ( getObj, timeDest );
 
 				return getObj;
-				break;
 			}
 		}
 

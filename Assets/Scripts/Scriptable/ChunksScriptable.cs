@@ -11,9 +11,11 @@ public class ChunksScriptable : ScriptableObject
 	public bool ChunkAleat = true;
 
 	[Header ("Chunks")]
+	public GameObject WallEndChunk;
+	public GameObject WallOnLastChunk;
 	public List<GameObject> TheseChunks;
 
-	[Header ("Prefabs d'objet à instancier")]
+	[Header ("Prefabs d'objet à instancier aléatoirement")]
 
 	[Range( 0,100)]
 	public int PourcSpawn;
@@ -27,5 +29,4 @@ public class ChunksScriptable : ScriptableObject
 	[Tooltip ("Obstacle pouvant être détruit")]
 	public List<GameObject> ObstacleDestrucSpawnable;
 	public List<GameObject> CoinSpawnable;
-	public GameObject WallOnLastChunk;
 }

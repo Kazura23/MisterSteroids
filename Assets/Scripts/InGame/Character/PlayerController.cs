@@ -103,38 +103,42 @@ public class PlayerController : MonoBehaviour
 
     Transform pTrans;
 	Rigidbody pRig;
+
 	Direction currentDir = Direction.North;
 	Direction newDir = Direction.North;
-	//Vector3 posDir;
 	Vector3 dirLine = Vector3.zero;
 	Vector3 lastPos;
-	IEnumerator propPunch;
-	Punch getPunch;
-	Camera thisCam;
-	Slider SliderSlow;
+	//Vector3 posDir;
 	Text textDist;
 	Text textCoin;
-	Animator playAnimator;
 
-	float PropulseBalls = 100;
+	IEnumerator propPunch;
+	Animator playAnimator;
+	Slider SliderSlow;
+	Camera thisCam;
+	Punch getPunch;
+
+	float maxSpeedCL = 0;
+	float maxSpeed = 0;
+	float accelerationCL = 0;
+	float decelerationCL = 0;
+	float acceleration = 0;
+	float impulsionCL = 0;
 	float currSpeed = 0;
 	float currSpLine = 0;
-	//float calPos = 0;
+
+	float PropulseBalls = 100;
 	float newH = 0;
 	float newDist;
 	float saveDist;
+	float nextIncrease = 0;
 	float befRot = 0;
 	float SliderContent;
 	float totalDis = 0;
     float rationUse = 1;
-	float nextIncrease = 0;
-	float maxSpeed = 0;
-	float maxSpeedCL = 0;
-	float accelerationCL = 0;
-	float acceleration = 0;
-	float impulsionCL = 0;
-	float decelerationCL = 0;
-    float valueSmooth = 0;
+	//float calPos = 0;
+
+	float valueSmooth = 0;
     float valueSmoothUse = 0;
 	float timeToDP;
 
@@ -694,11 +698,14 @@ public class PlayerController : MonoBehaviour
 			{
 				float accLine = 0;
 
-				if ( saveDist < 0 && newH > -lineDistance / 2 || saveDist > 0 && newH < lineDistance / 2 )
+				if ( saveDist < 0 && newH > -lineDistance / 1.25f || saveDist > 0 && newH < lineDistance / 1.25f )
+				{
+					canChange = true;
+				}
+
+				if ( saveDist < 0 && newH > -lineDistance / 4 || saveDist > 0 && newH < lineDistance / 4 )
 				{
 					currSpLine -= decelerationCL * delTime;
-
-					canChange = true;
 
 					if ( currSpLine < 0 )
 					{

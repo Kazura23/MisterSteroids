@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class AbstractObject : MonoBehaviour 
 {
@@ -17,6 +18,12 @@ public class AbstractObject : MonoBehaviour
 	[Tooltip ("force de direction lorsque en collision contre un Object / ennemis ( situation ou ce gameobject est immobile )")]
 	public float onObjForward;
 
+    [Space]
+    [Tooltip ("Slow Motion Approche")]
+    float distSlowMotio = 15;
+    float ratioSlow = 0.25f;
+    float timeSlow = 1f;
+
 	[Space]
 	[Header ("Contrainte axe / rotation ")]
 	[Tooltip ("Si différent de 0 alors l'axe est freeze")]
@@ -29,6 +36,8 @@ public class AbstractObject : MonoBehaviour
 
 	protected Rigidbody mainCorps;
 	protected Transform getTrans;
+    protected Transform playerTrans;
+    protected bool activeSlow = true;
 
 	List<Rigidbody> corps;
 	Vector3 projection;
@@ -49,6 +58,29 @@ public class AbstractObject : MonoBehaviour
 			corps.Add ( thisRig );
 		}
 	}
+
+    protected virtual void Start()
+    {
+        playerTrans = GlobalManager.GameCont.Player.transform;
+    }
+
+    protected virtual void Update()
+    {
+        if (Vector3.Distance(transform.position, playerTrans.position) <= distSlowMotio && activeSlow && !isDead && tag == Constants._EnnemisTag)
+        {
+            activeSlow = false;
+            Debug.Log("Here");
+            Time.timeScale = ratioSlow;
+            StartCoroutine("delaySlowMotio");
+            //DOTween.To(() => Time.timeScale, x => Time.timeScale = x, ratioSlow, timeSlow);
+            //if(Time.timeScale <= ratioSlow)
+                
+        }/*else if(Time.timeScale < 1 && Vector3.Distance(transform.position, playerTrans.position) > distSlowMotio && !activeSlow)
+        {
+            Time.timeScale = 1;
+            activeSlow = true;
+        }*/
+    }
 	#endregion
 
 	#region Public Methods
@@ -64,9 +96,9 @@ public class AbstractObject : MonoBehaviour
 	public virtual void Dead ( bool enemy = false )
 	{
 		isDead = true;
-
-		//StartCoroutine ( disableColl ( ) );
-		getTrans.tag = Constants._ObjDeadTag;
+        Time.timeScale = 1;
+        //StartCoroutine ( disableColl ( ) );
+        getTrans.tag = Constants._ObjDeadTag;
 		for ( int i = 0; i < corps.Count; i++ )
 		{
 			corps [ i ].useGravity = true;
@@ -92,7 +124,8 @@ public class AbstractObject : MonoBehaviour
 			Vector3 getUp = transform.up * projection.y;
 			mainCorps.AddForce ( getFor + getRig + getUp, ForceMode.VelocityChange );
 		}
-
+        Debug.Log("Time = " + Time.timeScale);
+        
 		Destroy ( this.gameObject, delayDead );
 	}
 
@@ -165,6 +198,14 @@ public class AbstractObject : MonoBehaviour
 		GetComponent<BoxCollider> ( ).enabled = true;
 	}
 
+    IEnumerator delaySlowMotio()
+    {
+        yield return new WaitForSeconds(timeSlow);
+        if(Time.timeScale < 1)
+        {
+            Time.timeScale = 1;
+        }
+    }
 
 	void checkConstAxe ( )
 	{

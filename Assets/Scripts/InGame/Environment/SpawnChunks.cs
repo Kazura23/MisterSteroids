@@ -84,8 +84,9 @@ public class SpawnChunks : MonoBehaviour
 		List<GameObject> getSpc = getSpawnChunks;
 
 		float distChunk = Vector3.Distance ( AllSpawnable [ currLevel ].getDebutFinCh [ 0 ].transform.position, AllSpawnable [ currLevel ].getDebutFinCh [ 1 ].transform.position );
+		distChunk /= 2;
 
-		spawnAfterThis ( sourceSpawn.position + sourceSpawn.forward * distChunk, sourceSpawn.rotation );
+		spawnAfterThis ( sourceSpawn.position, sourceSpawn.rotation );
 
 		if ( getSpc.Count > 5 )
 		{

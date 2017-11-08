@@ -152,10 +152,9 @@ public class AbstractObject : MonoBehaviour
 		Transform savePos = transform;
 		Transform playPos = GlobalManager.GameCont.Player.transform;
 
-		while ( Vector3.Distance ( savePos.position, playPos.position ) < 2.5f )
-		{
-			yield return thisF;
-		}
+		Physics.IgnoreCollision ( playPos.GetComponent<Collider> ( ), GetComponent<Collider> ( ) );
+
+		yield return thisF;
 
 		GetComponent<BoxCollider> ( ).enabled = true;
 	}

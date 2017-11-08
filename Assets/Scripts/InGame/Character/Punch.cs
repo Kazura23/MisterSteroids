@@ -77,17 +77,21 @@ public class Punch : MonoBehaviour {
 
     public void MadnessMana(string type)
     {
-        if (barMadness.value + addPointBarByPunchSimple < barMadness.maxValue && type == "Simple")
-        {
-	      barMadness.value += addPointBarByPunchSimple;
-        } else if (barMadness.value + addPointBarByPunchDouble < barMadness.maxValue && type == "Double")
-        {
-            barMadness.value += addPointBarByPunchDouble;
-        }
-        else
-        {
-            barMadness.value = barMadness.maxValue;
-            control.SetInMadness(true);
+        if (!control.IsInMadness()) {
+            if (barMadness.value + addPointBarByPunchSimple < barMadness.maxValue && type == "Simple")
+            {
+                //barMadness.value += addPointBarByPunchSimple;
+                control.AddSmoothCurve(addPointBarByPunchSimple);
+            } else if (barMadness.value + addPointBarByPunchDouble < barMadness.maxValue && type == "Double")
+            {
+                //barMadness.value += addPointBarByPunchDouble;
+                control.AddSmoothCurve(addPointBarByPunchDouble);
+            }
+            /*else
+            {
+                barMadness.value = barMadness.maxValue;
+                control.SetInMadness(true);
+            }*/
         }
     }
 }

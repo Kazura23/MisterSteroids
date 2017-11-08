@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour
     public float ratioMaxMadness = 4;
     public float delayDownBar = 1;
     public float lessPointPunchInMadness = 3;
+    public float smoothSpeed = 100;
 
 	[Header ("Caractéristique de force des punchs")]
 	public float PropulseBalls = 100;
@@ -125,7 +126,6 @@ public class PlayerController : MonoBehaviour
 	bool canDPunch = true;
     //private Coroutine corou/*, preparPunch*/;
 
-
     public GameObject Plafond;
 
     Transform pTrans;
@@ -162,6 +162,8 @@ public class PlayerController : MonoBehaviour
 	float acceleration = 0;
 	float impulsionCL = 0;
 	float decelerationCL = 0;
+    float valueSmooth = 0;
+    float valueSmoothUse = 0;
 
 	int currLine = 0;
 	int LastImp = 0;
@@ -216,6 +218,8 @@ public class PlayerController : MonoBehaviour
 
 	void Update ( )
 	{
+		Shader.SetGlobalFloat ( "_saturation", barMadness.value / 15);
+
 		float getTime = Time.deltaTime;
 
 		rationUse = 1 + (ratioMaxMadness * (InMadness ? 1 : (barMadness.value / barMadness.maxValue)));
@@ -232,7 +236,18 @@ public class PlayerController : MonoBehaviour
 		Shader.SetGlobalFloat ( "GlobaleMask_SoftNess", SoftNess );
 		Shader.SetGlobalFloat ( "_SlowMot", Time.timeScale );
 
-        if(Input.GetKeyDown(KeyCode.O))
+
+        SmoothBar();
+
+        if (barMadness.value - (getTime * delayDownBar) > 0)
+        {
+            barMadness.value -= getTime * delayDownBar;
+        }
+        else
+        {
+            barMadness.value = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.O))
             PlayerPrefs.DeleteAll();
 
     }
@@ -261,15 +276,33 @@ public class PlayerController : MonoBehaviour
 
 	public void GameOver ( bool forceDead = false )
 	{
-		if ( invDamage  && !forceDead )
+
+        GlobalManager.Ui.GameOver();
+
+        if ( invDamage  && !forceDead )
 		{
 			return;
 		}
 
+        ScreenShake.Singleton.ShakeGameOver();
+
         GameOverTok thisTok = new GameOverTok ( );
 		thisTok.totalDist = totalDis;
-           
-		Life--;
+
+        StopPlayer = true;
+
+        Camera.main.GetComponent<RainbowMove>().enabled = false;
+        Camera.main.GetComponent<RainbowRotate>().enabled = false;
+
+        DOVirtual.DelayedCall(.2f, () => {
+
+            Camera.main.transform.DORotate(new Vector3(-220, 0, 0), 1.8f, RotateMode.LocalAxisAdd);
+            Camera.main.transform.DOLocalMoveZ(-50f, .4f);
+        });
+
+
+
+        Life--;
 
 		if ( Life > 0 || playerDead )
 		{
@@ -280,43 +313,46 @@ public class PlayerController : MonoBehaviour
 			return;
 		}
 
-		GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver, thisTok );
-		ScreenShake.Singleton.ShakeGameOver();
-		playerDead = true;
+
+        DOVirtual.DelayedCall(1f, () => {
+
+            GlobalManager.Ui.OpenThisMenu(MenuType.GameOver, thisTok);
+            ScreenShake.Singleton.ShakeGameOver();
+            playerDead = true;
+        });
 		//GlobalManager.Ui.OpenThisMenu ( MenuType.GameOver );
 
 		//GlobalManager.GameCont.Restart ( );
 	}
+
+    public void AddSmoothCurve(float p_value)
+    {
+        valueSmooth = valueSmoothUse + p_value;
+        valueSmoothUse = valueSmooth;
+    }
+
+    public bool IsInMadness()
+    {
+        return InMadness;
+    }
 	#endregion
 
 	#region Private Functions
 	void playerAction ( float getTime )
 	{
-		if ( playerDead || StopPlayer )
+        if ( playerDead || StopPlayer )
 		{
 			thisCam.fieldOfView = Constants.DefFov;
 			return;
 		}
 
-		if ( barMadness.value > 98 && !InMadness )
+		if( barMadness.value == 0 && InMadness )
 		{
-			InMadness = true;
-			GlobalManager.Ui.OpenMadness();
-		}
-		else if( barMadness.value == 0 && InMadness )
-		{
-            Debug.Log("Mad");
+            GetComponentInChildren<Animator>().SetBool("InMadness", false);
+
+
             GlobalManager.Ui.CloseMadness();
             InMadness = false;
-		}
-
-		if (barMadness.value - (getTime * delayDownBar) > 0 )
-		{
-			barMadness.value -= getTime * delayDownBar;
-		}
-		else
-		{
-			barMadness.value = 0;
 		}
 
 		if ( Running )
@@ -347,7 +383,7 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 
-		if ( !Dash && !playerDead )
+		if ( !playerDead )
 		{
 			if ( Input.GetAxis ( "CoupSimple" ) == 0 )
 			{
@@ -412,7 +448,6 @@ public class PlayerController : MonoBehaviour
 				maxSpeedCL = MaxCLInc;
 			}
 		}
-		Debug.Log ( maxSpeed );
 	}
 
 	void speAction ( float getTime )
@@ -608,10 +643,11 @@ public class PlayerController : MonoBehaviour
 		float newImp = Input.GetAxis ( "Horizontal" );
 		float lineDistance = Constants.LineDist;
 
-		if ( ( canChange || newH == 0 ) && !Dash && !inAir && !InMadness)
+		if ( ( canChange || newH == 0 ) && !inAir && !InMadness)
 		{
 			if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLineRight && ( clDir == 1 || newH == 0 ) )
 			{
+				Dash = false;
 				canChange = false;
 				currLine++;
 				LastImp = 1;
@@ -621,6 +657,7 @@ public class PlayerController : MonoBehaviour
 			}
 			else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLineLeft && ( clDir == -1 || newH == 0 ) )
 			{
+				Dash = false;
 				canChange = false;
 				currLine--;
 				LastImp = -1;
@@ -648,7 +685,7 @@ public class PlayerController : MonoBehaviour
 
 					if ( currSpLine < 0 )
 					{
-						currSpLine = 0;
+						currSpLine = 0.1f;
 					}
 				}
 				else if ( currSpLine < maxSpeedCL )
@@ -683,7 +720,7 @@ public class PlayerController : MonoBehaviour
 				currSpLine = 0;
 			}
 
-
+			//Debug.Log ( currSpLine );
 
 			dirLine = pTrans.right * calTrans;
 			pTrans.Translate ( dirLine, Space.World );
@@ -696,63 +733,92 @@ public class PlayerController : MonoBehaviour
 
 	void playerFight ( )
 	{
+		if ( Input.anyKeyDown && Input.GetAxis ( "SpecialAction" ) == 0 && Input.GetAxis ( "Horizontal" ) == 0 )
+		{
+			if (InMadness)
+			{
+				if (barMadness.value - lessPointPunchInMadness < 0)
+				{
+					barMadness.value = 0;
+				}
+				else
+				{
+
+					barMadness.value -= lessPointPunchInMadness;
+                    ScreenShake.Singleton.ShakeMad();
+                    Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().Distortion = (barMadness.value/10);
+
+                }
+			}
+		}
+
+
 		if(Input.GetAxis("CoupSimple") != 0 && canPunch && resetAxeS  )
         {
-            
-                resetAxeS = false;
-                canPunch = false;
-                propP = true;
+			Dash = false;
 
-                if(!InMadness)
-                    transform.GetChild(0).GetComponent<Punch>().MadnessMana("Simple");
+            resetAxeS = false;
+            canPunch = false;
+            propP = true;
 
-                ScreenShake.Singleton.ShakeHitSimple();
+			if ( !InMadness )
+			{
+				punch.MadnessMana("Simple");
+			}
 
+            ScreenShake.Singleton.ShakeHitSimple();
+       
+            if (punchRight)
+            {
+                punch.RightPunch = true;
+                poingDroite.SetActive(true);
+
+				playAnimator.SetTrigger("Right");
+
+				if ( currCouR != null )
+				{
+					StopCoroutine(currCouR);
+				}
            
-                if (punchRight)
-                {
-                    punch.RightPunch = true;
-                    poingDroite.SetActive(true);
+				GlobalManager.Ui.SimpleCoup();
 
-					playAnimator.SetTrigger("Right");
+                currCouR = animePunch(true);
+                StartCoroutine(currCouR);
+            }
+            else
+            {
+                punch.RightPunch = false;
+                poingGauche.SetActive(true);
 
+				playAnimator.SetTrigger("Left");
 
-                    if (currCouR != null)
-                    {
-                        StopCoroutine(currCouR);
-                    }
-                    currCouR = animePunch(true);
-                    StartCoroutine(currCouR);
+		        if (currCouL != null)
+		        {
+		            StopCoroutine(currCouL);
+		        }
 
-                }
-                else
-                {
-                    punch.RightPunch = false;
-                    poingGauche.SetActive(true);
-
-					playAnimator.SetTrigger("Left");
-
-                if (currCouL != null)
-                    {
-                        StopCoroutine(currCouL);
-                    }
-                    currCouL = animePunch(false);
-                    StartCoroutine(currCouL);
-                }
-                punchRight = !punchRight;
-                StartCoroutine("StartPunch", 0);
-                propPunch = propulsePunch(TimePropulsePunch);
-                StartCoroutine(propPunch);
-			
+                currCouL = animePunch(false);
+                StartCoroutine(currCouL);
+            }
+            punchRight = !punchRight;
+            StartCoroutine("StartPunch", 0);
+            propPunch = propulsePunch(TimePropulsePunch);
+            StartCoroutine(propPunch);
 		}
 		else if(Input.GetAxis("CoupDouble") != 0 && canDPunch && canPunch && resetAxeD  )
         {
+			Dash = false;
+
             ScreenShake.Singleton.ShakeHitDouble();
+
+            GlobalManager.Ui.DoubleCoup();
 
 			playAnimator.SetTrigger("Double");
 
-            if (!InMadness)
-                transform.GetChild(0).GetComponent<Punch>().MadnessMana("Double");
+			if ( !InMadness )
+			{
+				punch.MadnessMana("Double");
+			}
 
             propDP = true;
 			resetAxeD = false;
@@ -778,7 +844,10 @@ public class PlayerController : MonoBehaviour
         punch.setTechnic(type_technic);
         punchBox.enabled = true;
        /* corou =*/ StartCoroutine("TimerHitbox");
-		if ( type_technic == 1 )
+
+        Shader.SetGlobalFloat("_saturation", barMadness.value);
+
+        if ( type_technic == 1 )
 		{
 			StartCoroutine(CooldownPunch( true ));
 		}
@@ -788,8 +857,7 @@ public class PlayerController : MonoBehaviour
 		}
         if (InMadness)
         {
-
-            Debug.Log("gyg");
+            
             if (barMadness.value - lessPointPunchInMadness < 0)
             {
                 barMadness.value = 0;
@@ -797,9 +865,9 @@ public class PlayerController : MonoBehaviour
             else
             {
                    
-                Debug.Log("gyg2");
                 barMadness.value -= lessPointPunchInMadness;
             }
+            AddSmoothCurve(-lessPointPunchInMadness);
         }
 	}
 
@@ -940,6 +1008,13 @@ public class PlayerController : MonoBehaviour
 	public void SetInMadness(bool p_bool)
     {
         InMadness = p_bool;
+
+		if ( p_bool )
+		{
+            GetComponentInChildren<Animator>().SetTrigger("Mad");
+            GetComponentInChildren<Animator>().SetBool("InMadness", true);
+			GlobalManager.Ui.OpenMadness();
+		}
     }
 
 	void OnTriggerEnter ( Collider thisColl )
@@ -960,6 +1035,8 @@ public class PlayerController : MonoBehaviour
 		{
 			if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ElemDash )
 			{
+                GlobalManager.Ui.BloodHit();
+
 				/*Vector3 getProj = getPunch.projection_basic;
 
 				if ( Random.Range ( 0,2 ) == 0 )
@@ -997,5 +1074,37 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+    private void SmoothBar()
+    {
+        float res = valueSmoothUse * (Time.deltaTime * smoothSpeed);
+        if(barMadness.value + res < 0)
+        {
+            barMadness.value = 0;
+            valueSmooth = 0;
+            valueSmoothUse = 0;
+            if (InMadness)
+            {
+                InMadness = !InMadness;
+                GlobalManager.Ui.CloseMadness();
+            }
+        }else if (barMadness.value + res >= 100)
+        {
+            Debug.Log("first etape");
+            barMadness.value = 100;
+            valueSmooth = 0;
+            valueSmoothUse = 0;
+            if (!InMadness)
+            {
+                Debug.Log("MADDDDDDDD");
+                InMadness = !InMadness;
+                GlobalManager.Ui.OpenMadness();
+            }
+        }
+        else
+        {
+            barMadness.value += res;
+            valueSmoothUse -= res;
+        }
+    }
 	#endregion
 }

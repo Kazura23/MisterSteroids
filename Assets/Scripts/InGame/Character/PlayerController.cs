@@ -87,6 +87,8 @@ public class PlayerController : MonoBehaviour
 	public bool Dash = false;
 	[HideInInspector]
 	public bool Running = true;
+	[HideInInspector]
+	public bool blockChangeLine = false;
 	public int Life = 1;
 	public bool StopPlayer = false;
 
@@ -528,12 +530,12 @@ public class PlayerController : MonoBehaviour
 
 				if ( getThis.rotation.x < 0 )
 				{
-					pTrans.Translate ( new Vector3 ( 0, ( ( 360 - getThis.eulerAngles.x ) / 4  ) * Time.deltaTime, 0 ), Space.World );
+					pTrans.Translate ( new Vector3 ( 0, ( ( 360 - getThis.eulerAngles.x ) / 4  ) * getTime, 0 ), Space.World );
 					pRig.useGravity = false;
 				}
 				else if ( getThis.rotation.x > 0 )
 				{
-					pTrans.Translate ( new Vector3 ( 0, ( -getThis.eulerAngles.x / 4 ) * Time.deltaTime, 0 ), Space.World );
+					pTrans.Translate ( new Vector3 ( 0, ( -getThis.eulerAngles.x / 4 ) * getTime, 0 ), Space.World );
 					pRig.useGravity = true;
 				}
 			}
@@ -656,7 +658,7 @@ public class PlayerController : MonoBehaviour
 		float newImp = Input.GetAxis ( "Horizontal" );
 		float lineDistance = Constants.LineDist;
 
-		if ( ( canChange || newH == 0 ) && !inAir )
+		if ( ( canChange || newH == 0 ) && !inAir && !blockChangeLine )
 		{
 			if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLineRight && ( clDir == 1 || newH == 0 ) )
 			{
@@ -918,6 +920,7 @@ public class PlayerController : MonoBehaviour
 		{
 			newPos = true;
 			newDir = thisColl.GetComponent<NewDirect> ( ).NewDirection;
+			blockChangeLine = false;
 			befRot = Vector3.Distance ( thisColl.transform.position, pTrans.position );
 		} 
 	}

@@ -4,29 +4,100 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 
+[CanEditMultipleObjects]
 [CustomEditor (typeof (CatShop))]
 public class EditCat : Editor 
 {
 	#region Variables
+	// bool var;
+	SerializedProperty NameCat;
+	SerializedProperty BuyForLife;
+	SerializedProperty Progression;
+
+	SerializedProperty ColorSelected;
+	SerializedProperty ColorUnSelected;
+	SerializedProperty Selected;
+	SerializedProperty SpriteSelected;
+	SerializedProperty SpriteUnSelected;
+
+	SerializedProperty LeftCategorie;
+	SerializedProperty RightCategorie;
+	SerializedProperty DefautItem;
 	#endregion
 
-
 	#region Public Methods
+	public void OnEnable ( )
+	{
+		NameCat = serializedObject.FindProperty("NameCat");
+		BuyForLife = serializedObject.FindProperty("BuyForLife");
+		Progression = serializedObject.FindProperty("Progression");
+
+		ColorSelected = serializedObject.FindProperty("ColorSelected");
+		ColorUnSelected = serializedObject.FindProperty("ColorUnSelected");
+		SpriteSelected = serializedObject.FindProperty("SpriteSelected");
+		SpriteUnSelected = serializedObject.FindProperty("SpriteUnSelected");
+
+		LeftCategorie = serializedObject.FindProperty("LeftCategorie");
+		RightCategorie = serializedObject.FindProperty("RightCategorie");
+		DefautItem = serializedObject.FindProperty("DefautItem");
+	}
+
 	public override void OnInspectorGUI()
 	{
-		CatShop myTarget = (CatShop)target;
+		CatShop myTarget = ( CatShop ) target;
 
-		myTarget.NameCat = EditorGUILayout.TextField ( "NameCat", myTarget.NameCat );
-		myTarget.BuyForLife = EditorGUILayout.Toggle ( "BuyForLife", myTarget.BuyForLife );
-		myTarget.Progression = EditorGUILayout.Toggle ( "Progression", myTarget.Progression );
+		serializedObject.Update ( );
+		EditorGUILayout.PropertyField ( NameCat );
 
-		myTarget.UseColor = EditorGUILayout.Toggle ( "UseColor", myTarget.UseColor );
-		myTarget.UseSprite = EditorGUILayout.Toggle ( "UseSprite", myTarget.UseSprite );
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.PropertyField ( BuyForLife );
+		EditorGUILayout.PropertyField ( Progression );
+		EditorGUILayout.EndHorizontal ( );
+
+		EditorGUILayout.Space ( );
+		EditorGUILayout.BeginHorizontal();
+
+		var buttonStyle = new GUIStyle(EditorStyles.miniButtonLeft);
 
 		if ( myTarget.UseColor )
 		{
-			myTarget.ColorSelected = EditorGUILayout.ColorField ( "ColorSelected", myTarget.ColorSelected );
-			myTarget.ColorUnSelected = EditorGUILayout.ColorField ( "ColorUnSelected", myTarget.ColorUnSelected );
+			buttonStyle.normal.textColor = Color.green;
+		}
+		else
+		{
+			buttonStyle.normal.textColor = Color.red;
+		}
+
+		if ( GUILayout.Button ( "UseColor", buttonStyle ) )
+		{
+			myTarget.UseColor = !myTarget.UseColor;
+		}
+
+		buttonStyle = new GUIStyle(EditorStyles.miniButtonRight);
+		if ( myTarget.UseSprite )
+		{
+			buttonStyle.normal.textColor = Color.green;
+		}
+		else
+		{
+			buttonStyle.normal.textColor = Color.red;
+		}
+
+
+		if ( GUILayout.Button ( "UseSprite", buttonStyle ) )
+		{
+			myTarget.UseSprite = !myTarget.UseSprite;
+		}
+		EditorGUILayout.EndHorizontal ( );
+
+		EditorGUI.indentLevel = 1;
+		if ( myTarget.UseColor )
+		{
+			EditorGUILayout.Space ( );
+			EditorGUILayout.LabelField("Color Information", EditorStyles.boldLabel);
+
+			EditorGUILayout.PropertyField ( ColorSelected );
+			EditorGUILayout.PropertyField ( ColorUnSelected );
 
 			if ( myTarget.Selected )
 			{
@@ -49,22 +120,31 @@ public class EditCat : Editor
 
 		if ( myTarget.UseSprite )
 		{
-			myTarget.SpriteSelected = (Sprite)EditorGUILayout.ObjectField ( "SpriteSelected", myTarget.SpriteSelected, typeof( Sprite ), true );
-			myTarget.SpriteUnSelected = (Sprite)EditorGUILayout.ObjectField ( "SpriteUnSelected", myTarget.SpriteUnSelected, typeof( Sprite ), true );
+			EditorGUILayout.Space ( );
+
+			EditorGUILayout.LabelField("Sprite Information", EditorStyles.boldLabel);
+
+			EditorGUILayout.PropertyField(SpriteSelected);
+			EditorGUILayout.PropertyField(SpriteUnSelected);
 
 			if ( myTarget.Selected )
 			{
-				//myTarget.GetComponent<Image> ( ).sprite = myTarget.SpriteSelected;
+				myTarget.GetComponent<Image> ( ).sprite = myTarget.SpriteSelected;
 			}
 			else
 			{
-				//myTarget.GetComponent<Image> ( ).sprite = myTarget.SpriteUnSelected;
+				myTarget.GetComponent<Image> ( ).sprite = myTarget.SpriteUnSelected;
 			}
 		}
 
-		myTarget.LeftCategorie = (CatShop)EditorGUILayout.ObjectField ( "LeftCategorie", myTarget.LeftCategorie, typeof( CatShop ), true );
-		myTarget.RightCategorie = (CatShop)EditorGUILayout.ObjectField ( "RightCategorie", myTarget.RightCategorie, typeof( CatShop ), true );
-		myTarget.DefautItem =(ItemModif)EditorGUILayout.ObjectField ( "DefautItem", myTarget.DefautItem, typeof( ItemModif ), true );
+		EditorGUI.indentLevel = 0;
+
+		EditorGUILayout.Space ( );
+		EditorGUILayout.LabelField("Around Information", EditorStyles.boldLabel);
+		EditorGUILayout.PropertyField ( LeftCategorie );
+		EditorGUILayout.PropertyField ( RightCategorie );
+		EditorGUILayout.PropertyField ( DefautItem );
+		serializedObject.ApplyModifiedProperties ( );
 	}
 	#endregion
 

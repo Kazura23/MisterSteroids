@@ -87,7 +87,8 @@ public class UiManager : ManagerParent
     public void Intro()
     {
         Time.timeScale = .05f;
-        
+		float saveFov = Camera.main.fieldOfView;
+
         DOVirtual.DelayedCall(.35f, () => {
             Time.timeScale = .0f;
             DOVirtual.DelayedCall(.1f, () =>
@@ -96,10 +97,10 @@ public class UiManager : ManagerParent
                 Camera.main.DOFieldOfView(4, .25f);
                 DOVirtual.DelayedCall(.25f, () =>
                 {
-                    Camera.main.DOFieldOfView(120, .25f);
+                    Camera.main.DOFieldOfView(100, .15f);
                     DOVirtual.DelayedCall(2f, () =>
                     {
-                        Camera.main.DOFieldOfView(60, .5f);
+						Camera.main.DOFieldOfView(saveFov, .25f);
                     });
                 });
             });
@@ -108,8 +109,10 @@ public class UiManager : ManagerParent
 
     public void DoubleCoup()
     {
+		float saveFov = Camera.main.fieldOfView;
+
         Camera.main.DOFieldOfView(47, .15f).OnComplete(() => {
-            Camera.main.DOFieldOfView(60, .1f);
+			Camera.main.DOFieldOfView(saveFov, .1f);
         });
     }
 
@@ -121,10 +124,12 @@ public class UiManager : ManagerParent
 			Time.timeScale = 1;
             Time.fixedDeltaTime = .02F;
         });
+
+		float saveFov = Camera.main.fieldOfView;
 		Camera.main.DOFieldOfView(45, .12f);//.SetEase(Ease.InBounce);
 		RedScreen.DOFade(.4f, .12f).OnComplete(() => {
 			RedScreen.DOFade(0, .08f);
-			Camera.main.DOFieldOfView(60, .08f);//.SetEase(Ease.InBounce);
+			Camera.main.DOFieldOfView(saveFov, .08f);//.SetEase(Ease.InBounce);
 		});
 	}
 

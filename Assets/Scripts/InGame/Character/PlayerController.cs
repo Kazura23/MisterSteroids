@@ -340,8 +340,6 @@ public class PlayerController : MonoBehaviour
 	#region Private Functions
 	void playerAction ( float getTime )
 	{
-        
-
         if ( playerDead || StopPlayer )
 		{
 			thisCam.fieldOfView = Constants.DefFov;
@@ -356,8 +354,6 @@ public class PlayerController : MonoBehaviour
             GlobalManager.Ui.CloseMadness();
             InMadness = false;
 		}
-
-		
 
 		if ( Running )
 		{
@@ -387,7 +383,7 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 
-		if ( !Dash && !playerDead )
+		if ( !playerDead )
 		{
 			if ( Input.GetAxis ( "CoupSimple" ) == 0 )
 			{
@@ -647,10 +643,11 @@ public class PlayerController : MonoBehaviour
 		float newImp = Input.GetAxis ( "Horizontal" );
 		float lineDistance = Constants.LineDist;
 
-		if ( ( canChange || newH == 0 ) && !Dash && !inAir && !InMadness)
+		if ( ( canChange || newH == 0 ) && !inAir && !InMadness)
 		{
 			if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLineRight && ( clDir == 1 || newH == 0 ) )
 			{
+				Dash = false;
 				canChange = false;
 				currLine++;
 				LastImp = 1;
@@ -660,6 +657,7 @@ public class PlayerController : MonoBehaviour
 			}
 			else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLineLeft && ( clDir == -1 || newH == 0 ) )
 			{
+				Dash = false;
 				canChange = false;
 				currLine--;
 				LastImp = -1;
@@ -735,7 +733,7 @@ public class PlayerController : MonoBehaviour
 
 	void playerFight ( )
 	{
-		if ( Input.anyKeyDown && Input.GetAxis ( "SpecialAction" ) == 0 )
+		if ( Input.anyKeyDown && Input.GetAxis ( "SpecialAction" ) == 0 && Input.GetAxis ( "Horizontal" ) == 0 )
 		{
 			if (InMadness)
 			{
@@ -757,6 +755,8 @@ public class PlayerController : MonoBehaviour
 
 		if(Input.GetAxis("CoupSimple") != 0 && canPunch && resetAxeS  )
         {
+			Dash = false;
+
             resetAxeS = false;
             canPunch = false;
             propP = true;
@@ -807,6 +807,8 @@ public class PlayerController : MonoBehaviour
 		}
 		else if(Input.GetAxis("CoupDouble") != 0 && canDPunch && canPunch && resetAxeD  )
         {
+			Dash = false;
+
             ScreenShake.Singleton.ShakeHitDouble();
 
             GlobalManager.Ui.DoubleCoup();

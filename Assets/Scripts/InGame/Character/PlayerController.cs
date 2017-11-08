@@ -616,7 +616,7 @@ public class PlayerController : MonoBehaviour
 			calTrans = Vector3.forward * speed * delTime;
 			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 0, 0 ) ), RotationSpeed * delTime );
 		}
-		/*else if ( currentDir == Direction.South )
+		else if ( currentDir == Direction.South )
 		{
 			calTrans = Vector3.back  * speed * delTime;
 			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 180, 0 ) ), RotationSpeed * delTime );
@@ -630,7 +630,7 @@ public class PlayerController : MonoBehaviour
 		{
 			calTrans = Vector3.left * speed * delTime;
 			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, -90, 0 ) ), RotationSpeed * delTime );
-		}*/
+		}
 
 		if ( newPos )
 		{

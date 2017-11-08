@@ -280,8 +280,10 @@ public class PlayerController : MonoBehaviour
 		impulsionCL = ImpulsionCL;
 		decelerationCL = DecelerationCL;
 		ThisAct = SpecialAction.Nothing;
+        NbrLineRight = 0;
+        NbrLineLeft = 0;
 
-		barMadness = GlobalManager.Ui.Madness;
+        barMadness = GlobalManager.Ui.Madness;
 		barMadness.value = 0;
 		InMadness = false;
 		GlobalManager.Ui.CloseMadness ( );

@@ -30,3 +30,12 @@ public enum SpecialAction
 	Nothing,
 	SlowMot
 }
+
+public enum AudioType
+{
+	MusicBackGround,
+	OtherMusic,
+	FxSound,
+	OtherSound,
+	Other
+}

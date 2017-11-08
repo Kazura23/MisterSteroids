@@ -32,8 +32,14 @@ public static class ScriptableObjectUtility
 	}
 
 	[MenuItem("ScriptableObject/Create/Chunks")]
-	public static void CreateAsset ( )
+	public static void CreateChunk ( )
 	{
 		ScriptableObjectUtility.CreateAsset<ChunksScriptable> ();
+	}
+
+	[MenuItem("ScriptableObject/Create/AudioScriptable")]
+	public static void CreateAudio ( )
+	{
+		ScriptableObjectUtility.CreateAsset<AudioScriptable> ();
 	}
 }

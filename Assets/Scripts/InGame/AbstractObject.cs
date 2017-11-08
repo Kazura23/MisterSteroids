@@ -20,9 +20,9 @@ public class AbstractObject : MonoBehaviour
 
     [Space]
     [Tooltip ("Slow Motion Approche")]
-    float distSlowMotio = 15;
-    float ratioSlow = 0.25f;
-    float timeSlow = 1f;
+    public float distSlowMotio = 5;
+    public float ratioSlow = 0.25f;
+    public float timeSlow = .3f;
 
 	[Space]
 	[Header ("Contrainte axe / rotation ")]

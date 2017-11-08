@@ -82,8 +82,13 @@ public class EnnemisLane : AbstractObject
 			}
 
 
+            Debug.Log("Fx");
 
-			if ( getRight > getLeft )
+            Vector3 playerPos = GlobalManager.GameCont.Player.transform.position;
+            GlobalManager.GameCont.FxInstanciate(new Vector3(playerPos.x, playerPos.y + .5f, playerPos.z), "PlayerReady", transform.parent);
+
+
+            if ( getRight > getLeft )
 			{
 				if ( CanGo.y == 0 )
 				{
@@ -104,17 +109,31 @@ public class EnnemisLane : AbstractObject
 			playerDetected = false;
 		}
 	}
-	#endregion
 
-	#region Private Methode
 	public override void Dead ( bool enemy = false ) 
 	{
 		base.Dead ( enemy );
-        
+
 
 		//mainCorps.GetComponent<BoxCollider> ( ).enabled = false;
 	}
+	#endregion
 
+	#region Private Methode
+	protected override void OnCollisionEnter ( Collision thisColl )
+	{
+		base.OnCollisionEnter ( thisColl );
+		if ( isDead )
+		{
+			GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
+		}
+	}
+
+	protected override void CollDetect ( )
+	{
+		base.CollDetect ( );
+		GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
+	}
 	IEnumerator changeLane ( bool rightLine ) 
 	{
 		moving = true;

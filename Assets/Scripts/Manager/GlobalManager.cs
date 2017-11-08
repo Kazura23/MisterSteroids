@@ -6,10 +6,10 @@ public class GlobalManager : MonoBehaviour
    	static GlobalManager mainManagerInstance;
 
 	//Add new managers here
-	static UIManager ui;
-	public static UIManager Ui { get { return ui; } }
+	static UiManager ui;
+	public static UiManager Ui { get { return ui; } }
 
-	static EventManager evnt;
+    static EventManager evnt;
     public static EventManager Event { get { return evnt; } }
 
 	static LevelManager scene;
@@ -17,6 +17,9 @@ public class GlobalManager : MonoBehaviour
 
 	static GameController gCont;
 	public static GameController GameCont { get { return gCont; } }
+
+	static AudioManager audio;
+	public static AudioManager Audio { get { return audio; } }
 	#endregion
 
 	#region Mono
@@ -45,14 +48,15 @@ public class GlobalManager : MonoBehaviour
 	void InitializeManagers()
 	{
 		InitializeManager ( ref evnt );
-		InitializeManager ( ref scene );
-		InitializeManager ( ref ui );
 		InitializeManager ( ref gCont );
-	}
+		InitializeManager ( ref ui );
+		InitializeManager ( ref scene );
+		InitializeManager ( ref audio );
+    }
 
 	void InitializeManager<T>(ref T manager) where T : ManagerParent
 	{
-		Debug.Log("Initializing managers");
+		//Debug.Log("Initializing managers");
 		T[] managers = GetComponentsInChildren<T>();
 
 		if(managers.Length == 0)
@@ -74,5 +78,12 @@ public class GlobalManager : MonoBehaviour
 		    }
 		} 
 	}
+
+    void Update()
+    {
+
+        if (Input.GetKeyDown(KeyCode.O))
+            PlayerPrefs.DeleteAll();
+    }
 	#endregion
 }

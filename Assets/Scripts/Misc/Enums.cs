@@ -2,7 +2,7 @@
 
 public enum TokenType
 {
-	
+	GoTok
 }
 
 
@@ -14,3 +14,28 @@ public enum Direction
 	West
 }
 
+public enum MenuType
+{
+	Nothing,
+	test,
+	MenuHome,
+	Shop,
+	Pause,
+	GameOver
+}
+
+
+public enum SpecialAction
+{
+	Nothing,
+	SlowMot
+}
+
+public enum AudioType
+{
+	MusicBackGround,
+	OtherMusic,
+	FxSound,
+	OtherSound,
+	Other
+}

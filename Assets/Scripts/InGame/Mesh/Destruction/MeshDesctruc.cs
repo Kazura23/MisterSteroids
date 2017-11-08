@@ -5,6 +5,8 @@ using UnityEngine;
 public class MeshDesctruc : MonoBehaviour 
 {
 	public GameObject TriangPrefb;
+	public Material DebrisMaterial;
+	public bool UseMatDeb = false;
 //	public List<GameObject> stockElem;
 	Transform garbage;
 
@@ -14,7 +16,7 @@ public class MeshDesctruc : MonoBehaviour
 		//stockElem = new List<GameObject> ( );
 	}
 
-	public IEnumerator SplitMesh ( GameObject objSource, float forcePro, float deleayDest, int lim = 25, bool little = false )    
+	public IEnumerator SplitMesh ( GameObject objSource, Transform thisPlayer, float forcePro, float deleayDest, int lim = 10, bool little = false )    
 	{
 		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
 
@@ -56,12 +58,13 @@ public class MeshDesctruc : MonoBehaviour
 	//	List<GameObject> getAllSt;
 
 		Transform getTrans = objSource.transform;
-		Vector3 explosionPos;
 		Vector3 getSize = M.bounds.size;
-		Vector3 calDir = getTrans.forward * forcePro;
+		Vector3 calDir = thisPlayer.forward;
 		GameObject GO;
 		GameObject getTri = TriangPrefb;
 		Mesh mesh;
+
+		float matCD = calDir.magnitude / 4;
 
 		int[] indices;
 
@@ -122,12 +125,12 @@ public class MeshDesctruc : MonoBehaviour
 
 					if ( !little )
 					{
-						newVerts [ c + 3 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.5f ), -verts [ index ].x * Random.Range ( 0.5f, 1.5f ), -verts [ index ].z * Random.Range ( 0.5f, 1.5f ) );
-						newVerts [ c + 6 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.5f ), -verts [ index ].x * Random.Range ( 0.5f, 1.5f ), -verts [ index ].z * Random.Range ( 0.5f, 1.5f ) );
+						newVerts [ c + 3 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.2f ), -verts [ index ].x * Random.Range ( 0.5f, 1.2f ), -verts [ index ].z * Random.Range ( 0.5f, 1.2f ) );
+						newVerts [ c + 6 ] = new Vector3 ( -verts [ index ].y * Random.Range ( 0.5f, 1.2f ), -verts [ index ].x * Random.Range ( 0.5f, 1.2f ), -verts [ index ].z * Random.Range ( 0.5f, 1.2f ) );
 					}
 					else
 					{
-						newVerts [ c + 3 ] = new Vector3 ( verts [ index ].x * Random.Range ( 0.5f, 1.5f ), verts [ index ].y * Random.Range ( 0.5f, 1.5f ), verts [ index ].z );
+						newVerts [ c + 3 ] = new Vector3 ( verts [ index ].x * Random.Range ( 0.5f, 1f ), verts [ index ].y * Random.Range ( 0.5f, 1f ), verts [ index ].z );
 						newVerts [ c + 6 ] = new Vector3 ( -verts [ index ].x * Random.Range ( 0.1f, 0.5f ), -verts [ index ].y * Random.Range ( 0.1f, 0.5f ), verts [ index ].z );
 					}
 				}
@@ -172,24 +175,23 @@ public class MeshDesctruc : MonoBehaviour
 				}*/
 				GO = ( GameObject ) Instantiate ( getTri );
 				GO.transform.SetParent ( garbage );
-				GO.GetComponent<MeshRenderer> ( ).material = materials [ a ];
+			
+				if ( UseMatDeb )
+				{
+					GO.GetComponent<MeshRenderer> ( ).material = DebrisMaterial;
+				}
+				else
+				{
+					GO.GetComponent<MeshRenderer> ( ).material = materials [ a ];
+				}
+
 				GO.GetComponent<MeshFilter> ( ).mesh = mesh;
-				GO.AddComponent<BoxCollider> ( );
 
 				GO.layer = LayerMask.NameToLayer ( "Particle" );
 				GO.transform.position = getTrans.position;
 				GO.transform.rotation = getTrans.rotation;
 
-				explosionPos = new Vector3 ( getTrans.position.x + Random.Range ( -getSize.x, getSize.x ), getTrans.position.y + Random.Range ( -getSize.y, getSize.y ), getTrans.position.z + Random.Range ( -getSize.z, getSize.z ) );
-
-				if ( Random.Range ( 0, 20 ) < 1 )
-				{
-					GO.GetComponent<Rigidbody> ( ).AddExplosionForce ( 10, explosionPos, 0, 0, ForceMode.Impulse );
-				}
-				else
-				{
-					GO.GetComponent<Rigidbody> ( ).AddForce ( calDir, ForceMode.VelocityChange );
-				}
+				GO.GetComponent<Rigidbody> ( ).AddForce ( ( new Vector3 ( Random.Range ( -matCD, matCD ), Random.Range ( 0, matCD ), Random.Range ( -matCD, matCD ) ) + calDir ) * Random.Range ( forcePro / 10, forcePro ), ForceMode.VelocityChange );
 
 				GO.GetComponent<TimeToDisable> ( ).DisableThis ( deleayDest + Random.Range ( 0.0f, deleayDest ) );
 			}

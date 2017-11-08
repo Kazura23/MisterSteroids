@@ -25,5 +25,19 @@ public class UiPoubelle : MonoBehaviour {
     {
         GameObject.Find("ShieldMan").GetComponent<ShieldMan>().Degat(prop2, 0);
     }
+    public void onActiveRagdoll()
+    {
+        GameObject champi = GameObject.Find("Charlotte_champi 1");
+        champi.GetComponent<Animator>().enabled = false;
+        Rigidbody[] rigis = champi.GetComponentsInChildren<Rigidbody>();
+        foreach(Rigidbody rig in rigis)
+        {
+            rig.useGravity = true;
+            if(rig.gameObject.name == "charlotte_champi1_Hips")
+            {
+                rig.AddForce(propulsion, ForceMode.Impulse);
+            }
+        }
+    }
 
 }

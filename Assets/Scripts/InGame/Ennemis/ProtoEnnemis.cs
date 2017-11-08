@@ -31,15 +31,27 @@ public class ProtoEnnemis : AbstractObject
 	{
 		base.PlayerDetected ( thisObj, isDetected );
 
-		if ( isDetected )
+		if ( isDetected && !isDead)
 		{
 			parMat.color = NewColor;
-		}
+
+            Vector3 playerPos = GlobalManager.GameCont.Player.transform.position;
+            GlobalManager.GameCont.FxInstanciate(new Vector3(playerPos.x, playerPos.y + .5f, playerPos.z), "PlayerReady", GlobalManager.GameCont.Player.transform);
+        }
 		else
 		{
 			parMat.color = saveCol;
 		}
 		parMat.color = NewColor;
+
+        Debug.Log("Fx");
+
+
+        try {
+			GetComponentInChildren<Animator>().SetTrigger("Attack");
+		}
+		catch{
+		}
 	}
 
 	public override void Dead ( bool enemy = false ) 
@@ -58,7 +70,7 @@ public class ProtoEnnemis : AbstractObject
 
 		if ( isDead )
 		{
-			GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
+			GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y, transform.localPosition.z + 5f), "EnemyNormalDeath", transform.parent);
 		}
 	}
 

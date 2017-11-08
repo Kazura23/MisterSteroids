@@ -8,6 +8,7 @@ public class SpawnChunks : MonoBehaviour
 	public List<ChunksScriptable> ChunksInfo;
 	public Vector3 DefaultPos;
 
+
 	[HideInInspector]
 	public int currLevel = 0;
 
@@ -86,7 +87,7 @@ public class SpawnChunks : MonoBehaviour
 
 		spawnAfterThis ( sourceSpawn.position + sourceSpawn.forward * distChunk, sourceSpawn.rotation );
 
-		if ( getSpc.Count > 2 )
+		if ( getSpc.Count > 5 )
 		{
 			Destroy ( getSpc [ 0 ] );
 			getSpc.RemoveAt ( 0 );
@@ -100,6 +101,7 @@ public class SpawnChunks : MonoBehaviour
 
 	public void FirstSpawn ( )
 	{
+
 		randAllChunk = false;
 		currNbrCh = 0;
 		currLevel = 0;
@@ -154,9 +156,12 @@ public class SpawnChunks : MonoBehaviour
 
 		float distChunk = Vector3.Distance ( AllSpawnable [ currLevel ].getDebutFinCh [ 0 ].transform.position, AllSpawnable [ currLevel ].getDebutFinCh [ 1 ].transform.position );
 
-		thisObj = ( GameObject ) Instantiate ( getChunks [ currLevel ].WallOnLastChunk, thisT );
-		thisObj.transform.position = getChunkT.position + getChunkT.forward * distChunk;
-		thisObj.transform.localPosition += thisObj.transform.up * thisObj.GetComponent<MeshRenderer> ( ).bounds.size.y / 2;
+		if ( getChunks [ currLevel ].WallOnLastChunk != null )
+		{
+			thisObj = ( GameObject ) Instantiate ( getChunks [ currLevel ].WallOnLastChunk, thisT );
+			thisObj.transform.position = getChunkT.position + getChunkT.forward * distChunk;
+			thisObj.transform.localPosition += thisObj.transform.up * thisObj.GetComponent<MeshRenderer> ( ).bounds.size.y / 2;
+		}
 
 		currLevel++;
 
@@ -180,7 +185,7 @@ public class SpawnChunks : MonoBehaviour
 
 		if ( getChunks [ currLevel ].ChunkAleat )
 		{
-			thisSpawn = getChunks [ currLevel ].TheseChunks [ Random.Range ( 0, getChunks [ currLevel ].TheseChunks.Count - 1 ) ];
+			thisSpawn = getChunks [ currLevel ].TheseChunks [ Random.Range ( 0, getChunks [ currLevel ].TheseChunks.Count ) ];
 		}
 		else
 		{

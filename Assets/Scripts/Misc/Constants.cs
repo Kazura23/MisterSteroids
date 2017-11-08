@@ -21,6 +21,7 @@ public static class Constants
 	public const string _SAbleDestObs = "SpawnableDestObs";
 	public const string _SAbleCoin = "SpawnableCoin";
 	public const string _DebutFinChunk = "DebutFinChunk";
+	public const string _ObsPropSafe = "ObsPropSafe";
 	#endregion
 
 	#region PlayerPref

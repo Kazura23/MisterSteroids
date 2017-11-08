@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class Punch : MonoBehaviour {
     private Slider barMadness;
-    public float addPointBarByPunch = 3;
+    public float addPointBarByPunchSimple = 3;
+    public float addPointBarByPunchDouble = 5;
     private PlayerController control;
 
     private enum Technic
@@ -22,16 +23,15 @@ public class Punch : MonoBehaviour {
 
 	bool canPunc = true;
 
-
-    private void Awake()
+    void Start()
     {
-        control = GetComponentInParent<PlayerController>();
+		control = GlobalManager.GameCont.Player.GetComponent<PlayerController>();
         barMadness = control.barMadness;
     }
 
     void OnTriggerEnter(Collider other)
     {
-		if( canPunc && other.gameObject.tag == Constants._EnnemisTag )
+		if( canPunc && ( other.gameObject.tag == Constants._EnnemisTag || other.gameObject.tag == Constants._ObsPropSafe))
         {
 			AbstractObject tryGet = other.GetComponentInChildren<AbstractObject> ( );
 			if ( !tryGet )
@@ -57,11 +57,11 @@ public class Punch : MonoBehaviour {
 				tryGet.Degat ( projection_double, numTechnic );
            	 	break;
             }
-            MadnessMana();
+            MadnessMana("Double");
         }else if (other.gameObject.tag == Constants._MissileBazoo)
         {
             other.gameObject.GetComponent<MissileBazooka>().ActiveTir(-other.gameObject.GetComponent<MissileBazooka>().GetDirection(), facteurVitesseRenvoie, true);
-            MadnessMana();
+            MadnessMana("Double");
         }
     }
 
@@ -75,17 +75,23 @@ public class Punch : MonoBehaviour {
 		canPunc = canPush;
 	}
 
-
-    private void MadnessMana()
+    public void MadnessMana(string type)
     {
-        if (barMadness.value + addPointBarByPunch < barMadness.maxValue)
-        {
-            barMadness.value += addPointBarByPunch;
-        }
-        else
-        {
-            barMadness.value = barMadness.maxValue;
-            control.SetInMadness(true);
+        if (!control.IsInMadness()) {
+            if (barMadness.value + addPointBarByPunchSimple < barMadness.maxValue && type == "Simple")
+            {
+                //barMadness.value += addPointBarByPunchSimple;
+                control.AddSmoothCurve(addPointBarByPunchSimple);
+            } else if (barMadness.value + addPointBarByPunchDouble < barMadness.maxValue && type == "Double")
+            {
+                //barMadness.value += addPointBarByPunchDouble;
+                control.AddSmoothCurve(addPointBarByPunchDouble);
+            }
+            /*else
+            {
+                barMadness.value = barMadness.maxValue;
+                control.SetInMadness(true);
+            }*/
         }
     }
 }

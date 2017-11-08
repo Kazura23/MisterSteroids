@@ -1,8 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 using DG.Tweening;
+using System.Runtime.CompilerServices;
+using System.Collections;
+using UnityEngine.EventSystems;
 
 public class MenuShop : UiParent 
 {
@@ -26,7 +28,6 @@ public class MenuShop : UiParent
     public Image moleculeCategory;
     public GameObject moleculeContainer;
 
-
 	[HideInInspector]
 	public CatShop currCatSeled;
 
@@ -34,10 +35,15 @@ public class MenuShop : UiParent
 	public ItemModif currItemSeled;
 
 	Dictionary <string, ItemModif> allConfirm;
+	List<ItemModif> allTempItem;
 	GameObject fixBackShop;
+	Text moneyNumberPlayer;
+
 	bool catCurrSelected = true;
 	bool waitInputH = false;
 	bool waitInputV = false;
+	bool waitImpCan = false;
+	bool waitImpSub = false;
 	#endregion
 
 	#region Mono
@@ -47,16 +53,40 @@ public class MenuShop : UiParent
 		float getV = Input.GetAxis ( "Vertical" );
 
 		// Touche pour pouvoir selectionner les items
-		if ( Input.GetAxis ( "Submit" ) == 1 )
+		if ( Input.GetAxis ( "Submit" ) == 1 && !waitImpSub )
 		{
-			ChangeToItem ( true );
+			waitImpSub = true;
+			if ( !catCurrSelected )
+			{
+				BuyItem ( );
+			}
+			else
+			{
+				ChangeToItem ( true );
+			}
+		}
+		else if (  Input.GetAxis ( "Submit" ) == 0 )
+		{
+			waitImpSub = false;
 		}
 
 		// Touche pour sortir des items
-		if ( Input.GetAxis ( "Cancel" ) == 1 )
+		if ( Input.GetAxis ( "Cancel" ) == 1 && !waitImpCan )
 		{
-			ChangeToItem ( false );
-            ChangeToCat();
+			waitImpCan = true;
+			if ( !catCurrSelected )
+			{
+				ChangeToItem ( false );
+				ChangeToCat();
+			}
+			else
+			{
+				GlobalManager.Ui.CloseThisMenu ( );
+			}
+		}
+		else if (  Input.GetAxis ( "Cancel" ) == 0 )
+		{
+			waitImpCan = false;
 		}
 
 		// Navigation horizontale des catégories ou items
@@ -115,7 +145,8 @@ public class MenuShop : UiParent
 
 		currItemSeled = currCatSeled.DefautItem;
 		CheckSelectItem ( true );
-	}
+
+    }
 
 	public override void CloseThis ( )
 	{
@@ -172,15 +203,18 @@ public class MenuShop : UiParent
 	// achete ou confirme un item
 	public void BuyItem ( )
 	{
-		string getCons = Constants.ItemBought;
+		string getCons = Constants.ItemBought + currItemSeled.CatName;
+		Dictionary <string, ItemModif> getAllBuy = allConfirm;
+
 		if ( AllPlayerPrefs.GetBoolValue ( getCons + currItemSeled.ItemName ) )
 		{
-			getCons += currItemSeled.CatName;
-			AllPlayerPrefs.SetStringValue ( getCons, "Confirm" );
+			AllPlayerPrefs.SetStringValue ( getCons + currItemSeled.ItemName, "Confirm" );
 			ItemModif getThis;
 
-			if ( allConfirm.TryGetValue ( getCons, out getThis ) )
+			if ( getAllBuy.TryGetValue ( getCons, out getThis ) )
 			{
+				AllPlayerPrefs.SetStringValue ( getCons + getThis.ItemName, "ok" );
+
 				if ( getThis.UseOtherSprite )
 				{
 					getThis.GetComponent<Image> ( ).sprite = currItemSeled.BoughtSpriteUnselected;
@@ -202,19 +236,20 @@ public class MenuShop : UiParent
 					}
 				}
 
-				allConfirm.Remove ( getCons );
+				getAllBuy.Remove ( getCons );
 			}
 
-			allConfirm.Add ( getCons, currItemSeled );
+			getThis = currItemSeled;
+			getThis.GetComponent<Image> ( ).sprite = getThis.SpriteConfirm;
 
-			currItemSeled.GetComponent<Image> ( ).sprite = currItemSeled.SpriteConfirm;
-
-			if ( currItemSeled.UseColor )
+			if ( getThis.UseColor )
 			{
-				currItemSeled.GetComponent<Image> ( ).color = currItemSeled.ColorConfirm;
+				getThis.GetComponent<Image> ( ).color = getThis.ColorConfirm;
 			}
+
+			getAllBuy.Add ( getCons, getThis );
 		}
-		else
+		else 
 		{
 			bool checkProg = false;
 			ItemModif currIT = currItemSeled;
@@ -233,14 +268,22 @@ public class MenuShop : UiParent
 
 			if ( checkProg && AllPlayerPrefs.GetIntValue ( Constants.Coin ) > currIT.Price )
 			{
+				Debug.Log ( "buy" );
 				AllPlayerPrefs.SetIntValue ( Constants.Coin, -currIT.Price );
 
 				if ( currCatSeled.BuyForLife )
 				{
+					getAllBuy.Add ( getCons, currItemSeled );
 					AllPlayerPrefs.SetStringValue ( getCons + currIT.ItemName );
+				}
+				else
+				{
+					allTempItem.Add ( currItemSeled );
 				}
 			}
 		}
+
+		moneyNumberPlayer.text = "" + AllPlayerPrefs.GetIntValue ( Constants.Coin );
 	}
 	#endregion
 
@@ -250,19 +293,29 @@ public class MenuShop : UiParent
 		currCatSeled = DefCatSelected;
 		currItemSeled = currCatSeled.DefautItem;
 
-		fixBackShop = transform.parent.Find ( "GlobalBackGround/Shop" ).gameObject;
+
+        fixBackShop = transform.parent.Find ( "GlobalBackGround/Shop" ).gameObject;
+		moneyNumberPlayer = fixBackShop.transform.Find ( "MoneyMutation/MoneyNumber" ).GetComponent<Text> ( );
+
+		moneyNumberPlayer.text = "" + AllPlayerPrefs.GetIntValue(Constants.Coin);
+
 		ItemModif[] checkAllItem = GetComponentsInChildren<ItemModif> ( true );
 		ItemModif currItem;
 
 		string getCons = Constants.ItemBought;
 		Dictionary <string, ItemModif> getItemConf = new Dictionary<string, ItemModif> ( );
+		allTempItem = new List<ItemModif> ( );
 
 		for ( int a = 0; a < checkAllItem.Length; a++ )
 		{
-			if ( AllPlayerPrefs.GetBoolValue ( getCons + checkAllItem [ a ].CatName ) )
+			if ( AllPlayerPrefs.GetBoolValue ( getCons + checkAllItem [ a ].CatName + checkAllItem [ a ].ItemName ) )
 			{
 				currItem = checkAllItem [ a ];
-				getItemConf.Add ( getCons + currItem, currItem ); 
+
+				try{
+					getItemConf.Add ( getCons + checkAllItem [ a ].CatName, currItem ); 
+
+				}catch{Debug.Log("key same");}
 
 				currItem.GetComponent<Image> ( ).sprite = currItem.SpriteConfirm;
 
@@ -277,8 +330,9 @@ public class MenuShop : UiParent
 
 		allConfirm = getItemConf;
 		GlobalManager.GameCont.AllModifItem = getItemConf;
-	}
-
+		GlobalManager.GameCont.AllTempsItem = allTempItem;
+    }
+    
 	//Changement de catégorie a item et inversement
 	void ChangeToItem ( bool goItem )
 	{
@@ -293,9 +347,7 @@ public class MenuShop : UiParent
             iconCategory.DOFade(0, .1f);
             textCategory.DOFade(0, .1f);
             barCategory.DOFade(0, .1f);
-
-
-
+		
 
             transform.DORotate(new Vector3(moleculeContainer.transform.localEulerAngles.x, moleculeContainer.transform.localEulerAngles.y, -130),1f);
             transform.DOLocalMoveX(transform.localPosition.x -625, 1f);

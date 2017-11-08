@@ -82,8 +82,13 @@ public class EnnemisLane : AbstractObject
 			}
 
 
+            Debug.Log("Fx");
 
-			if ( getRight > getLeft )
+            Vector3 playerPos = GlobalManager.GameCont.Player.transform.position;
+            GlobalManager.GameCont.FxInstanciate(new Vector3(playerPos.x, playerPos.y + .5f, playerPos.z), "PlayerReady", transform.parent);
+
+
+            if ( getRight > getLeft )
 			{
 				if ( CanGo.y == 0 )
 				{

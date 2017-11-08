@@ -253,6 +253,8 @@ public class PlayerController : MonoBehaviour
 		timeToDP = TimeToDoublePunch;
 		BarMadness = GlobalManager.Ui.Madness;
 		BarMadness.value = 0;
+        NbrLineRight = 0;
+        NbrLineLeft = 0;
 		InMadness = false;
 		GlobalManager.Ui.CloseMadness ( );
 	}

@@ -94,6 +94,7 @@ public class UiManager : ManagerParent
             DOVirtual.DelayedCall(.1f, () =>
             {
                 Time.timeScale = 1f;
+                GlobalManager.GameCont.Intro = false;
                 Camera.main.DOFieldOfView(4, .25f);
                 DOVirtual.DelayedCall(.25f, () =>
                 {

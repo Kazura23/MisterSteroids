@@ -12,7 +12,8 @@ public class Punch : MonoBehaviour {
     private enum Technic
     {
         basic_punch,
-        double_punch
+        double_punch,
+        onde_choc
     }
 		
     private int numTechnic;
@@ -31,7 +32,11 @@ public class Punch : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-		if( canPunc && ( other.gameObject.tag == Constants._EnnemisTag || other.gameObject.tag == Constants._ObsPropSafe))
+        if(numTechnic == (int)Technic.onde_choc)
+        {
+            //definir
+        }
+		else if( canPunc && ( other.gameObject.tag == Constants._EnnemisTag || other.gameObject.tag == Constants._ObsPropSafe))
         {
 			AbstractObject tryGet = other.GetComponentInChildren<AbstractObject> ( );
 			if ( !tryGet )

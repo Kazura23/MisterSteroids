@@ -19,12 +19,13 @@ public class ShieldMan : AbstractObject {
     #endregion
 
     #region Mono
-    void Start()
+    protected override void Start()
     {
         shieldActive = true;
         move = new Vector3();
 		parMat = getTrans.GetComponent<MeshRenderer>().material;
         saveCol = parMat.color;
+        base.Start();
     }
     #endregion
 

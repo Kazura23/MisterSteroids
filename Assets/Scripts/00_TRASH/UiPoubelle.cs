@@ -40,4 +40,9 @@ public class UiPoubelle : MonoBehaviour {
         }
     }
 
+    public void onInterrupt()
+    {
+        GameObject.Find("Interrupt").GetComponent<PunchInterrupt>().Activation();
+    }
+
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class GameController : ManagerParent
 {
@@ -43,6 +44,20 @@ public class GameController : ManagerParent
 				Camera.main.GetComponent<RainbowMove>().time = .2f;
 			}
 		}
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+
+            Debug.Log("Fx");
+            Vector3 playerPos = GlobalManager.GameCont.Player.transform.position;
+            GameObject thisGO = GlobalManager.GameCont.FxInstanciate(new Vector3(.16f, 0.12f, 0.134f) + playerPos, "PlayerReady", GlobalManager.GameCont.Player.transform, 1f);
+            thisGO.transform.SetParent(GlobalManager.GameCont.Player.GetComponent<PlayerController>().rightHand.transform);
+            thisGO.transform.DOLocalMove(Vector3.zero, 0);
+
+            GameObject thisGOLeft = GlobalManager.GameCont.FxInstanciate(new Vector3(.16f, 0.12f, 0.134f) + playerPos, "PlayerReady", GlobalManager.GameCont.Player.transform, 1f);
+            thisGOLeft.transform.SetParent(GlobalManager.GameCont.Player.GetComponent<PlayerController>().leftHand.transform);
+            thisGOLeft.transform.DOLocalMove(Vector3.zero, 0);
+        }
 	}
     #endregion
 
@@ -83,11 +98,23 @@ public class GameController : ManagerParent
 				{
 					getObj = ( GameObject ) Instantiate ( getObj );
 				}
+<<<<<<< HEAD
 
 				getObj.transform.position = thisPos;
 
 				Destroy(getObj, timeDest);
 
+=======
+
+
+                getObj.transform.position = thisPos;
+                Debug.Log(thisPos + " / " + getObj.transform.position);
+
+                Destroy(getObj, timeDest);
+                
+
+
+>>>>>>> Tom
 				return getObj;
 				break;
 			}
@@ -101,6 +128,7 @@ public class GameController : ManagerParent
 		SceneManager.LoadScene ( "ProtoAlex", LoadSceneMode.Single );
         GameStarted = false;
     }   
+    
     #endregion
 
     #region Private Methods
@@ -169,4 +197,4 @@ public class FxList
 {
 	public string FxName;
 	public GameObject FxObj;
-}
+}

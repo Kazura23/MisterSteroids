@@ -14,10 +14,15 @@ MonoBehaviour:
   NbrChunkOneLvl: 20
   ChunkAleat: 1
   TheseChunks:
-  - {fileID: 1706829058618086, guid: 1d5f7058c4862044aa994ef9088041f9, type: 2}
-  - {fileID: 1943810301217644, guid: f0067aaad204241498655cacebccce4f, type: 2}
+  - {fileID: 1495765868606036, guid: 5adbcec7ea9ae4d4c95c74ccbdae8f88, type: 2}
+  - {fileID: 1189522992461918, guid: 2a641882f231d134e890f2d3d3316cbc, type: 2}
+  - {fileID: 1189522992461918, guid: 4eae3e75463ac5647b7c9e2e36fcd4d6, type: 2}
+  - {fileID: 1237721187563962, guid: 5173c499ae8ec7d4db90a52ffc24e1d2, type: 2}
+  - {fileID: 1684938184911574, guid: 7216f1d31e01cdc46aa635eba953d92c, type: 2}
   - {fileID: 1248407654525698, guid: 52f735ab12cbef941ac49624cd44b09d, type: 2}
   - {fileID: 1590532982309802, guid: a82af4d48e5b0e342b01704270f40d87, type: 2}
+  - {fileID: 1943810301217644, guid: f0067aaad204241498655cacebccce4f, type: 2}
+  - {fileID: 1495765868606036, guid: ce17200febcb206459fd30ca64ddeec1, type: 2}
   - {fileID: 1189522992461918, guid: f9ad7fac79a2909489edbec98720f87e, type: 2}
   - {fileID: 1189522992461918, guid: f9ad7fac79a2909489edbec98720f87e, type: 2}
   - {fileID: 1491186742025188, guid: 336745011fc37c84ea35271d27e7401c, type: 2}
@@ -26,9 +31,13 @@ MonoBehaviour:
   - {fileID: 1684938184911574, guid: 0fa94155faba7ea4e9ea48a74e4c9bab, type: 2}
   - {fileID: 1660516987793412, guid: 1200d25ad630f1d41967cf5f350f7555, type: 2}
   - {fileID: 1684938184911574, guid: e7db2048c23d74349b42a9dbd9636310, type: 2}
-  - {fileID: 1237721187563962, guid: 5173c499ae8ec7d4db90a52ffc24e1d2, type: 2}
   PourcSpawn: 100
-  EnnemySpawnable: []
+  EnnemySpawnable:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   ObstacleSpawnable: []
   ObstacleDestrucSpawnable: []
   CoinSpawnable: []

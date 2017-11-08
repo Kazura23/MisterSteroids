@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
 	public float CooldownDoublePunch = 1;
 	public float DelayHitbox = 0.05f;
 	public float DelayPrepare = 0.05f;
+    public float delayChocWave = 5;
 
 	[Tooltip ("Le temps max sera delayPunch")]
 	public float TimePropulsePunch = 0.1f, TimePropulseDoublePunch = 0.2f;
@@ -89,7 +90,8 @@ public class PlayerController : MonoBehaviour
 	public int Life = 1;
 	public bool StopPlayer = false;
 
-	private Collider punchBox;
+	private BoxCollider punchBox;
+    private SphereCollider sphereChocWave;
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
     //private Coroutine corou/*, preparPunch*/;
@@ -150,6 +152,7 @@ public class PlayerController : MonoBehaviour
     bool InMadness = false;
 	bool animeSlo = false;
 	bool canSpe = true;
+    bool canChocWave = true;
 	bool playerDead = false;
 	bool dpunch = false;
 	#endregion
@@ -159,8 +162,9 @@ public class PlayerController : MonoBehaviour
 	{
 		pTrans = transform;
 		pRig = gameObject.GetComponent<Rigidbody> ( );
-		punchBox = pTrans.GetChild(0).GetComponent<Collider>();
-		punch = pTrans.GetChild(0).GetComponent<Punch>();
+		punchBox = pTrans.GetChild(0).GetComponent<BoxCollider>();
+        sphereChocWave = pTrans.GetChild(0).GetComponent<SphereCollider>();
+        punch = pTrans.GetChild(0).GetComponent<Punch>();
         canPunch = true; 
 		punchRight = true;
 		getPunch = GetComponentInChildren<Punch> ( );
@@ -206,6 +210,12 @@ public class PlayerController : MonoBehaviour
 		Shader.SetGlobalFloat ( "GlobaleMask_SoftNess", SoftNess );
 		Shader.SetGlobalFloat ( "_SlowMot", Time.timeScale );
 
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            sphereChocWave.enabled = true;
+            StartCoroutine(CooldownWave());
+            StartCoroutine(TimerHitbox());
+        }
 
         SmoothBar();
 
@@ -383,7 +393,9 @@ public class PlayerController : MonoBehaviour
 
 		if ( Input.GetAxis ( "Dash") != 0 && newH == 0 && canDash && !InMadness )
 		{
-			Dash = true;
+            if (Time.timeScale < 1)
+                Time.timeScale = 1;
+            Dash = true;
 			canDash = false;
 
 			StartCoroutine ( waitStopDash ( ) );
@@ -749,6 +761,8 @@ public class PlayerController : MonoBehaviour
             canPunch = false;
             propP = true;
 			timeToDP = TimeToDoublePunch;
+            if (Time.timeScale < 1)
+                Time.timeScale = 1;
 
 			if ( !InMadness )
 			{
@@ -789,6 +803,8 @@ public class PlayerController : MonoBehaviour
 
 			playAnimator.SetTrigger("Double");
 
+            if (Time.timeScale < 1)
+                Time.timeScale = 1;
 			if ( !InMadness )
 			{
 				punch.MadnessMana("Double");
@@ -846,8 +862,14 @@ public class PlayerController : MonoBehaviour
 	{
 		yield return new WaitForSeconds(DelayHitbox);
 		punchBox.enabled = false;
+        sphereChocWave.enabled = false;
 	}
 
+    IEnumerator CooldownWave()
+    {
+        yield return new WaitForSeconds(delayChocWave);
+        canChocWave = true;
+    }
 	IEnumerator waitStopDash ( )
 	{
 		WaitForSeconds thisS = new WaitForSeconds ( DashTime );

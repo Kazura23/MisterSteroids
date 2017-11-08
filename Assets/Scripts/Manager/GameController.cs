@@ -78,16 +78,15 @@ public class GameController : ManagerParent
 				if ( parentObj != null )
 				{
 					getObj = ( GameObject ) Instantiate ( getObj, parentObj );
-
 				}
 				else
 				{
-					getObj = ( GameObject ) Instantiate ( getObj, parentObj );
+					getObj = ( GameObject ) Instantiate ( getObj );
 				}
 
-				Destroy(getObj, timeDest);
+				getObj.transform.position = thisPos;
 
-                getObj.transform.position = thisPos;
+				Destroy(getObj, timeDest);
 
 				return getObj;
 				break;
@@ -128,7 +127,6 @@ public class GameController : ManagerParent
 				setItemToPlayer ( thisItem, currPlayer );
 			}
 		}
-
 
 		if ( AllTI != null )
 		{

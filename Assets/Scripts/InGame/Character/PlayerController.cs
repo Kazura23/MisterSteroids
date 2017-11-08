@@ -12,9 +12,6 @@ public class PlayerController : MonoBehaviour
 	public float Acceleration = 10;
 	public float Deceleration = 1;
 
-	[Tooltip ("Cooldown qui commence une fois le dash terminé")]
-	public float CooldownDash = 3;
-
 	[Header ("Caractéristique de changement de Lane")]
 	public float MaxSpeedCL = 5;
 	public float AccelerationCL = 10;
@@ -45,85 +42,56 @@ public class PlayerController : MonoBehaviour
     [Header("Caractéristique Fight")]
     /*public float delayLeft = 1;
 	public float delayRight = 1;*/
-	public float DashTime = 2;
+	public float DashTime = 1.5f;
 	[Tooltip ("La valeur de DashSpeed est un multiplicateur sur la vitesse du joueur")]
-	public float DashSpeed = 2;
+	public float DashSpeed = 2.5f;
 	[Tooltip ("Temps d'invicibilité apres avoir pris des dégats")]
 	public float TimeInvincible = 2;
 
 	//[Header ("Slow Motion Caractéristique")]
-	[Tooltip ("De combien la vitesse va diminuer au maximun par rapport à la vitesse standard")]
 	[HideInInspector]
-	public float SlowMotion = 1;
-	[Tooltip ("Vitesse pour atteindre le slowMotion")]
-	[HideInInspector]
-	public float SpeedSlowMot = 1;
-	[Tooltip ("Vitesse pour revenir à la vitesse normal")]
-	[HideInInspector]
-	public float SpeedDeacSM = 3;
+	public float SlowMotion, SpeedSlowMot, SpeedDeacSM, RecovSlider, ReduceSlider;
 
-	[Tooltip ("Vitesse de descente du slider content")]
-	[HideInInspector]
-	public float ReduceSlider;
-	[Tooltip ("Vitesse de récupération du slider content")]
-	[HideInInspector]
-	public float RecovSlider;
-
-	[Header ("Caractérique de temps sur les punchs")]
-    public float delayPunch = 1;
-	public float delayDoublePunch = 1;
+	[Header ("Caractérique punchs")]
+    public float DelayPunch = 0.05f;
+	public float TimeToDoublePunch = 0.25f;
 	public float CooldownDoublePunch = 1;
-	public float delayHitbox = 0.3f;
-	public float delayPrepare = 0.1f;
+	public float DelayHitbox = 0.05f;
+	public float DelayPrepare = 0.05f;
 
-    [Header("Caractéristique Madness")]
-    public float ratioMaxMadness = 4;
-    public float delayDownBar = 1;
-    public float lessPointPunchInMadness = 3;
-    public float smoothSpeed = 100;
-
-	[Header ("Caractéristique de force des punchs")]
-	public float PropulseBalls = 100;
 	[Tooltip ("Le temps max sera delayPunch")]
 	public float TimePropulsePunch = 0.1f, TimePropulseDoublePunch = 0.2f;
 	[Tooltip ("La valeur est un multiplicateur sur la vitesse du joueur")]
 	public float SpeedPunchRun = 1.2f, SpeedDoublePunchRun = 1.5f;
 
-	public Vector3 DistPoingDroit = Vector3.zero;
-	public Vector3 DistPoingGauche = Vector3.zero;
-	public GameObject poingGauche;
-	public GameObject poingDroite;
+    [Header("Caractéristique Madness")]
+    public float RatioMaxMadness = 4;
+    public float DelayDownBar = 3;
+    public float LessPointPunchInMadness = 15;
+    public float SmoothSpeed = 100;
 
 	[Header ("SphereMask")]
 	public float Radius;
 	public float SoftNess;
 
 	[HideInInspector]
-	public Slider barMadness;
-
+	public Slider BarMadness;
 	[HideInInspector]
 	public SpecialAction ThisAct;
-
 	[HideInInspector]
 	public int NbrLineRight = 1;
 	[HideInInspector]
 	public int NbrLineLeft = 1;
-
-	[HideInInspector]
-	public bool playerDead = false;
 	[HideInInspector]
 	public bool Dash = false;
 	[HideInInspector]
 	public bool Running = true;
-	
 	public int Life = 1;
-
 	public bool StopPlayer = false;
 
 	private Collider punchBox;
 	private Punch punch;
     private bool canPunch, punchRight;//, punchLeft, preparRight, preparLeft, defense;
-	bool canDPunch = true;
     //private Coroutine corou/*, preparPunch*/;
 
     public GameObject Plafond;
@@ -135,8 +103,6 @@ public class PlayerController : MonoBehaviour
 	//Vector3 posDir;
 	Vector3 dirLine = Vector3.zero;
 	Vector3 lastPos;
-	IEnumerator currCouR;
-	IEnumerator currCouL;
 	IEnumerator propPunch;
 	Punch getPunch;
 	Camera thisCam;
@@ -145,6 +111,7 @@ public class PlayerController : MonoBehaviour
 	Text textCoin;
 	Animator playAnimator;
 
+	float PropulseBalls = 100;
 	float currSpeed = 0;
 	float currSpLine = 0;
 	//float calPos = 0;
@@ -164,6 +131,7 @@ public class PlayerController : MonoBehaviour
 	float decelerationCL = 0;
     float valueSmooth = 0;
     float valueSmoothUse = 0;
+	float timeToDP;
 
 	int currLine = 0;
 	int LastImp = 0;
@@ -182,6 +150,8 @@ public class PlayerController : MonoBehaviour
     bool InMadness = false;
 	bool animeSlo = false;
 	bool canSpe = true;
+	bool playerDead = false;
+	bool dpunch = false;
 	#endregion
 
 	#region Mono
@@ -218,11 +188,11 @@ public class PlayerController : MonoBehaviour
 
 	void Update ( )
 	{
-		Shader.SetGlobalFloat ( "_saturation", barMadness.value / 15);
+		Shader.SetGlobalFloat ( "_saturation", BarMadness.value / 15);
 
 		float getTime = Time.deltaTime;
 
-		rationUse = 1 + (ratioMaxMadness * (InMadness ? 1 : (barMadness.value / barMadness.maxValue)));
+		rationUse = 1 + (RatioMaxMadness * (InMadness ? 1 : (BarMadness.value / BarMadness.maxValue)));
 		punch.SetPunch ( !playerDead );
 
 		distCal ( );
@@ -239,13 +209,13 @@ public class PlayerController : MonoBehaviour
 
         SmoothBar();
 
-        if (barMadness.value - (getTime * delayDownBar) > 0)
+        if (BarMadness.value - (getTime * DelayDownBar) > 0)
         {
-            barMadness.value -= getTime * delayDownBar;
+            BarMadness.value -= getTime * DelayDownBar;
         }
         else
         {
-            barMadness.value = 0;
+            BarMadness.value = 0;
         }
         if (Input.GetKeyDown(KeyCode.O))
             PlayerPrefs.DeleteAll();
@@ -267,9 +237,9 @@ public class PlayerController : MonoBehaviour
 		impulsionCL = ImpulsionCL;
 		decelerationCL = DecelerationCL;
 		ThisAct = SpecialAction.Nothing;
-
-		barMadness = GlobalManager.Ui.Madness;
-		barMadness.value = 0;
+		timeToDP = TimeToDoublePunch;
+		BarMadness = GlobalManager.Ui.Madness;
+		BarMadness.value = 0;
 		InMadness = false;
 		GlobalManager.Ui.CloseMadness ( );
 	}
@@ -346,7 +316,7 @@ public class PlayerController : MonoBehaviour
 			return;
 		}
 
-		if( barMadness.value == 0 && InMadness )
+		if( BarMadness.value == 0 && InMadness )
 		{
             GetComponentInChildren<Animator>().SetBool("InMadness", false);
 
@@ -393,11 +363,25 @@ public class PlayerController : MonoBehaviour
 			if ( Input.GetAxis ( "CoupDouble" ) == 0 )
 			{
 				resetAxeD = true;
+
+				timeToDP = TimeToDoublePunch;
 			}
+
+			if ( Input.GetAxis ( "CoupDouble" ) != 0 && resetAxeD )
+			{
+				timeToDP -= Time.deltaTime;
+
+				if ( timeToDP <= 0 )
+				{
+					resetAxeD = false;
+					dpunch = true;
+				}
+			}
+
             playerFight ( );
 		}
 
-		if ( Input.GetAxis ( "Dash") != 0 && newH == 0 && canDash )
+		if ( Input.GetAxis ( "Dash") != 0 && newH == 0 && canDash && !InMadness )
 		{
 			Dash = true;
 			canDash = false;
@@ -428,8 +412,6 @@ public class PlayerController : MonoBehaviour
 			{
 				maxSpeed += SpeedIncrease;
 				acceleration += AcceleraInc;
-
-			
 			}
 			else
 			{
@@ -551,9 +533,6 @@ public class PlayerController : MonoBehaviour
 		Vector3 calTrans = Vector3.zero;
 		delTime = Time.deltaTime;
 
-		GlobalManager.Ui.DashSpeedEffect ( false );
-        Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole>().enabled = false;
-
 		if ( inAir )
 		{
 			speed = ( speed / 100 ) * PourcRal;
@@ -568,16 +547,21 @@ public class PlayerController : MonoBehaviour
 			speed *= DashSpeed;
 
 			GlobalManager.Ui.DashSpeedEffect ( true );
-            Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole>().enabled = true;
-
-        }
-		else if ( propP )
-		{
-			speed *= SpeedPunchRun;
+			Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole> ( ).enabled = true;
 		}
-		else if ( propDP )
+		else
 		{
-			speed *= SpeedDoublePunchRun;
+			GlobalManager.Ui.DashSpeedEffect ( false );
+			Camera.main.GetComponent<CameraFilterPack_Blur_BlurHole>().enabled = false;
+
+			if ( propP )
+			{
+				speed *= SpeedPunchRun;
+			}
+			else if ( propDP )
+			{
+				speed *= SpeedDoublePunchRun;
+			}
 		}
 
 		float calCFov = Constants.DefFov * ( speed / maxSpeed );
@@ -589,10 +573,18 @@ public class PlayerController : MonoBehaviour
 			if ( thisCam.fieldOfView < calCFov)
 			{
 				thisCam.fieldOfView += Time.deltaTime * SpeedEffectTime;
+				if ( thisCam.fieldOfView > calCFov )
+				{
+					thisCam.fieldOfView = calCFov;
+				}
 			}
 			else if ( thisCam.fieldOfView > calCFov)
 			{
-				thisCam.fieldOfView -= Time.deltaTime * SpeedEffectTime;
+				thisCam.fieldOfView -= Time.deltaTime * SpeedEffectTime * 4;
+				if ( thisCam.fieldOfView < calCFov )
+				{
+					thisCam.fieldOfView = calCFov;
+				}
 			}
 		}
 
@@ -643,7 +635,7 @@ public class PlayerController : MonoBehaviour
 		float newImp = Input.GetAxis ( "Horizontal" );
 		float lineDistance = Constants.LineDist;
 
-		if ( ( canChange || newH == 0 ) && !inAir && !InMadness)
+		if ( ( canChange || newH == 0 ) && !inAir )
 		{
 			if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLineRight && ( clDir == 1 || newH == 0 ) )
 			{
@@ -737,29 +729,26 @@ public class PlayerController : MonoBehaviour
 		{
 			if (InMadness)
 			{
-				if (barMadness.value - lessPointPunchInMadness < 0)
+				if (BarMadness.value - LessPointPunchInMadness < 0)
 				{
-					barMadness.value = 0;
+					BarMadness.value = 0;
 				}
 				else
 				{
-
-					barMadness.value -= lessPointPunchInMadness;
+					BarMadness.value -= LessPointPunchInMadness;
                     ScreenShake.Singleton.ShakeMad();
-                    Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().Distortion = (barMadness.value/10);
-
+                    Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().Distortion = (BarMadness.value/10);
                 }
 			}
 		}
 
-
 		if(Input.GetAxis("CoupSimple") != 0 && canPunch && resetAxeS  )
         {
 			Dash = false;
-
             resetAxeS = false;
             canPunch = false;
             propP = true;
+			timeToDP = TimeToDoublePunch;
 
 			if ( !InMadness )
 			{
@@ -771,43 +760,28 @@ public class PlayerController : MonoBehaviour
             if (punchRight)
             {
                 punch.RightPunch = true;
-                poingDroite.SetActive(true);
 
 				playAnimator.SetTrigger("Right");
 
-				if ( currCouR != null )
-				{
-					StopCoroutine(currCouR);
-				}
-           
 				GlobalManager.Ui.SimpleCoup();
-
-                currCouR = animePunch(true);
-                StartCoroutine(currCouR);
             }
             else
             {
                 punch.RightPunch = false;
-                poingGauche.SetActive(true);
 
 				playAnimator.SetTrigger("Left");
-
-		        if (currCouL != null)
-		        {
-		            StopCoroutine(currCouL);
-		        }
-
-                currCouL = animePunch(false);
-                StartCoroutine(currCouL);
             }
             punchRight = !punchRight;
-            StartCoroutine("StartPunch", 0);
+			StartCoroutine( StartPunch ( 0 ) );
             propPunch = propulsePunch(TimePropulsePunch);
             StartCoroutine(propPunch);
 		}
-		else if(Input.GetAxis("CoupDouble") != 0 && canDPunch && canPunch && resetAxeD  )
+		else if( dpunch && canPunch )
         {
 			Dash = false;
+			dpunch = false;
+			canPunch = false;
+			timeToDP = TimeToDoublePunch;
 
             ScreenShake.Singleton.ShakeHitDouble();
 
@@ -821,18 +795,8 @@ public class PlayerController : MonoBehaviour
 			}
 
             propDP = true;
-			resetAxeD = false;
-            canPunch = false;
-			canDPunch = false;
-            poingDroite.SetActive(true);
-            poingGauche.SetActive(true);
-            StartCoroutine("StartPunch", 1);
+			StartCoroutine ( StartPunch ( 1 ) );
 
-			currCouL = animePunch ( false, true );
-			currCouR = animePunch ( true, true );
-
-			StartCoroutine ( currCouL );
-			StartCoroutine ( currCouR );
 			propPunch = propulsePunch ( TimePropulseDoublePunch );
 			StartCoroutine ( propPunch );
         }
@@ -840,139 +804,48 @@ public class PlayerController : MonoBehaviour
 
 	private IEnumerator StartPunch(int type_technic)
 	{
-		yield return new WaitForSeconds(delayPrepare / rationUse);
+		yield return new WaitForSeconds(DelayPrepare / rationUse);
         punch.setTechnic(type_technic);
         punchBox.enabled = true;
        /* corou =*/ StartCoroutine("TimerHitbox");
 
-        Shader.SetGlobalFloat("_saturation", barMadness.value);
+        Shader.SetGlobalFloat("_saturation", BarMadness.value);
 
-        if ( type_technic == 1 )
-		{
-			StartCoroutine(CooldownPunch( true ));
-		}
-		else
-		{
-			StartCoroutine(CooldownPunch());
-		}
+		StartCoroutine ( CooldownPunch ( type_technic ) );
+
         if (InMadness)
         {
-            
-            if (barMadness.value - lessPointPunchInMadness < 0)
+            if (BarMadness.value - LessPointPunchInMadness < 0)
             {
-                barMadness.value = 0;
+                BarMadness.value = 0;
             }
             else
             {
                    
-                barMadness.value -= lessPointPunchInMadness;
+                BarMadness.value -= LessPointPunchInMadness;
             }
-            AddSmoothCurve(-lessPointPunchInMadness);
+            AddSmoothCurve(-LessPointPunchInMadness);
         }
 	}
 
-
-	private IEnumerator CooldownPunch ( bool doublePunch = false )
+	private IEnumerator CooldownPunch ( int type_technic )
     {
-		if ( doublePunch )
+		if ( type_technic == 1 )
 		{
-			yield return new WaitForSeconds(delayDoublePunch /rationUse);
-			StartCoroutine ( WaitCooldown ( ));
+			yield return new WaitForSeconds ( ( DelayPunch * 4 ) / rationUse );
 		}
 		else
 		{
-			yield return new WaitForSeconds(delayPunch / rationUse);
+			yield return new WaitForSeconds(DelayPunch / rationUse);
 		}
-        if (poingDroite.activeInHierarchy)
-        {
-            poingDroite.SetActive(false);
-        }
-        if (poingGauche.activeInHierarchy)
-        {
-            poingGauche.SetActive(false);
-        }
-        canPunch = true;
+
+		canPunch = true;
     }
 
-	IEnumerator WaitCooldown ( )
-	{
-		yield return new WaitForSeconds ( CooldownDoublePunch );
-
-		canDPunch = true;
-	}
-   
 	private IEnumerator TimerHitbox()
 	{
-		yield return new WaitForSeconds(delayHitbox);
+		yield return new WaitForSeconds(DelayHitbox);
 		punchBox.enabled = false;
-	}
-
-	IEnumerator animePunch ( bool rightPoing, bool doublePunch = false )
-	{
-		WaitForEndOfFrame thisFrame = new WaitForEndOfFrame ( );
-		Transform thisPoing;
-		Vector3 getStart;
-		Vector3 thisDist;
-
-		float getTime;
-		if ( doublePunch )
-		{
-			getTime = delayDoublePunch / 2;
-		}
-		else
-		{
-			getTime = delayPunch / 2;
-		}
-
-		float currTime = 0;
-
-		if ( rightPoing )
-		{
-			thisPoing = poingDroite.transform;	
-			thisDist = DistPoingDroit;
-		}
-		else
-		{
-			thisPoing = poingGauche.transform;
-			thisDist = DistPoingGauche;
-		}
-
-		getStart = thisPoing.localPosition;
-
-		do 
-		{
-			yield return thisFrame;
-
-			currTime += Time.deltaTime;
-			thisPoing.localPosition = getStart + thisDist * ( currTime / getTime);
-		}while ( currTime < getTime );
-
-		do 
-		{
-			yield return thisFrame;
-
-			currTime -= Time.deltaTime;
-			thisPoing.localPosition = getStart + thisDist * ( currTime / getTime);
-		}while ( currTime > 0 );
-
-		thisPoing.localPosition = getStart;
-
-		if ( rightPoing )
-		{
-			currCouR = null;
-		}
-		else
-		{
-			currCouL = null;
-		}
-
-		if ( propPunch != null )
-		{
-			StopCoroutine ( propPunch );
-		}
-
-		propP = false;
-		propDP = false;
 	}
 
 	IEnumerator waitStopDash ( )
@@ -983,15 +856,7 @@ public class PlayerController : MonoBehaviour
 
 		Dash = false;
 
-		StartCoroutine ( enableDash ( ) );
-	}
-
-	IEnumerator enableDash ( )
-	{
-		WaitForSeconds thisS = new WaitForSeconds ( CooldownDash );
-
-		yield return thisS;
-
+		yield return new WaitForSeconds ( DashTime / 2 );
 		canDash = true;
 	}
 
@@ -1004,18 +869,6 @@ public class PlayerController : MonoBehaviour
 		propP = false;
 		propDP = false;
 	}
-
-	public void SetInMadness(bool p_bool)
-    {
-        InMadness = p_bool;
-
-		if ( p_bool )
-		{
-            GetComponentInChildren<Animator>().SetTrigger("Mad");
-            GetComponentInChildren<Animator>().SetBool("InMadness", true);
-			GlobalManager.Ui.OpenMadness();
-		}
-    }
 
 	void OnTriggerEnter ( Collider thisColl )
 	{
@@ -1076,33 +929,46 @@ public class PlayerController : MonoBehaviour
 
     private void SmoothBar()
     {
-        float res = valueSmoothUse * (Time.deltaTime * smoothSpeed);
-        if(barMadness.value + res < 0)
+        float res = valueSmoothUse * (Time.deltaTime * SmoothSpeed);
+        if(BarMadness.value + res < 0)
         {
-            barMadness.value = 0;
+            BarMadness.value = 0;
             valueSmooth = 0;
             valueSmoothUse = 0;
             if (InMadness)
             {
                 InMadness = !InMadness;
+
+				maxSpeed = MaxSpeed;
+				maxSpeedCL = MaxSpeedCL;
+				accelerationCL = AccelerationCL;
+				acceleration = Acceleration;
+
                 GlobalManager.Ui.CloseMadness();
             }
-        }else if (barMadness.value + res >= 100)
+        }else if (BarMadness.value + res >= 100)
         {
             Debug.Log("first etape");
-            barMadness.value = 100;
+            BarMadness.value = 100;
             valueSmooth = 0;
             valueSmoothUse = 0;
+
             if (!InMadness)
             {
                 Debug.Log("MADDDDDDDD");
                 InMadness = !InMadness;
+
+				maxSpeedCL = MaxSpeedCL * 2;
+				maxSpeed = MaxSpeed * 3;
+				accelerationCL = AccelerationCL * 2;
+				acceleration = Acceleration * 4;
+
                 GlobalManager.Ui.OpenMadness();
             }
         }
         else
         {
-            barMadness.value += res;
+            BarMadness.value += res;
             valueSmoothUse -= res;
         }
     }

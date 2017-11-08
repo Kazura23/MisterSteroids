@@ -202,7 +202,7 @@ public class UiManager : ManagerParent
 		}
 		else
 		{
-			speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f); 
+			speedEffect.GetComponent<CanvasGroup>().DOFade(0, .10f); 
 		}
 	}
 

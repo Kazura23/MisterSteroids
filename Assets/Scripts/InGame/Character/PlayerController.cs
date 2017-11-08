@@ -656,6 +656,10 @@ public class PlayerController : MonoBehaviour
 		{
 			if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLineRight && ( clDir == 1 || newH == 0 ) )
 			{
+                if(Time.timeScale < 1)
+                {
+                    Time.timeScale = 1;
+                }
 				Dash = false;
 				canChange = false;
 				currLine++;
@@ -666,7 +670,11 @@ public class PlayerController : MonoBehaviour
 			}
 			else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLineLeft && ( clDir == -1 || newH == 0 ) )
 			{
-				Dash = false;
+                if (Time.timeScale < 1)
+                {
+                    Time.timeScale = 1;
+                }
+                Dash = false;
 				canChange = false;
 				currLine--;
 				LastImp = -1;

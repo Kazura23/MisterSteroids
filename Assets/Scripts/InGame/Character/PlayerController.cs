@@ -915,7 +915,7 @@ public class PlayerController : MonoBehaviour
 		{
 			if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ElemDash )
 			{
-                GlobalManager.Ui.BloodHit();
+				GlobalManager.Ui.BloodHit ( );
 
 				/*Vector3 getProj = getPunch.projection_basic;
 
@@ -928,7 +928,7 @@ public class PlayerController : MonoBehaviour
 					getProj.x *= Random.Range ( getProj.x / 2, getProj.x );
 				}*/
 				thisColl.collider.enabled = false;
-				thisColl.gameObject.GetComponent<AbstractObject> ( ).ForceProp (  getPunch.projection_double );
+				thisColl.gameObject.GetComponent<AbstractObject> ( ).ForceProp ( getPunch.projection_double );
 				return;
 			}
 			else if ( getObj.tag == Constants._Balls )
@@ -936,6 +936,10 @@ public class PlayerController : MonoBehaviour
 				StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, pTrans, PropulseBalls, 1, 5, true ) );
 				return;
 			}
+		}
+		else if ( getObj.tag == Constants._ElemDash )
+		{
+			GameOver ( );
 		}
 
 		if ( getObj.tag == Constants._MissileBazoo )

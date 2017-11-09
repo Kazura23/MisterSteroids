@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class PlayerController : MonoBehaviour 
 {
@@ -194,7 +195,6 @@ public class PlayerController : MonoBehaviour
 		playAnimator = GetComponentInChildren<Animator> ( );
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
-
 
         Plafond.GetComponent<MeshRenderer>().enabled = true;
     }

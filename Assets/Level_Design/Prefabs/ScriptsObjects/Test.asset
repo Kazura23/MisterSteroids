@@ -11,13 +11,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49e2bddfe1dbf0d4ab0050d815070b9c, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  NbrChunkOneLvl: 1
+  NbrChunkOneLvl: 3
   ChunkAleat: 1
   TheseChunks:
-  - {fileID: 1495765868606036, guid: 8d9262ec29c680e42ab295e8e4002c56, type: 2}
+  - {fileID: 1495765868606036, guid: 585641c266c68e641a9347de6578192e, type: 2}
+  - {fileID: 1684938184911574, guid: ab95782875f957c499b7e86f9cc804ec, type: 2}
+  - {fileID: 1545821835470666, guid: 39bb8f9ca89a0724ca48c94aca426ffc, type: 2}
   PourcSpawn: 100
   EnnemySpawnable: []
   ObstacleSpawnable: []
   ObstacleDestrucSpawnable: []
   CoinSpawnable: []
-  WallOnLastChunk: {fileID: 0}
+  WallOnLastChunk: {fileID: 1131350923728168, guid: 8a4bd94c402f1fc47a4982080a229450,
+    type: 2}

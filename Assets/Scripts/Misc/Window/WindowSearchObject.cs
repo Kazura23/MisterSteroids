@@ -75,11 +75,10 @@ public class WindowSearchObject : EditorWindow
 		InfoOnPrefab = new List<List<GameObject>> ( );
 		thispref = new List<GameObject> ( );
 	}
-	// Add menu item named "My Window" to the Window menu
-	[MenuItem("Window/Custom/SearchTags")]
+	// chercher ref de l'obje en scene / projet & faire une recherche de pref 
+	[MenuItem("CustomWindow/SearchTags")]
 	public static void ShowWindow()
 	{
-		//Show existing window instance. If one doesn't exist, make one.
 		EditorWindow.GetWindow(typeof(WindowSearchObject));
 	}
 
@@ -119,7 +118,6 @@ public class WindowSearchObject : EditorWindow
 			objComp = EditorGUILayout.ObjectField ( "This component", objComp, typeof( Object ), true );
 			break;
 		}
-		EditorGUILayout.EndHorizontal();
 
 		var buttonStyle = new GUIStyle( EditorStyles.miniButton );
 
@@ -136,6 +134,7 @@ public class WindowSearchObject : EditorWindow
 		{
 			getChildren = !getChildren;
 		}
+		EditorGUILayout.EndHorizontal();
 
 		if ( GUILayout.Button ( "Object On Scene" ) )
 		{
@@ -249,8 +248,6 @@ public class WindowSearchObject : EditorWindow
 		EditorGUILayout.EndScrollView ( );
 		#endregion
 		EditorGUILayout.EndHorizontal();
-
-		//  / foldout / essaie d'associer l'object au prefab / gameobject en scene
 	}
 
 

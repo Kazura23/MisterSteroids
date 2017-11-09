@@ -30,8 +30,8 @@ public class SearchObject : MonoBehaviour
 		}
 
 		List<List<GameObject>> objectList = new List<List<GameObject>> ( );
-		List<GameObject> getObj = new List<GameObject> ( );
 		List<GameObject> asset = new List<GameObject> ( ); 
+		List<GameObject> getObj;
 
 		string guid;
 		string assetPath;
@@ -44,19 +44,26 @@ public class SearchObject : MonoBehaviour
 			asset.Add ( AssetDatabase.LoadAssetAtPath ( assetPath, typeof( GameObject ) ) as GameObject );
 		}
 
-		getObj = returnCurrObj ( asset.ToArray ( ), thisType, objComp, thisStringSearch, false );
-
 		if ( getChildren )
 		{
-			for ( a = 0; a < getObj.Count; a++ )
+			for ( a = 0; a < asset.Count; a++ )
 			{
-				objectList.Add ( new List<GameObject> ( ) );
-				objectList [ a ] = returnCurrObj ( GetComponentsInChildrenOfAsset ( getObj [ a ] ), thisType, objComp, thisStringSearch, true );
+				getObj = returnCurrObj ( GetComponentsInChildrenOfAsset ( asset [ a ] ), thisType, objComp, thisStringSearch, true );
+
+				if ( getObj.Count > 0 )
+				{
+					objectList.Add ( getObj );
+				}
 			}
 		}
-		else if ( getObj.Count > 0 )
+		else
 		{
-			objectList.Add ( getObj );
+			getObj = returnCurrObj ( asset.ToArray ( ), thisType, objComp, thisStringSearch, false );
+
+			if ( getObj.Count > 0 )
+			{
+				objectList.Add ( getObj );
+			}
 		}
 
 		return objectList;
@@ -66,19 +73,28 @@ public class SearchObject : MonoBehaviour
 	{
 		GameObject[] objectList = UnityEngine.SceneManagement.SceneManager.GetActiveScene ( ).GetRootGameObjects ( );
 		List<List<GameObject>> getAllObj = new List<List<GameObject>> ( );
-		List<GameObject> getObj = returnCurrObj ( objectList, thisType, objComp, thisStringSearch, false );
+		List<GameObject> getObj;
 
 		if ( getChildren )
 		{
-			for ( int a = 0; a < getObj.Count; a ++)
+			for ( int a = 0; a < objectList.Length; a ++)
 			{
-				getAllObj.Add ( new List<GameObject> ( ) );
-				getAllObj [ a ] = returnCurrObj ( GetComponentsInChildrenOfAsset ( getObj [ a ] ), thisType, objComp, thisStringSearch, true );
+				getObj = returnCurrObj ( GetComponentsInChildrenOfAsset ( objectList [ a ] ), thisType, objComp, thisStringSearch, true );
+
+				if ( getObj.Count > 0 )
+				{
+					getAllObj.Add ( getObj );
+				}
 			}
 		}
-		else if ( getObj.Count > 0 )
+		else
 		{
-			getAllObj.Add ( getObj );
+			getObj = returnCurrObj ( objectList, thisType, objComp, thisStringSearch, false );
+
+			if ( getObj.Count > 0 )
+			{
+				getAllObj.Add ( getObj );
+			}
 		}
 
 		return getAllObj;
@@ -87,22 +103,29 @@ public class SearchObject : MonoBehaviour
 	public static List<List<GameObject>> LoadOnPrefab ( ResearcheType thisType, Object objComp, List<GameObject> thisPref, string thisStringSearch, bool getChildren )
 	{
 		List<List<GameObject>> objectList = new List<List<GameObject>> ( );
-		List<GameObject> getObj = new List<GameObject> ( );
+		List<GameObject> getObj;
 		int a;
-
-		getObj = returnCurrObj ( thisPref.ToArray ( ), thisType, objComp, thisStringSearch, false );
 
 		if ( getChildren )
 		{
-			for ( a = 0; a < getObj.Count; a++ )
+			for ( a = 0; a < thisPref.Count; a++ )
 			{
-				objectList.Add ( new List<GameObject> ( ) );
-				objectList [ a ] = returnCurrObj ( GetComponentsInChildrenOfAsset ( getObj [ a ] ), thisType, objComp, thisStringSearch, true );
+				getObj = returnCurrObj ( GetComponentsInChildrenOfAsset ( thisPref [ a ] ), thisType, objComp, thisStringSearch, true );
+
+				if ( getObj.Count > 0 )
+				{
+					objectList.Add ( getObj );
+				}
 			}
 		}
-		else if ( getObj.Count > 0 )
+		else 
 		{
-			objectList.Add ( getObj );
+			getObj = returnCurrObj ( thisPref.ToArray ( ), thisType, objComp, thisStringSearch, false );
+
+			if ( getObj.Count > 0 )
+			{
+				objectList.Add ( getObj );
+			}
 		}
 
 		return objectList;
@@ -128,7 +151,7 @@ public class SearchObject : MonoBehaviour
 
 			if ( getChildren )
 			{
-				foreach ( GameObject thisChild in GetComponentsInChildrenOfAsset ( objectList[a] ) )
+				foreach ( GameObject thisChild in GetComponentsInChildrenOfAsset ( objectList[a], false ) )
 				{
 					switch (thisType) 
 					{
@@ -155,7 +178,7 @@ public class SearchObject : MonoBehaviour
 
 						for ( b = 0; b < components.Length; b++ )
 						{
-							if ( components [ b ] != null && components [ b ].name == objComp.name )
+							if ( components [ b ] != null && components [ b ].GetType ( ) == objComp.GetType ( ) )
 							{
 								objTagList.Add ( thisChild );
 								break;
@@ -204,9 +227,8 @@ public class SearchObject : MonoBehaviour
 
 					for ( b = 0; b < components.Length; b++ )
 					{
-						if ( components [ b ] != null && components [ b ].name == objComp.name )
+						if ( components [ b ] != null && components [ b ].GetType ( ) == objComp.GetType ( )  )
 						{
-							Debug.Log ( objComp );
 							objTagList.Add ( objectList[a] );
 							break;
 						}
@@ -231,20 +253,24 @@ public class SearchObject : MonoBehaviour
 		return objTagList;
 	}
 
-	static GameObject[] GetComponentsInChildrenOfAsset( GameObject go )
+	static GameObject[] GetComponentsInChildrenOfAsset( GameObject go, bool checkPar = true )
 	{
 		List<GameObject> tfs = new List<GameObject>();
-		CollectChildren( tfs, go.transform );
+		CollectChildren( tfs, go.transform, checkPar );
 
 		return tfs.ToArray();
 	}
 
-	static void CollectChildren( List<GameObject> transforms, Transform tf)
+	static void CollectChildren( List<GameObject> transforms, Transform tf, bool checkThis )
 	{
-		transforms.Add(tf.gameObject);
+		if ( checkThis )
+		{
+			transforms.Add ( tf.gameObject );
+		}
+
 		foreach(Transform child in tf)
 		{
-			CollectChildren(transforms, child);
+			CollectChildren ( transforms, child, true );
 		}
 	}
 	#endregion

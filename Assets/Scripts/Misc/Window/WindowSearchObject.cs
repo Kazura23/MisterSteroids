@@ -95,12 +95,12 @@ public class WindowSearchObject : EditorWindow
 		List<bool> fScene = foldoutScene;
 		List<bool> fProj = foldoutProj;
 
-
 		int a; 
 		GUILayout.Label ("Get Specific object", EditorStyles.boldLabel);
 
 		EditorGUILayout.BeginHorizontal();
 		thisType = (ResearcheType)EditorGUILayout.EnumPopup("ResearchType:", thisType);
+
 
 		switch (thisType) 
 		{
@@ -222,6 +222,7 @@ public class WindowSearchObject : EditorWindow
 			}
 		}
 
+
 		EditorGUILayout.EndVertical ( );
 
 		EditorGUILayout.EndHorizontal();
@@ -231,27 +232,55 @@ public class WindowSearchObject : EditorWindow
 
 		EditorGUILayout.BeginHorizontal ( );
 		#region Scene Layout
-		scrollPosScene = EditorGUILayout.BeginScrollView ( scrollPosScene );
-		LayoutSearch( getAllOnScene, bScene, fScene );
-		EditorGUILayout.EndScrollView ( );
+		if ( getAllOnScene.Count > 0 )
+		{
+			scrollPosScene = EditorGUILayout.BeginScrollView ( scrollPosScene );
+
+			if ( GUILayout.Button ( "Clear", EditorStyles.miniButton ) )
+			{
+				AllObjectScene = new List<List<GameObject>> ( );
+			}
+
+			aPageScene = LayoutSearch( getAllOnScene, bScene, fScene, aPageScene ,childScene );
+			EditorGUILayout.EndScrollView ( );
+		}
 		#endregion
 
 		#region Project layout
-		scrollPosProj = EditorGUILayout.BeginScrollView ( scrollPosProj );
-		LayoutSearch( getAllOnProj, bProj, fProj );
-		EditorGUILayout.EndScrollView ( );
+		if ( getAllOnProj.Count > 0 )
+		{
+			scrollPosProj = EditorGUILayout.BeginScrollView ( scrollPosProj );
+
+			if ( GUILayout.Button ( "Clear", EditorStyles.miniButton ) )
+			{
+				AllObjectProject = new List<List<GameObject>> ( );
+			}
+
+			aPageProj = LayoutSearch( getAllOnProj, bProj, fProj, aPageProj, childProj, true );
+			EditorGUILayout.EndScrollView ( );
+		}
 		#endregion
 
 		#region Pref Layout
-		scrollPosPref = EditorGUILayout.BeginScrollView ( scrollPosPref );
-		LayoutSearch( getAllOnPrefab, bPref, fPref );
-		EditorGUILayout.EndScrollView ( );
+		if ( getAllOnPrefab.Count > 0 )
+		{
+			scrollPosPref = EditorGUILayout.BeginScrollView ( scrollPosPref );
+
+			if ( GUILayout.Button ( "Clear", EditorStyles.miniButton ) )
+			{
+				InfoOnPrefab = new List<List<GameObject>> ( );
+			}
+
+			aPagePref = LayoutSearch( getAllOnPrefab, bPref, fPref, aPagePref, childPref );
+			EditorGUILayout.EndScrollView ( );
+		}
+
 		#endregion
 		EditorGUILayout.EndHorizontal();
 	}
 
 
-	void LayoutSearch ( List<List<GameObject>> listSearch, List<int> bPage, List<bool> fDout )
+	int LayoutSearch ( List<List<GameObject>> listSearch, List<int> bPage, List<bool> fDout, int aPage, bool ifChild, bool ifFolder = false )
 	{
 		int a; 
 		int b;
@@ -260,11 +289,11 @@ public class WindowSearchObject : EditorWindow
 		{
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.PrefixLabel( "Page : " + (listSearch.Count / 10).ToString() );
-			aPageScene = EditorGUILayout.IntSlider ( aPageScene, 0, listSearch.Count / 10 );
+			aPage = EditorGUILayout.IntSlider ( aPage, 0, listSearch.Count / 10 );
 			EditorGUILayout.EndHorizontal();
 		}
 
-		for ( a = aPageScene * 10; a < 10 * ( aPageScene + 1 ); a++ )
+		for ( a = aPage * 10; a < 10 * ( aPage + 1 ); a++ )
 		{
 			if ( a >= listSearch.Count )
 			{
@@ -272,20 +301,28 @@ public class WindowSearchObject : EditorWindow
 			}
 
 			EditorGUI.indentLevel = 0;
-			EditorGUILayout.TextField ( listSearch [ a ][0].name );
 
-			if ( childScene )
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.ObjectField ( listSearch [ a ][0], typeof( GameObject ), true );
+
+			if ( ifFolder )
+			{/*
+				if ( GUILayout.Button ( "Go Folder", EditorStyles.miniButton ) )
+				{
+				}*/
+			}
+			EditorGUILayout.EndHorizontal();
+
+			if ( ifChild )
 			{
 				if ( listSearch [ a ].Count > 1 )
 				{
 					EditorGUI.indentLevel = 1;
-
 					fDout [ a ] = EditorGUILayout.Foldout ( fDout [ a ], "Display Children : " + ( listSearch [ a ].Count - 1 ).ToString ( ) );
 				}
 
 				EditorGUI.indentLevel = 2;
 			}
-
 			if ( fDout [ a ] )
 			{
 				EditorGUILayout.BeginVertical ( );
@@ -309,7 +346,7 @@ public class WindowSearchObject : EditorWindow
 						break;
 					}
 
-					EditorGUILayout.TextField ( listSearch [ a ] [ b ].name );
+					EditorGUILayout.ObjectField ( listSearch [ a ] [ b ], typeof( GameObject ), true );
 				}
 				EditorGUILayout.EndVertical ( );
 			}
@@ -317,6 +354,8 @@ public class WindowSearchObject : EditorWindow
 			EditorGUILayout.Space ( );
 			EditorGUILayout.Space ( );
 		}
+
+		return aPage;
 	}
 }
 

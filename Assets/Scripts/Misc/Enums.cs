@@ -45,5 +45,6 @@ public enum ResearcheType
 	Tag,
 	Layer,
 	Name,
-	Component
+	Component,
+	MissingComp
 }

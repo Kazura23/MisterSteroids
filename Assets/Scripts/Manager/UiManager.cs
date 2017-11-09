@@ -79,20 +79,77 @@ public class UiManager : ManagerParent
 		}
 	}
 
+
+    public void SimpleCoup()
+    {
+    }
+
+    public void Intro()
+    {
+        Time.timeScale = .05f;
+		float saveFov = Camera.main.fieldOfView;
+
+        DOVirtual.DelayedCall(.35f, () => {
+            Time.timeScale = .0f;
+            DOVirtual.DelayedCall(.1f, () =>
+            {
+                Time.timeScale = 1f;
+                GlobalManager.GameCont.Intro = false;
+                Camera.main.DOFieldOfView(4, .25f);
+                DOVirtual.DelayedCall(.25f, () =>
+                {
+                    Camera.main.DOFieldOfView(100, .15f);
+                    DOVirtual.DelayedCall(2f, () =>
+                    {
+						Camera.main.DOFieldOfView(saveFov, .25f);
+                    });
+                });
+            });
+        });
+    }
+
+    public void DoubleCoup()
+    {
+		float saveFov = Camera.main.fieldOfView;
+
+        Camera.main.DOFieldOfView(47, .15f).OnComplete(() => {
+			Camera.main.DOFieldOfView(saveFov, .1f);
+        });
+    }
+
 	public void BloodHit()
 	{
-		Time.timeScale = 0.1f;
+		Time.timeScale = 0f;
         Time.fixedDeltaTime = 0.02F * Time.timeScale;
-        DOVirtual.DelayedCall(.08f, () => {
+        DOVirtual.DelayedCall(.1f, () => {
 			Time.timeScale = 1;
             Time.fixedDeltaTime = .02F;
         });
+
+		float saveFov = Camera.main.fieldOfView;
 		Camera.main.DOFieldOfView(45, .12f);//.SetEase(Ease.InBounce);
 		RedScreen.DOFade(.4f, .12f).OnComplete(() => {
 			RedScreen.DOFade(0, .08f);
-			Camera.main.DOFieldOfView(60, .08f);//.SetEase(Ease.InBounce);
+			Camera.main.DOFieldOfView(saveFov, .08f);//.SetEase(Ease.InBounce);
 		});
 	}
+
+    public void GameOver()
+    {
+        Debug.Log("ShakeOver");
+
+
+        //Time.timeScale = 0f;
+        //Time.fixedDeltaTime = 0.02F * Time.timeScale;
+        //DOVirtual.DelayedCall(.4f, () => {
+            Time.timeScale = 1;
+            Time.fixedDeltaTime = .02F;
+            ScreenShake.Singleton.ShakeGameOver();
+        //});
+        RedScreen.DOFade(.7f, .25f).OnComplete(() => {
+            RedScreen.DOFade(0, .0f);
+        });
+    }
 
     public void OpenMadness()
     {
@@ -146,7 +203,7 @@ public class UiManager : ManagerParent
 		}
 		else
 		{
-			speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f); 
+			speedEffect.GetComponent<CanvasGroup>().DOFade(0, .10f); 
 		}
 	}
 

@@ -15,18 +15,14 @@ public class CatShop : MonoBehaviour
 
 	public Color ColorSelected;
 	public Color ColorUnSelected;
-    public GameObject lol;
-
 
     public bool UseSprite;
 	public Sprite SpriteSelected;
 	public Sprite SpriteUnSelected;
 
-	[Header ("Information Categorie Voisines")]
 	public CatShop LeftCategorie;
 	public CatShop RightCategorie;
 
-    public float rotateCat;
     public ItemModif DefautItem;
 	#endregion
 

@@ -3188,6 +3188,9 @@ MonoBehaviour:
   delayDead: 1
   VelRestant: 20
   onObjForward: 100
+  distSlowMotio: 5
+  ratioSlow: 0.25
+  timeSlow: 0.25
   FreezeAxe: {x: 0, y: 0, z: 0}
   FreezeRot: {x: 0, y: 0, z: 0}
   useGravity: 1

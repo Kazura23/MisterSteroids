@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class AbstractObject : MonoBehaviour 
 {
@@ -17,6 +18,7 @@ public class AbstractObject : MonoBehaviour
 	[Tooltip ("force de direction lorsque en collision contre un Object / ennemis ( situation ou ce gameobject est immobile )")]
 	public float onObjForward;
 
+
 	[Space]
 	[Header ("Contrainte axe / rotation ")]
 	[Tooltip ("Si différent de 0 alors l'axe est freeze")]
@@ -29,6 +31,8 @@ public class AbstractObject : MonoBehaviour
 
 	protected Rigidbody mainCorps;
 	protected Transform getTrans;
+    protected Transform playerTrans;
+    protected bool activeSlow = true;
 
 	List<Rigidbody> corps;
 	Vector3 projection;
@@ -49,6 +53,11 @@ public class AbstractObject : MonoBehaviour
 			corps.Add ( thisRig );
 		}
 	}
+
+    protected virtual void Start()
+    {
+        playerTrans = GlobalManager.GameCont.Player.transform;
+    }
 	#endregion
 
 	#region Public Methods
@@ -64,9 +73,9 @@ public class AbstractObject : MonoBehaviour
 	public virtual void Dead ( bool enemy = false )
 	{
 		isDead = true;
-
-		//StartCoroutine ( disableColl ( ) );
-		getTrans.tag = Constants._ObjDeadTag;
+        Time.timeScale = 1;
+        //StartCoroutine ( disableColl ( ) );
+        getTrans.tag = Constants._ObjDeadTag;
 		for ( int i = 0; i < corps.Count; i++ )
 		{
 			corps [ i ].useGravity = true;
@@ -92,7 +101,7 @@ public class AbstractObject : MonoBehaviour
 			Vector3 getUp = transform.up * projection.y;
 			mainCorps.AddForce ( getFor + getRig + getUp, ForceMode.VelocityChange );
 		}
-
+        
 		Destroy ( this.gameObject, delayDead );
 	}
 
@@ -137,6 +146,12 @@ public class AbstractObject : MonoBehaviour
 
 		if ( getThis.tag == Constants._EnnemisTag || getThis.tag == Constants._ObjDeadTag || getThis.tag == Constants._ObsTag )
 		{
+			Physics.IgnoreCollision ( thisColl.collider, GetComponent<Collider> ( ) );
+
+			if ( getThis.tag == Constants._EnnemisTag || getThis.tag == Constants._ObjDeadTag )
+			{
+				Debug.Log ( "ennemis touche" );
+			}
 			CollDetect ( );
 		}
 
@@ -152,14 +167,12 @@ public class AbstractObject : MonoBehaviour
 		Transform savePos = transform;
 		Transform playPos = GlobalManager.GameCont.Player.transform;
 
-		while ( Vector3.Distance ( savePos.position, playPos.position ) < 2.5f )
-		{
-			yield return thisF;
-		}
+		Physics.IgnoreCollision ( playPos.GetComponent<Collider> ( ), GetComponent<Collider> ( ) );
+
+		yield return thisF;
 
 		GetComponent<BoxCollider> ( ).enabled = true;
 	}
-
 
 	void checkConstAxe ( )
 	{

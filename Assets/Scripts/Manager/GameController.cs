@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class GameController : ManagerParent
 {
@@ -14,6 +15,7 @@ public class GameController : ManagerParent
 	public GameObject Player;
 	public SpawnChunks SpawnerChunck;
     public bool GameStarted;
+    public bool Intro;
 
 	[HideInInspector]
 	public Dictionary <string, ItemModif> AllModifItem;
@@ -35,12 +37,28 @@ public class GameController : ManagerParent
         {
 			if ( GameStarted && !checkStart )
 			{
+                GlobalManager.Ui.Intro();
+
 				checkStart = true;
 				Player.GetComponent<PlayerController> ( ).StopPlayer = false;
 				Camera.main.GetComponent<RainbowRotate>().time = .4f;
 				Camera.main.GetComponent<RainbowMove>().time = .2f;
 			}
 		}
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+
+            Debug.Log("Fx");
+            Vector3 playerPos = GlobalManager.GameCont.Player.transform.position;
+            GameObject thisGO = GlobalManager.GameCont.FxInstanciate(new Vector3(.16f, 0.12f, 0.134f) + playerPos, "PlayerReady", GlobalManager.GameCont.Player.transform, 1f);
+            thisGO.transform.SetParent(GlobalManager.GameCont.Player.GetComponent<PlayerController>().rightHand.transform);
+            thisGO.transform.DOLocalMove(Vector3.zero, 0);
+
+            GameObject thisGOLeft = GlobalManager.GameCont.FxInstanciate(new Vector3(.16f, 0.12f, 0.134f) + playerPos, "PlayerReady", GlobalManager.GameCont.Player.transform, 1f);
+            thisGOLeft.transform.SetParent(GlobalManager.GameCont.Player.GetComponent<PlayerController>().leftHand.transform);
+            thisGOLeft.transform.DOLocalMove(Vector3.zero, 0);
+        }
 	}
     #endregion
 
@@ -50,6 +68,8 @@ public class GameController : ManagerParent
 		Player = GameObject.FindGameObjectWithTag("Player");
 		Player.GetComponent<PlayerController> ( ).ResetPlayer ( );
 		Player.GetComponent<PlayerController> ( ).ThisAct = SpecialAction.Nothing;
+
+        Intro = true;
 
 		SetAllBonus ( );
 		GameStarted = true;
@@ -62,12 +82,12 @@ public class GameController : ManagerParent
 		GlobalManager.Ui.CloseThisMenu ( );
     }
 
-	public void FxInstanciate ( Vector3 thisPos, string fxName, Transform parentObj = null )
+	public GameObject FxInstanciate ( Vector3 thisPos, string fxName, Transform parentObj = null, float timeDest = 0.35f )
 	{
 		List<FxList> getAllFx = AllFx;
 		GameObject getObj;
 
-		for ( int a = 0;  a < getAllFx.Count; a++ )
+		for ( int a = 0; a < getAllFx.Count; a++ )
 		{
 			if ( getAllFx [ a ].FxName == fxName )
 			{
@@ -76,28 +96,30 @@ public class GameController : ManagerParent
 				if ( parentObj != null )
 				{
 					getObj = ( GameObject ) Instantiate ( getObj, parentObj );
-
 				}
 				else
 				{
-					getObj = ( GameObject ) Instantiate ( getObj, parentObj );
+					getObj = ( GameObject ) Instantiate ( getObj );
 				}
 
-                Destroy(getObj, .35f);
 
-                getObj.transform.position = thisPos;
+				getObj.transform.position = thisPos;
 
-				break;
+				Destroy ( getObj, timeDest );
+
+				return getObj;
 			}
 		}
 
-    }
+		return null;
+	}
 
     public void Restart ( ) 
 	{
 		SceneManager.LoadScene ( "ProtoAlex", LoadSceneMode.Single );
         GameStarted = false;
     }   
+    
     #endregion
 
     #region Private Methods
@@ -124,7 +146,6 @@ public class GameController : ManagerParent
 				setItemToPlayer ( thisItem, currPlayer );
 			}
 		}
-
 
 		if ( AllTI != null )
 		{
@@ -167,4 +188,4 @@ public class FxList
 {
 	public string FxName;
 	public GameObject FxObj;
-}
+}

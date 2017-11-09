@@ -12,12 +12,13 @@ public class SpawnChunks : MonoBehaviour
 	[HideInInspector]
 	public int currLevel = 0;
 
-	List<GetSpawnable> AllSpawnable;
+	List<List<GetSpawnable>> AllSpawnable;
 	List<GameObject> getSpawnChunks;
 
 	GameObject WallOnLastChunk;
 	Transform thisT;
 	int currNbrCh = 0;
+	int currChunk = 0;
 	bool randAllChunk = false;
 	#endregion
 	
@@ -28,11 +29,11 @@ public class SpawnChunks : MonoBehaviour
 	public void InitChunck ( )
 	{
 		getSpawnChunks = new List<GameObject> ( );
-		AllSpawnable = new List<GetSpawnable> ( );
+		AllSpawnable = new List<List<GetSpawnable>> ( );
 		thisT = transform;
 
 		List<ChunksScriptable> getChunks = ChunksInfo;
-		List<GetSpawnable> getSpawnable = AllSpawnable;
+		List<List<GetSpawnable>> getSpawnable = AllSpawnable;
 
 		Transform[] getChildrenChunk;
 
@@ -42,15 +43,17 @@ public class SpawnChunks : MonoBehaviour
 
 		for ( a = 0; a < getChunks.Count; a++ )
 		{
-			getSpawnable.Add ( new GetSpawnable ( ) );
-			getSpawnable [ a ].getCoinSpawnable = new List<GameObject> ( );
-			getSpawnable [ a ].getDebutFinCh = new List<GameObject> ( );
-			getSpawnable [ a ].getEnnemySpawnable = new List<GameObject> ( );
-			getSpawnable [ a ].getObstacleDestrucSpawnable = new List<GameObject> ( );
-			getSpawnable [ a ].getObstacleSpawnable = new List<GameObject> ( );
+			getSpawnable.Add ( new List<GetSpawnable> ( ) );
+
 
 			for ( b = 0; b < getChunks [ a ].TheseChunks.Count; b++ )
 			{
+				getSpawnable [ a ].Add ( new GetSpawnable ( ) );
+				getSpawnable [ a ] [ b ].getCoinSpawnable = new List<GameObject> ( );
+				getSpawnable [ a ] [ b ].getEnnemySpawnable = new List<GameObject> ( );
+				getSpawnable [ a ] [ b ].getObstacleDestrucSpawnable = new List<GameObject> ( );
+				getSpawnable [ a ] [ b ].getObstacleSpawnable = new List<GameObject> ( );
+
 				getChildrenChunk = getChunks [ a ].TheseChunks [ b ].GetComponentsInChildren<Transform> ( true );
 
 				for ( c = 0; c < getChildrenChunk.Length; c++ )
@@ -58,19 +61,16 @@ public class SpawnChunks : MonoBehaviour
 					switch ( getChildrenChunk[c].tag )
 					{
 					case Constants._SAbleCoin:
-						getSpawnable [ a ].getCoinSpawnable.Add ( getChildrenChunk [ c ].gameObject );
+						getSpawnable [ a ] [ b ].getCoinSpawnable.Add ( getChildrenChunk [ c ].gameObject );
 						break;
 					case Constants._SAbleDestObs:
-						getSpawnable [ a ].getObstacleDestrucSpawnable.Add ( getChildrenChunk [ c ].gameObject );
+						getSpawnable [ a ] [ b ].getObstacleDestrucSpawnable.Add ( getChildrenChunk [ c ].gameObject );
 						break;
 					case Constants._SAbleObs:
-						getSpawnable [ a ].getObstacleSpawnable.Add ( getChildrenChunk [ c ].gameObject );
+						getSpawnable [ a ] [ b ].getObstacleSpawnable.Add ( getChildrenChunk [ c ].gameObject );
 						break;
 					case Constants._SAbleEnnemy:
-						getSpawnable [ a ].getEnnemySpawnable.Add ( getChildrenChunk [ c ].gameObject );
-						break;
-					case Constants._DebutFinChunk:
-						getSpawnable [ a ].getDebutFinCh.Add ( getChildrenChunk [ c ].gameObject );
+						getSpawnable [ a ] [ b ].getEnnemySpawnable.Add ( getChildrenChunk [ c ].gameObject );
 						break;
 					}
 				}
@@ -83,11 +83,9 @@ public class SpawnChunks : MonoBehaviour
 		List<ChunksScriptable> getChunks = ChunksInfo;
 		List<GameObject> getSpc = getSpawnChunks;
 
-		float distChunk = Vector3.Distance ( AllSpawnable [ currLevel ].getDebutFinCh [ 0 ].transform.position, AllSpawnable [ currLevel ].getDebutFinCh [ 1 ].transform.position );
+		spawnAfterThis ( sourceSpawn.position, sourceSpawn.rotation, sourceSpawn.GetComponent<SpawnNewLvl> ( ) );
 
-		spawnAfterThis ( sourceSpawn.position + sourceSpawn.forward * distChunk, sourceSpawn.rotation );
-
-		if ( getSpc.Count > 2 )
+		if ( getSpc.Count > 5 )
 		{
 			Destroy ( getSpc [ 0 ] );
 			getSpc.RemoveAt ( 0 );
@@ -154,11 +152,12 @@ public class SpawnChunks : MonoBehaviour
 		Transform getChunkT = getSpc [ getSpc.Count - 1 ].transform;
 		GameObject thisObj;
 
-		float distChunk = Vector3.Distance ( AllSpawnable [ currLevel ].getDebutFinCh [ 0 ].transform.position, AllSpawnable [ currLevel ].getDebutFinCh [ 1 ].transform.position );
-
-		thisObj = ( GameObject ) Instantiate ( getChunks [ currLevel ].WallOnLastChunk, thisT );
-		thisObj.transform.position = getChunkT.position + getChunkT.forward * distChunk;
-		thisObj.transform.localPosition += thisObj.transform.up * thisObj.GetComponent<MeshRenderer> ( ).bounds.size.y / 2;
+		if ( getChunks [ currLevel ].WallOnLastChunk != null )
+		{
+			thisObj = ( GameObject ) Instantiate ( getChunks [ currLevel ].WallOnLastChunk, thisT );
+			thisObj.transform.position = getChunkT.position;
+			thisObj.transform.localPosition += thisObj.transform.up * thisObj.GetComponent<MeshRenderer> ( ).bounds.size.y / 2;
+		}
 
 		currLevel++;
 
@@ -172,21 +171,62 @@ public class SpawnChunks : MonoBehaviour
 		currNbrCh = 0;
 	}
 
-	void spawnAfterThis ( Vector3 thisPos, Quaternion thisRot )
+	void spawnAfterThis ( Vector3 thisPos, Quaternion thisRot, SpawnNewLvl thisLvl = null )
 	{
 		List<ChunksScriptable> getChunks = ChunksInfo;
-		List<GetSpawnable> getSpawnable = AllSpawnable;;
+		List<List<GetSpawnable>> getSpawnable = AllSpawnable;
 		List<GameObject> getSpc = getSpawnChunks;
 		GameObject thisSpawn;
 		Transform getChunkT;
 
 		if ( getChunks [ currLevel ].ChunkAleat )
 		{
-			thisSpawn = getChunks [ currLevel ].TheseChunks [ Random.Range ( 0, getChunks [ currLevel ].TheseChunks.Count ) ];
+			currChunk = Random.Range ( 0, getChunks [ currLevel ].TheseChunks.Count );
+
+			thisSpawn = getChunks [ currLevel ].TheseChunks [ currChunk ];
 		}
 		else
 		{
+			currChunk = currNbrCh;
 			thisSpawn = getChunks [ currLevel ].TheseChunks [ currNbrCh ];
+		}
+
+		if ( thisLvl != null )
+		{
+			SpawnNewLvl getNew = thisSpawn.GetComponentInChildren<SpawnNewLvl> ( );
+			int getNbr;
+			int calNbr;
+
+			if ( Random.Range ( 0, 2 ) == 0 )
+			{
+				getNbr = -Random.Range ( 0, ( int ) thisLvl.NbrLaneFin.x + 1 );
+				thisPos = new Vector3 ( thisPos.x + Constants.LineDist * getNbr, thisPos.y, thisPos.z );
+			}
+			else
+			{
+				getNbr = Random.Range ( 0, ( int ) thisLvl.NbrLaneFin.y + 1 );
+				thisPos = new Vector3 ( thisPos.x + Constants.LineDist * getNbr, thisPos.y, thisPos.z );
+			}
+
+			calNbr = ( int ) thisLvl.NbrLaneFin.x - getNbr;
+
+			int a;
+			if ( getNew.NbrLaneDebut.x < calNbr )
+			{
+				for ( a = calNbr; a > getNew.NbrLaneDebut.x; a-- )
+				{
+					Instantiate ( getChunks [ currLevel ].WallEndChunk, thisLvl.transform );
+				}
+			}
+
+			calNbr = ( int ) thisLvl.NbrLaneFin.x + getNbr;
+			if ( getNew.NbrLaneDebut.y > calNbr )
+			{
+				for ( a = calNbr; a < getNew.NbrLaneDebut.y; a++ )
+				{
+					Instantiate ( getChunks [ currLevel ].WallEndChunk, thisLvl.transform );
+				}
+			}
 		}
 
 		currNbrCh++;
@@ -198,10 +238,10 @@ public class SpawnChunks : MonoBehaviour
 		getChunkT.rotation = thisRot;
 		getChunkT.position = thisPos;
 
-		spawnElements ( getSpawnable [ currLevel ].getCoinSpawnable, getChunks [ currLevel ].CoinSpawnable );
-		spawnElements ( getSpawnable [ currLevel ].getEnnemySpawnable, getChunks [ currLevel ].EnnemySpawnable );
-		spawnElements ( getSpawnable [ currLevel ].getObstacleSpawnable, getChunks [ currLevel ].ObstacleSpawnable );
-		spawnElements ( getSpawnable [ currLevel ].getObstacleDestrucSpawnable, getChunks [ currLevel ].ObstacleDestrucSpawnable );
+		spawnElements ( getSpawnable [ currLevel ] [ currChunk ].getCoinSpawnable, getChunks [ currLevel ].CoinSpawnable );
+		spawnElements ( getSpawnable [ currLevel ] [ currChunk ].getEnnemySpawnable, getChunks [ currLevel ].EnnemySpawnable );
+		spawnElements ( getSpawnable [ currLevel ] [ currChunk ].getObstacleSpawnable, getChunks [ currLevel ].ObstacleSpawnable );
+		spawnElements ( getSpawnable [ currLevel ] [ currChunk ].getObstacleDestrucSpawnable, getChunks [ currLevel ].ObstacleDestrucSpawnable );
 
 		getSpc.Add ( thisSpawn );
 	}
@@ -225,12 +265,15 @@ public class SpawnChunks : MonoBehaviour
 	#endregion
 }
 
-[System.Serializable]
 public class GetSpawnable
 {
 	public List<GameObject> getEnnemySpawnable;
 	public List<GameObject> getObstacleSpawnable;
 	public List<GameObject> getObstacleDestrucSpawnable;
 	public List<GameObject> getCoinSpawnable;
-	public List<GameObject> getDebutFinCh;
+}
+
+public class SpawnDetail 
+{
+
 }

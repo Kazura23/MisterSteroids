@@ -17,9 +17,10 @@ public class RiffleMan : AbstractObject
 	#endregion
 
 	#region Mono
-	void Start () 
+	protected override void Start () 
 	{
 		localShoot = getTrans.Find ( "SpawnShoot" );
+        base.Start();
 	}
 	#endregion
 

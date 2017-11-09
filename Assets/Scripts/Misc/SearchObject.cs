@@ -70,7 +70,6 @@ public class SearchObject : MonoBehaviour
 
 		if ( getChildren )
 		{
-
 			for ( int a = 0; a < getObj.Count; a ++)
 			{
 				getAllObj.Add ( new List<GameObject> ( ) );
@@ -85,99 +84,29 @@ public class SearchObject : MonoBehaviour
 		return getAllObj;
 	}
 
-	public static List<GameObject> LoadOnPrefab ( ResearcheType thisType, Object objComp, GameObject thisPref, string thisStringSearch, bool getChildren )
+	public static List<List<GameObject>> LoadOnPrefab ( ResearcheType thisType, Object objComp, List<GameObject> thisPref, string thisStringSearch, bool getChildren )
 	{
-		List<GameObject> objTagList = new List<GameObject> ( );
-		string getSearch = thisStringSearch;
+		List<List<GameObject>> objectList = new List<List<GameObject>> ( );
+		List<GameObject> getObj = new List<GameObject> ( );
+		int a;
+
+		getObj = returnCurrObj ( thisPref.ToArray ( ), thisType, objComp, thisStringSearch, false );
 
 		if ( getChildren )
 		{
-			foreach ( GameObject thisChild in GetComponentsInChildrenOfAsset ( thisPref ) )
+			for ( a = 0; a < getObj.Count; a++ )
 			{
-				switch (thisType) 
-				{
-				case ResearcheType.Tag:
-					if ( getSearch == string.Empty || thisChild.tag == getSearch )
-					{
-						objTagList.Add ( thisChild );
-					}
-					break;
-				case ResearcheType.Name:
-					if ( thisChild.name == getSearch )
-					{
-						objTagList.Add ( thisChild );
-					}
-					break;
-				case ResearcheType.Layer:
-					if ( thisChild.layer == int.Parse ( getSearch ) )
-					{
-						objTagList.Add ( thisChild );
-					}
-					break;
-				case ResearcheType.Component:
-					if ( thisChild.GetComponent ( objComp.GetType ( ) ) != null )
-					{
-						objTagList.Add ( thisChild );
-					}
-					break;
-				case ResearcheType.MissingComp :
-					var components =  thisChild.GetComponents<Component>();
-
-					foreach (var c in components)
-					{
-						if (!c)
-						{
-							objTagList.Add ( thisChild );
-							break;
-						}
-					}
-					break;
-				}
+				objectList.Add ( new List<GameObject> ( ) );
+				objectList [ a ] = returnCurrObj ( GetComponentsInChildrenOfAsset ( getObj [ a ] ), thisType, objComp, thisStringSearch, true );
 			}
 		}
-		else
+		else if ( getObj.Count > 0 )
 		{
-			switch (thisType) 
-			{
-			case ResearcheType.Tag:
-				if ( getSearch == string.Empty || thisPref.tag == getSearch )
-				{
-					objTagList.Add ( thisPref );
-				}
-				break;
-			case ResearcheType.Name:
-				if ( thisPref.name == getSearch )
-				{
-					objTagList.Add ( thisPref );
-				}
-				break;
-			case ResearcheType.Layer:
-				if ( thisPref.layer == int.Parse ( getSearch ) )
-				{
-					objTagList.Add ( thisPref );
-				}
-				break;
-			case ResearcheType.Component:
-				if ( thisPref.GetComponent ( objComp.GetType ( ) ) != null )
-				{
-					objTagList.Add ( thisPref );
-				}
-				break;
-			case ResearcheType.MissingComp :
-				var components =  thisPref.GetComponents<Component>();
-
-				foreach (var c in components)
-				{
-					if (!c)
-					{
-						objTagList.Add ( thisPref );
-						break;
-					}
-				}
-				break;
-			}
+			objectList.Add ( getObj );
 		}
-		return objTagList;
+
+		return objectList;
+	
 	}
 	#endregion
 
@@ -186,10 +115,17 @@ public class SearchObject : MonoBehaviour
 	{
 		List <GameObject> objTagList = new List<GameObject> ( );
 		string getSearch = thisStringSearch;
+		Component[] components;
 		int a;
+		int b;
 
 		for ( a = 0; a < objectList.Length; a++ )
 		{
+			if ( objectList [ a ] == null )
+			{
+				continue;
+			}
+
 			if ( getChildren )
 			{
 				foreach ( GameObject thisChild in GetComponentsInChildrenOfAsset ( objectList[a] ) )
@@ -215,17 +151,23 @@ public class SearchObject : MonoBehaviour
 						}
 						break;
 					case ResearcheType.Component:
-						if ( thisChild.GetComponent ( objComp.GetType ( ) ) != null )
+						components = thisChild.GetComponents<Component> ( );
+
+						for ( b = 0; b < components.Length; b++ )
 						{
-							objTagList.Add ( thisChild );
+							if ( components [ b ] != null && components [ b ].name == objComp.name )
+							{
+								objTagList.Add ( thisChild );
+								break;
+							}
 						}
 						break;
 					case ResearcheType.MissingComp :
-						var components =  thisChild.GetComponents<Component>();
+						components = thisChild.GetComponents<Component> ( );
 
-						foreach (var c in components)
+						for ( b = 0; b < components.Length; b++ )
 						{
-							if (!c)
+							if ( !components [ b ] )
 							{
 								objTagList.Add ( thisChild );
 								break;
@@ -258,19 +200,26 @@ public class SearchObject : MonoBehaviour
 					}
 					break;
 				case ResearcheType.Component:
-					if ( objectList [ a ].GetComponent ( objComp.GetType ( ) ) != null )
+					components = objectList[a].GetComponents<Component> ( );
+
+					for ( b = 0; b < components.Length; b++ )
 					{
-						objTagList.Add ( objectList [ a ] );
+						if ( components [ b ] != null && components [ b ].name == objComp.name )
+						{
+							Debug.Log ( objComp );
+							objTagList.Add ( objectList[a] );
+							break;
+						}
 					}
 					break;
 				case ResearcheType.MissingComp :
-					var components =  objectList [ a ].GetComponents<Component>();
+					components = objectList[a].GetComponents<Component> ( );
 
-					foreach (var c in components)
+					for ( b = 0; b < components.Length; b++ )
 					{
-						if (!c)
+						if ( !components [ b ] )
 						{
-							objTagList.Add ( objectList [ a ] );
+							objTagList.Add ( objectList[a] );
 							break;
 						}
 					}

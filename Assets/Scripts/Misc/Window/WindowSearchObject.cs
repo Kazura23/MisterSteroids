@@ -11,25 +11,32 @@ public class WindowSearchObject : EditorWindow
 	int thisNbr;
 
 	int aPageProj;
+	List<bool> foldoutProj;
 	List <int> bPageProj;
 	bool childProj;
 
 	int aPageScene;
 	List <int> bPageScene;
+	List<bool> foldoutScene;
 	bool childScene;
 
 	int aPagePref;
+	List <int> bPagePref;
+	List<bool> foldoutPref;
+	bool childPref;
 
 	bool getChildren;
+	bool foldListPref;
+
 	Object objComp;
-	GameObject thispref;
+	List<GameObject> thispref;
 	Vector2 scrollPosProj;
 	Vector2 scrollPosScene;
 	Vector2 scrollPosPref;
 
 	List<List<GameObject>> AllObjectProject;
 	List<List<GameObject>> AllObjectScene;
-	List<GameObject> InfoOnPrefab;
+	List<List<GameObject>> InfoOnPrefab;
 
 	void OnEnable ()
 	{
@@ -38,14 +45,15 @@ public class WindowSearchObject : EditorWindow
 		thisStringSearch = string.Empty;
 		SpecificPath = string.Empty;
 
+		objComp = null;
+		thisNbr = 0;
 		getChildren = true;
+
 		childProj = true;
 		childScene = true;
+		childPref = true;
+		foldListPref = true;
 
-		objComp = null;
-		thispref = null;
-
-		thisNbr = 0;
 		aPageProj = 0;
 		aPageScene = 0;
 		aPagePref = 0;
@@ -56,10 +64,16 @@ public class WindowSearchObject : EditorWindow
 
 		bPageProj = new List<int> ( );
 		bPageScene = new List<int> ( );
+		bPagePref = new List<int> ( );
+
+		foldoutProj = new List<bool> ( );
+		foldoutScene = new List<bool> ( );
+		foldoutPref = new List<bool> ( );
 
 		AllObjectProject = new List<List<GameObject>> ( );
 		AllObjectScene = new List<List<GameObject>> ( );
-		InfoOnPrefab = new List<GameObject> ( );
+		InfoOnPrefab = new List<List<GameObject>> ( );
+		thispref = new List<GameObject> ( );
 	}
 	// Add menu item named "My Window" to the Window menu
 	[MenuItem("Window/Custom/SearchTags")]
@@ -73,12 +87,17 @@ public class WindowSearchObject : EditorWindow
 	{
 		List<List<GameObject>> getAllOnProj = AllObjectProject;
 		List<List<GameObject>> getAllOnScene = AllObjectScene;
-		GameObject[] getAllOnPrefab = InfoOnPrefab.ToArray ( );
+		List<List<GameObject>> getAllOnPrefab = InfoOnPrefab;
 		List<int> bProj = bPageProj;
 		List<int> bScene = bPageScene;
+		List<int> bPref = bPagePref;
+
+		List<bool> fPref = foldoutPref;
+		List<bool> fScene = foldoutScene;
+		List<bool> fProj = foldoutProj;
+
 
 		int a; 
-		int b;
 		GUILayout.Label ("Get Specific object", EditorStyles.boldLabel);
 
 		EditorGUILayout.BeginHorizontal();
@@ -123,6 +142,7 @@ public class WindowSearchObject : EditorWindow
 			aPageScene = 0;
 			bPageScene = new List<int> ( );
 			bScene = bPageScene;
+			fScene = foldoutScene;
 			childScene = getChildren;
 
 			AllObjectScene = SearchObject.LoadAssetOnScenes ( thisType, objComp, thisStringSearch, getChildren );
@@ -131,6 +151,7 @@ public class WindowSearchObject : EditorWindow
 			for ( a = 0; a < getAllOnScene.Count; a++ )
 			{
 				bScene.Add ( 0 );
+				fScene.Add ( false );
 			}
 		}
 
@@ -138,7 +159,10 @@ public class WindowSearchObject : EditorWindow
 		if ( GUILayout.Button ( "Object On Project" ) )
 		{
 			bPageProj = new List<int> ( );
+			foldoutProj = new List<bool> ( );
+			fProj = foldoutProj;
 			bProj = bPageProj;
+
 			aPageProj = 0;
 			childProj = getChildren;
 			AllObjectProject = SearchObject.LoadAssetsInProject ( thisType, objComp, thisStringSearch, getChildren, SpecificPath );
@@ -147,6 +171,7 @@ public class WindowSearchObject : EditorWindow
 			for ( a = 0; a < getAllOnProj.Count; a++ )
 			{
 				bProj.Add ( 0 );
+				fProj.Add ( false );
 			}
 		}
 
@@ -157,147 +182,144 @@ public class WindowSearchObject : EditorWindow
 		if ( GUILayout.Button ( "Object On Prefabs" ) && thispref != null )
 		{
 			aPagePref = 0;
+			bPagePref = new List<int> ( );
+			bPref = bPagePref;
+			fPref = foldoutPref;
+			childPref = getChildren;
 
 			InfoOnPrefab = SearchObject.LoadOnPrefab ( thisType, objComp, thispref, thisStringSearch, getChildren );
-			getAllOnPrefab = InfoOnPrefab.ToArray ( );
+			getAllOnPrefab = InfoOnPrefab;
+
+			for ( a = 0; a < getAllOnPrefab.Count; a++ )
+			{
+				bPref.Add ( 0 );
+				fPref.Add ( false );
+			}
 		}
 
-		thispref = (GameObject) EditorGUILayout.ObjectField ( "This component", thispref, typeof( GameObject ), true );
+		var list = thispref;
+		int newCount = Mathf.Max(0, EditorGUILayout.IntField("Number Ref", list.Count));
+		while ( newCount < list.Count )
+		{
+			list.RemoveAt( list.Count - 1 );
+		}
+
+		while ( newCount > list.Count )
+		{
+			list.Add ( null );
+		}
+
+		EditorGUILayout.BeginVertical ( );
+		if ( thispref.Count > 0 )
+		{
+			foldListPref = EditorGUILayout.Foldout ( foldListPref, "Object List"  );
+		}
+
+		if ( foldListPref )
+		{
+			for( a = 0; a < thispref.Count; a++)
+			{
+				thispref [ a ] = ( GameObject ) EditorGUILayout.ObjectField ( "This component", thispref [ a ], typeof( GameObject ), true );
+			}
+		}
+
+		EditorGUILayout.EndVertical ( );
+
 		EditorGUILayout.EndHorizontal();
 
 		EditorGUILayout.Space ( );
 		EditorGUILayout.Space ( );
 
+		EditorGUILayout.BeginHorizontal ( );
 		#region Scene Layout
-		EditorGUILayout.BeginHorizontal();
 		scrollPosScene = EditorGUILayout.BeginScrollView ( scrollPosScene );
-
-		if ( getAllOnScene.Count > 10 )
-		{
-			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.PrefixLabel( "Page : " + (getAllOnScene.Count / 10).ToString() );
-			aPageScene = EditorGUILayout.IntSlider ( aPageScene, 0, getAllOnScene.Count / 10 );
-			EditorGUILayout.EndHorizontal();
-		}
-
-		for ( a = aPageScene * 10; a < 10 * ( aPageScene + 1 ); a++ )
-		{
-			if ( a >= getAllOnScene.Count )
-			{
-				break;
-			}
-
-			EditorGUI.indentLevel = 0;
-			EditorGUILayout.TextField ( getAllOnScene [ a ][0].name );
-
-			if ( childScene )
-			{
-				EditorGUI.indentLevel = 2;
-			}
-
-			EditorGUILayout.BeginVertical ( );
-
-			if ( getAllOnScene[a].Count > 10 )
-			{
-				EditorGUILayout.BeginHorizontal();
-				EditorGUILayout.PrefixLabel( "Page : " + (getAllOnScene[a].Count / 10).ToString() );
-				bScene[a] = EditorGUILayout.IntSlider ( bScene[a], 0, getAllOnScene[a].Count / 10 );
-				EditorGUILayout.EndHorizontal();
-			}
-			else
-			{
-				bScene[a] = 0;
-			}
-
-			for ( b = bScene[a] * 10 + 1; b < 10 * ( bScene[a] + 1 ) + 1; b++ )
-			{
-				if ( b >= getAllOnScene[a].Count)
-				{
-					break;
-				}
-
-				EditorGUILayout.TextField ( getAllOnScene [ a ] [ b ].name );
-			}
-			EditorGUILayout.EndVertical ( );
-		}
+		LayoutSearch( getAllOnScene, bScene, fScene );
 		EditorGUILayout.EndScrollView ( );
 		#endregion
 
 		#region Project layout
-		scrollPosProj =	EditorGUILayout.BeginScrollView ( scrollPosProj );
-		EditorGUILayout.BeginVertical ( );
-
-		if ( getAllOnProj.Count > 10 )
-		{
-			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.PrefixLabel( "Page : " + (getAllOnProj.Count / 10).ToString() );
-			aPageProj = EditorGUILayout.IntSlider ( aPageProj, 0, getAllOnProj.Count / 10 );
-			EditorGUILayout.EndHorizontal();
-		}
-
-		for ( a = aPageProj * 10; a < 10 * ( aPageProj + 1 ); a++ )
-		{
-			if ( a >= getAllOnProj.Count )
-			{
-				break;
-			}
-
-			EditorGUI.indentLevel = 0;
-			EditorGUILayout.TextField ( getAllOnProj [ a ][0].name );
-
-			if ( childProj )
-			{
-				EditorGUI.indentLevel = 2;
-			}
-
-			EditorGUILayout.BeginVertical ( );
-
-			if ( getAllOnProj[a].Count > 10 )
-			{
-				EditorGUILayout.BeginHorizontal();
-				EditorGUILayout.PrefixLabel( "Page : " + (getAllOnProj[a].Count / 10).ToString() );
-				bProj[a] = EditorGUILayout.IntSlider ( bProj[a], 0, getAllOnProj[a].Count / 10 );
-				EditorGUILayout.EndHorizontal();
-			}
-			else
-			{
-				bProj[a] = 0;
-			}
-
-			for ( b = bProj[a] * 10 + 1; b < 10 * ( bProj[a] + 1 ) + 1; b++ )
-			{
-				if ( b >= getAllOnProj[a].Count)
-				{
-					break;
-				}
-
-				EditorGUILayout.TextField ( getAllOnProj [ a ] [ b ].name );
-			}
-			EditorGUILayout.EndVertical ( );
-		}
-		EditorGUILayout.EndVertical ( );
+		scrollPosProj = EditorGUILayout.BeginScrollView ( scrollPosProj );
+		LayoutSearch( getAllOnProj, bProj, fProj );
 		EditorGUILayout.EndScrollView ( );
 		#endregion
 
-		#region Scene Layout
-
-		scrollPosPref =	EditorGUILayout.BeginScrollView(scrollPosPref);
-		for ( a = 0; a < getAllOnPrefab.Length; a++ )
-		{
-			EditorGUI.indentLevel = 0;
-			EditorGUILayout.TextField ( getAllOnPrefab [ a ].name );
-		}
+		#region Pref Layout
+		scrollPosPref = EditorGUILayout.BeginScrollView ( scrollPosPref );
+		LayoutSearch( getAllOnPrefab, bPref, fPref );
 		EditorGUILayout.EndScrollView ( );
 		#endregion
-
 		EditorGUILayout.EndHorizontal();
 
 		//  / foldout / essaie d'associer l'object au prefab / gameobject en scene
 	}
 
-	IEnumerator waitDisplay ( )
+
+	void LayoutSearch ( List<List<GameObject>> listSearch, List<int> bPage, List<bool> fDout )
 	{
-		yield break;
+		int a; 
+		int b;
+
+		if ( listSearch.Count > 10 )
+		{
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel( "Page : " + (listSearch.Count / 10).ToString() );
+			aPageScene = EditorGUILayout.IntSlider ( aPageScene, 0, listSearch.Count / 10 );
+			EditorGUILayout.EndHorizontal();
+		}
+
+		for ( a = aPageScene * 10; a < 10 * ( aPageScene + 1 ); a++ )
+		{
+			if ( a >= listSearch.Count )
+			{
+				break;
+			}
+
+			EditorGUI.indentLevel = 0;
+			EditorGUILayout.TextField ( listSearch [ a ][0].name );
+
+			if ( childScene )
+			{
+				if ( listSearch [ a ].Count > 1 )
+				{
+					EditorGUI.indentLevel = 1;
+
+					fDout [ a ] = EditorGUILayout.Foldout ( fDout [ a ], "Display Children : " + ( listSearch [ a ].Count - 1 ).ToString ( ) );
+				}
+
+				EditorGUI.indentLevel = 2;
+			}
+
+			if ( fDout [ a ] )
+			{
+				EditorGUILayout.BeginVertical ( );
+
+				if ( listSearch[a].Count > 10 )
+				{
+					EditorGUILayout.BeginHorizontal();
+					EditorGUILayout.PrefixLabel( "Page : " + (listSearch[a].Count / 10).ToString() );
+					bPage[a] = EditorGUILayout.IntSlider ( bPage[a], 0, listSearch[a].Count / 10 );
+					EditorGUILayout.EndHorizontal();
+				}
+				else
+				{
+					bPage[a] = 0;
+				}
+
+				for ( b = bPage[a] * 10 + 1; b < 10 * ( bPage[a] + 1 ) + 1; b++ )
+				{
+					if ( b >= listSearch[a].Count)
+					{
+						break;
+					}
+
+					EditorGUILayout.TextField ( listSearch [ a ] [ b ].name );
+				}
+				EditorGUILayout.EndVertical ( );
+			}
+
+			EditorGUILayout.Space ( );
+			EditorGUILayout.Space ( );
+		}
 	}
 }
 

@@ -137,8 +137,24 @@ public class SearchObject : MonoBehaviour
 	static List<GameObject> returnCurrObj ( GameObject[] objectList, ResearcheType thisType, Object objComp, string thisStringSearch, bool getChildren )
 	{
 		List <GameObject> objTagList = new List<GameObject> ( );
-		string getSearch = thisStringSearch;
 		Component[] components;
+		Component[] componentsPref;
+
+		GameObject getPref;
+
+		if ( thisType == ResearcheType.SamePref )
+		{
+			getPref = ( GameObject ) objComp;
+			componentsPref = getPref.GetComponents<Component> ( );
+		}
+		else
+		{
+			getPref = objectList[0];
+			componentsPref = getPref.GetComponents<Component> ( );
+		}
+
+		string getSearch = thisStringSearch;
+
 		int a;
 		int b;
 
@@ -151,7 +167,7 @@ public class SearchObject : MonoBehaviour
 
 			if ( getChildren )
 			{
-				foreach ( GameObject thisChild in GetComponentsInChildrenOfAsset ( objectList[a], false ) )
+				foreach ( GameObject thisChild in GetComponentsInChildrenOfAsset ( objectList[a] ) )
 				{
 					switch (thisType) 
 					{
@@ -176,6 +192,11 @@ public class SearchObject : MonoBehaviour
 					case ResearcheType.Component:
 						components = thisChild.GetComponents<Component> ( );
 
+						if ( objComp == null )
+						{
+							return new List<GameObject> ( );
+						}
+
 						for ( b = 0; b < components.Length; b++ )
 						{
 							if ( components [ b ] != null && components [ b ].GetType ( ) == objComp.GetType ( ) )
@@ -195,6 +216,13 @@ public class SearchObject : MonoBehaviour
 								objTagList.Add ( thisChild );
 								break;
 							}
+						}
+						break;
+					case ResearcheType.SamePref:
+						components = thisChild.GetComponents<Component> ( );
+						if ( componentsPref.Length == components.Length && thisChild.name.Length >= getPref.name.Length && thisChild.name.Substring ( 0, getPref.name.Length ) == getPref.name  )
+						{
+							objTagList.Add ( thisChild );
 						}
 						break;
 					}
@@ -225,6 +253,11 @@ public class SearchObject : MonoBehaviour
 				case ResearcheType.Component:
 					components = objectList[a].GetComponents<Component> ( );
 
+					if ( objComp == null )
+					{
+						return new List<GameObject> ( );
+					}
+
 					for ( b = 0; b < components.Length; b++ )
 					{
 						if ( components [ b ] != null && components [ b ].GetType ( ) == objComp.GetType ( )  )
@@ -246,6 +279,13 @@ public class SearchObject : MonoBehaviour
 						}
 					}
 					break;
+				case ResearcheType.SamePref:
+					components = objectList [ a ].GetComponents<Component> ( );
+					if ( componentsPref.Length == components.Length && objectList [ a ].name.Length >= getPref.name.Length && objectList [ a ].name.Substring ( 0, getPref.name.Length ) == getPref.name )
+					{
+						objTagList.Add ( objectList [ a ] );
+					}
+					break;
 				}
 			}
 		}
@@ -253,24 +293,21 @@ public class SearchObject : MonoBehaviour
 		return objTagList;
 	}
 
-	static GameObject[] GetComponentsInChildrenOfAsset( GameObject go, bool checkPar = true )
+	static GameObject[] GetComponentsInChildrenOfAsset( GameObject go )
 	{
 		List<GameObject> tfs = new List<GameObject>();
-		CollectChildren( tfs, go.transform, checkPar );
+		CollectChildren( tfs, go.transform );
 
 		return tfs.ToArray();
 	}
 
-	static void CollectChildren( List<GameObject> transforms, Transform tf, bool checkThis )
+	static void CollectChildren( List<GameObject> transforms, Transform tf )
 	{
-		if ( checkThis )
-		{
-			transforms.Add ( tf.gameObject );
-		}
+		transforms.Add ( tf.gameObject );
 
 		foreach(Transform child in tf)
 		{
-			CollectChildren ( transforms, child, true );
+			CollectChildren ( transforms, child );
 		}
 	}
 	#endregion

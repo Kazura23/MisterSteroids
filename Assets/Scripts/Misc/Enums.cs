@@ -46,5 +46,6 @@ public enum ResearcheType
 	Layer,
 	Name,
 	Component,
+	SamePref,
 	MissingComp
 }

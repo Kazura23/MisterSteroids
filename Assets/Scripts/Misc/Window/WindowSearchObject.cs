@@ -101,7 +101,6 @@ public class WindowSearchObject : EditorWindow
 		EditorGUILayout.BeginHorizontal();
 		thisType = (ResearcheType)EditorGUILayout.EnumPopup("ResearchType:", thisType);
 
-
 		switch (thisType) 
 		{
 		case ResearcheType.Tag:
@@ -116,6 +115,9 @@ public class WindowSearchObject : EditorWindow
 			break;
 		case ResearcheType.Component:
 			objComp = EditorGUILayout.ObjectField ( "This component", objComp, typeof( Object ), true );
+			break;
+		case ResearcheType.SamePref:
+			objComp = EditorGUILayout.ObjectField ( "This Object", objComp, typeof( Object ), true );
 			break;
 		}
 
@@ -195,7 +197,7 @@ public class WindowSearchObject : EditorWindow
 				fPref.Add ( false );
 			}
 		}
-
+			
 		var list = thispref;
 		int newCount = Mathf.Max(0, EditorGUILayout.IntField("Number Ref", list.Count));
 		while ( newCount < list.Count )
@@ -221,14 +223,52 @@ public class WindowSearchObject : EditorWindow
 				thispref [ a ] = ( GameObject ) EditorGUILayout.ObjectField ( "This component", thispref [ a ], typeof( GameObject ), true );
 			}
 		}
-
-
 		EditorGUILayout.EndVertical ( );
-
 		EditorGUILayout.EndHorizontal();
 
 		EditorGUILayout.Space ( );
 		EditorGUILayout.Space ( );
+
+		if ( thisType == ResearcheType.SamePref )
+		{
+			EditorGUILayout.BeginHorizontal();
+			if ( GUILayout.Button ( "Apply Prefab", EditorStyles.miniButtonLeft ) )
+			{
+				Component [] allComp;
+				Component [] allCompPref;
+				GameObject currObj = ( GameObject ) objComp;
+				Vector3 getCurr;
+				int b;
+				int c;
+
+				allCompPref = currObj.GetComponents<Component> ( );
+				for ( a = 0; a < getAllOnScene.Count; a++ )
+				{
+					for ( b = 0; b < getAllOnScene.Count; b++ )
+					{
+						getCurr = getAllOnScene [ a ] [ b ].transform.position;
+						allComp = getAllOnScene [ a ] [ b ].GetComponents<Component> ( );
+
+						//Destroy ( getAllOnScene [ a ] [ b ].GetComponents<Component> ( ) );
+
+						/*for ( c = 0; c < allComp.Length; c ++ )
+						{
+
+							getAllOnScene [ a ] [ b ].AddComponent ( allCompPref [ c ] );
+						}
+						*/
+						//EditorUtility.SetDirty ( (Object) getAllOnScene [ a ] [ b ] );
+						getAllOnScene [ a ] [ b ].transform.localPosition = Vector3.zero;
+					}
+				}
+			}
+
+			if ( GUILayout.Button ( "Apply Destroy", EditorStyles.miniButtonRight ) )
+			{
+				
+			}
+			EditorGUILayout.EndHorizontal();
+		}
 
 		EditorGUILayout.BeginHorizontal ( );
 		#region Scene Layout
@@ -241,7 +281,7 @@ public class WindowSearchObject : EditorWindow
 				AllObjectScene = new List<List<GameObject>> ( );
 			}
 
-			aPageScene = LayoutSearch( getAllOnScene, bScene, fScene, aPageScene ,childScene );
+			aPageScene = LayoutSearch( getAllOnScene, bScene, fScene, aPageScene, childScene );
 			EditorGUILayout.EndScrollView ( );
 		}
 		#endregion
@@ -256,7 +296,7 @@ public class WindowSearchObject : EditorWindow
 				AllObjectProject = new List<List<GameObject>> ( );
 			}
 
-			aPageProj = LayoutSearch( getAllOnProj, bProj, fProj, aPageProj, childProj, true );
+			aPageProj = LayoutSearch( getAllOnProj, bProj, fProj, aPageProj, childProj );
 			EditorGUILayout.EndScrollView ( );
 		}
 		#endregion
@@ -279,11 +319,14 @@ public class WindowSearchObject : EditorWindow
 		EditorGUILayout.EndHorizontal();
 	}
 
-
-	int LayoutSearch ( List<List<GameObject>> listSearch, List<int> bPage, List<bool> fDout, int aPage, bool ifChild, bool ifFolder = false )
+	int LayoutSearch ( List<List<GameObject>> listSearch, List<int> bPage, List<bool> fDout, int aPage, bool ifChild )
 	{
 		int a; 
 		int b;
+		int isParent = 0;
+		bool getParent = false;
+		int getindentLevel = 0;
+		Transform currParent;
 
 		if ( listSearch.Count > 10 )
 		{
@@ -302,19 +345,32 @@ public class WindowSearchObject : EditorWindow
 
 			EditorGUI.indentLevel = 0;
 
-			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.ObjectField ( listSearch [ a ][0], typeof( GameObject ), true );
-
-			if ( ifFolder )
-			{/*
-				if ( GUILayout.Button ( "Go Folder", EditorStyles.miniButton ) )
-				{
-				}*/
-			}
-			EditorGUILayout.EndHorizontal();
-
-			if ( ifChild )
+			getParent = false;
+			if ( ifChild && listSearch [ a ] [ 0 ].transform.parent == null )
 			{
+				EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.BeginVertical();
+
+				currParent = listSearch [ a ] [ 0 ].transform.parent;
+
+				isParent = 1;
+				EditorGUILayout.ObjectField ( listSearch [ a ] [ 0 ], typeof ( GameObject ), true );
+
+				while ( currParent.parent != null )
+				{
+					currParent = currParent.parent;
+				}
+
+				getindentLevel = EditorGUI.indentLevel;
+				EditorGUI.indentLevel = getindentLevel + 2;
+
+				EditorGUILayout.ObjectField ( "Parent", currParent.gameObject, typeof ( GameObject ), true );
+				EditorGUI.indentLevel = getindentLevel;
+
+				EditorGUILayout.EndVertical();
+				EditorGUILayout.EndHorizontal();
+
+				getParent = true;
 				if ( listSearch [ a ].Count > 1 )
 				{
 					EditorGUI.indentLevel = 1;
@@ -323,6 +379,13 @@ public class WindowSearchObject : EditorWindow
 
 				EditorGUI.indentLevel = 2;
 			}
+			else
+			{
+				currParent = listSearch [ a ] [ 0 ].transform;
+				isParent = 0;
+				fDout [ a ] = true;
+			}
+
 			if ( fDout [ a ] )
 			{
 				EditorGUILayout.BeginVertical ( );
@@ -332,21 +395,32 @@ public class WindowSearchObject : EditorWindow
 					EditorGUILayout.BeginHorizontal();
 					EditorGUILayout.PrefixLabel( "Page : " + (listSearch[a].Count / 10).ToString() );
 					bPage[a] = EditorGUILayout.IntSlider ( bPage[a], 0, listSearch[a].Count / 10 );
-					EditorGUILayout.EndHorizontal();
+					EditorGUILayout.EndHorizontal ( );
+
 				}
 				else
 				{
 					bPage[a] = 0;
 				}
 
-				for ( b = bPage[a] * 10 + 1; b < 10 * ( bPage[a] + 1 ) + 1; b++ )
+				for ( b = bPage[a] * 10 + isParent; b < 10 * ( bPage[a] + 1 ) + 1; b++ )
 				{
 					if ( b >= listSearch[a].Count)
 					{
 						break;
 					}
-
+					Debug.Log ( a+ " / " + b + " - " + listSearch [ a ] [ b ].name );
+					EditorGUILayout.BeginVertical();
 					EditorGUILayout.ObjectField ( listSearch [ a ] [ b ], typeof( GameObject ), true );
+					if ( !getParent && currParent != listSearch [ a ] [ b ].transform.parent )
+					{
+						getindentLevel = EditorGUI.indentLevel;
+						EditorGUI.indentLevel = getindentLevel + 3;
+
+						EditorGUILayout.ObjectField ( "OtherParent", listSearch [ a ] [ b ].transform.parent.gameObject, typeof( GameObject ), true );
+						EditorGUI.indentLevel = getindentLevel;
+					}
+					EditorGUILayout.EndVertical();
 				}
 				EditorGUILayout.EndVertical ( );
 			}

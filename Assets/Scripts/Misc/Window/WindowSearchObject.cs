@@ -2,7 +2,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using System.Reflection;
 
 public class WindowSearchObject : EditorWindow
 {
@@ -80,7 +79,7 @@ public class WindowSearchObject : EditorWindow
 		thispref = new List<GameObject> ( );
 	}
 	// chercher ref de l'obje en scene / projet & faire une recherche de pref 
-	[MenuItem("CustomWindow/SearchTags")]
+	[MenuItem("CustomTools/SearchTags")]
 	public static void ShowWindow()
 	{
 		EditorWindow.GetWindow(typeof(WindowSearchObject));
@@ -454,12 +453,15 @@ public class WindowSearchObject : EditorWindow
 		int a;
 		int b;
 		int c;
+		Component [] m_List;
 		Component [] allComp;
-		GameObject currObj = ( GameObject ) objComp;
+		GameObject original = ( GameObject ) objComp;
 		Vector3 getCurr;
 		Quaternion getCurrRot;
 
-		allComp = currObj.GetComponents<Component> ( );
+		allComp = original.GetComponents<Component> ( );
+		System.Reflection.FieldInfo[] fields = original.GetType().GetFields();
+
 		for ( a = 0; a < listSearch.Count; a++ )
 		{
 			for ( b = 0; b < listSearch [ a ].Count; b++ )
@@ -469,40 +471,30 @@ public class WindowSearchObject : EditorWindow
 				getCurr = listSearch [ a ] [ b ].transform.localPosition;
 				getCurrRot = listSearch [ a ] [ b ].transform.localRotation;
 
-				if ( thisTypeTU == TypeUpdate.UpdateAll )
-				{
-					for ( c = 0; c < allComp.Length; c++ )
-					{
-						if ( listSearch [ a ] [ b ].GetComponent ( allComp [ c ].GetType ( ) ) == null )
-						{
-							listSearch [ a ] [ b ].AddComponent ( allComp [ c ].GetType ( ) );
-						}
-						else
-						{
-							Component oldComp = listSearch [ a ] [ b ].GetComponent ( allComp [ c ].GetType ( ) );
-							Component new_component = allComp [ c ];
+				m_List = listSearch [ a ] [ b ].GetComponents<Component>();
 
-							foreach (FieldInfo f in oldComp.GetType().GetFields())
-							{
-								f.SetValue(new_component, f.GetValue(listSearch [ a ] [ b ].GetComponent ( allComp [ c ].GetType ( ) )));
-							}
-						}
+				for ( c = 0; c < allComp.Length; c++ )
+				{
+					if ( listSearch [ a ] [ b ].GetComponent ( allComp [ c ].GetType ( ) ) == null )
+					{
+						listSearch [ a ] [ b ].AddComponent ( allComp [ c ].GetType ( ) );
 					}
 
-					listSearch [ a ] [ b ].transform.localPosition = getCurr;
-					listSearch [ a ] [ b ].transform.localRotation = getCurrRot;
+					UnityEditorInternal.ComponentUtility.CopyComponent ( allComp [ c ] );
+					UnityEditorInternal.ComponentUtility.PasteComponentValues ( listSearch [ a ] [ b ].GetComponent ( allComp [ c ].GetType ( ) ) );
 				}
-			
 
-				//Destroy ( getAllOnScene [ a ] [ b ].GetComponents<Component> ( ) );
-
-				/*for ( c = 0; c < allComp.Length; c ++ )
+				for ( c = 0; c < m_List.Length; c++ )
 				{
-
-					getAllOnScene [ a ] [ b ].AddComponent ( allCompPref [ c ] );
+					if ( original.GetComponent ( m_List [ c ].GetType ( ) ) == null )
+					{
+						DestroyImmediate ( listSearch [ a ] [ b ].GetComponent ( m_List [ c ].GetType ( ) ) );
+					}
 				}
-				
-				*/
+					
+				listSearch [ a ] [ b ].transform.localPosition = getCurr;
+				listSearch [ a ] [ b ].transform.localRotation = getCurrRot;
+
 			}
 		}
 	}

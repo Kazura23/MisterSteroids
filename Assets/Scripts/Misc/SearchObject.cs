@@ -100,7 +100,7 @@ public class SearchObject : MonoBehaviour
 		return getAllObj;
 	}
 
-	public static List<List<GameObject>> LoadOnPrefab ( ResearcheType thisType, Object objComp, List<GameObject> thisPref, string thisStringSearch, bool getChildren )
+	public static List<List<GameObject>> LoadOnPrefab ( ResearcheType thisType, Object objComp, List<GameObject> thisPref, string thisStringSearch, bool getChildren  )
 	{
 		List<List<GameObject>> objectList = new List<List<GameObject>> ( );
 		List<GameObject> getObj;
@@ -134,22 +134,27 @@ public class SearchObject : MonoBehaviour
 	#endregion
 
 	#region Private Methods
-	static List<GameObject> returnCurrObj ( GameObject[] objectList, ResearcheType thisType, Object objComp, string thisStringSearch, bool getChildren )
+	static List<GameObject> returnCurrObj ( GameObject[] objectList, ResearcheType thisType, Object objComp, string thisStringSearch, bool getChildren  )
 	{
 		List <GameObject> objTagList = new List<GameObject> ( );
-		Component[] components;
-		Component[] componentsPref;
+		Component [] components;
+		Component [] componentsPref;
 
 		GameObject getPref;
 
 		if ( thisType == ResearcheType.SamePref )
 		{
+			if ( objComp == null )
+			{
+				return new List<GameObject> ( );
+			}
+
 			getPref = ( GameObject ) objComp;
 			componentsPref = getPref.GetComponents<Component> ( );
 		}
 		else
 		{
-			getPref = objectList[0];
+			getPref = objectList [ 0 ];
 			componentsPref = getPref.GetComponents<Component> ( );
 		}
 
@@ -167,7 +172,7 @@ public class SearchObject : MonoBehaviour
 
 			if ( getChildren )
 			{
-				foreach ( GameObject thisChild in GetComponentsInChildrenOfAsset ( objectList[a] ) )
+				foreach (GameObject thisChild in GetComponentsInChildrenOfAsset ( objectList[a] ))
 				{
 					switch (thisType) 
 					{
@@ -293,15 +298,15 @@ public class SearchObject : MonoBehaviour
 		return objTagList;
 	}
 
-	static GameObject[] GetComponentsInChildrenOfAsset( GameObject go )
+	static GameObject[] GetComponentsInChildrenOfAsset( GameObject go  )
 	{
 		List<GameObject> tfs = new List<GameObject>();
-		CollectChildren( tfs, go.transform );
 
+		CollectChildren( tfs, go.transform );
 		return tfs.ToArray();
 	}
 
-	static void CollectChildren( List<GameObject> transforms, Transform tf )
+	static void CollectChildren( List<GameObject> transforms, Transform tf)
 	{
 		transforms.Add ( tf.gameObject );
 

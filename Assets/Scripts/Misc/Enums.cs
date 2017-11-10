@@ -49,3 +49,11 @@ public enum ResearcheType
 	SamePref,
 	MissingComp
 }
+
+public enum TypeUpdate 
+{
+	Nothing,
+	UpdateAll,
+	OnlyNewComponent,
+	DeleteAll
+}

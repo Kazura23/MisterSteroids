@@ -28,7 +28,7 @@ public class Punch : MonoBehaviour {
     void Start()
     {
 		control = GlobalManager.GameCont.Player.GetComponent<PlayerController>();
-        barMadness = control.barMadness;
+        barMadness = control.BarMadness;
     }
 
     void OnTriggerEnter(Collider other)
@@ -98,12 +98,12 @@ public class Punch : MonoBehaviour {
 
     public void MadnessMana(string type)
     {
-        if (!control.IsInMadness()) {
-            if (barMadness.value + addPointBarByPunchSimple < barMadness.maxValue && type == "Simple")
+        //if (!control.IsInMadness()) {
+            if (/*barMadness.value + addPointBarByPunchSimple < barMadness.maxValue &&*/ type == "Simple")
             {
                 //barMadness.value += addPointBarByPunchSimple;
                 control.AddSmoothCurve(addPointBarByPunchSimple);
-            } else if (barMadness.value + addPointBarByPunchDouble < barMadness.maxValue && type == "Double")
+            } else if (/*barMadness.value + addPointBarByPunchDouble < barMadness.maxValue &&*/ type == "Double")
             {
                 //barMadness.value += addPointBarByPunchDouble;
                 control.AddSmoothCurve(addPointBarByPunchDouble);
@@ -113,6 +113,6 @@ public class Punch : MonoBehaviour {
                 barMadness.value = barMadness.maxValue;
                 control.SetInMadness(true);
             }*/
-        }
+        //}
     }
 }

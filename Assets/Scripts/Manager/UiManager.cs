@@ -94,6 +94,7 @@ public class UiManager : ManagerParent
             DOVirtual.DelayedCall(.1f, () =>
             {
                 Time.timeScale = 1f;
+                GlobalManager.GameCont.Intro = false;
                 Camera.main.DOFieldOfView(4, .25f);
                 DOVirtual.DelayedCall(.25f, () =>
                 {
@@ -138,13 +139,13 @@ public class UiManager : ManagerParent
         Debug.Log("ShakeOver");
 
 
-        Time.timeScale = 0f;
-        Time.fixedDeltaTime = 0.02F * Time.timeScale;
-        DOVirtual.DelayedCall(.4f, () => {
+        //Time.timeScale = 0f;
+        //Time.fixedDeltaTime = 0.02F * Time.timeScale;
+        //DOVirtual.DelayedCall(.4f, () => {
             Time.timeScale = 1;
             Time.fixedDeltaTime = .02F;
             ScreenShake.Singleton.ShakeGameOver();
-        });
+        //});
         RedScreen.DOFade(.7f, .25f).OnComplete(() => {
             RedScreen.DOFade(0, .0f);
         });
@@ -202,7 +203,7 @@ public class UiManager : ManagerParent
 		}
 		else
 		{
-			speedEffect.GetComponent<CanvasGroup>().DOFade(0, .25f); 
+			speedEffect.GetComponent<CanvasGroup>().DOFade(0, .10f); 
 		}
 	}
 

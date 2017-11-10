@@ -17,6 +17,9 @@ public class GlobalManager : MonoBehaviour
 
 	static GameController gCont;
 	public static GameController GameCont { get { return gCont; } }
+
+	static AudioManager audio;
+	public static AudioManager Audio { get { return audio; } }
 	#endregion
 
 	#region Mono
@@ -48,6 +51,7 @@ public class GlobalManager : MonoBehaviour
 		InitializeManager ( ref gCont );
 		InitializeManager ( ref ui );
 		InitializeManager ( ref scene );
+		InitializeManager ( ref audio );
     }
 
 	void InitializeManager<T>(ref T manager) where T : ManagerParent

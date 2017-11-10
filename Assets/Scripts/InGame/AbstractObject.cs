@@ -18,7 +18,6 @@ public class AbstractObject : MonoBehaviour
 	[Tooltip ("force de direction lorsque en collision contre un Object / ennemis ( situation ou ce gameobject est immobile )")]
 	public float onObjForward;
 
-
 	[Space]
 	[Header ("Contrainte axe / rotation ")]
 	[Tooltip ("Si différent de 0 alors l'axe est freeze")]
@@ -146,6 +145,12 @@ public class AbstractObject : MonoBehaviour
 
 		if ( getThis.tag == Constants._EnnemisTag || getThis.tag == Constants._ObjDeadTag || getThis.tag == Constants._ObsTag )
 		{
+			Physics.IgnoreCollision ( thisColl.collider, GetComponent<Collider> ( ) );
+
+			if ( getThis.tag == Constants._EnnemisTag || getThis.tag == Constants._ObjDeadTag )
+			{
+				Debug.Log ( "ennemis touche" );
+			}
 			CollDetect ( );
 		}
 

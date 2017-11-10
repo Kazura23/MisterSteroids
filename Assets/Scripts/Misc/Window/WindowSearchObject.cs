@@ -39,6 +39,7 @@ public class WindowSearchObject : EditorWindow
 	List<List<GameObject>> AllObjectScene;
 	List<List<GameObject>> InfoOnPrefab;
 
+
 	void OnEnable ()
 	{
 		thisType = ResearcheType.Tag;
@@ -230,7 +231,7 @@ public class WindowSearchObject : EditorWindow
 		EditorGUILayout.Space ( );
 		EditorGUILayout.Space ( );
 
-		if ( thisType == ResearcheType.SamePref )
+		if ( thisType == ResearcheType.SamePref &&  GUILayout.Button ( "Apply Update", EditorStyles.miniButton ) )
 		{
 			modifPref ( getAllOnScene );
 			modifPref ( getAllOnProj );
@@ -489,3 +490,9 @@ public class WindowSearchObject : EditorWindow
 	}
 }
 
+// faire un slider de tolérence
+// faire en sorte que l'on peu choisir pour chaque component de l'update / delete / rien faire
+public class ActionOnComp 
+{
+	
+}

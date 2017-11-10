@@ -6,7 +6,6 @@ using System.Collections;
 public class WindowSearchObject : EditorWindow
 {
 	ResearcheType thisType;
-	TypeUpdate thisTypeTU;
 
 	string thisStringSearch;
 	string SpecificPath;
@@ -43,7 +42,6 @@ public class WindowSearchObject : EditorWindow
 	void OnEnable ()
 	{
 		thisType = ResearcheType.Tag;
-		thisTypeTU = TypeUpdate.Nothing;
 
 		thisStringSearch = string.Empty;
 		SpecificPath = string.Empty;
@@ -234,18 +232,9 @@ public class WindowSearchObject : EditorWindow
 
 		if ( thisType == ResearcheType.SamePref )
 		{
-			EditorGUILayout.BeginHorizontal ( );
-			if ( thisTypeTU != TypeUpdate.Nothing && GUILayout.Button ( "Apply On Object" ) )
-			{
-				modifPref ( getAllOnScene );
-				modifPref ( getAllOnProj );
-				modifPref ( getAllOnPrefab );
-
-				thisTypeTU = TypeUpdate.Nothing;
-			}
-
-			thisTypeTU = ( TypeUpdate ) EditorGUILayout.EnumPopup ( "Type Update:", thisTypeTU );
-			EditorGUILayout.EndHorizontal();
+			modifPref ( getAllOnScene );
+			modifPref ( getAllOnProj );
+			modifPref ( getAllOnPrefab );
 		}
 
 		EditorGUILayout.BeginHorizontal ( );

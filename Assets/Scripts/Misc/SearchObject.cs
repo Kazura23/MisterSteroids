@@ -220,7 +220,7 @@ public class SearchObject : MonoBehaviour
 						break;
 					case ResearcheType.SamePref:
 						components = thisChild.GetComponents<Component> ( );
-						if ( componentsPref.Length == components.Length && thisChild.name.Length >= getPref.name.Length && thisChild.name.Substring ( 0, getPref.name.Length ) == getPref.name  )
+						if ( (componentsPref.Length - components.Length  <= 2 ) && thisChild.name.Length >= getPref.name.Length && thisChild.name.Substring ( 0, getPref.name.Length ) == getPref.name  )
 						{
 							objTagList.Add ( thisChild );
 						}
@@ -281,7 +281,7 @@ public class SearchObject : MonoBehaviour
 					break;
 				case ResearcheType.SamePref:
 					components = objectList [ a ].GetComponents<Component> ( );
-					if ( componentsPref.Length == components.Length && objectList [ a ].name.Length >= getPref.name.Length && objectList [ a ].name.Substring ( 0, getPref.name.Length ) == getPref.name )
+					if ( (componentsPref.Length - components.Length  <= 2 ) && objectList [ a ].name.Length >= getPref.name.Length && objectList [ a ].name.Substring ( 0, getPref.name.Length ) == getPref.name )
 					{
 						objTagList.Add ( objectList [ a ] );
 					}

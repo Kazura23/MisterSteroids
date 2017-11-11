@@ -18,8 +18,8 @@ public class GlobalManager : MonoBehaviour
 	static GameController gCont;
 	public static GameController GameCont { get { return gCont; } }
 
-	static AudioManager audio;
-	public static AudioManager Audio { get { return audio; } }
+	static AudioManager mAudio;
+	public static AudioManager AudioMa { get { return mAudio; } }
 	#endregion
 
 	#region Mono
@@ -27,7 +27,6 @@ public class GlobalManager : MonoBehaviour
 	{
 		//PlayerPrefs.DeleteAll ( );
 	
-		//Keep manager a singleton
 		if ( mainManagerInstance != null )
 		{
 			Destroy ( gameObject );
@@ -51,7 +50,7 @@ public class GlobalManager : MonoBehaviour
 		InitializeManager ( ref gCont );
 		InitializeManager ( ref ui );
 		InitializeManager ( ref scene );
-		InitializeManager ( ref audio );
+		InitializeManager ( ref mAudio );
     }
 
 	void InitializeManager<T>(ref T manager) where T : ManagerParent

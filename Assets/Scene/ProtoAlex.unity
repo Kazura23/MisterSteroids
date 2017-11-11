@@ -1176,8 +1176,23 @@ Prefab:
       objectReference: {fileID: 78526969}
     - target: {fileID: 114420335998659392, guid: b4cea04d2ef6e224da8a8b609103e64f,
         type: 2}
-      propertyPath: TimePropulseDoublePunch
-      value: 0.2
+      propertyPath: ratioDownInMadness
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114492754820279070, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: _Y
+      value: -0.825
+      objectReference: {fileID: 0}
+    - target: {fileID: 114492754820279070, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: _U
+      value: 0.156
+      objectReference: {fileID: 0}
+    - target: {fileID: 114492754820279070, guid: b4cea04d2ef6e224da8a8b609103e64f,
+        type: 2}
+      propertyPath: _V
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b4cea04d2ef6e224da8a8b609103e64f, type: 2}

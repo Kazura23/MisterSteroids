@@ -18,7 +18,6 @@ public class AbstractObject : MonoBehaviour
 	[Tooltip ("force de direction lorsque en collision contre un Object / ennemis ( situation ou ce gameobject est immobile )")]
 	public float onObjForward;
 
-
 	[Space]
 	[Header ("Contrainte axe / rotation ")]
 	[Tooltip ("Si différent de 0 alors l'axe est freeze")]

@@ -69,8 +69,9 @@ public class PlayerController : MonoBehaviour
     [Header("Caractéristique Madness")]
     public float RatioMaxMadness = 4;
     public float DelayDownBar = 3;
-    public float LessPointPunchInMadness = 15;
+    //public float LessPointPunchInMadness = 15;
     public float SmoothSpeed = 100;
+    public float ratioDownInMadness = 1.5f;
 
 	[Header ("SphereMask")]
 	public float Radius;
@@ -120,6 +121,8 @@ public class PlayerController : MonoBehaviour
 	Slider SliderSlow;
 	Camera thisCam;
 	Punch getPunch;
+    CameraFilterPack_Color_YUV camMad;
+    Vector3 saveCamMad;
 
 	float maxSpeedCL = 0;
 	float maxSpeed = 0;
@@ -193,6 +196,8 @@ public class PlayerController : MonoBehaviour
 		impulsionCL = ImpulsionCL;
 		decelerationCL = DecelerationCL;
 		playAnimator = GetComponentInChildren<Animator> ( );
+        camMad = GetComponentInChildren<CameraFilterPack_Color_YUV>();
+        saveCamMad = new Vector3(camMad._Y, camMad._U, camMad._V);
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
 
@@ -227,10 +232,13 @@ public class PlayerController : MonoBehaviour
         }
 
         SmoothBar();
+        camMad._Y = saveCamMad.x * (BarMadness.value / BarMadness.maxValue);
+        camMad._U = saveCamMad.y * (BarMadness.value / BarMadness.maxValue);
+        camMad._V = saveCamMad.z * (BarMadness.value / BarMadness.maxValue);
 
-        if (BarMadness.value - (getTime * DelayDownBar) > 0)
+        if (BarMadness.value - (getTime * DelayDownBar * (InMadness ? ratioDownInMadness : 1)) > 0)
         {
-            BarMadness.value -= getTime * DelayDownBar;
+            BarMadness.value -= getTime * DelayDownBar * (InMadness ? ratioDownInMadness : 1);
         }
         else
         {
@@ -761,7 +769,7 @@ public class PlayerController : MonoBehaviour
 	{
 		if ( Input.anyKeyDown && Input.GetAxis ( "SpecialAction" ) == 0 && Input.GetAxis ( "Horizontal" ) == 0 )
 		{
-			if (InMadness)
+			/*if (InMadness)
 			{
 				if (BarMadness.value - LessPointPunchInMadness < 0)
 				{
@@ -773,7 +781,7 @@ public class PlayerController : MonoBehaviour
                     ScreenShake.Singleton.ShakeMad();
                     Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().Distortion = (BarMadness.value/10);
                 }
-			}
+			}*/
 		}
 
 		if(Input.GetAxis("CoupSimple") != 0 && canPunch && resetAxeS  )
@@ -786,10 +794,10 @@ public class PlayerController : MonoBehaviour
             if (Time.timeScale < 1)
                 Time.timeScale = 1;
 
-			if ( !InMadness )
-			{
+			//if ( !InMadness )
+			//{
 				punch.MadnessMana("Simple");
-			}
+			//}
 
             ScreenShake.Singleton.ShakeHitSimple();
        
@@ -827,10 +835,10 @@ public class PlayerController : MonoBehaviour
 
             if (Time.timeScale < 1)
                 Time.timeScale = 1;
-			if ( !InMadness )
-			{
+			//if ( !InMadness )
+			//{
 				punch.MadnessMana("Double");
-			}
+			//}
 
             propDP = true;
 			StartCoroutine ( StartPunch ( 1 ) );
@@ -851,7 +859,7 @@ public class PlayerController : MonoBehaviour
 
 		StartCoroutine ( CooldownPunch ( type_technic ) );
 
-        if (InMadness)
+        /*if (InMadness)
         {
             if (BarMadness.value - LessPointPunchInMadness < 0)
             {
@@ -862,8 +870,8 @@ public class PlayerController : MonoBehaviour
                    
                 BarMadness.value -= LessPointPunchInMadness;
             }
-            AddSmoothCurve(-LessPointPunchInMadness);
-        }
+            //AddSmoothCurve(-LessPointPunchInMadness);
+        }*/
 	}
 
 	private IEnumerator CooldownPunch ( int type_technic )
@@ -1007,7 +1015,9 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("MADDDDDDDD");
                 InMadness = !InMadness;
 
-				maxSpeedCL = MaxSpeedCL * 2;
+                camMad._Y = saveCamMad.x; camMad._U = saveCamMad.y; camMad._V = saveCamMad.z;
+
+                maxSpeedCL = MaxSpeedCL * 2;
 				maxSpeed = MaxSpeed * 3;
 				accelerationCL = AccelerationCL * 2;
 				acceleration = Acceleration * 4;

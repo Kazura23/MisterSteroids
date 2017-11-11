@@ -12,7 +12,8 @@ public class BazookaMan : AbstractObject {
     private Transform player;
 	Transform localShoot;
 	// Use this for initialization
-	void Start () {
+	protected override void Start()
+	{
         timer = 0;
 		player = GlobalManager.GameCont.Player.transform;
 		localShoot = getTrans.Find ( "SpawnShoot" );

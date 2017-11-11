@@ -28,12 +28,6 @@ public class ProtoEnnemis : AbstractObject
     
 
 	#region Public Methods
-    protected override void Update()
-    {
-        base.Update();
-    }
-
-
     public override void PlayerDetected ( GameObject thisObj, bool isDetected )
 	{
 		base.PlayerDetected ( thisObj, isDetected );

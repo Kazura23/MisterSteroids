@@ -13,6 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NbrChunkOneLvl: 10
   ChunkAleat: 1
+  WallEndChunk: {fileID: 0}
+  WallOnLastChunk: {fileID: 0}
   TheseChunks:
   - {fileID: 1248407654525698, guid: 52f735ab12cbef941ac49624cd44b09d, type: 2}
   - {fileID: 1590532982309802, guid: a82af4d48e5b0e342b01704270f40d87, type: 2}
@@ -23,5 +25,5 @@ MonoBehaviour:
   EnnemySpawnable: []
   ObstacleSpawnable: []
   ObstacleDestrucSpawnable: []
-  CoinSpawnable: []
-  WallOnLastChunk: {fileID: 0}
+  CoinSpawnable:
+  - {fileID: 0}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class PlayerController : MonoBehaviour 
 {
@@ -68,8 +69,9 @@ public class PlayerController : MonoBehaviour
     [Header("Caractéristique Madness")]
     public float RatioMaxMadness = 4;
     public float DelayDownBar = 3;
-    public float LessPointPunchInMadness = 15;
+    //public float LessPointPunchInMadness = 15;
     public float SmoothSpeed = 100;
+    public float ratioDownInMadness = 1.5f;
 
 	[Header ("SphereMask")]
 	public float Radius;
@@ -87,6 +89,8 @@ public class PlayerController : MonoBehaviour
 	public bool Dash = false;
 	[HideInInspector]
 	public bool Running = true;
+	[HideInInspector]
+	public bool blockChangeLine = false;
 	public int Life = 1;
 	public bool StopPlayer = false;
 
@@ -103,38 +107,44 @@ public class PlayerController : MonoBehaviour
 
     Transform pTrans;
 	Rigidbody pRig;
+
 	Direction currentDir = Direction.North;
 	Direction newDir = Direction.North;
-	//Vector3 posDir;
 	Vector3 dirLine = Vector3.zero;
 	Vector3 lastPos;
-	IEnumerator propPunch;
-	Punch getPunch;
-	Camera thisCam;
-	Slider SliderSlow;
+	//Vector3 posDir;
 	Text textDist;
 	Text textCoin;
-	Animator playAnimator;
 
-	float PropulseBalls = 100;
+	IEnumerator propPunch;
+	Animator playAnimator;
+	Slider SliderSlow;
+	Camera thisCam;
+	Punch getPunch;
+    CameraFilterPack_Color_YUV camMad;
+    Vector3 saveCamMad;
+
+	float maxSpeedCL = 0;
+	float maxSpeed = 0;
+	float accelerationCL = 0;
+	float decelerationCL = 0;
+	float acceleration = 0;
+	float impulsionCL = 0;
 	float currSpeed = 0;
 	float currSpLine = 0;
-	//float calPos = 0;
+
+	float PropulseBalls = 100;
 	float newH = 0;
 	float newDist;
 	float saveDist;
+	float nextIncrease = 0;
 	float befRot = 0;
 	float SliderContent;
 	float totalDis = 0;
     float rationUse = 1;
-	float nextIncrease = 0;
-	float maxSpeed = 0;
-	float maxSpeedCL = 0;
-	float accelerationCL = 0;
-	float acceleration = 0;
-	float impulsionCL = 0;
-	float decelerationCL = 0;
-    float valueSmooth = 0;
+	//float calPos = 0;
+
+	float valueSmooth = 0;
     float valueSmoothUse = 0;
 	float timeToDP;
 
@@ -186,9 +196,10 @@ public class PlayerController : MonoBehaviour
 		impulsionCL = ImpulsionCL;
 		decelerationCL = DecelerationCL;
 		playAnimator = GetComponentInChildren<Animator> ( );
+        camMad = GetComponentInChildren<CameraFilterPack_Color_YUV>();
+        saveCamMad = new Vector3(camMad._Y, camMad._U, camMad._V);
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
-
 
         Plafond.GetComponent<MeshRenderer>().enabled = true;
     }
@@ -221,10 +232,13 @@ public class PlayerController : MonoBehaviour
         }
 
         SmoothBar();
+        camMad._Y = saveCamMad.x * (BarMadness.value / BarMadness.maxValue);
+        camMad._U = saveCamMad.y * (BarMadness.value / BarMadness.maxValue);
+        camMad._V = saveCamMad.z * (BarMadness.value / BarMadness.maxValue);
 
-        if (BarMadness.value - (getTime * DelayDownBar) > 0)
+        if (BarMadness.value - (getTime * DelayDownBar * (InMadness ? ratioDownInMadness : 1)) > 0)
         {
-            BarMadness.value -= getTime * DelayDownBar;
+            BarMadness.value -= getTime * DelayDownBar * (InMadness ? ratioDownInMadness : 1);
         }
         else
         {
@@ -524,12 +538,12 @@ public class PlayerController : MonoBehaviour
 
 				if ( getThis.rotation.x < 0 )
 				{
-					pTrans.Translate ( new Vector3 ( 0, ( ( 360 - getThis.eulerAngles.x ) / 4  ) * Time.deltaTime, 0 ), Space.World );
+					pTrans.Translate ( new Vector3 ( 0, ( ( 360 - getThis.eulerAngles.x ) / 4  ) * getTime, 0 ), Space.World );
 					pRig.useGravity = false;
 				}
 				else if ( getThis.rotation.x > 0 )
 				{
-					pTrans.Translate ( new Vector3 ( 0, ( -getThis.eulerAngles.x / 4 ) * Time.deltaTime, 0 ), Space.World );
+					pTrans.Translate ( new Vector3 ( 0, ( -getThis.eulerAngles.x / 4 ) * getTime, 0 ), Space.World );
 					pRig.useGravity = true;
 				}
 			}
@@ -610,7 +624,7 @@ public class PlayerController : MonoBehaviour
 			calTrans = Vector3.forward * speed * delTime;
 			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 0, 0 ) ), RotationSpeed * delTime );
 		}
-		/*else if ( currentDir == Direction.South )
+		else if ( currentDir == Direction.South )
 		{
 			calTrans = Vector3.back  * speed * delTime;
 			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, 180, 0 ) ), RotationSpeed * delTime );
@@ -624,7 +638,7 @@ public class PlayerController : MonoBehaviour
 		{
 			calTrans = Vector3.left * speed * delTime;
 			transPlayer.rotation = Quaternion.Slerp ( transPlayer.rotation, Quaternion.Euler ( new Vector3 ( 0, -90, 0 ) ), RotationSpeed * delTime );
-		}*/
+		}
 
 		if ( newPos )
 		{
@@ -652,10 +666,14 @@ public class PlayerController : MonoBehaviour
 		float newImp = Input.GetAxis ( "Horizontal" );
 		float lineDistance = Constants.LineDist;
 
-		if ( ( canChange || newH == 0 ) && !inAir )
+		if ( ( canChange || newH == 0 ) && !inAir && !blockChangeLine )
 		{
 			if ( newImp == 1 && LastImp != 1 && currLine + 1 <= NbrLineRight && ( clDir == 1 || newH == 0 ) )
 			{
+                if(Time.timeScale < 1)
+                {
+                    Time.timeScale = 1;
+                }
 				Dash = false;
 				canChange = false;
 				currLine++;
@@ -666,7 +684,11 @@ public class PlayerController : MonoBehaviour
 			}
 			else if ( newImp == -1 && LastImp != -1 && currLine - 1 >= -NbrLineLeft && ( clDir == -1 || newH == 0 ) )
 			{
-				Dash = false;
+                if (Time.timeScale < 1)
+                {
+                    Time.timeScale = 1;
+                }
+                Dash = false;
 				canChange = false;
 				currLine--;
 				LastImp = -1;
@@ -686,11 +708,14 @@ public class PlayerController : MonoBehaviour
 			{
 				float accLine = 0;
 
-				if ( saveDist < 0 && newH > -lineDistance / 2 || saveDist > 0 && newH < lineDistance / 2 )
+				if ( saveDist < 0 && newH > -lineDistance / 1.25f || saveDist > 0 && newH < lineDistance / 1.25f )
+				{
+					canChange = true;
+				}
+
+				if ( saveDist < 0 && newH > -lineDistance / 4 || saveDist > 0 && newH < lineDistance / 4 )
 				{
 					currSpLine -= decelerationCL * delTime;
-
-					canChange = true;
 
 					if ( currSpLine < 0 )
 					{
@@ -744,7 +769,7 @@ public class PlayerController : MonoBehaviour
 	{
 		if ( Input.anyKeyDown && Input.GetAxis ( "SpecialAction" ) == 0 && Input.GetAxis ( "Horizontal" ) == 0 )
 		{
-			if (InMadness)
+			/*if (InMadness)
 			{
 				if (BarMadness.value - LessPointPunchInMadness < 0)
 				{
@@ -756,7 +781,7 @@ public class PlayerController : MonoBehaviour
                     ScreenShake.Singleton.ShakeMad();
                     Camera.main.GetComponent<CameraFilterPack_Distortion_Dream2>().Distortion = (BarMadness.value/10);
                 }
-			}
+			}*/
 		}
 
 		if(Input.GetAxis("CoupSimple") != 0 && canPunch && resetAxeS  )
@@ -769,10 +794,10 @@ public class PlayerController : MonoBehaviour
             if (Time.timeScale < 1)
                 Time.timeScale = 1;
 
-			if ( !InMadness )
-			{
+			//if ( !InMadness )
+			//{
 				punch.MadnessMana("Simple");
-			}
+			//}
 
             ScreenShake.Singleton.ShakeHitSimple();
        
@@ -810,10 +835,10 @@ public class PlayerController : MonoBehaviour
 
             if (Time.timeScale < 1)
                 Time.timeScale = 1;
-			if ( !InMadness )
-			{
+			//if ( !InMadness )
+			//{
 				punch.MadnessMana("Double");
-			}
+			//}
 
             propDP = true;
 			StartCoroutine ( StartPunch ( 1 ) );
@@ -834,7 +859,7 @@ public class PlayerController : MonoBehaviour
 
 		StartCoroutine ( CooldownPunch ( type_technic ) );
 
-        if (InMadness)
+        /*if (InMadness)
         {
             if (BarMadness.value - LessPointPunchInMadness < 0)
             {
@@ -845,8 +870,8 @@ public class PlayerController : MonoBehaviour
                    
                 BarMadness.value -= LessPointPunchInMadness;
             }
-            AddSmoothCurve(-LessPointPunchInMadness);
-        }
+            //AddSmoothCurve(-LessPointPunchInMadness);
+        }*/
 	}
 
 	private IEnumerator CooldownPunch ( int type_technic )
@@ -903,6 +928,7 @@ public class PlayerController : MonoBehaviour
 		{
 			newPos = true;
 			newDir = thisColl.GetComponent<NewDirect> ( ).NewDirection;
+			blockChangeLine = false;
 			befRot = Vector3.Distance ( thisColl.transform.position, pTrans.position );
 		} 
 	}
@@ -915,7 +941,7 @@ public class PlayerController : MonoBehaviour
 		{
 			if ( getObj.tag == Constants._EnnemisTag || getObj.tag == Constants._ElemDash )
 			{
-                GlobalManager.Ui.BloodHit();
+				GlobalManager.Ui.BloodHit ( );
 
 				/*Vector3 getProj = getPunch.projection_basic;
 
@@ -928,7 +954,7 @@ public class PlayerController : MonoBehaviour
 					getProj.x *= Random.Range ( getProj.x / 2, getProj.x );
 				}*/
 				thisColl.collider.enabled = false;
-				thisColl.gameObject.GetComponent<AbstractObject> ( ).ForceProp (  getPunch.projection_double );
+				thisColl.gameObject.GetComponent<AbstractObject> ( ).ForceProp ( getPunch.projection_double );
 				return;
 			}
 			else if ( getObj.tag == Constants._Balls )
@@ -936,6 +962,10 @@ public class PlayerController : MonoBehaviour
 				StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( getObj, pTrans, PropulseBalls, 1, 5, true ) );
 				return;
 			}
+		}
+		else if ( getObj.tag == Constants._ElemDash )
+		{
+			GameOver ( );
 		}
 
 		if ( getObj.tag == Constants._MissileBazoo )
@@ -985,7 +1015,9 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("MADDDDDDDD");
                 InMadness = !InMadness;
 
-				maxSpeedCL = MaxSpeedCL * 2;
+                camMad._Y = saveCamMad.x; camMad._U = saveCamMad.y; camMad._V = saveCamMad.z;
+
+                maxSpeedCL = MaxSpeedCL * 2;
 				maxSpeed = MaxSpeed * 3;
 				accelerationCL = AccelerationCL * 2;
 				acceleration = Acceleration * 4;

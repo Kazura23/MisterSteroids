@@ -12,7 +12,7 @@ public class SearchObject : MonoBehaviour
 	#endregion
 
 	#region Public Methods
-	public static List<List<GameObject>> LoadAssetsInProject(ResearcheType thisType, Object objComp, string thisStringSearch, bool getChildren, string optionalPath = "")
+	public static List<List<GameObject>> LoadAssetsInProject(ResearcheType thisType, Object objComp, string thisStringSearch, bool getChildren, string optionalPath = "", int diffComp = 2 )
 	{
 		string currTag = thisStringSearch;
 		string[] GUIDs;
@@ -48,7 +48,7 @@ public class SearchObject : MonoBehaviour
 		{
 			for ( a = 0; a < asset.Count; a++ )
 			{
-				getObj = returnCurrObj ( GetComponentsInChildrenOfAsset ( asset [ a ] ), thisType, objComp, thisStringSearch );
+				getObj = returnCurrObj ( GetComponentsInChildrenOfAsset ( asset [ a ] ), thisType, objComp, thisStringSearch, diffComp );
 
 				if ( getObj.Count > 0 )
 				{
@@ -69,7 +69,7 @@ public class SearchObject : MonoBehaviour
 		return objectList;
 	}
 
-	public static List<List<GameObject>> LoadAssetOnScenes ( ResearcheType thisType, Object objComp, string thisStringSearch, bool getChildren )
+	public static List<List<GameObject>> LoadAssetOnScenes ( ResearcheType thisType, Object objComp, string thisStringSearch, bool getChildren, int diffComp = 2 )
 	{
 		GameObject[] objectList = UnityEngine.SceneManagement.SceneManager.GetActiveScene ( ).GetRootGameObjects ( );
 		List<List<GameObject>> getAllObj = new List<List<GameObject>> ( );
@@ -79,7 +79,7 @@ public class SearchObject : MonoBehaviour
 		{
 			for ( int a = 0; a < objectList.Length; a ++)
 			{
-				getObj = returnCurrObj ( GetComponentsInChildrenOfAsset ( objectList [ a ] ), thisType, objComp, thisStringSearch );
+				getObj = returnCurrObj ( GetComponentsInChildrenOfAsset ( objectList [ a ] ), thisType, objComp, thisStringSearch, diffComp );
 
 				if ( getObj.Count > 0 )
 				{
@@ -100,7 +100,7 @@ public class SearchObject : MonoBehaviour
 		return getAllObj;
 	}
 
-	public static List<List<GameObject>> LoadOnPrefab ( ResearcheType thisType, Object objComp, List<GameObject> thisPref, string thisStringSearch, bool getChildren  )
+	public static List<List<GameObject>> LoadOnPrefab ( ResearcheType thisType, Object objComp, List<GameObject> thisPref, string thisStringSearch, bool getChildren, int diffComp = 2 )
 	{
 		List<List<GameObject>> objectList = new List<List<GameObject>> ( );
 		List<GameObject> getObj;
@@ -110,7 +110,7 @@ public class SearchObject : MonoBehaviour
 		{
 			for ( a = 0; a < thisPref.Count; a++ )
 			{
-				getObj = returnCurrObj ( GetComponentsInChildrenOfAsset ( thisPref [ a ] ), thisType, objComp, thisStringSearch );
+				getObj = returnCurrObj ( GetComponentsInChildrenOfAsset ( thisPref [ a ] ), thisType, objComp, thisStringSearch, diffComp );
 
 				if ( getObj.Count > 0 )
 				{
@@ -134,7 +134,7 @@ public class SearchObject : MonoBehaviour
 	#endregion
 
 	#region Private Methods
-	static List<GameObject> returnCurrObj ( GameObject[] objectList, ResearcheType thisType, Object objComp, string thisStringSearch  )
+	static List<GameObject> returnCurrObj ( GameObject[] objectList, ResearcheType thisType, Object objComp, string thisStringSearch, int diffComp = 2 )
 	{
 		List <GameObject> objTagList = new List<GameObject> ( );
 		Component [] components;
@@ -220,7 +220,7 @@ public class SearchObject : MonoBehaviour
 				break;
 			case ResearcheType.SamePref:
 				components = objectList [ a ].GetComponents<Component> ( );
-				if ( (componentsPref.Length - components.Length  <= 2 ) && objectList [ a ].name.Length >= getPref.name.Length && objectList [ a ].name.Substring ( 0, getPref.name.Length ) == getPref.name )
+				if ( (componentsPref.Length - components.Length  <= diffComp ) && objectList [ a ].name.Length >= getPref.name.Length && objectList [ a ].name.Substring ( 0, getPref.name.Length ) == getPref.name )
 				{
 					objTagList.Add ( objectList [ a ] );
 				}

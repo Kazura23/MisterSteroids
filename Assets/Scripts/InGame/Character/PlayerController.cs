@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
 	public float AcceleraCLInc = 0;
 
 	//public float JumpForce = 200;
-    [Header("Caractéristique Fight")]
+    [Header("Caractéristique Dash")]
     /*public float delayLeft = 1;
 	public float delayRight = 1;*/
 	public float DashTime = 1.5f;
@@ -393,7 +393,15 @@ public class PlayerController : MonoBehaviour
 			{
 				resetAxeD = true;
 
-				timeToDP = TimeToDoublePunch;
+				if ( timeToDP < TimeToDoublePunch * 0.75f )
+				{
+					resetAxeD = false;
+					dpunch = true;
+				}
+				else
+				{
+					timeToDP = TimeToDoublePunch;
+				}
 			}
 
 			if ( Input.GetAxis ( "CoupDouble" ) != 0 && resetAxeD )
@@ -825,7 +833,6 @@ public class PlayerController : MonoBehaviour
 			Dash = false;
 			dpunch = false;
 			canPunch = false;
-			timeToDP = TimeToDoublePunch;
 
             ScreenShake.Singleton.ShakeHitDouble();
 
@@ -845,6 +852,8 @@ public class PlayerController : MonoBehaviour
 
 			propPunch = propulsePunch ( TimePropulseDoublePunch );
 			StartCoroutine ( propPunch );
+
+			timeToDP = TimeToDoublePunch;
         }
 	}
 

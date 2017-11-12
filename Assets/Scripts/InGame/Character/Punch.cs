@@ -24,7 +24,7 @@ public class Punch : MonoBehaviour {
 	public bool RightPunch = false;
 
 	bool canPunc = true;
-
+	float pourcPunch = 100;
     void Start()
     {
 		control = GlobalManager.GameCont.Player.GetComponent<PlayerController>();
@@ -75,7 +75,7 @@ public class Punch : MonoBehaviour {
 				tryGet.Degat ( getProj, numTechnic );
 				break;
 			case (int)Technic.double_punch:
-				tryGet.Degat ( projection_double, numTechnic );
+				tryGet.Degat ( projection_double * pourcPunch, numTechnic );
            	 	break;
             }
             MadnessMana("Double");
@@ -86,8 +86,9 @@ public class Punch : MonoBehaviour {
         }
     }
 
-    public void setTechnic(int typeTech)
+	public void setTechnic(int typeTech, float pourc = 100 )
     {
+		pourcPunch = pourc;
         numTechnic = typeTech;
     }
 

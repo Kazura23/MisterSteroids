@@ -860,7 +860,8 @@ public class PlayerController : MonoBehaviour
 	private IEnumerator StartPunch(int type_technic)
 	{
 		yield return new WaitForSeconds(DelayPrepare / rationUse);
-        punch.setTechnic(type_technic);
+		 
+		punch.setTechnic ( type_technic, ( TimeToDoublePunch * 100 ) / ( TimeToDoublePunch - timeToDP ) );
         punchBox.enabled = true;
        /* corou =*/ StartCoroutine("TimerHitbox");
 

@@ -642,16 +642,16 @@ public class PlayerController : MonoBehaviour
 
 		if ( newPos )
 		{
-			befRot -= calTrans.magnitude;
+			befRot -= speed * delTime;
 
 			if ( befRot < 0 )
 			{
 				newPos = false;
 				currentDir = newDir;
-				pTrans.Translate ( pTrans.forward * befRot * delTime, Space.World );
+				pTrans.Translate ( pTrans.forward * befRot, Space.World );
 			}
 		}
-
+			
 		pTrans.Translate ( calTrans, Space.World );
 
 		/*if ( canJump && Input.GetAxis ( "Jump" ) > 0 )
@@ -929,7 +929,13 @@ public class PlayerController : MonoBehaviour
 			newPos = true;
 			newDir = thisColl.GetComponent<NewDirect> ( ).NewDirection;
 			blockChangeLine = false;
-			befRot = Vector3.Distance ( thisColl.transform.position, pTrans.position );
+			Vector3 getThisC = thisColl.transform.position;
+			getThisC = new Vector3 ( getThisC.x, 0, getThisC.z );
+
+			Vector3 getPtr = pTrans.position;
+			getPtr = new Vector3 ( getPtr.x, 0, getPtr.z );
+
+			befRot = Vector3.Distance ( getThisC, getPtr );
 		} 
 	}
 

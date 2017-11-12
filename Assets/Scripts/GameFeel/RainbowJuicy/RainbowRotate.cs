@@ -6,21 +6,19 @@ using UnityEngine.UI;
 
 public class RainbowRotate : MonoBehaviour
 {
-    public enum Type
-    {
-        Clockwise,
-        CounterClockwise
-    }
-
     int index = -1;
     public float time = .2f;
-    public Type movesType;
+    public TypeRotate movesType;
     public Vector3[] moves;
     public Ease easeType;
-    
+	Transform currT;
+	Quaternion startRot;
+
 
     void OnEnable()
     {
+		currT = transform;
+		startRot = transform.localRotation;
         Next();
         //transform.DOMoveY(LocalY, 0);
         //Debug.Log(LocalY);
@@ -29,14 +27,17 @@ public class RainbowRotate : MonoBehaviour
     void Next()
     {
         index = (index + 1) % moves.Length;
-
-        if (movesType == Type.Clockwise)
-            transform.DORotate(moves[index], time, RotateMode.LocalAxisAdd).SetEase(easeType).OnComplete(() => Next());
-
+	
+		if ( movesType == TypeRotate.Clockwise )
+		{
+			currT.DOLocalRotate ( moves [ index ], time, RotateMode.LocalAxisAdd ).SetEase ( easeType ).OnComplete ( ( ) => Next ( ) );
+		}
     }
 
     void OnDisable()
     {
-            transform.DOKill();
+		currT.DOKill();
+
+		currT.localRotation = startRot;
     }
 }

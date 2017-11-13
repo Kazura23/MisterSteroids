@@ -393,7 +393,7 @@ public class PlayerController : MonoBehaviour
 			{
 				resetAxeD = true;
 
-				if ( timeToDP < TimeToDoublePunch * 0.75f )
+				if ( timeToDP < TimeToDoublePunch * 0.55f )
 				{
 					resetAxeD = false;
 					dpunch = true;
@@ -410,6 +410,7 @@ public class PlayerController : MonoBehaviour
 
 				if ( timeToDP <= 0 )
 				{
+					timeToDP = 0;
 					resetAxeD = false;
 					dpunch = true;
 				}
@@ -848,7 +849,7 @@ public class PlayerController : MonoBehaviour
 			//}
 
             propDP = true;
-			StartCoroutine ( StartPunch ( 1 ) );
+			StartCoroutine ( StartPunch ( 1, timeToDP ) );
 
 			propPunch = propulsePunch ( TimePropulseDoublePunch );
 			StartCoroutine ( propPunch );
@@ -857,11 +858,20 @@ public class PlayerController : MonoBehaviour
         }
 	}
 
-	private IEnumerator StartPunch(int type_technic)
+	private IEnumerator StartPunch(int type_technic, float timeDp = 0 )
 	{
 		yield return new WaitForSeconds(DelayPrepare / rationUse);
 		 
-		punch.setTechnic ( type_technic, ( TimeToDoublePunch * 100 ) / ( TimeToDoublePunch - timeToDP ) );
+		if ( type_technic == 1 )
+		{
+			float getPourc = TimeToDoublePunch - timeDp;
+			punch.setTechnic ( type_technic, ( ( TimeToDoublePunch - timeToDP ) * 100 ) / TimeToDoublePunch );
+		}
+		else
+		{
+			punch.setTechnic ( type_technic );
+		}
+
         punchBox.enabled = true;
        /* corou =*/ StartCoroutine("TimerHitbox");
 

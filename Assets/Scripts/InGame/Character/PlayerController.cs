@@ -72,6 +72,10 @@ public class PlayerController : MonoBehaviour
     public float SmoothSpeed = 100;
     public float ratioDownInMadness = 1.5f;
 
+    public float delayInBeginMadness = 2;
+    public float slowInBeginMadness = 3;
+
+
 	[Header ("SphereMask")]
 	public float Radius;
 	public float SoftNess;
@@ -140,6 +144,7 @@ public class PlayerController : MonoBehaviour
     float valueSmooth = 0;
     float valueSmoothUse = 0;
 	float timeToDP;
+    float timerBeginMadness = 0;
 
 	int currLine = 0;
 	int LastImp = 0;
@@ -161,6 +166,7 @@ public class PlayerController : MonoBehaviour
     bool canChocWave = true;
 	bool playerDead = false;
 	bool dpunch = false;
+    bool InBeginMadness = false;
 	#endregion
 
 	#region Mono
@@ -191,6 +197,7 @@ public class PlayerController : MonoBehaviour
 		playAnimator = GetComponentInChildren<Animator> ( );
         camMad = GetComponentInChildren<CameraFilterPack_Color_YUV>();
         saveCamMad = new Vector3(camMad._Y, camMad._U, camMad._V);
+        
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
 
@@ -226,17 +233,34 @@ public class PlayerController : MonoBehaviour
         }
 
         SmoothBar();
-        camMad._Y = saveCamMad.x * (BarMadness.value / BarMadness.maxValue);
-        camMad._U = saveCamMad.y * (BarMadness.value / BarMadness.maxValue);
-        camMad._V = saveCamMad.z * (BarMadness.value / BarMadness.maxValue);
 
-        if (BarMadness.value - (getTime * DelayDownBar * (InMadness ? ratioDownInMadness : 1)) > 0)
+        if (!InBeginMadness)
         {
-            BarMadness.value -= getTime * DelayDownBar * (InMadness ? ratioDownInMadness : 1);
+            camMad._Y = saveCamMad.x * (BarMadness.value / BarMadness.maxValue);
+            camMad._U = saveCamMad.y * (BarMadness.value / BarMadness.maxValue);
+            camMad._V = saveCamMad.z * (BarMadness.value / BarMadness.maxValue);
+            if (BarMadness.value - (getTime * DelayDownBar * (InMadness ? ratioDownInMadness : 1)) > 0)
+            {
+                BarMadness.value -= getTime * DelayDownBar * (InMadness ? ratioDownInMadness : 1);
+            }
+            else
+            {
+                BarMadness.value = 0;
+            }
         }
         else
         {
-            BarMadness.value = 0;
+            if(timerBeginMadness < delayInBeginMadness)
+            {
+                timerBeginMadness += Time.deltaTime;
+                camMad._Y += saveCamMad.x * Time.deltaTime / delayInBeginMadness;
+                camMad._U += saveCamMad.y * Time.deltaTime / delayInBeginMadness;
+                camMad._V += saveCamMad.z * Time.deltaTime / delayInBeginMadness;
+            }
+            else
+            {
+                InBeginMadness = false;
+            }
         }
         if (Input.GetKeyDown(KeyCode.O))
             PlayerPrefs.DeleteAll();
@@ -646,7 +670,7 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 
-		pTrans.Translate ( calTrans, Space.World );
+		pTrans.Translate ( calTrans / (InBeginMadness ? slowInBeginMadness : 1), Space.World );
 
 		/*if ( canJump && Input.GetAxis ( "Jump" ) > 0 )
 		{
@@ -1000,8 +1024,11 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("MADDDDDDDD");
                 InMadness = !InMadness;
+                InBeginMadness = true;
+                timerBeginMadness = 0;
+                camMad._Y = 0; camMad._U = 0; camMad._V = 0;
 
-                camMad._Y = saveCamMad.x; camMad._U = saveCamMad.y; camMad._V = saveCamMad.z;
+                //camMad._Y = saveCamMad.x; camMad._U = saveCamMad.y; camMad._V = saveCamMad.z;
 
                 maxSpeedCL = MaxSpeedCL * 2;
 				maxSpeed = MaxSpeed * 3;

@@ -632,9 +632,9 @@ public class PlayerController : MonoBehaviour
 
 		if ( !inAir )
 		{
-			Shader.SetGlobalFloat ( "_ReduceVis", speed / maxSpeed);
+			Shader.SetGlobalFloat ( "_ReduceVis", speed / maxSpeed );
 
-			if ( thisCam.fieldOfView < calCFov)
+			if ( thisCam.fieldOfView < calCFov )
 			{
 				thisCam.fieldOfView += Time.deltaTime * SpeedEffectTime;
 				if ( thisCam.fieldOfView > calCFov )
@@ -642,7 +642,7 @@ public class PlayerController : MonoBehaviour
 					thisCam.fieldOfView = calCFov;
 				}
 			}
-			else if ( thisCam.fieldOfView > calCFov)
+			else if ( thisCam.fieldOfView > calCFov )
 			{
 				thisCam.fieldOfView -= Time.deltaTime * SpeedEffectTime * 4;
 				if ( thisCam.fieldOfView < calCFov )
@@ -650,6 +650,10 @@ public class PlayerController : MonoBehaviour
 					thisCam.fieldOfView = calCFov;
 				}
 			}
+		}
+		else
+		{
+			thisCam.fieldOfView = Constants.DefFov;
 		}
 
 		if ( currentDir == Direction.North )

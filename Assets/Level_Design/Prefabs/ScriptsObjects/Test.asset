@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49e2bddfe1dbf0d4ab0050d815070b9c, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  NbrChunkOneLvl: 3
+  ChunkAleat: 1
+  WallEndChunk: {fileID: 0}
+  WallOnLastChunk: {fileID: 0}
+  TheseChunks:
+  - {fileID: 1545821835470666, guid: 891c9e9e764497b4e880fa49f71fc0cb, type: 2}
+  PourcSpawn: 100
+  EnnemySpawnable: []
+  ObstacleSpawnable: []
+  ObstacleDestrucSpawnable: []
+  CoinSpawnable: []

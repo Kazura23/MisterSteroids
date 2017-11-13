@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class AbstractObject : MonoBehaviour 
 {
@@ -17,6 +18,12 @@ public class AbstractObject : MonoBehaviour
 	[Tooltip ("force de direction lorsque en collision contre un Object / ennemis ( situation ou ce gameobject est immobile )")]
 	public float onObjForward;
 
+    [Space]
+    [Tooltip ("Slow Motion Approche")]
+    public float distSlowMotio = 5;
+    public float ratioSlow = 0.25f;
+    public float timeSlow = .3f;
+
 	[Space]
 	[Header ("Contrainte axe / rotation ")]
 	[Tooltip ("Si différent de 0 alors l'axe est freeze")]
@@ -29,6 +36,8 @@ public class AbstractObject : MonoBehaviour
 
 	protected Rigidbody mainCorps;
 	protected Transform getTrans;
+    protected Transform playerTrans;
+    protected bool activeSlow = true;
 
 	List<Rigidbody> corps;
 	Vector3 projection;
@@ -49,6 +58,29 @@ public class AbstractObject : MonoBehaviour
 			corps.Add ( thisRig );
 		}
 	}
+
+    protected virtual void Start()
+    {
+        playerTrans = GlobalManager.GameCont.Player.transform;
+    }
+
+    protected virtual void Update()
+    {
+        if (Vector3.Distance(transform.position, playerTrans.position) <= distSlowMotio && activeSlow && !isDead && tag == Constants._EnnemisTag)
+        {
+            activeSlow = false;
+            Debug.Log("Here");
+            Time.timeScale = ratioSlow;
+            StartCoroutine("delaySlowMotio");
+            //DOTween.To(() => Time.timeScale, x => Time.timeScale = x, ratioSlow, timeSlow);
+            //if(Time.timeScale <= ratioSlow)
+                
+        }/*else if(Time.timeScale < 1 && Vector3.Distance(transform.position, playerTrans.position) > distSlowMotio && !activeSlow)
+        {
+            Time.timeScale = 1;
+            activeSlow = true;
+        }*/
+    }
 	#endregion
 
 	#region Public Methods
@@ -64,16 +96,16 @@ public class AbstractObject : MonoBehaviour
 	public virtual void Dead ( bool enemy = false )
 	{
 		isDead = true;
-
-		//StartCoroutine ( disableColl ( ) );
-		getTrans.tag = Constants._ObjDeadTag;
+        Time.timeScale = 1;
+        //StartCoroutine ( disableColl ( ) );
+        getTrans.tag = Constants._ObjDeadTag;
 		for ( int i = 0; i < corps.Count; i++ )
 		{
 			corps [ i ].useGravity = true;
 		}
 
 		mainCorps.constraints = RigidbodyConstraints.None;
-
+		checkConstAxe ( );
 		if ( useGravity )
 		{
 			mainCorps.useGravity = true;
@@ -92,7 +124,8 @@ public class AbstractObject : MonoBehaviour
 			Vector3 getUp = transform.up * projection.y;
 			mainCorps.AddForce ( getFor + getRig + getUp, ForceMode.VelocityChange );
 		}
-
+        Debug.Log("Time = " + Time.timeScale);
+        
 		Destroy ( this.gameObject, delayDead );
 	}
 
@@ -108,7 +141,7 @@ public class AbstractObject : MonoBehaviour
 		}
 	}
 
-	public void ForceProp ( Vector3 forceProp )
+	public virtual void ForceProp ( Vector3 forceProp )
 	{
 		isDead = true;
 
@@ -119,7 +152,7 @@ public class AbstractObject : MonoBehaviour
 		}
 
 		mainCorps.constraints = RigidbodyConstraints.None;
-
+		checkConstAxe ( );
 		if ( useGravity )
 		{
 			mainCorps.useGravity = true;
@@ -137,6 +170,12 @@ public class AbstractObject : MonoBehaviour
 
 		if ( getThis.tag == Constants._EnnemisTag || getThis.tag == Constants._ObjDeadTag || getThis.tag == Constants._ObsTag )
 		{
+			Physics.IgnoreCollision ( thisColl.collider, GetComponent<Collider> ( ) );
+
+			if ( getThis.tag == Constants._EnnemisTag || getThis.tag == Constants._ObjDeadTag )
+			{
+				Debug.Log ( "ennemis touche" );
+			}
 			CollDetect ( );
 		}
 
@@ -152,22 +191,24 @@ public class AbstractObject : MonoBehaviour
 		Transform savePos = transform;
 		Transform playPos = GlobalManager.GameCont.Player.transform;
 
-		while ( Vector3.Distance ( savePos.position, playPos.position ) < 5 )
-		{
-			yield return thisF;
-		}
+		Physics.IgnoreCollision ( playPos.GetComponent<Collider> ( ), GetComponent<Collider> ( ) );
+
+		yield return thisF;
 
 		GetComponent<BoxCollider> ( ).enabled = true;
 	}
 
+    IEnumerator delaySlowMotio()
+    {
+        yield return new WaitForSeconds(timeSlow);
+        if(Time.timeScale < 1)
+        {
+            Time.timeScale = 1;
+        }
+    }
 
-	/*void checkConstAxe ( )
+	void checkConstAxe ( )
 	{
-		if ( useGravity )
-		{
-			mainCorps.useGravity = true;
-		}
-
 		if ( FreezeAxe.x != 0 )
 		{
 			mainCorps.constraints = RigidbodyConstraints.FreezePositionX;
@@ -197,7 +238,7 @@ public class AbstractObject : MonoBehaviour
 		{
 			mainCorps.constraints = RigidbodyConstraints.FreezeRotationZ;
 		}
-	}*/
+	}
 		
 	IEnumerator disableColl ( )
 	{

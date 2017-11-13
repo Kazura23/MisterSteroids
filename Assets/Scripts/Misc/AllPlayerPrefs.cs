@@ -7,7 +7,7 @@ public static class AllPlayerPrefs
     #region Get Methods
 	public static int GetIntValue ( string thisString )
 	{
-		return PlayerPrefs.GetInt ( thisString, 0 );
+		return PlayerPrefs.GetInt ( thisString, 10000 );
 	}
 
 	public static bool GetBoolValue ( string thisString )

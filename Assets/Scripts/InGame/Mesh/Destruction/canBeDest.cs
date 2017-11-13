@@ -11,7 +11,7 @@ public class canBeDest : MonoBehaviour
 	{
 		if ( collision.collider.tag == Constants._PlayerTag )
 		{
-			StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( gameObject, ForcePropulse, DelayDestruc ) );
+			StartCoroutine ( GlobalManager.GameCont.MeshDest.SplitMesh ( gameObject, collision.transform, ForcePropulse, DelayDestruc ) );
 		}
 	}
 }

@@ -205,9 +205,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 435c00366f47d7f47bc950ef28abc364, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  JumpForce: 50
-  MoveSpeed: 10
+  MaxSpeed: 5
+  Acceleration: 10
+  Deceleration: 1
+  CooldownDash: 3
+  MaxSpeedCL: 5
+  AccelerationCL: 10
+  ImpulsionCL: 10
+  DecelerationCL: 1
   RotationSpeed: 4
+  SpeedEffectTime: 0
+  BonusGrav: 0
+  PourcRal: 50
+  DistIncMaxSpeed: 50
+  SpeedIncrease: 5
+  CLSpeedIncrease: 5
+  MaxSpeedInc: 20
+  MaxCLInc: 20
+  AcceleraInc: 3
+  AcceleraCLInc: 3
+  DashTime: 2
+  DashSpeed: 2
+  TimeInvincible: 2
+  SlowMotion: 1
+  SpeedSlowMot: 1
+  SpeedDeacSM: 3
+  ReduceSlider: 0
+  RecovSlider: 0
+  delayPunch: 1
+  delayDoublePunch: 1
+  CooldownDoublePunch: 1
+  delayHitbox: 0.3
+  delayPrepare: 0.1
+  barMadness: {fileID: 0}
+  ratioMaxMadness: 4
+  delayDownBar: 1
+  lessPointPunchInMadness: 3
+  PropulseBalls: 100
+  TimePropulsePunch: 0.1
+  TimePropulseDoublePunch: 0.2
+  SpeedPunchRun: 1.2
+  SpeedDoublePunchRun: 1.5
+  DistPoingDroit: {x: 0, y: 0, z: 0}
+  DistPoingGauche: {x: 0, y: 0, z: 0}
+  poingGauche: {fileID: 0}
+  poingDroite: {fileID: 0}
+  Radius: 0
+  SoftNess: 0
+  ThisAct: 0
+  NbrLineRight: 1
+  NbrLineLeft: 1
+  playerDead: 0
+  Dash: 0
+  Running: 1
+  Life: 3
+  StopPlayer: 0
 --- !u!124 &124875319366438558
 Behaviour:
   m_ObjectHideFlags: 1

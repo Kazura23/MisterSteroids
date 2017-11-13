@@ -17,6 +17,9 @@ public class GlobalManager : MonoBehaviour
 
 	static GameController gCont;
 	public static GameController GameCont { get { return gCont; } }
+
+	static AudioManager audio;
+	public static AudioManager Audio { get { return audio; } }
 	#endregion
 
 	#region Mono
@@ -48,11 +51,12 @@ public class GlobalManager : MonoBehaviour
 		InitializeManager ( ref gCont );
 		InitializeManager ( ref ui );
 		InitializeManager ( ref scene );
+		InitializeManager ( ref audio );
     }
 
 	void InitializeManager<T>(ref T manager) where T : ManagerParent
 	{
-		Debug.Log("Initializing managers");
+		//Debug.Log("Initializing managers");
 		T[] managers = GetComponentsInChildren<T>();
 
 		if(managers.Length == 0)
@@ -74,5 +78,12 @@ public class GlobalManager : MonoBehaviour
 		    }
 		} 
 	}
+
+    void Update()
+    {
+
+        if (Input.GetKeyDown(KeyCode.O))
+            PlayerPrefs.DeleteAll();
+    }
 	#endregion
 }

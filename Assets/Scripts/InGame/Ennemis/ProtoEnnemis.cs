@@ -17,29 +17,45 @@ public class ProtoEnnemis : AbstractObject
 	#endregion
 
 	#region Mono
-	void Start ( )
+	protected override void Start ( )
 	{
 		parMat = getTrans.GetComponent<MeshRenderer> ( ).material;
 		saveCol = parMat.color;
+        base.Start();
 	}
 	#endregion
 
     
 
 	#region Public Methods
-	public override void PlayerDetected ( GameObject thisObj, bool isDetected )
+    protected override void Update()
+    {
+        base.Update();
+    }
+
+
+    public override void PlayerDetected ( GameObject thisObj, bool isDetected )
 	{
 		base.PlayerDetected ( thisObj, isDetected );
 
-		if ( isDetected )
+		if ( isDetected && !isDead)
 		{
 			parMat.color = NewColor;
-		}
+
+        }
 		else
 		{
 			parMat.color = saveCol;
 		}
 		parMat.color = NewColor;
+
+
+
+        try {
+			GetComponentInChildren<Animator>().SetTrigger("Attack");
+		}
+		catch{
+		}
 	}
 
 	public override void Dead ( bool enemy = false ) 
@@ -58,7 +74,7 @@ public class ProtoEnnemis : AbstractObject
 
 		if ( isDead )
 		{
-			GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), "EnemyNormalDeath", transform.parent);
+			GlobalManager.GameCont.FxInstanciate(new Vector3(transform.position.x, transform.position.y, transform.localPosition.z + 5f), "EnemyNormalDeath", transform.parent, .35f);
 		}
 	}
 

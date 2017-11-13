@@ -39,3 +39,11 @@ public enum AudioType
 	OtherSound,
 	Other
 }
+
+public enum ResearcheType 
+{
+	Tag,
+	Layer,
+	Name,
+	Component
+}

@@ -211,7 +211,7 @@ public class SearchObject : MonoBehaviour
 
 				for ( b = 0; b < components.Length; b++ )
 				{
-					if ( !components [ b ] )
+					if ( components [ b ] == null )
 					{
 						objTagList.Add ( objectList[a] );
 						break;

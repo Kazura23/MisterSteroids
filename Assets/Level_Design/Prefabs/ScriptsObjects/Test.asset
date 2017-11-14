@@ -11,14 +11,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49e2bddfe1dbf0d4ab0050d815070b9c, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
+<<<<<<< HEAD
   NbrChunkOneLvl: 3
   ChunkAleat: 1
   WallEndChunk: {fileID: 0}
   WallOnLastChunk: {fileID: 0}
   TheseChunks:
+  - {fileID: 1545821835470666, guid: 891c9e9e764497b4e880fa49f71fc0cb, type: 2}
+=======
+  NbrChunkOneLvl: 1
+=======
+  NbrChunkOneLvl: 3
+>>>>>>> Simon
+  ChunkAleat: 1
+  WallEndChunk: {fileID: 0}
+  WallOnLastChunk: {fileID: 0}
+  TheseChunks:
+<<<<<<< HEAD
+  - {fileID: 1495765868606036, guid: 8d9262ec29c680e42ab295e8e4002c56, type: 2}
+>>>>>>> master
+=======
   - {fileID: 1545821835470666, guid: 017e15099f40b6e4bb909ac43522be94, type: 2}
+>>>>>>> Simon
   PourcSpawn: 100
   EnnemySpawnable: []
   ObstacleSpawnable: []
   ObstacleDestrucSpawnable: []
   CoinSpawnable: []
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  WallOnLastChunk: {fileID: 0}
+>>>>>>> master
+=======
+>>>>>>> Simon

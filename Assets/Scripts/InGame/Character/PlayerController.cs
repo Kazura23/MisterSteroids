@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
 	public float AcceleraCLInc = 0;
 
 	//public float JumpForce = 200;
-    [Header("Caractéristique Dash")]
+    [Header("Caractéristique Fight")]
     /*public float delayLeft = 1;
 	public float delayRight = 1;*/
 	public float DashTime = 1.5f;
@@ -72,10 +72,6 @@ public class PlayerController : MonoBehaviour
     //public float LessPointPunchInMadness = 15;
     public float SmoothSpeed = 100;
     public float ratioDownInMadness = 1.5f;
-
-    public float delayInBeginMadness = 2;
-    public float slowInBeginMadness = 3;
-
 
 	[Header ("SphereMask")]
 	public float Radius;
@@ -151,7 +147,6 @@ public class PlayerController : MonoBehaviour
 	float valueSmooth = 0;
     float valueSmoothUse = 0;
 	float timeToDP;
-    float timerBeginMadness = 0;
 
 	int currLine = 0;
 	int LastImp = 0;
@@ -173,7 +168,6 @@ public class PlayerController : MonoBehaviour
     bool canChocWave = true;
 	bool playerDead = false;
 	bool dpunch = false;
-    bool InBeginMadness = false;
 	#endregion
 
 	#region Mono
@@ -204,7 +198,6 @@ public class PlayerController : MonoBehaviour
 		playAnimator = GetComponentInChildren<Animator> ( );
         camMad = GetComponentInChildren<CameraFilterPack_Color_YUV>();
         saveCamMad = new Vector3(camMad._Y, camMad._U, camMad._V);
-        
         /* punchLeft = true; preparRight = false; preparLeft = false; defense = false;
 		preparPunch = null;*/
 
@@ -239,34 +232,17 @@ public class PlayerController : MonoBehaviour
         }
 
         SmoothBar();
+        camMad._Y = saveCamMad.x * (BarMadness.value / BarMadness.maxValue);
+        camMad._U = saveCamMad.y * (BarMadness.value / BarMadness.maxValue);
+        camMad._V = saveCamMad.z * (BarMadness.value / BarMadness.maxValue);
 
-        if (!InBeginMadness)
+        if (BarMadness.value - (getTime * DelayDownBar * (InMadness ? ratioDownInMadness : 1)) > 0)
         {
-            camMad._Y = saveCamMad.x * (BarMadness.value / BarMadness.maxValue);
-            camMad._U = saveCamMad.y * (BarMadness.value / BarMadness.maxValue);
-            camMad._V = saveCamMad.z * (BarMadness.value / BarMadness.maxValue);
-            if (BarMadness.value - (getTime * DelayDownBar * (InMadness ? ratioDownInMadness : 1)) > 0)
-            {
-                BarMadness.value -= getTime * DelayDownBar * (InMadness ? ratioDownInMadness : 1);
-            }
-            else
-            {
-                BarMadness.value = 0;
-            }
+            BarMadness.value -= getTime * DelayDownBar * (InMadness ? ratioDownInMadness : 1);
         }
         else
         {
-            if(timerBeginMadness < delayInBeginMadness)
-            {
-                timerBeginMadness += Time.deltaTime;
-                camMad._Y += saveCamMad.x * Time.deltaTime / delayInBeginMadness;
-                camMad._U += saveCamMad.y * Time.deltaTime / delayInBeginMadness;
-                camMad._V += saveCamMad.z * Time.deltaTime / delayInBeginMadness;
-            }
-            else
-            {
-                InBeginMadness = false;
-            }
+            BarMadness.value = 0;
         }
         if (Input.GetKeyDown(KeyCode.O))
             PlayerPrefs.DeleteAll();
@@ -417,15 +393,7 @@ public class PlayerController : MonoBehaviour
 			{
 				resetAxeD = true;
 
-				if ( timeToDP < TimeToDoublePunch * 0.55f )
-				{
-					resetAxeD = false;
-					dpunch = true;
-				}
-				else
-				{
-					timeToDP = TimeToDoublePunch;
-				}
+				timeToDP = TimeToDoublePunch;
 			}
 
 			if ( Input.GetAxis ( "CoupDouble" ) != 0 && resetAxeD )
@@ -434,7 +402,6 @@ public class PlayerController : MonoBehaviour
 
 				if ( timeToDP <= 0 )
 				{
-					timeToDP = 0;
 					resetAxeD = false;
 					dpunch = true;
 				}
@@ -632,9 +599,9 @@ public class PlayerController : MonoBehaviour
 
 		if ( !inAir )
 		{
-			Shader.SetGlobalFloat ( "_ReduceVis", speed / maxSpeed );
+			Shader.SetGlobalFloat ( "_ReduceVis", speed / maxSpeed);
 
-			if ( thisCam.fieldOfView < calCFov )
+			if ( thisCam.fieldOfView < calCFov)
 			{
 				thisCam.fieldOfView += Time.deltaTime * SpeedEffectTime;
 				if ( thisCam.fieldOfView > calCFov )
@@ -642,7 +609,7 @@ public class PlayerController : MonoBehaviour
 					thisCam.fieldOfView = calCFov;
 				}
 			}
-			else if ( thisCam.fieldOfView > calCFov )
+			else if ( thisCam.fieldOfView > calCFov)
 			{
 				thisCam.fieldOfView -= Time.deltaTime * SpeedEffectTime * 4;
 				if ( thisCam.fieldOfView < calCFov )
@@ -650,10 +617,6 @@ public class PlayerController : MonoBehaviour
 					thisCam.fieldOfView = calCFov;
 				}
 			}
-		}
-		else
-		{
-			thisCam.fieldOfView = Constants.DefFov;
 		}
 
 		if ( currentDir == Direction.North )
@@ -679,17 +642,17 @@ public class PlayerController : MonoBehaviour
 
 		if ( newPos )
 		{
-			befRot -= speed * delTime;
+			befRot -= calTrans.magnitude;
 
 			if ( befRot < 0 )
 			{
 				newPos = false;
 				currentDir = newDir;
-				pTrans.Translate ( pTrans.forward * befRot, Space.World );
+				pTrans.Translate ( pTrans.forward * befRot * delTime, Space.World );
 			}
 		}
 
-		pTrans.Translate ( calTrans / (InBeginMadness ? slowInBeginMadness : 1), Space.World );
+		pTrans.Translate ( calTrans, Space.World );
 
 		/*if ( canJump && Input.GetAxis ( "Jump" ) > 0 )
 		{
@@ -862,6 +825,7 @@ public class PlayerController : MonoBehaviour
 			Dash = false;
 			dpunch = false;
 			canPunch = false;
+			timeToDP = TimeToDoublePunch;
 
             ScreenShake.Singleton.ShakeHitDouble();
 
@@ -877,29 +841,17 @@ public class PlayerController : MonoBehaviour
 			//}
 
             propDP = true;
-			StartCoroutine ( StartPunch ( 1, timeToDP ) );
+			StartCoroutine ( StartPunch ( 1 ) );
 
 			propPunch = propulsePunch ( TimePropulseDoublePunch );
 			StartCoroutine ( propPunch );
-
-			timeToDP = TimeToDoublePunch;
         }
 	}
 
-	private IEnumerator StartPunch(int type_technic, float timeDp = 0 )
+	private IEnumerator StartPunch(int type_technic)
 	{
 		yield return new WaitForSeconds(DelayPrepare / rationUse);
-		 
-		if ( type_technic == 1 )
-		{
-			float getPourc = TimeToDoublePunch - timeDp;
-			punch.setTechnic ( type_technic, ( ( TimeToDoublePunch - timeToDP ) * 100 ) / TimeToDoublePunch );
-		}
-		else
-		{
-			punch.setTechnic ( type_technic );
-		}
-
+        punch.setTechnic(type_technic);
         punchBox.enabled = true;
        /* corou =*/ StartCoroutine("TimerHitbox");
 
@@ -977,13 +929,7 @@ public class PlayerController : MonoBehaviour
 			newPos = true;
 			newDir = thisColl.GetComponent<NewDirect> ( ).NewDirection;
 			blockChangeLine = false;
-			Vector3 getThisC = thisColl.transform.position;
-			getThisC = new Vector3 ( getThisC.x, 0, getThisC.z );
-
-			Vector3 getPtr = pTrans.position;
-			getPtr = new Vector3 ( getPtr.x, 0, getPtr.z );
-
-			befRot = Vector3.Distance ( getThisC, getPtr );
+			befRot = Vector3.Distance ( thisColl.transform.position, pTrans.position );
 		} 
 	}
 
@@ -1068,11 +1014,8 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("MADDDDDDDD");
                 InMadness = !InMadness;
-                InBeginMadness = true;
-                timerBeginMadness = 0;
-                camMad._Y = 0; camMad._U = 0; camMad._V = 0;
 
-                //camMad._Y = saveCamMad.x; camMad._U = saveCamMad.y; camMad._V = saveCamMad.z;
+                camMad._Y = saveCamMad.x; camMad._U = saveCamMad.y; camMad._V = saveCamMad.z;
 
                 maxSpeedCL = MaxSpeedCL * 2;
 				maxSpeed = MaxSpeed * 3;

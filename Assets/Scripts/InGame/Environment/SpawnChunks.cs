@@ -231,14 +231,12 @@ public class SpawnChunks : MonoBehaviour
 
 		currNbrCh++;
 
-		if ( thisSpawn != null )
-		{
-			thisSpawn = ( GameObject ) Instantiate ( thisSpawn, thisT );
+		thisSpawn = ( GameObject ) Instantiate ( thisSpawn, thisT );
 
-			getChunkT = thisSpawn.transform;
-			getChunkT.rotation = thisRot;
-			getChunkT.position = thisPos;
-		}
+		getChunkT = thisSpawn.transform;
+
+		getChunkT.rotation = thisRot;
+		getChunkT.position = thisPos;
 
 		spawnElements ( getSpawnable [ currLevel ] [ currChunk ].getCoinSpawnable, getChunks [ currLevel ].CoinSpawnable );
 		spawnElements ( getSpawnable [ currLevel ] [ currChunk ].getEnnemySpawnable, getChunks [ currLevel ].EnnemySpawnable );

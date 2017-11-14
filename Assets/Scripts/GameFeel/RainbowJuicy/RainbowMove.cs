@@ -18,15 +18,11 @@ public class RainbowMove : MonoBehaviour
     public Type movesType;
     public float[] moves;
     public Ease easeType;
-	Transform currT;
-    private float LocalY;
 
-	Vector3 startPos;
+    private float LocalY;
 
     void OnEnable()
     {
-		currT = transform;
-		startPos = currT.localPosition;
         Next();
         //transform.DOMoveY(LocalY, 0);
         //Debug.Log(LocalY);
@@ -37,43 +33,40 @@ public class RainbowMove : MonoBehaviour
         index = (index + 1) % moves.Length;
 
         if (movesType == Type.LocalHorizontal)
-			currT.DOLocalMoveX(moves[index], time).SetEase(easeType).OnComplete(() => Next());
+            transform.DOLocalMoveX(moves[index], time).SetEase(easeType).OnComplete(() => Next());
 
         if (movesType == Type.LocalVertical)
-			currT.DOLocalMoveY(moves[index], time).SetEase(easeType).OnComplete(() => Next());
+            transform.DOLocalMoveY(transform.localPosition.y + moves[index], time).SetEase(easeType).OnComplete(() => Next());
 
         if (movesType == Type.GlobalHorizontal)
-			currT.DOMoveX(moves[index], time).SetEase(easeType).OnComplete(() => Next());
+            transform.DOMoveX(moves[index], time).SetEase(easeType).OnComplete(() => Next());
 
         if (movesType == Type.GlobalVertical)
-			currT.DOMoveY(moves[index], time).SetEase(easeType).OnComplete(() => Next());
+            transform.DOMoveY(moves[index], time).SetEase(easeType).OnComplete(() => Next());
 
     }
 
     void OnDisable()
     {
-		currT.DOKill();
-		currT.localPosition = startPos;
-      /*  if (movesType == Type.LocalHorizontal)
-			currT.DOLocalMoveX(moves[index], time).SetEase(easeType).OnComplete(() => Next());
+        if (movesType == Type.LocalHorizontal)
+            transform.DOLocalMoveX(moves[index], time).SetEase(easeType).OnComplete(() => Next());
 
         if (movesType == Type.LocalVertical)
         {
-			currT.DOLocalMoveY(moves[index], time).SetEase(easeType).OnComplete(() => Next());
 
             //transform.DOMoveY(LocalY, 0);
             //Debug.Log("Disable " + LocalY);
-			//
-			//EmptyChild.DOKill();
+
+            transform.DOKill();
 
             //LocalY = transform.position.y;
         }
 
         if (movesType == Type.GlobalHorizontal)
-			currT.DOMoveX(moves[index], time).SetEase(easeType).OnComplete(() => Next());
+            transform.DOMoveX(moves[index], time).SetEase(easeType).OnComplete(() => Next());
 
         if (movesType == Type.GlobalVertical)
-			currT.DOMoveY(moves[index], time).SetEase(easeType).OnComplete(() => Next());
-		*/
+            transform.DOMoveY(moves[index], time).SetEase(easeType).OnComplete(() => Next());
+
     }
 }

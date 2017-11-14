@@ -49,9 +49,3 @@ public enum ResearcheType
 	SamePref,
 	MissingComp
 }
-
-public enum TypeRotate
-{
-	Clockwise,
-	CounterClockwise
-}

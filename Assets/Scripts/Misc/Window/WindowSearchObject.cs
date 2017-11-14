@@ -509,8 +509,6 @@ public class WindowSearchObject : EditorWindow
 							{
 								getindentLevel = EditorGUI.indentLevel;
 								EditorGUI.indentLevel = getindentLevel + 2;
-								EditorGUILayout.Space ( );
-								EditorGUILayout.Space ( );
 
 								EditorGUILayout.ObjectField ( "OtherParent", listSearch [ a ] [ b ].transform.parent.gameObject, typeof( GameObject ), true );
 								EditorGUI.indentLevel = getindentLevel;
@@ -519,6 +517,7 @@ public class WindowSearchObject : EditorWindow
 					}
 					EditorGUILayout.EndVertical();
 
+					EditorGUILayout.Space ( );
 					EditorGUILayout.Space ( );
 				}
 				EditorGUILayout.EndVertical ( );

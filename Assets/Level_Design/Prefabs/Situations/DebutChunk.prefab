@@ -22,8 +22,6 @@ GameObject:
   - component: {fileID: 65424773750243860}
   - component: {fileID: 114217999866744284}
   - component: {fileID: 114271918232904606}
-  - component: {fileID: 114906489955547852}
-  - component: {fileID: 114904631173387128}
   m_Layer: 0
   m_Name: DebutChunk
   m_TagString: DebutFinChunk
@@ -80,35 +78,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a95e408bd992bb499080f1142d91049, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NbrLaneDebut: {x: 0, y: 0}
-  NbrLaneFin: {x: 0, y: 0}
   LevelParent: {fileID: 0}
---- !u!114 &114904631173387128
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1932266622343094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 112998890, guid: 325c5b2a7434372429c2ca9d61dba58e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _guid: 0e732dfa-5fd9-46e4-849a-85f8bf58383a
---- !u!114 &114906489955547852
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1932266622343094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -605777808, guid: 325c5b2a7434372429c2ca9d61dba58e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isConnected: 1
-  _guid: 
-  _referenceCollection:
-    _collection:
-    - {fileID: 1932266622343094}
-  _assetGuid: 5f5aad1086635b246924b0c975ccb220
